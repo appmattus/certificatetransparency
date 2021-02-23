@@ -5,12 +5,11 @@ plugins {
     id("kotlin")
     id("org.owasp.dependencycheck")
     id("com.android.lint")
+    id("com.vanniktech.maven.publish")
     id("org.jetbrains.dokka")
 }
 
 apply(from = "$rootDir/gradle/scripts/jacoco.gradle.kts")
-apply(from = "$rootDir/gradle/scripts/bintray.gradle.kts")
-apply(from = "$rootDir/gradle/scripts/dokka-javadoc.gradle.kts")
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8

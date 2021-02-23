@@ -2,7 +2,7 @@
 
 [![CI status](https://github.com/babylonhealth/certificate-transparency-android/workflows/CI/badge.svg)](https://github.com/babylonhealth/certificate-transparency-android/actions)
 [![codecov](https://codecov.io/gh/babylonhealth/certificate-transparency-android/branch/main/graph/badge.svg)](https://codecov.io/gh/babylonhealth/certificate-transparency-android)
-[![Download](https://api.bintray.com/packages/babylonpartners/maven/certificatetransparency/images/download.svg)](https://bintray.com/babylonpartners/maven/certificatetransparency/_latestVersion)
+[![Maven Central](https://img.shields.io/maven-central/v/com.appmattus.certificatetransparency/certificatetransparency)](https://search.maven.org/search?q=g:com.appmattus.certificatetransparency)
 
 To protect our apps from man-in-the-middle attacks one of the first
 things that usually springs to mind is certificate pinning. However, the
@@ -64,20 +64,20 @@ we have missed please reach out so we can keep this up to date.
 
 ## Getting started
 
-[![Download](https://api.bintray.com/packages/babylonpartners/maven/certificatetransparency/images/download.svg)](https://bintray.com/babylonpartners/maven/certificatetransparency/_latestVersion)
+[![Maven Central](https://img.shields.io/maven-central/v/com.appmattus.certificatetransparency/certificatetransparency)](https://search.maven.org/search?q=g:com.appmattus.certificatetransparency)
 
 For Android modules include the `android` dependency in your
 build.gradle file which ensures the necessary ProGuard rules are
 present:
 
-```groovy
-implementation 'com.babylon.certificatetransparency:certificatetransparency-android:<latest-version>'
+```kotlin
+implementation("com.appmattus.certificatetransparency:certificatetransparency-android:<latest-version>")
 ```
 
 For Java library modules include the dependency as follows:
 
-```groovy
-implementation 'com.babylon.certificatetransparency:certificatetransparency:<latest-version>'
+```kotlin
+implementation("com.appmattus.certificatetransparency:certificatetransparency:<latest-version>")
 ```
 
 ### OkHttp
@@ -207,29 +207,29 @@ The network interceptor allows you to configure the following
 properties:
 
 **Trust Manager** [X509TrustManager](https://docs.oracle.com/javase/6/docs/api/javax/net/ssl/X509TrustManager.html)
-used to clean the certificate chain  
+used to clean the certificate chain
 *Default:* Platform default [X509TrustManager](https://docs.oracle.com/javase/6/docs/api/javax/net/ssl/X509TrustManager.html)
 created through [TrustManagerFactory](http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/TrustManagerFactory.html)
 
 **Log List Data Source** A [DataSource](./certificatetransparency/src/main/kotlin/com/babylon/certificatetransparency/datasource/DataSource.kt)
-providing a list of [LogServer](./certificatetransparency/src/main/kotlin/com/babylon/certificatetransparency/loglist/LogServer.kt)  
+providing a list of [LogServer](./certificatetransparency/src/main/kotlin/com/babylon/certificatetransparency/loglist/LogServer.kt)
 *Default:* In memory cached log list loaded from [https://www.gstatic.com/ct/log_list/log_list.json](https://www.gstatic.com/ct/log_list/log_list.json)
 
 **Policy** [CTPolicy](./certificatetransparency/src/main/kotlin/com/babylon/certificatetransparency/CTPolicy.kt)
-which will verify correct number of SCTs are present  
+which will verify correct number of SCTs are present
 *Default:* Policy which follows rules of [Chromium CT Policy](https://github.com/chromium/ct-policy/blob/master/ct_policy.md)
 
 **Fail On Error** Determine if a failure to pass certificate
 transparency results in the connection being closed. A value of `true`
-ensures the connection is closed on errors  
+ensures the connection is closed on errors
 *Default:* true
 
 **Logger** [CTLogger](./certificatetransparency/src/main/kotlin/com/babylon/certificatetransparency/CTLogger.kt)
-which will be called with all results.  
+which will be called with all results.
 On Android you can use the provided [BasicAndroidCTLogger](./certificatetransparency-android/src/main/kotlin/com/babylon/certificatetransparency/BasicAndroidCTLogger.kt)
 which logs with the tag `CertificateTransparency` by setting
 `logger = BasicAndroidCRLogger(BuildConfig.DEBUG)` using your apps
-`BuildConfig`.  
+`BuildConfig`.
 *Default:* none
 
 **Hosts** Verify certificate transparency for hosts that match a
