@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Code derived from https://github.com/google/certificate-transparency-java
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.internal.logclient
@@ -167,7 +169,7 @@ class HttpLogClientTest {
             val chainCertBytes = x509Entry.certificateChain[0]
             chainCert = CertificateFactory.getInstance("X509")
                 .generateCertificate(chainCertBytes.inputStream()) as X509Certificate
-        } catch (e: CertificateException) {
+        } catch (ignored: CertificateException) {
             fail()
         }
 
@@ -237,7 +239,7 @@ class HttpLogClientTest {
             val chainCertBytes = x509Entry.certificateChain[0]
             chainCert = CertificateFactory.getInstance("X509")
                 .generateCertificate(chainCertBytes.inputStream()) as X509Certificate
-        } catch (e: CertificateException) {
+        } catch (ignored: CertificateException) {
             fail()
         }
 

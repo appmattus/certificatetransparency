@@ -5,15 +5,14 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("android.extensions")
 }
 
 android {
-    compileSdkVersion(29)
+    compileSdkVersion(30)
     defaultConfig {
         applicationId = "com.babylon.certificatetransparency.sampleapp"
         minSdkVersion(19)
-        targetSdkVersion(29)
+        targetSdkVersion(30)
         versionCode = 1
         versionName = "1.0"
         multiDexEnabled = true
@@ -26,12 +25,17 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     packagingOptions {
         exclude("META-INF/DEPENDENCIES")
         exclude("META-INF/atomicfu.kotlin_module")
+    }
+    buildFeatures {
+        viewBinding = true
     }
 }
 
@@ -44,22 +48,23 @@ tasks.withType(KotlinCompile::class.java).all {
 dependencies {
     implementation(project(":certificatetransparency-android"))
     implementation(kotlin("stdlib-jdk8"))
-    implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.1")
-    implementation("com.google.android.material:material:1.2.1")
-    implementation("com.google.android.gms:play-services-base:17.4.0")
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation("androidx.lifecycle:lifecycle-livedata:2.2.0")
-    implementation("android.arch.navigation:navigation-fragment-ktx:1.0.0")
-    implementation("android.arch.navigation:navigation-ui-ktx:1.0.0")
-    implementation("com.xwray:groupie:2.8.1")
-    implementation("com.xwray:groupie-kotlin-android-extensions:2.8.1")
-    implementation("com.afollestad.material-dialogs:core:3.3.0")
-    implementation("com.afollestad.material-dialogs:input:3.3.0")
-    implementation("com.pddstudio:highlightjs-android:1.5.0")
-    implementation("com.android.volley:volley:1.1.1")
-    implementation("com.github.spullara.mustache.java:compiler:0.9.6")
+    implementation("androidx.appcompat:appcompat:${Versions.AndroidX.appCompat}")
+    implementation("androidx.constraintlayout:constraintlayout:${Versions.AndroidX.constraintLayout}")
+    implementation("com.google.android.material:material:${Versions.Google.material}")
+    implementation("com.google.android.gms:play-services-base:${Versions.Google.playServices}")
+    implementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
+    implementation("com.squareup.retrofit2:converter-gson:${Versions.retrofit}")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:${Versions.AndroidX.lifecycle}")
+    implementation("androidx.lifecycle:lifecycle-common-java8:${Versions.AndroidX.lifecycle}")
+    implementation("android.arch.navigation:navigation-fragment-ktx:${Versions.AndroidX.navigation}")
+    implementation("android.arch.navigation:navigation-ui-ktx:${Versions.AndroidX.navigation}")
+    implementation("com.xwray:groupie:${Versions.groupie}")
+    implementation("com.xwray:groupie-viewbinding:${Versions.groupie}")
+    implementation("com.afollestad.material-dialogs:core:${Versions.materialDialogs}")
+    implementation("com.afollestad.material-dialogs:input:${Versions.materialDialogs}")
+    implementation("com.pddstudio:highlightjs-android:${Versions.highlightJs}")
+    implementation("com.android.volley:volley:${Versions.volley}")
+    implementation("com.github.spullara.mustache.java:compiler:${Versions.mustache}")
+
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:${Versions.desugar}")
 }

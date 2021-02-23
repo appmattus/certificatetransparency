@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.cache
@@ -58,7 +62,7 @@ class AndroidDiskCache @JvmOverloads constructor(
 
                 null
             }
-        } catch (e: IOException) {
+        } catch (ignored: IOException) {
             null
         }
     }
@@ -74,7 +78,7 @@ class AndroidDiskCache @JvmOverloads constructor(
                 prefs.edit()
                     .putLong(PREF_KEY_LAST_WRITE, System.currentTimeMillis())
                     .apply()
-            } catch (e: IOException) {
+            } catch (ignored: IOException) {
                 // non fatal
             }
         }

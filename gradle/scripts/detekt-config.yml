@@ -9,7 +9,7 @@ style:
   MaxLineLength:
     maxLineLength: 145 # increased from 120
   MagicNumber:
-    excludes: "**/test/**,**/androidTest/**,**Test.kt,**Spec.kt,**Spek.kt,**.kts"
+    excludes: ["**/test/**","**/androidTest/**","**Test.kt","**Spec.kt","**Spek.kt","**.kts"]
 
 complexity:
   LongMethod:

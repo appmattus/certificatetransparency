@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Code derived from https://github.com/google/certificate-transparency-java
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.internal.serialization
@@ -242,8 +244,8 @@ internal object Deserializer {
                 val length = inputStream.readNumber(THREE_BYTES).toInt()
                 certificateChain.add(inputStream.readFixedLength(length))
             }
-        } catch (e: IOException) {
-            throw SerializationException("Cannot parse xChainEntry. ${e.localizedMessage}")
+        } catch (expected: IOException) {
+            throw SerializationException("Cannot parse xChainEntry. ${expected.localizedMessage}")
         }
 
         return LogEntry.X509ChainEntry(
@@ -270,8 +272,8 @@ internal object Deserializer {
                 val length = inputStream.readNumber(THREE_BYTES).toInt()
                 preCertificateChain.add(inputStream.readFixedLength(length))
             }
-        } catch (e: IOException) {
-            throw SerializationException("Cannot parse PrecertEntryChain.${e.localizedMessage}")
+        } catch (expected: IOException) {
+            throw SerializationException("Cannot parse PrecertEntryChain.${expected.localizedMessage}")
         }
 
         return LogEntry.PreCertificateChainEntry(

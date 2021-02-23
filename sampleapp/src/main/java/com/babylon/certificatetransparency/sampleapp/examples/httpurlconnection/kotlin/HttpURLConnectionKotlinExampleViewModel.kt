@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,11 +13,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.sampleapp.examples.httpurlconnection.kotlin
 
-import android.content.Context
+import android.app.Application
 import com.babylon.certificatetransparency.CTLogger
 import com.babylon.certificatetransparency.cache.AndroidDiskCache
 import com.babylon.certificatetransparency.certificateTransparencyHostnameVerifier
@@ -26,7 +30,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
-class HttpURLConnectionKotlinExampleViewModel(val context: Context) : BaseExampleViewModel(context) {
+class HttpURLConnectionKotlinExampleViewModel(application: Application) : BaseExampleViewModel(application) {
 
     override val sampleCodeTemplate
         get() = "httpurlconnection-kotlin.txt"

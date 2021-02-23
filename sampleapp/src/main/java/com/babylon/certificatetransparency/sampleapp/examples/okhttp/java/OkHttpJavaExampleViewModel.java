@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,11 +13,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.sampleapp.examples.okhttp.java;
 
-import android.content.Context;
+import android.app.Application;
 
 import com.babylon.certificatetransparency.CTInterceptorBuilder;
 import com.babylon.certificatetransparency.CTLogger;
@@ -37,8 +41,8 @@ import okhttp3.Response;
 
 public class OkHttpJavaExampleViewModel extends BaseExampleViewModel {
 
-    public OkHttpJavaExampleViewModel(@NotNull Context context) {
-        super(context);
+    public OkHttpJavaExampleViewModel(@NotNull Application application) {
+        super(application);
     }
 
     @NotNull
@@ -53,9 +57,9 @@ public class OkHttpJavaExampleViewModel extends BaseExampleViewModel {
     private OkHttpClient createOkHttpClient(Set<String> hosts, boolean isFailOnError, CTLogger defaultLogger) {
         // Create a network interceptor
         CTInterceptorBuilder builder = new CTInterceptorBuilder()
-                .setFailOnError(isFailOnError)
-                .setLogger(defaultLogger)
-                .setDiskCache(new AndroidDiskCache(getApplication()));
+            .setFailOnError(isFailOnError)
+            .setLogger(defaultLogger)
+            .setDiskCache(new AndroidDiskCache(getApplication()));
 
         for (String host : hosts) {
             builder.includeHost(host);
@@ -65,8 +69,8 @@ public class OkHttpJavaExampleViewModel extends BaseExampleViewModel {
 
         // Set the interceptor when creating the OkHttp client
         return new OkHttpClient.Builder()
-                .addNetworkInterceptor(networkInterceptor)
-                .build();
+            .addNetworkInterceptor(networkInterceptor)
+            .build();
     }
 
     @Override

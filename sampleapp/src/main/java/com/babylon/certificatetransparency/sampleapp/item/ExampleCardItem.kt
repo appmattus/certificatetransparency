@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.sampleapp.item
@@ -20,13 +24,13 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import com.babylon.certificatetransparency.sampleapp.R
+import com.babylon.certificatetransparency.sampleapp.databinding.ExampleCardItemBinding
 import com.google.android.material.snackbar.Snackbar
-import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
-import com.xwray.groupie.kotlinandroidextensions.Item
-import kotlinx.android.synthetic.main.example_card_item.view.*
+import com.xwray.groupie.viewbinding.BindableItem
 
 class ExampleCardItem(
     private val navController: NavController,
@@ -34,28 +38,31 @@ class ExampleCardItem(
     private val uri: Uri,
     private val kotlinNav: Int,
     private val javaNav: Int
-) : Item() {
+) : BindableItem<ExampleCardItemBinding>() {
+
+    override fun initializeViewBinding(view: View) = ExampleCardItemBinding.bind(view)
 
     override fun getLayout() = R.layout.example_card_item
 
-    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+    override fun bind(viewBinding: ExampleCardItemBinding, position: Int) {
+        val context = viewBinding.root.context
 
-        viewHolder.containerView.title.text = title
+        viewBinding.title.text = title
 
-        viewHolder.containerView.link.setOnClickListener {
+        viewBinding.link.setOnClickListener {
             try {
                 val myIntent = Intent(Intent.ACTION_VIEW, uri)
-                startActivity(viewHolder.containerView.context, myIntent, Bundle())
-            } catch (e: ActivityNotFoundException) {
-                Snackbar.make(viewHolder.containerView, "Unable to open external link", Snackbar.LENGTH_SHORT).show()
+                startActivity(context, myIntent, Bundle())
+            } catch (ignored: ActivityNotFoundException) {
+                Snackbar.make(viewBinding.root, "Unable to open external link", Snackbar.LENGTH_SHORT).show()
             }
         }
 
-        viewHolder.containerView.kotlin.setOnClickListener {
+        viewBinding.kotlin.setOnClickListener {
             navController.navigate(kotlinNav)
         }
 
-        viewHolder.containerView.java.setOnClickListener {
+        viewBinding.java.setOnClickListener {
             navController.navigate(javaNav)
         }
     }
