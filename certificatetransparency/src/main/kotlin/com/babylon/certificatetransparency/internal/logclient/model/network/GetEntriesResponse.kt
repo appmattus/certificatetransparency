@@ -55,13 +55,13 @@ internal data class GetEntriesResponse(
         return entries.map {
             val leafInput = try {
                 Base64.decode(it.leafInput)
-            } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+            } catch (@Suppress("TooGenericExceptionCaught") ignored: Exception) {
                 throw CertificateTransparencyException("Bad response. The leafInput is invalid.")
             }
 
             val extraData = try {
                 Base64.decode(it.extraData)
-            } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+            } catch (@Suppress("TooGenericExceptionCaught") ignored: Exception) {
                 throw CertificateTransparencyException("Bad response. The extraData is invalid.")
             }
 

@@ -58,7 +58,7 @@ class AndroidDiskCache @JvmOverloads constructor(
 
                 null
             }
-        } catch (e: IOException) {
+        } catch (ignored: IOException) {
             null
         }
     }
@@ -74,7 +74,7 @@ class AndroidDiskCache @JvmOverloads constructor(
                 prefs.edit()
                     .putLong(PREF_KEY_LAST_WRITE, System.currentTimeMillis())
                     .apply()
-            } catch (e: IOException) {
+            } catch (ignored: IOException) {
                 // non fatal
             }
         }

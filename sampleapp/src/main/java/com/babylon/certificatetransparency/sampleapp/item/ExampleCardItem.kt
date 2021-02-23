@@ -46,7 +46,7 @@ class ExampleCardItem(
             try {
                 val myIntent = Intent(Intent.ACTION_VIEW, uri)
                 startActivity(viewHolder.containerView.context, myIntent, Bundle())
-            } catch (e: ActivityNotFoundException) {
+            } catch (ignored: ActivityNotFoundException) {
                 Snackbar.make(viewHolder.containerView, "Unable to open external link", Snackbar.LENGTH_SHORT).show()
             }
         }

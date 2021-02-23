@@ -69,7 +69,7 @@ class DataSourceReuseInflightTest {
 
         // when we get the same key 5 times
         val jobs = arrayListOf<Deferred<Any?>>()
-        for (i in 1..5) {
+        repeat(5) {
             jobs.add(async { reuseInflightCache.get() })
         }
         jobs.forEach { it.await() }
@@ -98,7 +98,7 @@ class DataSourceReuseInflightTest {
 
         // when we get the same key 5 times
         val jobs = arrayListOf<Deferred<Any?>>()
-        for (i in 1..5) {
+        repeat(5) {
             jobs.add(async { reuseInflightCache.get() })
         }
         jobs.forEach { it.await() }

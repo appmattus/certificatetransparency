@@ -1,5 +1,6 @@
 import com.appmattus.markdown.rules.LineLengthRule
 import com.appmattus.markdown.rules.ProperNamesRule
+import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.dokka.gradle.DokkaPlugin
 import org.jetbrains.dokka.gradle.DokkaTask
 
@@ -9,7 +10,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:4.0.1")
+        classpath("com.android.tools.build:gradle:${Versions.androidGradlePlugin}")
     }
 }
 
@@ -19,6 +20,7 @@ plugins {
     id("com.appmattus.markdown") version Versions.markdownlintGradlePlugin
     id("com.vanniktech.maven.publish") version Versions.gradleMavenPublishPlugin apply false
     id("org.jetbrains.dokka") version Versions.dokkaPlugin
+    id("io.gitlab.arturbosch.detekt") version Versions.detektGradlePlugin
 }
 
 allprojects {
@@ -54,7 +56,6 @@ tasks.register<Delete>("clean") {
     delete(rootProject.buildDir)
 }
 
-apply(from = "$rootDir/gradle/scripts/detekt.gradle.kts")
 apply(from = "$rootDir/gradle/scripts/dependencyUpdates.gradle.kts")
 
 markdownlint {
@@ -63,3 +64,23 @@ markdownlint {
         +ProperNamesRule { excludes = listOf(".*/NOTICE.md") }
     }
 }
+
+dependencies {
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${Versions.detektGradlePlugin}")
+}
+
+tasks.withType<Detekt> {
+    jvmTarget = "1.8"
+}
+
+detekt {
+    input = files(subprojects.map { File(it.projectDir, "src") })
+
+    buildUponDefaultConfig = true
+
+    autoCorrect = true
+
+    config = files("gradle/scripts/detekt-config.yml")
+}
+
+tasks.maybeCreate("check").dependsOn(tasks.named("detekt"))

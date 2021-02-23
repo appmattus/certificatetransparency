@@ -36,9 +36,9 @@ class Application : MultiDexApplication() {
     private fun updateSecurityProvider() {
         try {
             ProviderInstaller.installIfNeeded(this)
-        } catch (e: GooglePlayServicesRepairableException) {
+        } catch (ignored: GooglePlayServicesRepairableException) {
             println("Failed to update security provider")
-        } catch (e: GooglePlayServicesNotAvailableException) {
+        } catch (ignored: GooglePlayServicesNotAvailableException) {
             println("Failed to update security provider")
         }
     }

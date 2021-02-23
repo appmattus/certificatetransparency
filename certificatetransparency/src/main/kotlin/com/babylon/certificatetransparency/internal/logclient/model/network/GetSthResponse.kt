@@ -55,7 +55,7 @@ internal data class GetSthResponse(
         val base64Signature = treeHeadSignature
         val sha256RootHash = try {
             Base64.decode(sha256RootHash)
-        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+        } catch (@Suppress("TooGenericExceptionCaught") ignored: Exception) {
             throw CertificateTransparencyException("Bad response. The root hash of the Merkle Hash Tree is invalid.")
         }
 

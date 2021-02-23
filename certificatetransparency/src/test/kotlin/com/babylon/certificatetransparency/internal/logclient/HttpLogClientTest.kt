@@ -167,7 +167,7 @@ class HttpLogClientTest {
             val chainCertBytes = x509Entry.certificateChain[0]
             chainCert = CertificateFactory.getInstance("X509")
                 .generateCertificate(chainCertBytes.inputStream()) as X509Certificate
-        } catch (e: CertificateException) {
+        } catch (ignored: CertificateException) {
             fail()
         }
 
@@ -237,7 +237,7 @@ class HttpLogClientTest {
             val chainCertBytes = x509Entry.certificateChain[0]
             chainCert = CertificateFactory.getInstance("X509")
                 .generateCertificate(chainCertBytes.inputStream()) as X509Certificate
-        } catch (e: CertificateException) {
+        } catch (ignored: CertificateException) {
             fail()
         }
 

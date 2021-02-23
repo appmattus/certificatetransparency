@@ -242,8 +242,8 @@ internal object Deserializer {
                 val length = inputStream.readNumber(THREE_BYTES).toInt()
                 certificateChain.add(inputStream.readFixedLength(length))
             }
-        } catch (e: IOException) {
-            throw SerializationException("Cannot parse xChainEntry. ${e.localizedMessage}")
+        } catch (expected: IOException) {
+            throw SerializationException("Cannot parse xChainEntry. ${expected.localizedMessage}")
         }
 
         return LogEntry.X509ChainEntry(
@@ -270,8 +270,8 @@ internal object Deserializer {
                 val length = inputStream.readNumber(THREE_BYTES).toInt()
                 preCertificateChain.add(inputStream.readFixedLength(length))
             }
-        } catch (e: IOException) {
-            throw SerializationException("Cannot parse PrecertEntryChain.${e.localizedMessage}")
+        } catch (expected: IOException) {
+            throw SerializationException("Cannot parse PrecertEntryChain.${expected.localizedMessage}")
         }
 
         return LogEntry.PreCertificateChainEntry(

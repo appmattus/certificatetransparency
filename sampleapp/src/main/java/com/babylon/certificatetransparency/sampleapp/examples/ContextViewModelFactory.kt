@@ -28,7 +28,7 @@ class ContextViewModelFactory(private val context: Context) : ViewModelProvider.
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return try {
             modelClass.getConstructor(Context::class.java).newInstance(context.applicationContext)
-        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+        } catch (@Suppress("TooGenericExceptionCaught") ignored: Exception) {
             super.create(modelClass)
         }
     }
