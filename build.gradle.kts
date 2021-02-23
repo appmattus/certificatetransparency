@@ -1,7 +1,6 @@
-import com.android.build.gradle.internal.tasks.factory.dependsOn
 import com.appmattus.markdown.rules.LineLengthRule
 import com.appmattus.markdown.rules.ProperNamesRule
-import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
+import org.jetbrains.dokka.gradle.DokkaPlugin
 import org.jetbrains.dokka.gradle.DokkaTask
 
 buildscript {
@@ -15,34 +14,36 @@ buildscript {
 }
 
 plugins {
-    kotlin("jvm") version "1.4.10" apply false
-    id("org.jetbrains.dokka") version "1.4.10"
+    kotlin("jvm") version Versions.kotlin apply false
     id("org.owasp.dependencycheck") version "6.0.2"
     id("com.appmattus.markdown") version "0.6.0"
+    id("com.vanniktech.maven.publish") version Versions.gradleMavenPublishPlugin apply false
+    id("org.jetbrains.dokka") version Versions.dokkaPlugin
 }
 
 allprojects {
     repositories {
         google()
         jcenter()
-
-        // For material dialogs
-        maven(url = "https://dl.bintray.com/drummer-aidan/maven/")
     }
 }
 
 subprojects {
-    tasks.withType<DokkaTask> {
-        outputDirectory.set(buildDir.resolve("reports/dokka"))
+    version = System.getenv("GITHUB_REF")?.substring(10) ?: System.getProperty("GITHUB_REF")?.substring(10) ?: "unknown"
 
-        dokkaSourceSets {
-            configureEach {
-                skipDeprecated.set(true)
+    plugins.withType<DokkaPlugin> {
+        tasks.withType<DokkaTask>().configureEach {
+            dokkaSourceSets {
+                configureEach {
+                    if (name.startsWith("ios")) {
+                        displayName.set("ios")
+                    }
 
-                sourceLink {
-                    localDirectory.set(rootDir)
-                    remoteUrl.set(java.net.URL("https://github.com/babylonhealth/certificate-transparency-android/blob/main/"))
-                    remoteLineSuffix.set("#L")
+                    sourceLink {
+                        localDirectory.set(rootDir)
+                        remoteUrl.set(java.net.URL("https://github.com/appmattus/certificatetransparency/blob/main"))
+                        remoteLineSuffix.set("#L")
+                    }
                 }
             }
         }
@@ -55,12 +56,6 @@ tasks.register<Delete>("clean") {
 
 apply(from = "$rootDir/gradle/scripts/detekt.gradle.kts")
 apply(from = "$rootDir/gradle/scripts/dependencyUpdates.gradle.kts")
-
-val dokka = tasks.named<DokkaMultiModuleTask>("dokkaHtmlMultiModule") {
-    outputDirectory.set(buildDir.resolve("dokkaCustomMultiModuleOutput"))
-}
-
-tasks.register("check").dependsOn(dokka)
 
 markdownlint {
     rules {

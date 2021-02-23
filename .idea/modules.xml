@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/certificate-transparency-android.iml" filepath="$PROJECT_DIR$/certificate-transparency-android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/certificatetransparency/certificate-transparency-android.certificatetransparency.iml" filepath="$PROJECT_DIR$/.idea/modules/certificatetransparency/certificate-transparency-android.certificatetransparency.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/certificatetransparency-android/certificate-transparency-android.certificatetransparency-android.iml" filepath="$PROJECT_DIR$/.idea/modules/certificatetransparency-android/certificate-transparency-android.certificatetransparency-android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sampleapp/certificate-transparency-android.sampleapp.iml" filepath="$PROJECT_DIR$/.idea/modules/sampleapp/certificate-transparency-android.sampleapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/certificatetransparency.iml" filepath="$PROJECT_DIR$/.idea/modules/certificatetransparency.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/certificatetransparency.buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/certificatetransparency.buildSrc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/certificatetransparency/certificatetransparency.certificatetransparency.iml" filepath="$PROJECT_DIR$/.idea/modules/certificatetransparency/certificatetransparency.certificatetransparency.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/certificatetransparency-android/certificatetransparency.certificatetransparency-android.iml" filepath="$PROJECT_DIR$/.idea/modules/certificatetransparency-android/certificatetransparency.certificatetransparency-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sampleapp/certificatetransparency.sampleapp.iml" filepath="$PROJECT_DIR$/.idea/modules/sampleapp/certificatetransparency.sampleapp.iml" />
     </modules>
   </component>
 </project>
