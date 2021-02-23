@@ -66,7 +66,7 @@ object Versions {
 
     object Google {
         const val dagger = "2.31.1-alpha"
-        const val material = "1.3.0-rc01"
+        const val material = "1.3.0"
         const val tink = "1.5.0"
     }
 

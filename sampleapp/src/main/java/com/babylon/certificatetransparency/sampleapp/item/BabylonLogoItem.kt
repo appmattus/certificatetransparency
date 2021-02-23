@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,17 +13,23 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.sampleapp.item
 
+import android.view.View
 import com.babylon.certificatetransparency.sampleapp.R
-import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
-import com.xwray.groupie.kotlinandroidextensions.Item
+import com.babylon.certificatetransparency.sampleapp.databinding.BabylonItemBinding
+import com.xwray.groupie.viewbinding.BindableItem
 
-object BabylonLogoItem : Item() {
+object BabylonLogoItem : BindableItem<BabylonItemBinding>() {
+
+    override fun initializeViewBinding(view: View) = BabylonItemBinding.bind(view)
 
     override fun getLayout() = R.layout.babylon_item
 
-    override fun bind(viewHolder: GroupieViewHolder, position: Int) = Unit
+    override fun bind(viewBinding: BabylonItemBinding, position: Int) = Unit
 }

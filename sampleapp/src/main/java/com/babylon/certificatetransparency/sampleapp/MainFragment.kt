@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.sampleapp
@@ -19,38 +23,32 @@ package com.babylon.certificatetransparency.sampleapp
 import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.babylon.certificatetransparency.sampleapp.databinding.FragmentMainBinding
 import com.babylon.certificatetransparency.sampleapp.item.BabylonLogoItem
 import com.babylon.certificatetransparency.sampleapp.item.ExampleCardItem
 import com.babylon.certificatetransparency.sampleapp.item.text.HeaderTextItem
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import kotlinx.android.synthetic.main.fragment_main.*
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(R.layout.fragment_main) {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false)
-    }
+    private val binding by viewBinding<FragmentMainBinding>()
 
     @Suppress("LongMethod")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        binding.recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
         @Suppress("MagicNumber")
         val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, resources.displayMetrics)
-        recyclerView.addItemDecoration(SpaceItemDecoration(px.toInt()))
+        binding.recyclerView.addItemDecoration(SpaceItemDecoration(px.toInt()))
 
-        recyclerView.adapter = GroupAdapter<GroupieViewHolder>().apply {
+        binding.recyclerView.adapter = GroupAdapter<GroupieViewHolder>().apply {
             val navController = findNavController()
 
             add(HeaderTextItem(R.string.certificate_transparency, iconResId = R.drawable.ic_launcher_foreground))

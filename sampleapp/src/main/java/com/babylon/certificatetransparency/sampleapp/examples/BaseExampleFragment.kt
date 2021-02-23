@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +13,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.sampleapp.examples
 
+import android.app.Application
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -24,7 +29,6 @@ import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,6 +37,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.babylon.certificatetransparency.sampleapp.R
 import com.babylon.certificatetransparency.sampleapp.SpaceItemDecoration
+import com.babylon.certificatetransparency.sampleapp.databinding.ExampleFragmentBinding
 import com.babylon.certificatetransparency.sampleapp.item.CheckboxItem
 import com.babylon.certificatetransparency.sampleapp.item.CodeViewItem
 import com.babylon.certificatetransparency.sampleapp.item.RemovableItem
@@ -41,13 +46,15 @@ import com.babylon.certificatetransparency.sampleapp.item.button.OutlinedButtonI
 import com.babylon.certificatetransparency.sampleapp.item.text.BodyTextItem
 import com.babylon.certificatetransparency.sampleapp.item.text.HeaderTextItem
 import com.babylon.certificatetransparency.sampleapp.item.text.SubHeaderTextItem
+import com.babylon.certificatetransparency.sampleapp.viewBinding
 import com.google.android.material.snackbar.Snackbar
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section
-import kotlinx.android.synthetic.main.example_fragment.*
 
-abstract class BaseExampleFragment<T : BaseExampleViewModel> : Fragment() {
+abstract class BaseExampleFragment<T : BaseExampleViewModel> : Fragment(R.layout.example_fragment) {
+
+    private val binding by viewBinding<ExampleFragmentBinding>()
 
     abstract fun getViewModelClass(): Class<T>
 
@@ -91,28 +98,29 @@ abstract class BaseExampleFragment<T : BaseExampleViewModel> : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProvider(this, ContextViewModelFactory(requireContext())).get(getViewModelClass())
+        val appContext = requireContext().applicationContext as Application
+        viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(appContext).create(getViewModelClass())
 
         viewModel.liveData.observe(
             viewLifecycleOwner,
-            Observer { state ->
+            { state ->
                 updateHosts(state)
-                        updateMessage(state)
-                        updateCode(state)
-                        updateFailOnError(state)
+                updateMessage(state)
+                updateCode(state)
+                updateFailOnError(state)
             }
         )
 
-        hostsRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        hostsRecyclerView.setHasFixedSize(false)
+        binding.hostsRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        binding.hostsRecyclerView.setHasFixedSize(false)
 
         @Suppress("MagicNumber")
         val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, resources.displayMetrics)
-        hostsRecyclerView.addItemDecoration(SpaceItemDecoration(px.toInt()))
+        binding.hostsRecyclerView.addItemDecoration(SpaceItemDecoration(px.toInt()))
 
-        (hostsRecyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        (binding.hostsRecyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
-        hostsRecyclerView.adapter = GroupAdapter<GroupieViewHolder>().apply {
+        binding.hostsRecyclerView.adapter = GroupAdapter<GroupieViewHolder>().apply {
             add(HeaderTextItem(getTitle()))
             add(SubHeaderTextItem(R.string.configuration))
             add(hostsSection)
@@ -121,8 +129,8 @@ abstract class BaseExampleFragment<T : BaseExampleViewModel> : Fragment() {
             add(codeViewItem)
             add(
                 ButtonItem(R.string.test_certificate_transparency) {
-                showConnectionDialog()
-            }
+                    showConnectionDialog()
+                }
             )
         }
     }
@@ -160,13 +168,13 @@ abstract class BaseExampleFragment<T : BaseExampleViewModel> : Fragment() {
 
                 addCallback(
                     object : Snackbar.Callback() {
-            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                super.onDismissed(transientBottomBar, event)
-                if (snackbar == this@apply) {
-                    viewModel.dismissMessage()
-                }
-            }
-        }
+                        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                            super.onDismissed(transientBottomBar, event)
+                            if (snackbar == this@apply) {
+                                viewModel.dismissMessage()
+                            }
+                        }
+                    }
                 )
                 show()
             }

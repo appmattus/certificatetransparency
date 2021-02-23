@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,11 +13,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.sampleapp.examples.okhttp.kotlin
 
-import android.content.Context
+import android.app.Application
 import com.babylon.certificatetransparency.CTLogger
 import com.babylon.certificatetransparency.cache.AndroidDiskCache
 import com.babylon.certificatetransparency.certificateTransparencyInterceptor
@@ -28,7 +32,7 @@ import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 
-class OkHttpKotlinExampleViewModel(val context: Context) : BaseExampleViewModel(context) {
+class OkHttpKotlinExampleViewModel(application: Application) : BaseExampleViewModel(application) {
 
     override val sampleCodeTemplate
         get() = "okhttp-kotlin.txt"
@@ -60,15 +64,15 @@ class OkHttpKotlinExampleViewModel(val context: Context) : BaseExampleViewModel(
         client.newCall(request).enqueue(
             object : Callback {
 
-override fun onFailure(call: Call, e: IOException) {
-// Failure. Send message to the UI as logger won't catch generic network exceptions
-sendException(e)
-}
+                override fun onFailure(call: Call, e: IOException) {
+                    // Failure. Send message to the UI as logger won't catch generic network exceptions
+                    sendException(e)
+                }
 
-override fun onResponse(call: Call, response: Response) {
-// Success. Reason will have been sent to the logger
-}
-}
+                override fun onResponse(call: Call, response: Response) {
+                    // Success. Reason will have been sent to the logger
+                }
+            }
         )
     }
 }

@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,14 +13,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.sampleapp.examples.volley.kotlin
 
-import android.content.Context
+import android.app.Application
 import com.android.volley.Request
 import com.android.volley.RequestQueue
-import com.android.volley.Response
 import com.android.volley.toolbox.HurlStack
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -31,7 +34,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
-class VolleyKotlinExampleViewModel(context: Context) : BaseExampleViewModel(context) {
+class VolleyKotlinExampleViewModel(application: Application) : BaseExampleViewModel(application) {
 
     override val sampleCodeTemplate
         get() = "volley-kotlin.txt"
@@ -75,13 +78,13 @@ class VolleyKotlinExampleViewModel(context: Context) : BaseExampleViewModel(cont
         val request = StringRequest(
             Request.Method.GET,
             "https://$connectionHost",
-            Response.Listener<String> { response ->
+            { response ->
                 // Success. Reason will have been sent to the logger
                 println(response)
             },
-            Response.ErrorListener {
+            { error ->
                 // Failure. Send message to the UI as logger won't catch generic network exceptions
-                sendException(it)
+                sendException(error)
             }
         )
 

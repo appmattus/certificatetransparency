@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,11 +13,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.sampleapp.examples.httpurlconnection.java;
 
-import android.content.Context;
+import android.app.Application;
 
 import com.babylon.certificatetransparency.CTHostnameVerifierBuilder;
 import com.babylon.certificatetransparency.CTLogger;
@@ -34,8 +38,8 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class HttpURLConnectionJavaExampleViewModel extends BaseExampleViewModel {
 
-    public HttpURLConnectionJavaExampleViewModel(@NotNull Context context) {
-        super(context);
+    public HttpURLConnectionJavaExampleViewModel(@NotNull Application application) {
+        super(application);
     }
 
     @NotNull
@@ -45,19 +49,19 @@ public class HttpURLConnectionJavaExampleViewModel extends BaseExampleViewModel 
     }
 
     private void enableCertificateTransparencyChecks(
-            HttpURLConnection connection,
-            Set<String> hosts,
-            boolean isFailOnError,
-            CTLogger defaultLogger
+        HttpURLConnection connection,
+        Set<String> hosts,
+        boolean isFailOnError,
+        CTLogger defaultLogger
     ) {
         if (connection instanceof HttpsURLConnection) {
             HttpsURLConnection httpsConnection = (HttpsURLConnection) connection;
 
             // Create a hostname verifier wrapping the original
             CTHostnameVerifierBuilder builder = new CTHostnameVerifierBuilder(httpsConnection.getHostnameVerifier())
-                    .setFailOnError(isFailOnError)
-                    .setLogger(defaultLogger)
-                    .setDiskCache(new AndroidDiskCache(getApplication()));
+                .setFailOnError(isFailOnError)
+                .setLogger(defaultLogger)
+                .setDiskCache(new AndroidDiskCache(getApplication()));
 
             for (String host : hosts) {
                 builder.includeHost(host);

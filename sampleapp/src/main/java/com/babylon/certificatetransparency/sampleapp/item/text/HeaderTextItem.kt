@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,39 +13,45 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.sampleapp.item.text
 
+import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import com.babylon.certificatetransparency.sampleapp.R
-import com.babylon.certificatetransparency.sampleapp.item.getString
-import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
-import com.xwray.groupie.kotlinandroidextensions.Item
-import kotlinx.android.synthetic.main.header_text_item.view.*
+import com.babylon.certificatetransparency.sampleapp.databinding.HeaderTextItemBinding
+import com.xwray.groupie.viewbinding.BindableItem
 
 class HeaderTextItem(
     @StringRes private val titleResId: Int? = null,
     private val title: String? = null,
     @DrawableRes private val iconResId: Int? = null
-) : Item() {
+) : BindableItem<HeaderTextItemBinding>() {
 
     init {
         check((titleResId != null) xor (title != null)) { "Provide either titleResId or title" }
     }
 
+    override fun initializeViewBinding(view: View) = HeaderTextItemBinding.bind(view)
+
     override fun getLayout() = R.layout.header_text_item
 
-    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.containerView.title.text = if (titleResId != null) viewHolder.getString(titleResId) else title
+    override fun bind(viewBinding: HeaderTextItemBinding, position: Int) {
+        val context = viewBinding.root.context
+
+        viewBinding.title.text = if (titleResId != null) context.getString(titleResId) else title
 
         if (iconResId != null) {
-            val drawable = ContextCompat.getDrawable(viewHolder.containerView.context, iconResId)
-            viewHolder.containerView.title.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
+            val drawable = ContextCompat.getDrawable(context, iconResId)
+            viewBinding.title.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
         } else {
-            viewHolder.containerView.title.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null)
+            viewBinding.title.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, null, null)
         }
     }
 }

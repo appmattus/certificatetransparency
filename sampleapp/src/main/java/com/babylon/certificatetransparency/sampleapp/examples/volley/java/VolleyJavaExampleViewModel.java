@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,11 +13,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.sampleapp.examples.volley.java;
 
-import android.content.Context;
+import android.app.Application;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -39,8 +43,8 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class VolleyJavaExampleViewModel extends BaseExampleViewModel {
 
-    public VolleyJavaExampleViewModel(@NotNull Context context) {
-        super(context);
+    public VolleyJavaExampleViewModel(@NotNull Application application) {
+        super(application);
     }
 
     @NotNull
@@ -50,19 +54,19 @@ public class VolleyJavaExampleViewModel extends BaseExampleViewModel {
     }
 
     private void enableCertificateTransparencyChecks(
-            HttpURLConnection connection,
-            Set<String> hosts,
-            boolean isFailOnError,
-            CTLogger defaultLogger
+        HttpURLConnection connection,
+        Set<String> hosts,
+        boolean isFailOnError,
+        CTLogger defaultLogger
     ) {
         if (connection instanceof HttpsURLConnection) {
             HttpsURLConnection httpsConnection = (HttpsURLConnection) connection;
 
             // Create a hostname verifier wrapping the original
             CTHostnameVerifierBuilder builder = new CTHostnameVerifierBuilder(httpsConnection.getHostnameVerifier())
-                    .setFailOnError(isFailOnError)
-                    .setLogger(defaultLogger)
-                    .setDiskCache(new AndroidDiskCache(getApplication()));
+                .setFailOnError(isFailOnError)
+                .setLogger(defaultLogger)
+                .setDiskCache(new AndroidDiskCache(getApplication()));
 
             for (String host : hosts) {
                 builder.includeHost(host);
@@ -76,16 +80,16 @@ public class VolleyJavaExampleViewModel extends BaseExampleViewModel {
     // We create it dynamically as we allow the user to set the hosts for certificate transparency
     private RequestQueue createRequestQueue(Set<String> hosts, boolean isFailOnError, CTLogger defaultLogger) {
         return Volley.newRequestQueue(getApplication(),
-                new HurlStack() {
-                    @Override
-                    protected HttpURLConnection createConnection(URL url) throws IOException {
-                        HttpURLConnection connection = super.createConnection(url);
+            new HurlStack() {
+                @Override
+                protected HttpURLConnection createConnection(URL url) throws IOException {
+                    HttpURLConnection connection = super.createConnection(url);
 
-                        enableCertificateTransparencyChecks(connection, hosts, isFailOnError, defaultLogger);
+                    enableCertificateTransparencyChecks(connection, hosts, isFailOnError, defaultLogger);
 
-                        return connection;
-                    }
+                    return connection;
                 }
+            }
         );
     }
 
@@ -95,10 +99,10 @@ public class VolleyJavaExampleViewModel extends BaseExampleViewModel {
 
         // Failure. Send message to the UI as logger won't catch generic network exceptions
         Request<String> request = new StringRequest(Request.Method.GET, "https://" + connectionHost,
-                response -> {
-                    // Success. Reason will have been sent to the logger
-                },
-                this::sendException);
+            response -> {
+                // Success. Reason will have been sent to the logger
+            },
+            this::sendException);
 
         // Explicitly disable cache so we always call the interceptor and thus see the certificate transparency results
         request.setShouldCache(false);
