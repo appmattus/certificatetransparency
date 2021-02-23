@@ -20,10 +20,11 @@ object Versions {
 
     const val androidGradlePlugin = "4.1.2"
     const val detektGradlePlugin = "1.16.0-RC1"
+    const val dokkaPlugin = "1.4.20"
+    const val gradleMavenPublishPlugin = "0.14.2"
     const val gradleVersionsPlugin = "0.36.0"
     const val markdownlintGradlePlugin = "0.6.0"
-    const val gradleMavenPublishPlugin = "0.14.2"
-    const val dokkaPlugin = "1.4.20"
+    const val owaspDependencyCheckPlugin = "6.1.1"
 
     const val bouncyCastle = "1.68"
     const val cache2k = "2.0.0.Final"
@@ -36,12 +37,13 @@ object Versions {
     const val slf4j = "1.7.30"
     const val sqlDelight = "1.4.4"
     const val systemRules = "1.19.0"
+    const val retrofit = "2.9.0"
 
+    const val equalsVerifier = "3.5.4"
     const val junit4 = "4.13.2"
-    const val mockito = "3.7.7"
+    const val mockito = "3.8.0"
     const val mockitoKotlin = "2.2.0"
     const val objenesis = "2.6"
-    const val retrofit = "2.9.0"
     const val robolectric = "4.5.1"
 
     const val desugar = "1.1.1"

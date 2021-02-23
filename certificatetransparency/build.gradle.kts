@@ -19,21 +19,21 @@ java {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
-    implementation("org.bouncycastle:bcpkix-jdk15to18:1.66")
-    implementation("org.bouncycastle:bcprov-jdk15to18:1.66")
-    implementation("org.bouncycastle:bctls-jdk15to18:1.66")
+    implementation("org.bouncycastle:bcpkix-jdk15to18:${Versions.bouncyCastle}")
+    implementation("org.bouncycastle:bcprov-jdk15to18:${Versions.bouncyCastle}")
+    implementation("org.bouncycastle:bctls-jdk15to18:${Versions.bouncyCastle}")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
 
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    testImplementation("com.squareup.retrofit2:retrofit-mock:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
+    implementation("com.squareup.retrofit2:converter-gson:${Versions.retrofit}")
+    testImplementation("com.squareup.retrofit2:retrofit-mock:${Versions.retrofit}")
 
-    testImplementation("junit:junit:4.13")
-    testImplementation("org.mockito:mockito-core:3.5.13")
-    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
+    testImplementation("junit:junit:${Versions.junit4}")
+    testImplementation("org.mockito:mockito-core:${Versions.mockito}")
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:${Versions.mockitoKotlin}")
 
-    testImplementation("nl.jqno.equalsverifier:equalsverifier:3.4.3")
+    testImplementation("nl.jqno.equalsverifier:equalsverifier:${Versions.equalsVerifier}")
 }
 
 tasks.withType(KotlinCompile::class.java).all {

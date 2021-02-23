@@ -10,11 +10,11 @@ plugins {
 apply(from = "$rootDir/gradle/scripts/jacoco-android.gradle.kts")
 
 android {
-    compileSdkVersion(29)
+    compileSdkVersion(30)
 
     defaultConfig {
         minSdkVersion(19)
-        targetSdkVersion(29)
+        targetSdkVersion(30)
         versionCode = 1
         versionName = "1.0"
 
@@ -38,16 +38,16 @@ android {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
 
     api(project(":certificatetransparency"))
 
-    testImplementation("junit:junit:4.13")
-    testImplementation("org.mockito:mockito-core:3.5.13")
-    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
+    testImplementation("junit:junit:${Versions.junit4}")
+    testImplementation("org.mockito:mockito-core:${Versions.mockito}")
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:${Versions.mockitoKotlin}")
 
-    testImplementation("androidx.test:core:1.3.0")
-    testImplementation("androidx.test:runner:1.3.0")
-    testImplementation("androidx.test.ext:junit:1.1.2")
-    testImplementation("org.robolectric:robolectric:4.4")
+    testImplementation("androidx.test:core:${Versions.AndroidX.testCore}")
+    testImplementation("androidx.test:runner:${Versions.AndroidX.testRunner}")
+    testImplementation("androidx.test.ext:junit:${Versions.AndroidX.testExtJunit}")
+    testImplementation("org.robolectric:robolectric:${Versions.robolectric}")
 }

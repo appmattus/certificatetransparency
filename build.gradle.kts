@@ -15,8 +15,8 @@ buildscript {
 
 plugins {
     kotlin("jvm") version Versions.kotlin apply false
-    id("org.owasp.dependencycheck") version "6.0.2"
-    id("com.appmattus.markdown") version "0.6.0"
+    id("org.owasp.dependencycheck") version Versions.owaspDependencyCheckPlugin
+    id("com.appmattus.markdown") version Versions.markdownlintGradlePlugin
     id("com.vanniktech.maven.publish") version Versions.gradleMavenPublishPlugin apply false
     id("org.jetbrains.dokka") version Versions.dokkaPlugin
 }
