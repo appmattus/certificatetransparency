@@ -48,7 +48,8 @@ public sealed class VerificationResult {
             /**
              * Returns a string representation of the object.
              */
-            override fun toString(): String = "Success: SCT trusted logs $scts"
+            override fun toString(): String =
+                "Success: SCT trusted logs ${scts.forDisplay()}"
         }
 
         public data class InsecureConnection(val host: String) : Success() {
@@ -105,8 +106,10 @@ public sealed class VerificationResult {
             /**
              * Returns a string representation of the object.
              */
-            override fun toString(): String =
-                "Failure: Too few trusted SCTs, required $minSctCount, found ${scts.count { it.value is SctVerificationResult.Valid }} in $scts"
+            override fun toString(): String {
+                val trustedScts = scts.count { it.value is SctVerificationResult.Valid }
+                return "Failure: Too few trusted SCTs, required $minSctCount, found $trustedScts in ${scts.forDisplay()}"
+            }
         }
 
         /**
@@ -119,5 +122,9 @@ public sealed class VerificationResult {
              */
             override fun toString(): String = "Failure: IOException $ioException"
         }
+    }
+
+    public companion object {
+        private fun Map<String, SctVerificationResult>.forDisplay() = map { "${it.key}:${it.value}" }
     }
 }
