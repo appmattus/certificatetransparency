@@ -3,6 +3,7 @@ import com.appmattus.markdown.rules.ProperNamesRule
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.dokka.gradle.DokkaPlugin
 import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     repositories {
@@ -46,6 +47,16 @@ subprojects {
                         remoteUrl.set(java.net.URL("https://github.com/appmattus/certificatetransparency/blob/main"))
                         remoteLineSuffix.set("#L")
                     }
+                }
+            }
+        }
+    }
+
+    if (project.name !in listOf("sampleapp")) {
+        tasks.withType<KotlinCompile>().configureEach {
+            if (!name.contains("test", ignoreCase = true)) {
+                kotlinOptions {
+                    freeCompilerArgs += "-Xexplicit-api=strict"
                 }
             }
         }
