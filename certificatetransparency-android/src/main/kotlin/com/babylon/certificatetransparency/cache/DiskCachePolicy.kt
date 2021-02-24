@@ -21,6 +21,6 @@ import java.util.Date
 /**
  * Disk cache expiry policy
  */
-interface DiskCachePolicy {
-    fun isExpired(lastWriteDate: Date, currentDate: Date): Boolean
+public interface DiskCachePolicy {
+    public fun isExpired(lastWriteDate: Date, currentDate: Date): Boolean
 }
