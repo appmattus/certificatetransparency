@@ -22,7 +22,7 @@ import java.util.Date
 /**
  * A default disk cache expiry policy. The log list expires after 24 hours since it was last saved.
  */
-class DefaultDiskCachePolicy : DiskCachePolicy {
+public class DefaultDiskCachePolicy : DiskCachePolicy {
 
     override fun isExpired(lastWriteDate: Date, currentDate: Date): Boolean {
         val expiryCalendar = Calendar.getInstance().apply {

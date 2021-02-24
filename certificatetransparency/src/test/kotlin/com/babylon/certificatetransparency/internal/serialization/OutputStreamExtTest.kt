@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,15 +15,18 @@
  * limitations under the License.
  *
  * Code derived from https://github.com/google/certificate-transparency-java
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.internal.serialization
 
-import com.babylon.certificatetransparency.internal.logclient.model.DigitallySigned
-import com.babylon.certificatetransparency.internal.logclient.model.LogId
-import com.babylon.certificatetransparency.internal.logclient.model.SignedCertificateTimestamp
-import com.babylon.certificatetransparency.internal.logclient.model.Version
 import com.babylon.certificatetransparency.internal.utils.Base64
+import com.babylon.certificatetransparency.internal.verifier.model.DigitallySigned
+import com.babylon.certificatetransparency.internal.verifier.model.LogId
+import com.babylon.certificatetransparency.internal.verifier.model.SignedCertificateTimestamp
+import com.babylon.certificatetransparency.internal.verifier.model.Version
 import com.babylon.certificatetransparency.utils.TestData
 import org.junit.Assert.assertArrayEquals
 import org.junit.Test
@@ -52,7 +56,7 @@ class OutputStreamExtTest {
         )
 
         val generatedBytes = serializeSctToBinary(sct)
-        val readBytes = TestData.file(TEST_CERT_SCT).readBytes()
+        val readBytes = TestData.file(TestData.TEST_CERT_SCT).readBytes()
         assertArrayEquals(readBytes, generatedBytes)
     }
 
@@ -71,8 +75,6 @@ class OutputStreamExtTest {
     }
 
     companion object {
-        const val TEST_CERT_SCT = "/testdata/test-cert.proof"
-
         const val HASH_ALG_LENGTH = 1
         const val SIGNATURE_ALG_LENGTH = 1
     }

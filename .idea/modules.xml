@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/certificatetransparency.buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/certificatetransparency.buildSrc.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/certificatetransparency/certificatetransparency.certificatetransparency.iml" filepath="$PROJECT_DIR$/.idea/modules/certificatetransparency/certificatetransparency.certificatetransparency.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/certificatetransparency-android/certificatetransparency.certificatetransparency-android.iml" filepath="$PROJECT_DIR$/.idea/modules/certificatetransparency-android/certificatetransparency.certificatetransparency-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/certificatetransparency-logclient/certificatetransparency.certificatetransparency-logclient.iml" filepath="$PROJECT_DIR$/.idea/modules/certificatetransparency-logclient/certificatetransparency.certificatetransparency-logclient.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/sampleapp/certificatetransparency.sampleapp.iml" filepath="$PROJECT_DIR$/.idea/modules/sampleapp/certificatetransparency.sampleapp.iml" />
     </modules>
   </component>
