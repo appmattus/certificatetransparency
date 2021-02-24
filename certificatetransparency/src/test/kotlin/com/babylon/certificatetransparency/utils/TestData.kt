@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +15,9 @@
  * limitations under the License.
  *
  * Code derived from https://github.com/google/certificate-transparency-java
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.utils
@@ -26,6 +30,7 @@ import java.security.cert.X509Certificate
 @Ignore("Contains constants for tests")
 object TestData {
     private const val DATA_ROOT = "/testdata/"
+
     // Public log key
     const val TEST_LOG_KEY = DATA_ROOT + "ct-server-key-public.pem"
     const val TEST_LOG_KEY_RSA = DATA_ROOT + "rsa/ct-server-key-public-rsa.pem"

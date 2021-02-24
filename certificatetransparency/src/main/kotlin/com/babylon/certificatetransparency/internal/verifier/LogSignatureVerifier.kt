@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +15,14 @@
  * limitations under the License.
  *
  * Code derived from https://github.com/google/certificate-transparency-java
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.internal.verifier
 
 import com.babylon.certificatetransparency.SctVerificationResult
-import com.babylon.certificatetransparency.internal.logclient.model.SignedCertificateTimestamp
-import com.babylon.certificatetransparency.internal.logclient.model.Version
 import com.babylon.certificatetransparency.internal.serialization.CTConstants
 import com.babylon.certificatetransparency.internal.serialization.CTConstants.LOG_ENTRY_TYPE_LENGTH
 import com.babylon.certificatetransparency.internal.serialization.CTConstants.MAX_CERTIFICATE_LENGTH
@@ -35,6 +37,8 @@ import com.babylon.certificatetransparency.internal.utils.isPreCertificateSignin
 import com.babylon.certificatetransparency.internal.utils.issuerInformation
 import com.babylon.certificatetransparency.internal.utils.issuerInformationFromPreCertificate
 import com.babylon.certificatetransparency.internal.verifier.model.IssuerInformation
+import com.babylon.certificatetransparency.internal.verifier.model.SignedCertificateTimestamp
+import com.babylon.certificatetransparency.internal.verifier.model.Version
 import com.babylon.certificatetransparency.loglist.LogServer
 import org.bouncycastle.asn1.ASN1InputStream
 import org.bouncycastle.asn1.ASN1ObjectIdentifier

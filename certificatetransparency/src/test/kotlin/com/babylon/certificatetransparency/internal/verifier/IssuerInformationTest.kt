@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,18 +13,24 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.internal.verifier
 
-import com.babylon.certificatetransparency.internal.logclient.model.SignedTreeHead
+import com.babylon.certificatetransparency.internal.verifier.model.IssuerInformation
 import com.babylon.certificatetransparency.utils.equalsVerifier
+import org.bouncycastle.asn1.x500.X500Name
 import org.junit.Test
 
 class IssuerInformationTest {
 
     @Test
     fun verifyEquals() {
-        equalsVerifier<SignedTreeHead>()
+        equalsVerifier<IssuerInformation> {
+            withPrefabValues(X500Name::class.java, X500Name("CN=red"), X500Name("CN=blue"))
+        }
     }
 }

@@ -35,7 +35,7 @@ import kotlin.coroutines.CoroutineContext
  * The private storage directory of the application is used to store the log list and its signature.
  * The last write date is stored alongside in shared preferences in order to track cache expiry.
  */
-class AndroidDiskCache @JvmOverloads constructor(
+public class AndroidDiskCache @JvmOverloads constructor(
     context: Context,
     private val diskCachePolicy: DiskCachePolicy = DefaultDiskCachePolicy()
 ) : DiskCache {
@@ -95,9 +95,9 @@ class AndroidDiskCache @JvmOverloads constructor(
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO
 
-    companion object {
-        const val LOG_LIST_FILE = "loglist.json"
-        const val SIG_FILE = "loglist.sig"
-        const val PREF_KEY_LAST_WRITE = "last_write"
+    public companion object {
+        private const val LOG_LIST_FILE = "loglist.json"
+        private const val SIG_FILE = "loglist.sig"
+        private const val PREF_KEY_LAST_WRITE = "last_write"
     }
 }

@@ -1,0 +1,64 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+plugins {
+    id("java-library")
+    id("kotlin")
+    id("org.owasp.dependencycheck")
+    id("com.android.lint")
+    id("com.vanniktech.maven.publish")
+    id("org.jetbrains.dokka")
+}
+
+apply(from = "$rootDir/gradle/scripts/jacoco.gradle.kts")
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    implementation(kotlin("stdlib-jdk8"))
+
+    implementation("org.bouncycastle:bcpkix-jdk15to18:${Versions.bouncyCastle}")
+    implementation("org.bouncycastle:bcprov-jdk15to18:${Versions.bouncyCastle}")
+    implementation("org.bouncycastle:bctls-jdk15to18:${Versions.bouncyCastle}")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
+
+    implementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
+    implementation("com.squareup.retrofit2:converter-gson:${Versions.retrofit}")
+    testImplementation("com.squareup.retrofit2:retrofit-mock:${Versions.retrofit}")
+
+    testImplementation("junit:junit:${Versions.junit4}")
+    testImplementation("org.mockito:mockito-core:${Versions.mockito}")
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:${Versions.mockitoKotlin}")
+
+    testImplementation("nl.jqno.equalsverifier:equalsverifier:${Versions.equalsVerifier}")
+}
+
+tasks.withType(KotlinCompile::class.java).all {
+    kotlinOptions {
+        allWarningsAsErrors = true
+        freeCompilerArgs += "-Xuse-experimental=kotlin.Experimental"
+    }
+}
+
+dependencyCheck {
+    failBuildOnCVSS = 0f
+
+    suppressionFile = file("cve-suppressions.xml").toString()
+
+    analyzers.assemblyEnabled = false
+
+    skipConfigurations = listOf("lintClassPath", "jacocoAgent", "jacocoAnt", "kotlinCompilerClasspath", "kotlinCompilerPluginClasspath")
+}
+
+lintOptions {
+    isAbortOnError = true
+    isWarningsAsErrors = true
+}
+
+tasks.named("check") {
+    finalizedBy(rootProject.tasks.named("detekt"))
+}
+tasks.getByName("check").dependsOn(rootProject.tasks.getByName("markdownlint"))

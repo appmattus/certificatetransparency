@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +15,16 @@
  * limitations under the License.
  *
  * Code derived from https://github.com/google/certificate-transparency-java
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.internal.utils
 
-import com.babylon.certificatetransparency.internal.logclient.model.SignedCertificateTimestamp
 import com.babylon.certificatetransparency.internal.serialization.CTConstants
 import com.babylon.certificatetransparency.internal.serialization.Deserializer
+import com.babylon.certificatetransparency.internal.verifier.model.SignedCertificateTimestamp
 import org.bouncycastle.asn1.ASN1OctetString
 import org.bouncycastle.asn1.ASN1Primitive
 import org.bouncycastle.asn1.DEROctetString
