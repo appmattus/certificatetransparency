@@ -67,9 +67,6 @@ internal fun Certificate.hasEmbeddedSct(): Boolean {
 // not PreCertificate Signing Cert. In this case, the only thing that's needed is the
 // issuer key hash - the Precertificate will already have the right value for the issuer
 // name and K509 Authority Key Identifier extension.
-/**
- * @throws NoSuchAlgorithmException
- */
 internal fun Certificate.issuerInformation(): IssuerInformation {
     return IssuerInformation(keyHash = keyHash(), issuedByPreCertificateSigningCert = false)
 }
@@ -90,7 +87,4 @@ internal fun Certificate.issuerInformationFromPreCertificate(preCertificate: Cer
     }
 }
 
-/**
- * @throws NoSuchAlgorithmException
- */
 private fun Certificate.keyHash() = publicKey.sha256Hash()

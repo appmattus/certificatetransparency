@@ -22,15 +22,8 @@ package com.babylon.certificatetransparency.internal.utils
 
 import org.bouncycastle.jcajce.provider.digest.SHA1
 import org.bouncycastle.jcajce.provider.digest.SHA256
-import java.security.NoSuchAlgorithmException
 import java.security.PublicKey
 
-/**
- * @throws NoSuchAlgorithmException
- */
 internal fun PublicKey.sha256Hash(): ByteArray = SHA256.Digest().digest(encoded)
 
-/**
- * @throws NoSuchAlgorithmException
- */
 internal fun PublicKey.sha1Hash(): ByteArray = SHA1.Digest().digest(encoded)
