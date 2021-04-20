@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,20 +13,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.internal.utils
 
-import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
+import org.bouncycastle.jcajce.provider.digest.SHA1
+import org.bouncycastle.jcajce.provider.digest.SHA256
 import java.security.PublicKey
 
-/**
- * @throws NoSuchAlgorithmException
- */
-internal fun PublicKey.sha256Hash(): ByteArray = MessageDigest.getInstance("SHA-256").digest(encoded)
+internal fun PublicKey.sha256Hash(): ByteArray = SHA256.Digest().digest(encoded)
 
-/**
- * @throws NoSuchAlgorithmException
- */
-internal fun PublicKey.sha1Hash(): ByteArray = MessageDigest.getInstance("SHA-1").digest(encoded)
+internal fun PublicKey.sha1Hash(): ByteArray = SHA1.Digest().digest(encoded)

@@ -40,7 +40,7 @@ class PublicKeyExtTest {
         // given a certificate
         val certificate = TestData.loadCertificates(TestData.TEST_CERT)[0]
 
-        // when we hash the public key using SHA256
+        // when we hash the public key using SHA1
         val hash = Base64.toBase64String(certificate.publicKey.sha1Hash())
 
         // then the result matches openssl generated using:
