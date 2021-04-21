@@ -35,6 +35,10 @@ import okhttp3.Request
 
 public object LogListDataSourceFactory {
 
+    /**
+     * Create a [LogListService] allowing the override of [baseUrl] and [OkHttpClient]
+     * Default: baseUrl = https://www.gstatic.com/ct/log_list/v2/
+     */
     public fun createLogListService(
         baseUrl: String = "https://www.gstatic.com/ct/log_list/v2/",
         okHttpClient: OkHttpClient? = null
@@ -62,6 +66,9 @@ public object LogListDataSourceFactory {
         }
     }
 
+    /**
+     * Create a [DataSource] of [LogListResult] allowing the override of [LogListService] and [DiskCache]
+     */
     public fun createDataSource(
         logListService: LogListService = createLogListService(),
         diskCache: DiskCache? = null

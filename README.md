@@ -213,11 +213,11 @@ created through [TrustManagerFactory](http://docs.oracle.com/javase/6/docs/api/j
 
 **Log List Service** A [LogListService](./certificatetransparency/src/main/kotlin/com/babylon/certificatetransparency/loglist/LogListService.kt)
 providing log_list.json and log_list.sig byte data from the network.
+Can be used to override the OkHttpClient by creating through [LogListDataSourceFactory.createLogListService](./certificatetransparency/src/main/kotlin/com/babylon/certificatetransparency/loglist/LogListDataSourceFactory.kt).
 *Default:* log_list.json and log_list.sig byte data loaded from [https://www.gstatic.com/ct/log_list/v2/log_list.json](https://www.gstatic.com/ct/log_list/v2/log_list.json)
 
 **Log List Data Source** A [DataSource](./certificatetransparency/src/main/kotlin/com/babylon/certificatetransparency/datasource/DataSource.kt)
 providing a list of [LogServer](./certificatetransparency/src/main/kotlin/com/babylon/certificatetransparency/loglist/LogServer.kt).
-Can be used to override the OkHttpClient.
 *Default:* In memory cached log list loaded from [https://www.gstatic.com/ct/log_list/v2/log_list.json](https://www.gstatic.com/ct/log_list/v2/log_list.json)
 
 **Policy** [CTPolicy](./certificatetransparency/src/main/kotlin/com/babylon/certificatetransparency/CTPolicy.kt)

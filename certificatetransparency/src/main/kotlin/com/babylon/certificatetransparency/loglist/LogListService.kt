@@ -20,6 +20,10 @@
 
 package com.babylon.certificatetransparency.loglist
 
+/**
+ * Service to load log_list.json and log_list.sig file from the network.
+ * Typically returned from https://www.gstatic.com/ct/log_list/v2/log_list.json
+ */
 public interface LogListService {
     /**
      * Contents of https://www.gstatic.com/ct/log_list/v2/log_list.json
