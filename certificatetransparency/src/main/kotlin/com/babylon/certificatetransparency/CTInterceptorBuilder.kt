@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency
@@ -112,7 +116,7 @@ public class CTInterceptorBuilder {
 
     /**
      * A [LogListService] providing log list data from network
-     * Default: Log list loaded from https://www.gstatic.com/ct/log_list/log_list.json
+     * Default: Log list loaded from https://www.gstatic.com/ct/log_list/v2/log_list.json
      */
     @Suppress("MemberVisibilityCanBePrivate")
     public fun setLogListService(logListService: LogListService): CTInterceptorBuilder =
@@ -122,7 +126,7 @@ public class CTInterceptorBuilder {
 
     /**
      * A [LogListService] providing log list data from network
-     * Default: Log list loaded from https://www.gstatic.com/ct/log_list/log_list.json
+     * Default: Log list loaded from https://www.gstatic.com/ct/log_list/v2/log_list.json
      */
     @JvmSynthetic
     @Suppress("unused")
@@ -132,7 +136,7 @@ public class CTInterceptorBuilder {
 
     /**
      * A [DataSource] providing a list of [LogServer]
-     * Default: In memory cached log list loaded from https://www.gstatic.com/ct/log_list/log_list.json
+     * Default: In memory cached log list loaded from https://www.gstatic.com/ct/log_list/v2/log_list.json
      */
     @Suppress("MemberVisibilityCanBePrivate")
     public fun setLogListDataSource(logListDataSource: DataSource<LogListResult>): CTInterceptorBuilder =
@@ -142,7 +146,7 @@ public class CTInterceptorBuilder {
 
     /**
      * A [DataSource] providing a list of [LogServer]
-     * Default: In memory cached log list loaded from https://www.gstatic.com/ct/log_list/log_list.json
+     * Default: In memory cached log list loaded from https://www.gstatic.com/ct/log_list/v2/log_list.json
      */
     @JvmSynthetic
     @Suppress("unused")

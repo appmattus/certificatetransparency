@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.utils
@@ -29,7 +33,7 @@ import kotlinx.coroutines.GlobalScope
 object LogListDataSourceTestFactory {
 
     val logListDataSource: DataSource<LogListResult> by lazy {
-        // Collection of CT logs that are trusted from https://www.gstatic.com/ct/log_list/log_list.json
+        // Collection of CT logs that are trusted from https://www.gstatic.com/ct/log_list/v2/log_list.json
         val json = TestData.file(TestData.TEST_LOG_LIST_JSON).readText()
         val trustedLogKeys = GsonBuilder().create().fromJson(json, LogListV2::class.java).operators.flatMap { it.logs.map(Log::key) }
 

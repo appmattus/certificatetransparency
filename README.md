@@ -211,9 +211,14 @@ used to clean the certificate chain
 *Default:* Platform default [X509TrustManager](https://docs.oracle.com/javase/6/docs/api/javax/net/ssl/X509TrustManager.html)
 created through [TrustManagerFactory](http://docs.oracle.com/javase/6/docs/api/javax/net/ssl/TrustManagerFactory.html)
 
+**Log List Service** A [LogListService](./certificatetransparency/src/main/kotlin/com/babylon/certificatetransparency/loglist/LogListService.kt)
+providing log_list.json and log_list.sig byte data from the network.
+*Default:* log_list.json and log_list.sig byte data loaded from [https://www.gstatic.com/ct/log_list/v2/log_list.json](https://www.gstatic.com/ct/log_list/v2/log_list.json)
+
 **Log List Data Source** A [DataSource](./certificatetransparency/src/main/kotlin/com/babylon/certificatetransparency/datasource/DataSource.kt)
-providing a list of [LogServer](./certificatetransparency/src/main/kotlin/com/babylon/certificatetransparency/loglist/LogServer.kt)
-*Default:* In memory cached log list loaded from [https://www.gstatic.com/ct/log_list/log_list.json](https://www.gstatic.com/ct/log_list/log_list.json)
+providing a list of [LogServer](./certificatetransparency/src/main/kotlin/com/babylon/certificatetransparency/loglist/LogServer.kt).
+Can be used to override the OkHttpClient.
+*Default:* In memory cached log list loaded from [https://www.gstatic.com/ct/log_list/v2/log_list.json](https://www.gstatic.com/ct/log_list/v2/log_list.json)
 
 **Policy** [CTPolicy](./certificatetransparency/src/main/kotlin/com/babylon/certificatetransparency/CTPolicy.kt)
 which will verify correct number of SCTs are present
