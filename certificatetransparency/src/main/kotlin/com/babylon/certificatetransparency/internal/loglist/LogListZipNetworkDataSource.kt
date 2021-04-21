@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.internal.loglist
@@ -19,18 +23,19 @@ package com.babylon.certificatetransparency.internal.loglist
 import com.babylon.certificatetransparency.datasource.DataSource
 import com.babylon.certificatetransparency.internal.utils.LimitedSizeInputStream
 import com.babylon.certificatetransparency.internal.utils.isTooBigException
+import com.babylon.certificatetransparency.loglist.LogListService
 import com.babylon.certificatetransparency.loglist.RawLogListResult
 import kotlinx.coroutines.GlobalScope
 import java.io.File
 import java.util.zip.ZipInputStream
 
 internal class LogListZipNetworkDataSource(
-    private val logService: LogListService
+    private val logListService: LogListService
 ) : DataSource<RawLogListResult> {
 
     override val coroutineContext = GlobalScope.coroutineContext
 
-    override suspend fun get(): RawLogListResult = when (val logListZip = wrap(RawLogListZipFailedTooBig) { logService.getLogListZip() }) {
+    override suspend fun get(): RawLogListResult = when (val logListZip = wrap(RawLogListZipFailedTooBig) { logListService.getLogListZip() }) {
         is Data.Valid -> readZip(logListZip.bytes)
         is Data.Invalid -> logListZip.error
     }

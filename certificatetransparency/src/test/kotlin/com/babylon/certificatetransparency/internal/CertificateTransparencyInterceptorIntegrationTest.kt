@@ -100,7 +100,7 @@ class CertificateTransparencyInterceptorIntegrationTest {
                 certificateTransparencyInterceptor {
                     +"*.babylonhealth.com"
 
-logListDataSource {
+                    logListDataSource {
                         LogListDataSourceTestFactory.logListDataSource
                     }
                 }
@@ -120,7 +120,7 @@ logListDataSource {
                 certificateTransparencyInterceptor {
                     +"*.*"
 
-logListDataSource {
+                    logListDataSource {
                         LogListDataSourceTestFactory.logListDataSource
                     }
                 }
@@ -139,9 +139,9 @@ logListDataSource {
             OkHttpClient.Builder().addNetworkInterceptor(
                 certificateTransparencyInterceptor {
                     +"*.*"
--invalidSctDomain
+                    -invalidSctDomain
 
-logListDataSource {
+                    logListDataSource {
                         LogListDataSourceTestFactory.logListDataSource
                     }
                 }

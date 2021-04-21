@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +15,9 @@
  * limitations under the License.
  *
  * Code derived from https://github.com/google/certificate-transparency-java
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.internal.verifier
@@ -25,12 +29,12 @@ import com.babylon.certificatetransparency.cache.DiskCache
 import com.babylon.certificatetransparency.chaincleaner.CertificateChainCleaner
 import com.babylon.certificatetransparency.chaincleaner.CertificateChainCleanerFactory
 import com.babylon.certificatetransparency.datasource.DataSource
-import com.babylon.certificatetransparency.internal.loglist.LogListDataSourceFactory
 import com.babylon.certificatetransparency.internal.loglist.NoLogServers
 import com.babylon.certificatetransparency.internal.utils.Base64
 import com.babylon.certificatetransparency.internal.utils.hasEmbeddedSct
 import com.babylon.certificatetransparency.internal.utils.signedCertificateTimestamps
 import com.babylon.certificatetransparency.internal.verifier.model.Host
+import com.babylon.certificatetransparency.loglist.LogListDataSourceFactory
 import com.babylon.certificatetransparency.loglist.LogListResult
 import kotlinx.coroutines.runBlocking
 import java.io.IOException
@@ -66,7 +70,7 @@ internal open class CertificateTransparencyBase(
         certificateChainCleanerFactory?.get(localTrustManager) ?: CertificateChainCleaner.get(localTrustManager)
     }
 
-    private val logListDataSource = (logListDataSource ?: LogListDataSourceFactory.create(diskCache))
+    private val logListDataSource = (logListDataSource ?: LogListDataSourceFactory.createDataSource(diskCache = diskCache))
 
     private val policy = (policy ?: DefaultPolicy())
 
