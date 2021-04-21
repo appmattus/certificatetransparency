@@ -252,6 +252,30 @@ In addition to all of the properties above the hostname verifier ensures
 you provide a **delegate** hostname verifier which is used to first
 verify the hostname before the certificate transparency checks occur.
 
+## Certificate revocation
+
+Unfortunately in Android there is no built-in support for certificate
+revocation, which means you're basically on your own. This is an incredibly
+hard to solve problem and it is worth reading [revocation is broken](https://scotthelme.co.uk/revocation-is-broken/)
+for more background. Needless to say I would argue that revocation is flawed
+along with the broken implementations in mobile and web browsers.
+
+For our purposes we've added `certificateRevocationInterceptor` to this library:
+
+```kotlin
+certificateRevocationInterceptor {
+    addCrl(
+        issuerDistinguishedName = "ME0xCzAJBgNVBAYTAlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxJzAlBgNVBAMTHkRpZ2lDZXJ0IFNIQTIgU2VjdXJlIFNlcnZlciBDQQ==",
+        serialNumbers = listOf("Aa8e+91erglSMgsk/mtVaA==", "A3G1iob2zpw+y3v0L5II/A==")
+    )
+}
+```
+
+It is worth highlighting that the list of revoked certificates would need to be
+built into the app and so would require pushing out an app update should you
+want to add a revocation in. This does mean there's a small window for any
+attacks using a revoked certificate.
+
 ## Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md)
