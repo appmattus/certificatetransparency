@@ -25,21 +25,13 @@ import com.babylon.certificatetransparency.datasource.DataSource
 import com.babylon.certificatetransparency.internal.loglist.InMemoryDataSource
 import com.babylon.certificatetransparency.internal.loglist.LogListNetworkDataSource
 import com.babylon.certificatetransparency.internal.loglist.LogListZipNetworkDataSource
+import com.babylon.certificatetransparency.internal.loglist.await
 import com.babylon.certificatetransparency.internal.loglist.parser.RawLogListToLogListResultTransformer
 import com.babylon.certificatetransparency.internal.utils.MaxSizeInterceptor
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
 import okhttp3.CacheControl
-import okhttp3.Call
-import okhttp3.Callback
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.Response
-import java.io.IOException
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 public object LogListDataSourceFactory {
 
@@ -85,37 +77,6 @@ public object LogListDataSourceFactory {
             .compose(LogListNetworkDataSource(logListService))
             .oneWayTransform { transformer.transform(it) }
             .reuseInflight()
-    }
-
-    /**
-     * Suspend extension that allows suspend [Call] inside coroutine.
-     *
-     * @return Result of request or throw exception
-     */
-    private suspend fun Call.await(): ByteArray {
-        return withContext(Dispatchers.IO) {
-            suspendCancellableCoroutine { continuation ->
-                enqueue(object : Callback {
-                    override fun onResponse(call: Call, response: Response) {
-                        continuation.resume(response.body()?.bytes() ?: throw IOException("No data available"))
-                    }
-
-                    override fun onFailure(call: Call, e: IOException) {
-                        // Don't bother with resuming the continuation if it is already cancelled.
-                        if (continuation.isCancelled) return
-                        continuation.resumeWithException(e)
-                    }
-                })
-
-                continuation.invokeOnCancellation {
-                    try {
-                        cancel()
-                    } catch (ex: Throwable) {
-                        // Ignore cancel exception
-                    }
-                }
-            }
-        }
     }
 
     private class InMemoryCache : InMemoryDataSource<RawLogListResult>() {
