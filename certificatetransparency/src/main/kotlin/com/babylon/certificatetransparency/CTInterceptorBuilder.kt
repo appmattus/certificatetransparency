@@ -22,6 +22,7 @@ import com.babylon.certificatetransparency.datasource.DataSource
 import com.babylon.certificatetransparency.internal.verifier.CertificateTransparencyInterceptor
 import com.babylon.certificatetransparency.internal.verifier.model.Host
 import com.babylon.certificatetransparency.loglist.LogListResult
+import com.babylon.certificatetransparency.loglist.LogListService
 import com.babylon.certificatetransparency.loglist.LogServer
 import okhttp3.Interceptor
 import javax.net.ssl.TrustManagerFactory
@@ -35,6 +36,7 @@ import javax.net.ssl.X509TrustManager
 public class CTInterceptorBuilder {
     private var certificateChainCleanerFactory: CertificateChainCleanerFactory? = null
     private var trustManager: X509TrustManager? = null
+    private var logListService: LogListService? = null
     private var logListDataSource: DataSource<LogListResult>? = null
     private val includeHosts = mutableSetOf<Host>()
     private val excludeHosts = mutableSetOf<Host>()
@@ -106,6 +108,26 @@ public class CTInterceptorBuilder {
     @Suppress("unused")
     public fun trustManager(init: () -> X509TrustManager) {
         setTrustManager(init())
+    }
+
+    /**
+     * A [LogListService] providing log list data from network
+     * Default: Log list loaded from https://www.gstatic.com/ct/log_list/log_list.json
+     */
+    @Suppress("MemberVisibilityCanBePrivate")
+    public fun setLogListService(logListService: LogListService): CTInterceptorBuilder =
+        apply {
+            this.logListService = logListService
+        }
+
+    /**
+     * A [LogListService] providing log list data from network
+     * Default: Log list loaded from https://www.gstatic.com/ct/log_list/log_list.json
+     */
+    @JvmSynthetic
+    @Suppress("unused")
+    public fun logListService(init: () -> LogListService) {
+        setLogListService(init())
     }
 
     /**
@@ -225,6 +247,7 @@ public class CTInterceptorBuilder {
         excludeHosts.toSet(),
         certificateChainCleanerFactory,
         trustManager,
+        logListService,
         logListDataSource,
         policy,
         diskCache,

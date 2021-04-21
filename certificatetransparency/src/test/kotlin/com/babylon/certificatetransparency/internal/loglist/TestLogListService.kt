@@ -15,7 +15,7 @@
  */
 
 package com.babylon.certificatetransparency.internal.loglist
-w
+
 import com.babylon.certificatetransparency.loglist.LogListService
 import retrofit2.http.GET
 import retrofit2.http.Headers

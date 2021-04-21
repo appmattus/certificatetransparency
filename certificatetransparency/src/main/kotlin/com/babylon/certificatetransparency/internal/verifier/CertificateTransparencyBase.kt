@@ -36,6 +36,7 @@ import com.babylon.certificatetransparency.internal.utils.signedCertificateTimes
 import com.babylon.certificatetransparency.internal.verifier.model.Host
 import com.babylon.certificatetransparency.loglist.LogListDataSourceFactory
 import com.babylon.certificatetransparency.loglist.LogListResult
+import com.babylon.certificatetransparency.loglist.LogListService
 import kotlinx.coroutines.runBlocking
 import java.io.IOException
 import java.security.KeyStore
@@ -50,6 +51,7 @@ internal open class CertificateTransparencyBase(
     private val excludeHosts: Set<Host> = emptySet(),
     private val certificateChainCleanerFactory: CertificateChainCleanerFactory? = null,
     trustManager: X509TrustManager? = null,
+    logListService: LogListService? = null,
     logListDataSource: DataSource<LogListResult>? = null,
     policy: CTPolicy? = null,
     diskCache: DiskCache? = null
@@ -60,6 +62,9 @@ internal open class CertificateTransparencyBase(
             require(!it.startsWithWildcard) { "Certificate transparency exclusions cannot use wildcards" }
             require(!includeHosts.contains(it)) { "Certificate transparency exclusions must not match include directly" }
         }
+
+        require(logListDataSource == null || logListService == null) { "LogListService is ignored when overriding logListDataSource" }
+        require(logListDataSource == null || diskCache == null) { "DiskCache is ignored when overriding logListDataSource" }
     }
 
     private val cleaner: CertificateChainCleaner by lazy {
@@ -70,7 +75,10 @@ internal open class CertificateTransparencyBase(
         certificateChainCleanerFactory?.get(localTrustManager) ?: CertificateChainCleaner.get(localTrustManager)
     }
 
-    private val logListDataSource = (logListDataSource ?: LogListDataSourceFactory.createDataSource(diskCache = diskCache))
+    private val logListDataSource = (logListDataSource ?: LogListDataSourceFactory.createDataSource(
+        logListService = logListService ?: LogListDataSourceFactory.createLogListService(),
+        diskCache = diskCache
+    ))
 
     private val policy = (policy ?: DefaultPolicy())
 
