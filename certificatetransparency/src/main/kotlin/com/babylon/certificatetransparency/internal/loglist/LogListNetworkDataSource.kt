@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,26 +13,30 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.internal.loglist
 
 import com.babylon.certificatetransparency.datasource.DataSource
 import com.babylon.certificatetransparency.internal.utils.isTooBigException
+import com.babylon.certificatetransparency.loglist.LogListService
 import com.babylon.certificatetransparency.loglist.RawLogListResult
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 
 internal class LogListNetworkDataSource(
-    private val logService: LogListService
+    private val logListService: LogListService
 ) : DataSource<RawLogListResult> {
 
     override val coroutineContext = GlobalScope.coroutineContext
 
     @Suppress("ReturnCount")
     override suspend fun get(): RawLogListResult {
-        val logListJob = async { logService.getLogList() }
-        val signatureJob = async { logService.getLogListSignature() }
+        val logListJob = async { logListService.getLogList() }
+        val signatureJob = async { logListService.getLogListSignature() }
 
         val logListJson = try {
             logListJob.await()

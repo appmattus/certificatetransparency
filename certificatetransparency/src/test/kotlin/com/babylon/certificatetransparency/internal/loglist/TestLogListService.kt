@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Babylon Partners Limited
+ * Copyright 2021 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,20 @@
 
 package com.babylon.certificatetransparency.internal.loglist
 
+import com.babylon.certificatetransparency.loglist.LogListService
 import retrofit2.http.GET
 import retrofit2.http.Headers
 
-internal interface LogListService {
+public interface TestLogListService : LogListService {
     @GET("log_list.json")
     @Headers("Cache-Control: no-cache", "Max-Size: 1048576")
-    suspend fun getLogList(): ByteArray
+    override suspend fun getLogList(): ByteArray
 
     @GET("log_list.sig")
     @Headers("Cache-Control: no-cache", "Max-Size: 512")
-    suspend fun getLogListSignature(): ByteArray
+    override suspend fun getLogListSignature(): ByteArray
 
     @GET("log_list.zip")
     @Headers("Cache-Control: no-cache", "Max-Size: 2097152")
-    suspend fun getLogListZip(): ByteArray
+    override suspend fun getLogListZip(): ByteArray
 }

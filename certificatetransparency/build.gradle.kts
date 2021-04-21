@@ -25,8 +25,9 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
 
-    implementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
-    implementation("com.squareup.retrofit2:converter-gson:${Versions.retrofit}")
+    implementation("com.squareup.okhttp3:okhttp:${Versions.okhttp}")
+    implementation("com.google.code.gson:gson:${Versions.gson}")
+    testImplementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
     testImplementation("com.squareup.retrofit2:retrofit-mock:${Versions.retrofit}")
 
     testImplementation("junit:junit:${Versions.junit4}")

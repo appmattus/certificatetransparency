@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,12 +13,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.internal.loglist
 
-import com.babylon.certificatetransparency.internal.utils.MaxSizeInterceptor
 import com.babylon.certificatetransparency.internal.utils.ByteArrayConverterFactory
+import com.babylon.certificatetransparency.internal.utils.MaxSizeInterceptor
+import com.babylon.certificatetransparency.loglist.LogListService
 import com.babylon.certificatetransparency.loglist.RawLogListResult
 import com.babylon.certificatetransparency.utils.TestData
 import com.babylon.certificatetransparency.utils.assertIsA
@@ -42,7 +47,7 @@ class LogListZipNetworkDataSourceTest {
     private val client: OkHttpClient =
         OkHttpClient.Builder().addInterceptor(MaxSizeInterceptor()).addInterceptor(mockInterceptor).build()
     private val retrofit = Retrofit.Builder().client(client).baseUrl("http://ctlog/").addConverterFactory(ByteArrayConverterFactory()).build()
-    private val logListService: LogListService = retrofit.create(LogListService::class.java)
+    private val logListService: LogListService = retrofit.create(TestLogListService::class.java)
 
     private fun expectInterceptorHttpNotFound(url: String) {
         whenever(mockInterceptor.intercept(argThat { request().url().toString() == url })).then {

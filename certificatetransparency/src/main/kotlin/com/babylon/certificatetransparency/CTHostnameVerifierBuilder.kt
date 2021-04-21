@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency
@@ -22,6 +26,7 @@ import com.babylon.certificatetransparency.datasource.DataSource
 import com.babylon.certificatetransparency.internal.verifier.CertificateTransparencyHostnameVerifier
 import com.babylon.certificatetransparency.internal.verifier.model.Host
 import com.babylon.certificatetransparency.loglist.LogListResult
+import com.babylon.certificatetransparency.loglist.LogListService
 import com.babylon.certificatetransparency.loglist.LogServer
 import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.TrustManagerFactory
@@ -38,6 +43,7 @@ public class CTHostnameVerifierBuilder(
 ) {
     private var certificateChainCleanerFactory: CertificateChainCleanerFactory? = null
     private var trustManager: X509TrustManager? = null
+    private var logListService: LogListService? = null
     private var logListDataSource: DataSource<LogListResult>? = null
     private val includeHosts = mutableSetOf<Host>()
     private val excludeHosts = mutableSetOf<Host>()
@@ -112,8 +118,28 @@ public class CTHostnameVerifierBuilder(
     }
 
     /**
+     * A [LogListService] providing log list data from network
+     * Default: Log list loaded from https://www.gstatic.com/ct/log_list/v2/log_list.json
+     */
+    @Suppress("MemberVisibilityCanBePrivate")
+    public fun setLogListService(logListService: LogListService): CTHostnameVerifierBuilder =
+        apply {
+            this.logListService = logListService
+        }
+
+    /**
+     * A [LogListService] providing log list data from network
+     * Default: Log list loaded from https://www.gstatic.com/ct/log_list/v2/log_list.json
+     */
+    @JvmSynthetic
+    @Suppress("unused")
+    public fun logListService(init: () -> LogListService) {
+        setLogListService(init())
+    }
+
+    /**
      * A [DataSource] providing a list of [LogServer]
-     * Default: In memory cached log list loaded from https://www.gstatic.com/ct/log_list/log_list.json
+     * Default: In memory cached log list loaded from https://www.gstatic.com/ct/log_list/v2/log_list.json
      */
     @Suppress("MemberVisibilityCanBePrivate")
     public fun setLogListDataSource(logListDataSource: DataSource<LogListResult>): CTHostnameVerifierBuilder =
@@ -123,7 +149,7 @@ public class CTHostnameVerifierBuilder(
 
     /**
      * A [DataSource] providing a list of [LogServer]
-     * Default: In memory cached log list loaded from https://www.gstatic.com/ct/log_list/log_list.json
+     * Default: In memory cached log list loaded from https://www.gstatic.com/ct/log_list/v2/log_list.json
      */
     @JvmSynthetic
     @Suppress("unused")
@@ -229,6 +255,7 @@ public class CTHostnameVerifierBuilder(
         excludeHosts.toSet(),
         certificateChainCleanerFactory,
         trustManager,
+        logListService,
         logListDataSource,
         policy,
         diskCache,

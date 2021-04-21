@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.internal.utils
@@ -37,10 +41,8 @@ internal class LimitedSizeInputStream(private val original: InputStream, private
 
     private fun incrementCounter(size: Int) {
         total += size.toLong()
-        if (total > maxSize) throw IOException(MAX_SIZE_ERROR_MESSAGE)
+        if (total > maxSize) throw IOException("InputStream exceeded maximum size $maxSize bytes")
     }
 }
 
-internal fun Exception.isTooBigException() = message == MAX_SIZE_ERROR_MESSAGE
-
-private const val MAX_SIZE_ERROR_MESSAGE = "InputStream exceeded maximum size in bytes."
+internal fun Exception.isTooBigException() = message?.startsWith("InputStream exceeded maximum size") == true

@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +15,9 @@
  * limitations under the License.
  *
  * Code derived from https://github.com/google/certificate-transparency-java
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.internal.verifier
@@ -25,13 +29,14 @@ import com.babylon.certificatetransparency.cache.DiskCache
 import com.babylon.certificatetransparency.chaincleaner.CertificateChainCleaner
 import com.babylon.certificatetransparency.chaincleaner.CertificateChainCleanerFactory
 import com.babylon.certificatetransparency.datasource.DataSource
-import com.babylon.certificatetransparency.internal.loglist.LogListDataSourceFactory
 import com.babylon.certificatetransparency.internal.loglist.NoLogServers
 import com.babylon.certificatetransparency.internal.utils.Base64
 import com.babylon.certificatetransparency.internal.utils.hasEmbeddedSct
 import com.babylon.certificatetransparency.internal.utils.signedCertificateTimestamps
 import com.babylon.certificatetransparency.internal.verifier.model.Host
+import com.babylon.certificatetransparency.loglist.LogListDataSourceFactory
 import com.babylon.certificatetransparency.loglist.LogListResult
+import com.babylon.certificatetransparency.loglist.LogListService
 import kotlinx.coroutines.runBlocking
 import java.io.IOException
 import java.security.KeyStore
@@ -46,6 +51,7 @@ internal open class CertificateTransparencyBase(
     private val excludeHosts: Set<Host> = emptySet(),
     private val certificateChainCleanerFactory: CertificateChainCleanerFactory? = null,
     trustManager: X509TrustManager? = null,
+    logListService: LogListService? = null,
     logListDataSource: DataSource<LogListResult>? = null,
     policy: CTPolicy? = null,
     diskCache: DiskCache? = null
@@ -56,6 +62,9 @@ internal open class CertificateTransparencyBase(
             require(!it.startsWithWildcard) { "Certificate transparency exclusions cannot use wildcards" }
             require(!includeHosts.contains(it)) { "Certificate transparency exclusions must not match include directly" }
         }
+
+        require(logListDataSource == null || logListService == null) { "LogListService is ignored when overriding logListDataSource" }
+        require(logListDataSource == null || diskCache == null) { "DiskCache is ignored when overriding logListDataSource" }
     }
 
     private val cleaner: CertificateChainCleaner by lazy {
@@ -66,7 +75,10 @@ internal open class CertificateTransparencyBase(
         certificateChainCleanerFactory?.get(localTrustManager) ?: CertificateChainCleaner.get(localTrustManager)
     }
 
-    private val logListDataSource = (logListDataSource ?: LogListDataSourceFactory.create(diskCache))
+    private val logListDataSource = (logListDataSource ?: LogListDataSourceFactory.createDataSource(
+        logListService = logListService ?: LogListDataSourceFactory.createLogListService(),
+        diskCache = diskCache
+    ))
 
     private val policy = (policy ?: DefaultPolicy())
 
