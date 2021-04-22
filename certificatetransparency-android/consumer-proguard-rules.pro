@@ -76,7 +76,6 @@
 ## Ensure network models are not obfuscated
 # See https://github.com/babylonhealth/certificate-transparency-android/issues/38
 -keep class com.babylon.certificatetransparency.internal.loglist.model.v2.* { *; }
--keep class com.babylon.certificatetransparency.internal.logclient.model.network.* { *; }
 
 # Ensure chain cleaner classes are kept as they're loaded through reflection
 -keep class com.babylon.certificatetransparency.chaincleaner.* { *; }
