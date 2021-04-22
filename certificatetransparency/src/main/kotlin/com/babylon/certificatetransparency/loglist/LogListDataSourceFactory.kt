@@ -32,20 +32,25 @@ import okhttp3.CacheControl
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.util.concurrent.TimeUnit
 
 public object LogListDataSourceFactory {
 
     /**
-     * Create a [LogListService] allowing the override of [baseUrl] and [OkHttpClient]
+     * Create a [LogListService] allowing the override of [baseUrl], [okHttpClient] and [networkTimeoutSeconds].
      * Default: baseUrl = https://www.gstatic.com/ct/log_list/v2/
      */
     public fun createLogListService(
         baseUrl: String = "https://www.gstatic.com/ct/log_list/v2/",
-        okHttpClient: OkHttpClient? = null
+        okHttpClient: OkHttpClient? = null,
+        networkTimeoutSeconds: Long = 30
     ): LogListService {
 
         val client = (okHttpClient?.newBuilder() ?: OkHttpClient.Builder())
             .addInterceptor(MaxSizeInterceptor())
+            .connectTimeout(networkTimeoutSeconds, TimeUnit.SECONDS)
+            .readTimeout(networkTimeoutSeconds, TimeUnit.SECONDS)
+            .writeTimeout(networkTimeoutSeconds, TimeUnit.SECONDS)
             .cache(null)
             .build()
 
