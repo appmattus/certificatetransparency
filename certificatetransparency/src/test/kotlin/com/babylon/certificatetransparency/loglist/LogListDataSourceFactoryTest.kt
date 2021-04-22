@@ -100,21 +100,4 @@ public class LogListDataSourceFactoryTest {
             assertIsA<IOException>((result as LogListJsonFailedLoadingWithException).exception)
         }
     }
-
-    /*@Test
-    public fun timeoutReturnsExceptionExpo() {
-        runBlocking {
-            // Given the log list service times out
-            configuration = { setBodyDelay(5, TimeUnit.SECONDS) }
-            val logListService = LogListDataSourceFactory.createLogListService(baseUrl = baseUrl.toString(), networkTimeoutSeconds = 1)
-
-            // When we request the log list
-            val dataSource = LogListDataSourceFactory.createDataSource(logListService = logListService)
-            val result = retryWithExponentialBackoff(isValid = { this is LogListResult.Valid }) { dataSource.get() }
-
-            // Then a failure is returned with a socket timeout exception
-            assertIsA<LogListJsonFailedLoadingWithException>(result)
-            assertIsA<SocketTimeoutException>((result as LogListJsonFailedLoadingWithException).exception)
-        }
-    }*/
 }
