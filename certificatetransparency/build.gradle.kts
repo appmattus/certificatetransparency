@@ -29,6 +29,7 @@ dependencies {
     implementation("com.google.code.gson:gson:${Versions.gson}")
     testImplementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
     testImplementation("com.squareup.retrofit2:retrofit-mock:${Versions.retrofit}")
+    testImplementation("com.squareup.okhttp3:mockwebserver:${Versions.okhttp}")
 
     testImplementation("junit:junit:${Versions.junit4}")
     testImplementation("org.mockito:mockito-core:${Versions.mockito}")

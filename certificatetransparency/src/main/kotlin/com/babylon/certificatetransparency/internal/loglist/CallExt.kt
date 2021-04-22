@@ -38,7 +38,16 @@ internal suspend fun Call.await(): ByteArray {
         suspendCancellableCoroutine { continuation ->
             enqueue(object : Callback {
                 override fun onResponse(call: Call, response: Response) {
-                    continuation.resume(response.body()?.bytes() ?: throw IOException("No data available"))
+                    try {
+                        val bytes = response.body()?.bytes()
+                        when {
+                            !response.isSuccessful -> continuation.resumeWithException(IOException("Invalid response ${response.code()}"))
+                            bytes == null -> continuation.resumeWithException(IOException("No data"))
+                            else -> continuation.resume(bytes)
+                        }
+                    } catch (expected: Exception) {
+                        continuation.resumeWithException(expected)
+                    }
                 }
 
                 override fun onFailure(call: Call, e: IOException) {
