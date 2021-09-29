@@ -17,8 +17,10 @@
 package com.babylon.certificatetransparency.internal.loglist
 
 import com.babylon.certificatetransparency.datasource.DataSource
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 
+@DelicateCoroutinesApi
 internal open class InMemoryDataSource<Value : Any> : DataSource<Value> {
     private var cachedValue: Value? = null
 

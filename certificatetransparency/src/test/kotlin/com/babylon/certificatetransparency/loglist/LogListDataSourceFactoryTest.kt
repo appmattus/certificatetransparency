@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 import java.util.logging.Logger
 
-public class LogListDataSourceFactoryTest {
+class LogListDataSourceFactoryTest {
 
     init {
         Logger.getLogger(MockWebServer::class.java.name).level = Level.OFF
@@ -81,12 +81,12 @@ public class LogListDataSourceFactoryTest {
     }
 
     @Test
-    public fun serverErrorReturnsException() {
+    fun serverErrorReturnsException() {
         runBlocking {
             // Given the log list service times out
             configuration = {
                 setResponseCode(500)
-                body = Buffer()
+                setBody(Buffer())
             }
 
             val logListService = LogListDataSourceFactory.createLogListService(baseUrl = baseUrl.toString(), networkTimeoutSeconds = 1)

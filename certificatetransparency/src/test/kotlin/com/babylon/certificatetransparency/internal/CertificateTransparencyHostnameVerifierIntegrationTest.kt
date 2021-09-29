@@ -29,7 +29,7 @@ class CertificateTransparencyHostnameVerifierIntegrationTest {
     companion object {
         private const val invalidSctDomain = "no-sct.badssl.com"
 
-        val hostnameVerifier = certificateTransparencyHostnameVerifier(OkHostnameVerifier.INSTANCE) {
+        val hostnameVerifier = certificateTransparencyHostnameVerifier(OkHostnameVerifier) {
             +"*.babylonhealth.com"
             +invalidSctDomain
 
@@ -64,7 +64,7 @@ class CertificateTransparencyHostnameVerifierIntegrationTest {
     @Test
     fun invalidAllowedWhenSctNotChecked() {
         val client = OkHttpClient.Builder().hostnameVerifier(
-            certificateTransparencyHostnameVerifier(OkHostnameVerifier.INSTANCE) {
+            certificateTransparencyHostnameVerifier(OkHostnameVerifier) {
                 +"*.babylonhealth.com"
 
 logListDataSource {

@@ -24,14 +24,16 @@ import com.babylon.certificatetransparency.datasource.DataSource
 import com.babylon.certificatetransparency.internal.utils.isTooBigException
 import com.babylon.certificatetransparency.loglist.LogListService
 import com.babylon.certificatetransparency.loglist.RawLogListResult
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlin.coroutines.CoroutineContext
 
-internal class LogListNetworkDataSource(
+public class LogListNetworkDataSource(
     private val logListService: LogListService
 ) : DataSource<RawLogListResult> {
 
-    override val coroutineContext = GlobalScope.coroutineContext
+    override val coroutineContext: CoroutineContext = GlobalScope.coroutineContext
 
     @Suppress("ReturnCount")
     override suspend fun get(): RawLogListResult {
@@ -53,7 +55,7 @@ internal class LogListNetworkDataSource(
         return RawLogListResult.Success(logListJson, signature)
     }
 
-    override suspend fun isValid(value: RawLogListResult?) = value is RawLogListResult.Success
+    override suspend fun isValid(value: RawLogListResult?): Boolean = value is RawLogListResult.Success
 
-    override suspend fun set(value: RawLogListResult) = Unit
+    override suspend fun set(value: RawLogListResult): Unit = Unit
 }

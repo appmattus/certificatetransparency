@@ -25,9 +25,9 @@ import javax.net.ssl.SSLPeerUnverifiedException
 class CertificateRevocationHostnameVerifierIntegrationTest {
 
     companion object {
-        val emptyHostnameVerifier = certificateRevocationHostnameVerifier(OkHostnameVerifier.INSTANCE)
+        val emptyHostnameVerifier = certificateRevocationHostnameVerifier(OkHostnameVerifier)
 
-        val hostnameVerifier = certificateRevocationHostnameVerifier(OkHostnameVerifier.INSTANCE) {
+        val hostnameVerifier = certificateRevocationHostnameVerifier(OkHostnameVerifier) {
             // revoked.badssl.com
             @Suppress("MaxLineLength")
             addCrl(

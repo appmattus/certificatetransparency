@@ -25,15 +25,17 @@ import com.babylon.certificatetransparency.internal.utils.LimitedSizeInputStream
 import com.babylon.certificatetransparency.internal.utils.isTooBigException
 import com.babylon.certificatetransparency.loglist.LogListService
 import com.babylon.certificatetransparency.loglist.RawLogListResult
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import java.io.File
 import java.util.zip.ZipInputStream
+import kotlin.coroutines.CoroutineContext
 
-internal class LogListZipNetworkDataSource(
+public class LogListZipNetworkDataSource(
     private val logListService: LogListService
 ) : DataSource<RawLogListResult> {
 
-    override val coroutineContext = GlobalScope.coroutineContext
+    override val coroutineContext: CoroutineContext = GlobalScope.coroutineContext
 
     override suspend fun get(): RawLogListResult = when (val logListZip = wrap(RawLogListZipFailedTooBig) { logListService.getLogListZip() }) {
         is Data.Valid -> readZip(logListZip.bytes)
@@ -73,9 +75,9 @@ internal class LogListZipNetworkDataSource(
         }
     }
 
-    override suspend fun isValid(value: RawLogListResult?) = value is RawLogListResult.Success
+    override suspend fun isValid(value: RawLogListResult?): Boolean = value is RawLogListResult.Success
 
-    override suspend fun set(value: RawLogListResult) = Unit
+    override suspend fun set(value: RawLogListResult): Unit = Unit
 
     private suspend fun wrap(tooBig: RawLogListResult, lambda: suspend () -> ByteArray): Data = try {
         Data.Valid(lambda())
@@ -92,7 +94,7 @@ internal class LogListZipNetworkDataSource(
         class Invalid(val error: RawLogListResult) : Data()
     }
 
-    companion object {
+    public companion object {
         // Constants also in LogListService
 
         // 1 MB

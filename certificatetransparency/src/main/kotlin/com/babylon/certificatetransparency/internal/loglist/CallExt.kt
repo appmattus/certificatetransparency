@@ -39,9 +39,9 @@ internal suspend fun Call.await(): ByteArray {
             enqueue(object : Callback {
                 override fun onResponse(call: Call, response: Response) {
                     try {
-                        val bytes = response.body()?.bytes()
+                        val bytes = response.body?.bytes()
                         when {
-                            !response.isSuccessful -> continuation.resumeWithException(IOException("Invalid response ${response.code()}"))
+                            !response.isSuccessful -> continuation.resumeWithException(IOException("Invalid response ${response.code}"))
                             bytes == null -> continuation.resumeWithException(IOException("No data"))
                             else -> continuation.resume(bytes)
                         }

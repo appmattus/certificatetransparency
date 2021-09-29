@@ -19,12 +19,13 @@ package com.babylon.certificatetransparency.internal.loglist.model.v2
 import com.babylon.certificatetransparency.internal.loglist.deserializer.HostnameDeserializer
 import com.google.gson.annotations.JsonAdapter
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 @JsonAdapter(HostnameDeserializer::class)
 internal data class Hostname(
     val value: String
 ) {
     init {
-        HttpUrl.parse("http://$value")?.host() ?: throw IllegalArgumentException("$value is not a well-formed hostname")
+        "http://$value".toHttpUrlOrNull()?.host ?: throw IllegalArgumentException("$value is not a well-formed hostname")
     }
 }

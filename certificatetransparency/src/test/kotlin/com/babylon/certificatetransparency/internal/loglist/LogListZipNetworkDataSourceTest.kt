@@ -31,11 +31,11 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
 import okhttp3.Response
-import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Test
 import retrofit2.Retrofit
 import javax.net.ssl.SSLPeerUnverifiedException
@@ -50,12 +50,12 @@ class LogListZipNetworkDataSourceTest {
     private val logListService: LogListService = retrofit.create(TestLogListService::class.java)
 
     private fun expectInterceptorHttpNotFound(url: String) {
-        whenever(mockInterceptor.intercept(argThat { request().url().toString() == url })).then {
+        whenever(mockInterceptor.intercept(argThat { request().url.toString() == url })).then {
 
             val chain = it.arguments[0] as Interceptor.Chain
 
             Response.Builder()
-                .body(ResponseBody.create(MediaType.parse("application/octet-stream"), ByteArray(0)))
+                .body(ByteArray(0).toResponseBody("application/octet-stream".toMediaTypeOrNull()))
                 .request(chain.request())
                 .protocol(Protocol.HTTP_2)
                 .code(404)
@@ -65,18 +65,18 @@ class LogListZipNetworkDataSourceTest {
     }
 
     private fun expectInterceptorSSLException(url: String) {
-        whenever(mockInterceptor.intercept(argThat { request().url().toString() == url })).then {
+        whenever(mockInterceptor.intercept(argThat { request().url.toString() == url })).then {
             throw SSLPeerUnverifiedException("Mock throwing exception")
         }
     }
 
     private fun expectInterceptor(@Suppress("SameParameterValue") url: String, @Suppress("SameParameterValue") byteResponse: ByteArray) {
-        whenever(mockInterceptor.intercept(argThat { request().url().toString() == url })).then {
+        whenever(mockInterceptor.intercept(argThat { request().url.toString() == url })).then {
 
             val chain = it.arguments[0] as Interceptor.Chain
 
             Response.Builder()
-                .body(ResponseBody.create(MediaType.parse("application/octet-stream"), byteResponse))
+                .body(byteResponse.toResponseBody("application/octet-stream".toMediaTypeOrNull()))
                 .request(chain.request())
                 .protocol(Protocol.HTTP_2)
                 .code(200)

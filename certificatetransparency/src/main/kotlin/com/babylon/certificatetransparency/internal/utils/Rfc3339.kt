@@ -87,7 +87,7 @@ internal fun String.toRfc3339Long(): Long {
     var value = dateTime.timeInMillis
 
     if (isTimeGiven && isTzShiftGiven) {
-        if (tzShiftRegexGroup[0].toUpperCase() != 'Z') {
+        if (tzShiftRegexGroup[0].uppercaseChar() != 'Z') {
             var tzShift = (results.groupValues[11].toInt() * 60 + // time zone shift HH
                     results.groupValues[12].toInt()) // time zone shift mm
             if (results.groupValues[10][0] == '-') { // time zone shift + or -

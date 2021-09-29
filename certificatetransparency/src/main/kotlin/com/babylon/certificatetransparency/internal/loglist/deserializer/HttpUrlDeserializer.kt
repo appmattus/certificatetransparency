@@ -20,9 +20,10 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import java.lang.reflect.Type
 
 internal class HttpUrlDeserializer : JsonDeserializer<HttpUrl> {
 
-    override fun deserialize(jsonElement: JsonElement, type: Type, context: JsonDeserializationContext) = HttpUrl.parse(jsonElement.asString)!!
+    override fun deserialize(jsonElement: JsonElement, type: Type, context: JsonDeserializationContext) = jsonElement.asString.toHttpUrlOrNull()!!
 }

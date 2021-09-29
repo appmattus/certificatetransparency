@@ -7,10 +7,10 @@ import org.junit.runner.RunWith
 import org.robolectric.shadows.ShadowLog
 
 @RunWith(AndroidJUnit4::class)
-class BasicAndroidCRLoggerTest {
+public class BasicAndroidCRLoggerTest {
 
     @Test
-    fun logsInDebugMode() {
+    public fun logsInDebugMode() {
         // given a basic logger
         val logger = BasicAndroidCRLogger(true)
 
@@ -22,8 +22,8 @@ class BasicAndroidCRLoggerTest {
     }
 
     @Test
-    fun nothingLoggedInReleaseMode() {
-        // given a basic logge
+    public fun nothingLoggedInReleaseMode() {
+        // given a basic logger
         val logger = BasicAndroidCRLogger(false)
 
         // when we log

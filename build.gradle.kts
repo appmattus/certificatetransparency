@@ -8,10 +8,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:${Versions.androidGradlePlugin}")
+        classpath("com.android.tools.build:gradle:4.2.2")
     }
 }
 
@@ -27,7 +27,9 @@ plugins {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+        // For Groupie in Sample app
+        maven(url = "https://jitpack.io")
     }
 }
 
@@ -56,7 +58,7 @@ subprojects {
         tasks.withType<KotlinCompile>().configureEach {
             if (!name.contains("test", ignoreCase = true)) {
                 kotlinOptions {
-                    freeCompilerArgs += "-Xexplicit-api=strict"
+                    freeCompilerArgs = freeCompilerArgs + "-Xexplicit-api=strict"
                 }
             }
         }

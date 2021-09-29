@@ -5,26 +5,26 @@ import java.security.InvalidKeyException
 import java.security.NoSuchAlgorithmException
 import java.security.SignatureException
 
-internal sealed class LogServerSignatureResult {
-    object Valid : LogServerSignatureResult() {
-        override fun toString() = "Valid signature"
+public sealed class LogServerSignatureResult {
+    public object Valid : LogServerSignatureResult() {
+        override fun toString(): String = "Valid signature"
     }
 
-    sealed class Invalid : LogServerSignatureResult() {
-        object SignatureFailed : Invalid() {
-            override fun toString() = "Invalid signature"
+    public sealed class Invalid : LogServerSignatureResult() {
+        public object SignatureFailed : Invalid() {
+            override fun toString(): String = "Invalid signature"
         }
 
-        data class SignatureNotValid(val exception: SignatureException) : Invalid() {
-            override fun toString() = "Invalid signature (public key) with ${exception.stringStackTrace()}"
+        public data class SignatureNotValid(val exception: SignatureException) : Invalid() {
+            override fun toString(): String = "Invalid signature (public key) with ${exception.stringStackTrace()}"
         }
 
-        data class PublicKeyNotValid(val exception: InvalidKeyException) : Invalid() {
-            override fun toString() = "Invalid signature (public key) with ${exception.stringStackTrace()}"
+        public data class PublicKeyNotValid(val exception: InvalidKeyException) : Invalid() {
+            override fun toString(): String = "Invalid signature (public key) with ${exception.stringStackTrace()}"
         }
 
-        data class NoSuchAlgorithm(val exception: NoSuchAlgorithmException) : Invalid() {
-            override fun toString() = "Invalid signature (public key) with ${exception.stringStackTrace()}"
+        public data class NoSuchAlgorithm(val exception: NoSuchAlgorithmException) : Invalid() {
+            override fun toString(): String = "Invalid signature (public key) with ${exception.stringStackTrace()}"
         }
     }
 }

@@ -34,8 +34,8 @@ internal class CertificateRevocationInterceptor(
 ) : CertificateRevocationBase(crlSet, certificateChainCleanerFactory, trustManager), Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val host = chain.request().url().host()
-        val certs = chain.connection()?.handshake()?.peerCertificates() ?: emptyList()
+        val host = chain.request().url.host
+        val certs = chain.connection()?.handshake()?.peerCertificates ?: emptyList()
 
         val result = if (chain.connection()?.socket() is SSLSocket) {
             verifyCertificateRevocation(host, certs)

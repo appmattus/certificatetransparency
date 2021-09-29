@@ -16,7 +16,7 @@
 
 package com.babylon.certificatetransparency.internal.verifier.model
 
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 /**
  * @property pattern A hostname like `example.com` or a pattern like `*.example.com`.
@@ -35,9 +35,9 @@ internal data class Host(
 
     init {
         this.canonicalHostname = if (startsWithWildcard) {
-            HttpUrl.parse("http://" + pattern.substring(WILDCARD.length))?.host()
+            ("http://" + pattern.substring(WILDCARD.length)).toHttpUrlOrNull()?.host
         } else {
-            HttpUrl.parse("http://$pattern")?.host()
+            "http://$pattern".toHttpUrlOrNull()?.host
         } ?: throw IllegalArgumentException("$pattern is not a well-formed URL")
     }
 

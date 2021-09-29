@@ -41,7 +41,10 @@ dependencies {
 tasks.withType(KotlinCompile::class.java).all {
     kotlinOptions {
         allWarningsAsErrors = true
-        freeCompilerArgs += "-Xuse-experimental=kotlin.Experimental"
+        freeCompilerArgs = freeCompilerArgs +
+                "-Xopt-in=kotlin.RequiresOptIn" +
+                // For GlobalScope
+                "-Xopt-in=kotlinx.coroutines.DelicateCoroutinesApi"
     }
 }
 
