@@ -19,9 +19,10 @@ java {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
-    implementation("org.bouncycastle:bcpkix-jdk15to18:${Versions.bouncyCastle}")
-    implementation("org.bouncycastle:bcprov-jdk15to18:${Versions.bouncyCastle}")
-    implementation("org.bouncycastle:bctls-jdk15to18:${Versions.bouncyCastle}")
+    implementation("org.bouncycastle:bcpkix-jdk15on:${Versions.bouncyCastle}")
+    implementation("org.bouncycastle:bcprov-jdk15on:${Versions.bouncyCastle}")
+    implementation("org.bouncycastle:bctls-jdk15on:${Versions.bouncyCastle}")
+    implementation("org.bouncycastle:bcutil-jdk15on:${Versions.bouncyCastle}")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
 
