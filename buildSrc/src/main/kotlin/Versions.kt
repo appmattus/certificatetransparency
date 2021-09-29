@@ -16,7 +16,7 @@
 
 object Versions {
 
-    const val kotlin = "1.4.32"
+    const val kotlin = "1.5.31"
 
     const val androidGradlePlugin = "4.1.3"
     const val detektGradlePlugin = "1.16.0"
