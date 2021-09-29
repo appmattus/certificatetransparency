@@ -20,8 +20,8 @@ object Versions {
 
     const val androidGradlePlugin = "4.2.2"
     const val detektGradlePlugin = "1.16.0"
-    const val dokkaPlugin = "1.4.30"
-    const val gradleMavenPublishPlugin = "0.14.2"
+    const val dokkaPlugin = "1.5.30"
+    const val gradleMavenPublishPlugin = "0.18.0"
     const val gradleVersionsPlugin = "0.36.0"
     const val markdownlintGradlePlugin = "0.6.0"
     const val owaspDependencyCheckPlugin = "6.3.1"
