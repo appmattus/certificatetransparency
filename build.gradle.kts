@@ -34,7 +34,7 @@ allprojects {
 }
 
 subprojects {
-    version = System.getenv("GITHUB_REF")?.substring(10) ?: System.getProperty("GITHUB_REF")?.substring(10) ?: "unknown"
+    version = System.getenv("GITHUB_REF")?.substring(10) ?: System.getProperty("GITHUB_REF")?.substring(10) ?: "0.4.0"
 
     plugins.withType<DokkaPlugin> {
         tasks.withType<DokkaTask>().configureEach {
