@@ -32,7 +32,7 @@ object Versions {
     const val highlightJs = "1.5.0"
     const val materialDialogs = "3.3.0"
     const val mustache = "0.8.18" // 0.9.7
-    const val okhttp = "3.14.9"
+    const val okhttp = "4.9.1"
     const val retrofit = "2.9.0"
     const val gson = "2.8.6"
     const val volley = "1.2.0"
