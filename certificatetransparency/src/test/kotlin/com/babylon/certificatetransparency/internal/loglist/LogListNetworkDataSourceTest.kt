@@ -49,7 +49,10 @@ class LogListNetworkDataSourceTest {
     private val retrofit = Retrofit.Builder().client(client).baseUrl("http://ctlog/").addConverterFactory(ByteArrayConverterFactory()).build()
     private val logListService: LogListService = retrofit.create(TestLogListService::class.java)
 
-    private fun expectInterceptor(@Suppress("SameParameterValue") url: String, @Suppress("SameParameterValue") jsonResponse: String) {
+    private fun expectInterceptor(
+        @Suppress("SameParameterValue") url: String,
+        @Suppress("SameParameterValue") jsonResponse: String
+    ) {
         whenever(mockInterceptor.intercept(argThat { request().url().toString() == url })).then {
 
             val chain = it.arguments[0] as Interceptor.Chain
@@ -85,7 +88,10 @@ class LogListNetworkDataSourceTest {
         }
     }
 
-    private fun expectInterceptor(@Suppress("SameParameterValue") url: String, @Suppress("SameParameterValue") byteResponse: ByteArray) {
+    private fun expectInterceptor(
+        @Suppress("SameParameterValue") url: String,
+        @Suppress("SameParameterValue") byteResponse: ByteArray
+    ) {
         whenever(mockInterceptor.intercept(argThat { request().url().toString() == url })).then {
 
             val chain = it.arguments[0] as Interceptor.Chain

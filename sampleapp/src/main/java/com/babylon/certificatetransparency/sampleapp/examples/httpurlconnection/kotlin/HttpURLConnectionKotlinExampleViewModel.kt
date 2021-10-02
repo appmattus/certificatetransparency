@@ -53,7 +53,12 @@ class HttpURLConnectionKotlinExampleViewModel(application: Application) : BaseEx
         }
     }
 
-    override fun openConnection(connectionHost: String, hosts: Set<String>, isFailOnError: Boolean, defaultLogger: CTLogger) {
+    override fun openConnection(
+        connectionHost: String,
+        hosts: Set<String>,
+        isFailOnError: Boolean,
+        defaultLogger: CTLogger
+    ) {
         // Quick and dirty way to push the network call onto a background thread, don't do this is a real app
         Thread {
             try {

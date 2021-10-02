@@ -56,7 +56,12 @@ class OkHttpKotlinExampleViewModel(application: Application) : BaseExampleViewMo
         }.build()
     }
 
-    override fun openConnection(connectionHost: String, hosts: Set<String>, isFailOnError: Boolean, defaultLogger: CTLogger) {
+    override fun openConnection(
+        connectionHost: String,
+        hosts: Set<String>,
+        isFailOnError: Boolean,
+        defaultLogger: CTLogger
+    ) {
         val client = createOkHttpClient(hosts, isFailOnError, defaultLogger)
 
         val request = Request.Builder().url("https://$connectionHost").build()

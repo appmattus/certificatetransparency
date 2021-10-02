@@ -70,7 +70,10 @@ class LogListZipNetworkDataSourceTest {
         }
     }
 
-    private fun expectInterceptor(@Suppress("SameParameterValue") url: String, @Suppress("SameParameterValue") byteResponse: ByteArray) {
+    private fun expectInterceptor(
+        @Suppress("SameParameterValue") url: String,
+        @Suppress("SameParameterValue") byteResponse: ByteArray
+    ) {
         whenever(mockInterceptor.intercept(argThat { request().url().toString() == url })).then {
 
             val chain = it.arguments[0] as Interceptor.Chain

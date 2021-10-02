@@ -112,7 +112,12 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
         }
     }
 
-    abstract fun openConnection(connectionHost: String, hosts: Set<String>, isFailOnError: Boolean, defaultLogger: CTLogger)
+    abstract fun openConnection(
+        connectionHost: String,
+        hosts: Set<String>,
+        isFailOnError: Boolean,
+        defaultLogger: CTLogger
+    )
 
     fun openConnection(connectionHost: String) {
         openConnection(connectionHost, state.hosts, state.failOnError, defaultLogger)
