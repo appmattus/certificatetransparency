@@ -31,7 +31,7 @@ object Versions {
     const val groupie = "2.9.0"
     const val highlightJs = "1.5.0"
     const val materialDialogs = "3.3.0"
-    const val mustache = "0.8.18" // 0.9.7
+    const val mustache = "0.8.18" // Cannot update due to use of ThreadLocal which is not desugared
     const val okhttp = "4.9.2"
     const val retrofit = "2.9.0"
     const val gson = "2.8.8"
