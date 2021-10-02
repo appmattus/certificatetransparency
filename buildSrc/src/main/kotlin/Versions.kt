@@ -18,7 +18,7 @@ object Versions {
 
     const val kotlin = "1.5.31"
 
-    const val androidGradlePlugin = "4.1.3"
+    const val androidGradlePlugin = "7.0.2"
     const val detektGradlePlugin = "1.18.1"
     const val dokkaPlugin = "1.4.30"
     const val gradleMavenPublishPlugin = "0.18.0"

@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion(30)
+    compileSdk = 30
     defaultConfig {
         applicationId = "com.babylon.certificatetransparency.sampleapp"
-        minSdkVersion(19)
-        targetSdkVersion(30)
+        minSdk = 19
+        targetSdk = 30
         versionCode = 1
         versionName = "1.0"
         multiDexEnabled = true
