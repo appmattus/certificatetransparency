@@ -24,9 +24,9 @@ object Versions {
     const val gradleMavenPublishPlugin = "0.18.0"
     const val gradleVersionsPlugin = "0.36.0"
     const val markdownlintGradlePlugin = "0.6.0"
-    const val owaspDependencyCheckPlugin = "6.1.5"
+    const val owaspDependencyCheckPlugin = "6.3.2"
 
-    const val bouncyCastle = "1.68"
+    const val bouncyCastle = "1.69"
     const val coroutines = "1.5.2"
     const val groupie = "2.9.0"
     const val highlightJs = "1.5.0"
