@@ -31,8 +31,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     packagingOptions {
-        exclude("META-INF/DEPENDENCIES")
-        exclude("META-INF/atomicfu.kotlin_module")
+        resources.excludes.add("META-INF/DEPENDENCIES")
+        resources.excludes.add("META-INF/atomicfu.kotlin_module")
     }
     buildFeatures {
         viewBinding = true
