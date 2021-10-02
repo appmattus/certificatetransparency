@@ -40,7 +40,7 @@ import org.mockito.kotlin.whenever
 import retrofit2.Retrofit
 import javax.net.ssl.SSLPeerUnverifiedException
 
-class LogListZipNetworkDataSourceTest {
+internal class LogListZipNetworkDataSourceTest {
 
     private val mockInterceptor = mock<Interceptor>()
 

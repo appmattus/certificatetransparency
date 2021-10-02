@@ -43,7 +43,7 @@ import java.security.cert.X509Certificate
 import javax.net.ssl.SSLPeerUnverifiedException
 import javax.net.ssl.X509TrustManager
 
-class CertificateTransparencyBaseTest {
+internal class CertificateTransparencyBaseTest {
 
     @Test
     fun mitmDisallowedWhenHostChecked() {

@@ -30,7 +30,7 @@ import java.security.cert.X509Certificate
 import javax.net.ssl.SSLPeerUnverifiedException
 import javax.net.ssl.X509TrustManager
 
-class BasicCertificateChainCleanerTest {
+internal class BasicCertificateChainCleanerTest {
 
     @Test
     fun noLeafCertificateInChainThrowsException() {

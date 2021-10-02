@@ -26,7 +26,7 @@ import okhttp3.internal.tls.OkHostnameVerifier
 import org.junit.Test
 import javax.net.ssl.SSLPeerUnverifiedException
 
-class CertificateRevocationHostnameVerifierIntegrationTest {
+internal class CertificateRevocationHostnameVerifierIntegrationTest {
 
     companion object {
         val emptyHostnameVerifier = certificateRevocationHostnameVerifier(OkHostnameVerifier)

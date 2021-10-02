@@ -25,7 +25,7 @@ import com.babylon.certificatetransparency.utils.equalsVerifier
 import org.bouncycastle.asn1.x500.X500Name
 import org.junit.Test
 
-class IssuerInformationTest {
+internal class IssuerInformationTest {
 
     @Test
     fun verifyEquals() {

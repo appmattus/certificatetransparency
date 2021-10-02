@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.utils
@@ -28,7 +32,7 @@ import java.security.PublicKey
  * @receiver [File] containing the key.
  * @return [PublicKey] represented by this [File].
  */
-fun File.readPemFile(): PublicKey {
+internal fun File.readPemFile(): PublicKey {
     return PemReader(FileReader(this)).use {
         PublicKeyFactory.fromByteArray(it.readPemObject().content)
     }

@@ -23,7 +23,7 @@ package com.babylon.certificatetransparency.internal.verifier.model
 import com.babylon.certificatetransparency.utils.equalsVerifier
 import org.junit.Test
 
-class SignedCertificateTimestampTest {
+internal class SignedCertificateTimestampTest {
     @Test
     fun verifyEquals() {
         equalsVerifier<SignedCertificateTimestamp>()

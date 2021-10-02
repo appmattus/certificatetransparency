@@ -28,7 +28,7 @@ import java.security.cert.X509Certificate
 
 /** Constants for tests.  */
 @Ignore("Contains constants for tests")
-object TestData {
+internal object TestData {
     private const val DATA_ROOT = "/testdata/"
 
     // Public log key

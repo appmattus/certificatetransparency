@@ -35,7 +35,7 @@ import java.util.Date
 import java.util.Random
 
 @RunWith(Parameterized::class)
-class DefaultPolicyTest(
+internal class DefaultPolicyTest(
     @Suppress("unused") private val description: String,
     private val start: Date,
     private val end: Date,

@@ -28,7 +28,7 @@ import okhttp3.internal.tls.OkHostnameVerifier
 import org.junit.Test
 import javax.net.ssl.SSLPeerUnverifiedException
 
-class CertificateTransparencyHostnameVerifierIntegrationTest {
+internal class CertificateTransparencyHostnameVerifierIntegrationTest {
 
     companion object {
         private const val invalidSctDomain = "no-sct.badssl.com"

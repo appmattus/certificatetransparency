@@ -35,7 +35,7 @@ import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.verifyZeroInteractions
 import org.mockito.kotlin.whenever
 
-class DataSourceOneWayTransformTest {
+internal class DataSourceOneWayTransformTest {
 
     private val cache = spy(InMemoryDataSource<String>())
 

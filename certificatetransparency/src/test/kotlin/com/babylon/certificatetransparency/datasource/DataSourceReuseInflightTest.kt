@@ -33,7 +33,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.util.concurrent.atomic.AtomicInteger
 
-class DataSourceReuseInflightTest {
+internal class DataSourceReuseInflightTest {
 
     private val cache = spy(InMemoryDataSource<Any>())
 

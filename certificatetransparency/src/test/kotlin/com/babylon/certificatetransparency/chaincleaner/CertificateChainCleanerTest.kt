@@ -26,7 +26,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import javax.net.ssl.X509TrustManager
 
-class CertificateChainCleanerTest {
+internal class CertificateChainCleanerTest {
 
     @Test
     fun returnsBasicCertificateChainCleaner() {

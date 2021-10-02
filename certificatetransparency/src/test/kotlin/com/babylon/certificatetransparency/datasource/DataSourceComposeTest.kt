@@ -37,7 +37,7 @@ import org.mockito.kotlin.spy
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
-class DataSourceComposeTest {
+internal class DataSourceComposeTest {
 
     @Test
     fun testComposeQueriesBothEmptyCaches() = runBlocking {
