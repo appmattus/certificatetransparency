@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.internal.loglist.deserializer
@@ -20,9 +24,10 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import java.lang.reflect.Type
 
 internal class HttpUrlDeserializer : JsonDeserializer<HttpUrl> {
 
-    override fun deserialize(jsonElement: JsonElement, type: Type, context: JsonDeserializationContext) = HttpUrl.parse(jsonElement.asString)!!
+    override fun deserialize(jsonElement: JsonElement, type: Type, context: JsonDeserializationContext) = jsonElement.asString.toHttpUrl()
 }

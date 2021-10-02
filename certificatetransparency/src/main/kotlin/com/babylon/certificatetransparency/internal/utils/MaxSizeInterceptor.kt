@@ -22,8 +22,9 @@ package com.babylon.certificatetransparency.internal.utils
 
 import okhttp3.Interceptor
 import okhttp3.Response
-import okhttp3.ResponseBody
-import okio.Okio
+import okhttp3.ResponseBody.Companion.asResponseBody
+import okio.buffer
+import okio.source
 
 internal class MaxSizeInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -35,15 +36,11 @@ internal class MaxSizeInterceptor : Interceptor {
             }.build()
         )
 
-        val body = response.body()
+        val body = response.body!!
 
         return request.headers(HEADER).firstOrNull()?.toLongOrNull()?.let { maxSize ->
             response.newBuilder().body(
-                ResponseBody.create(
-                    body!!.contentType(),
-                    body.contentLength(),
-                    Okio.buffer(Okio.source(LimitedSizeInputStream(body.byteStream(), maxSize)))
-                )
+                LimitedSizeInputStream(body.byteStream(), maxSize).source().buffer().asResponseBody(body.contentType(), body.contentLength())
             ).build()
         } ?: response
     }

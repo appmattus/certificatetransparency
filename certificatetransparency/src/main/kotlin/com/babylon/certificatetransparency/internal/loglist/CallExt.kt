@@ -14,6 +14,7 @@
  * limitations under the License.
  *
  * File modified by Appmattus Limited to return a ByteArray or throw an exception
+ * File modified by Appmattus Limited to update OkHttp
  */
 
 package com.babylon.certificatetransparency.internal.loglist
@@ -39,9 +40,9 @@ internal suspend fun Call.await(): ByteArray {
             enqueue(object : Callback {
                 override fun onResponse(call: Call, response: Response) {
                     try {
-                        val bytes = response.body()?.bytes()
+                        val bytes = response.body?.bytes()
                         when {
-                            !response.isSuccessful -> continuation.resumeWithException(IOException("Invalid response ${response.code()}"))
+                            !response.isSuccessful -> continuation.resumeWithException(IOException("Invalid response ${response.code}"))
                             bytes == null -> continuation.resumeWithException(IOException("No data"))
                             else -> continuation.resume(bytes)
                         }
