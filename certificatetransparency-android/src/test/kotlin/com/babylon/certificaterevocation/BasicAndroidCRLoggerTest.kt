@@ -23,7 +23,7 @@ class BasicAndroidCRLoggerTest {
 
     @Test
     fun nothingLoggedInReleaseMode() {
-        // given a basic logge
+        // given a basic logger
         val logger = BasicAndroidCRLogger(false)
 
         // when we log

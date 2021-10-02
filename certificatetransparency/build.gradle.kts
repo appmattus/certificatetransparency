@@ -33,7 +33,7 @@ dependencies {
 
     testImplementation("junit:junit:${Versions.junit4}")
     testImplementation("org.mockito:mockito-core:${Versions.mockito}")
-    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:${Versions.mockitoKotlin}")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:${Versions.mockitoKotlin}")
 
     testImplementation("nl.jqno.equalsverifier:equalsverifier:${Versions.equalsVerifier}")
 }

@@ -3,7 +3,9 @@ import com.appmattus.markdown.rules.ProperNamesRule
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.dokka.gradle.DokkaPlugin
 import org.jetbrains.dokka.gradle.DokkaTask
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
+import org.jetbrains.kotlin.gradle.plugin.KotlinAndroidPluginWrapper
+import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
 
 buildscript {
     repositories {
@@ -52,12 +54,18 @@ subprojects {
         }
     }
 
-    if (project.name !in listOf("sampleapp")) {
-        tasks.withType<KotlinCompile>().configureEach {
-            if (!name.contains("test", ignoreCase = true)) {
-                kotlinOptions {
-                    freeCompilerArgs += "-Xexplicit-api=strict"
-                }
+    plugins.withType<KotlinPluginWrapper> {
+        configure<KotlinProjectExtension> {
+            // for strict mode
+            explicitApi()
+        }
+    }
+
+    plugins.withId("com.android.library") {
+        plugins.withType<KotlinAndroidPluginWrapper> {
+            configure<KotlinProjectExtension> {
+                // for strict mode
+                explicitApi()
             }
         }
     }

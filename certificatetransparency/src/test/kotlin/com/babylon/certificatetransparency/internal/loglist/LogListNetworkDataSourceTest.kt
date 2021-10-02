@@ -26,9 +26,6 @@ import com.babylon.certificatetransparency.loglist.LogListService
 import com.babylon.certificatetransparency.loglist.RawLogListResult
 import com.babylon.certificatetransparency.utils.TestData
 import com.babylon.certificatetransparency.utils.assertIsA
-import com.nhaarman.mockitokotlin2.argThat
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.MediaType
@@ -37,6 +34,9 @@ import okhttp3.Protocol
 import okhttp3.Response
 import okhttp3.ResponseBody
 import org.junit.Test
+import org.mockito.kotlin.argThat
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import retrofit2.Retrofit
 import javax.net.ssl.SSLPeerUnverifiedException
 

@@ -39,8 +39,8 @@ object Versions {
 
     const val equalsVerifier = "3.6"
     const val junit4 = "4.13.2"
-    const val mockito = "3.8.0"
-    const val mockitoKotlin = "2.2.0"
+    const val mockito = "3.12.4"
+    const val mockitoKotlin = "3.2.0"
     const val robolectric = "4.5.1"
 
     const val desugar = "1.1.1"
