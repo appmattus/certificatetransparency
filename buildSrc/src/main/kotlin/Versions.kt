@@ -20,7 +20,7 @@ object Versions {
 
     const val androidGradlePlugin = "7.0.2"
     const val detektGradlePlugin = "1.18.1"
-    const val dokkaPlugin = "1.4.30"
+    const val dokkaPlugin = "1.5.30"
     const val gradleMavenPublishPlugin = "0.18.0"
     const val gradleVersionsPlugin = "0.36.0"
     const val markdownlintGradlePlugin = "0.6.0"
@@ -37,28 +37,28 @@ object Versions {
     const val gson = "2.8.6"
     const val volley = "1.2.0"
 
-    const val equalsVerifier = "3.6"
+    const val equalsVerifier = "3.7.1"
     const val junit4 = "4.13.2"
     const val mockito = "3.12.4"
     const val mockitoKotlin = "3.2.0"
-    const val robolectric = "4.5.1"
+    const val robolectric = "4.6.1"
 
-    const val desugar = "1.1.1"
+    const val desugar = "1.1.5"
 
     object AndroidX {
-        const val appCompat = "1.2.0"
-        const val constraintLayout = "2.0.4"
+        const val appCompat = "1.3.1"
+        const val constraintLayout = "2.1.1"
         const val fragment = "1.3.0"
         const val lifecycle = "2.3.1"
         const val navigation = "2.3.5"
 
-        const val testCore = "1.3.0"
-        const val testExtJunit = "1.1.2"
-        const val testRunner = "1.3.0"
+        const val testCore = "1.4.0"
+        const val testExtJunit = "1.1.3"
+        const val testRunner = "1.4.0"
     }
 
     object Google {
-        const val material = "1.3.0"
+        const val material = "1.4.0"
         const val playServices = "17.6.0"
     }
 }

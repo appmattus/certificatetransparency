@@ -95,8 +95,8 @@ abstract class BaseExampleFragment<T : BaseExampleViewModel> : Fragment(R.layout
     }
 
     @Suppress("LongMethod")
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val appContext = requireContext().applicationContext as Application
         viewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(appContext).create(getViewModelClass())
