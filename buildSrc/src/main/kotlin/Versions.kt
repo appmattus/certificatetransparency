@@ -16,7 +16,7 @@
 
 object Versions {
 
-    const val kotlin = "1.4.32"
+    const val kotlin = "1.5.31"
 
     const val androidGradlePlugin = "4.1.3"
     const val detektGradlePlugin = "1.18.1"
@@ -27,7 +27,7 @@ object Versions {
     const val owaspDependencyCheckPlugin = "6.1.5"
 
     const val bouncyCastle = "1.68"
-    const val coroutines = "1.4.2"
+    const val coroutines = "1.5.2"
     const val groupie = "2.9.0"
     const val highlightJs = "1.5.0"
     const val materialDialogs = "3.3.0"

@@ -47,8 +47,6 @@ object LogListDataSourceTestFactory {
             override suspend fun get() = list
 
             override suspend fun set(value: LogListResult) = Unit
-
-            override val coroutineContext = GlobalScope.coroutineContext
         }
     }
 
@@ -57,8 +55,6 @@ object LogListDataSourceTestFactory {
             override suspend fun get() = LogListResult.Valid(emptyList())
 
             override suspend fun set(value: LogListResult) = Unit
-
-            override val coroutineContext = GlobalScope.coroutineContext
         }
     }
 
@@ -67,8 +63,6 @@ object LogListDataSourceTestFactory {
             override suspend fun get(): LogListResult? = null
 
             override suspend fun set(value: LogListResult) = Unit
-
-            override val coroutineContext = GlobalScope.coroutineContext
         }
     }
 }

@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Babylon Partners Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,12 +13,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.internal.loglist
 
 import com.babylon.certificatetransparency.datasource.DataSource
-import kotlinx.coroutines.GlobalScope
 
 internal open class InMemoryDataSource<Value : Any> : DataSource<Value> {
     private var cachedValue: Value? = null
@@ -27,6 +30,4 @@ internal open class InMemoryDataSource<Value : Any> : DataSource<Value> {
     override suspend fun set(value: Value) {
         cachedValue = value
     }
-
-    override val coroutineContext = GlobalScope.coroutineContext
 }

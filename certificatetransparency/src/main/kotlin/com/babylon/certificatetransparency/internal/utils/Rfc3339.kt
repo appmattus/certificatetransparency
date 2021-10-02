@@ -13,7 +13,8 @@
  *
  * Derived from https://github.com/googleapis/google-http-java-client/blob/dev/google-http-client/src/main/java/com/google/api/client/util/DateTime.java
  *
- * Modified 2018 by Babylon Healthcare Services Limited
+ * Modified 2018 by Babylon Partners Limited
+ * Modified 2021 by Appmattus Limited
  */
 
 package com.babylon.certificatetransparency.internal.utils
@@ -87,7 +88,8 @@ internal fun String.toRfc3339Long(): Long {
     var value = dateTime.timeInMillis
 
     if (isTimeGiven && isTzShiftGiven) {
-        if (tzShiftRegexGroup[0].toUpperCase() != 'Z') {
+        @Suppress("EXPERIMENTAL_API_USAGE_ERROR")
+        if (tzShiftRegexGroup[0].uppercaseChar() != 'Z') {
             var tzShift = (results.groupValues[11].toInt() * 60 + // time zone shift HH
                     results.groupValues[12].toInt()) // time zone shift mm
             if (results.groupValues[10][0] == '-') { // time zone shift + or -

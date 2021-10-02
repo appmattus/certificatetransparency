@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,14 +15,17 @@
  * limitations under the License.
  *
  * Derived from https://github.com/appmattus/layercache/
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.datasource
 
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 /**
@@ -29,7 +33,7 @@ import kotlinx.coroutines.launch
  *
  * @param Value The data type this data source accesses
  */
-public interface DataSource<Value : Any> : CoroutineScope {
+public interface DataSource<Value : Any> {
 
     /**
      * Return the value associated with this data source or null if not present
@@ -62,10 +66,10 @@ public interface DataSource<Value : Any> : CoroutineScope {
             override suspend fun isValid(value: Value?) = this@DataSource.isValid(value)
 
             override suspend fun set(value: Value) {
-                awaitAll(async { this@DataSource.set(value) }, async { b.set(value) })
+                coroutineScope {
+                    awaitAll(async { this@DataSource.set(value) }, async { b.set(value) })
+                }
             }
-
-            override val coroutineContext = this@DataSource.coroutineContext + b.coroutineContext
         }
     }
 
@@ -83,21 +87,21 @@ public interface DataSource<Value : Any> : CoroutineScope {
             private var job: Deferred<Value?>? = null
 
             override suspend fun get(): Value? {
-                return (job ?: async { this@DataSource.get() }.apply {
-                    job = this
+                return coroutineScope {
+                    (job ?: async { this@DataSource.get() }.apply {
+                        job = this
 
-                    launch {
-                        this@apply.join()
-                        job = null
-                    }
-                }).await()
+                        launch {
+                            this@apply.join()
+                            job = null
+                        }
+                    }).await()
+                }
             }
 
             override suspend fun isValid(value: Value?) = this@DataSource.isValid(value)
 
             override suspend fun set(value: Value) = this@DataSource.set(value)
-
-            override val coroutineContext = this@DataSource.coroutineContext
         }
     }
 
@@ -115,8 +119,6 @@ public interface DataSource<Value : Any> : CoroutineScope {
 
             // No-op
             override suspend fun set(value: MappedValue) = Unit
-
-            override val coroutineContext = this@DataSource.coroutineContext
         }
     }
 }
