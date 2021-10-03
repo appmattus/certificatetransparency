@@ -6,37 +6,37 @@
 
     <fragment
         android:id="@+id/main_fragment"
-        android:name="com.babylon.certificatetransparency.sampleapp.MainFragment"
+        android:name="com.appmattus.certificatetransparency.sampleapp.MainFragment"
         tools:layout="@layout/fragment_main" />
 
     <fragment
         android:id="@+id/okhttp_kotlin_example_fragment"
-        android:name="com.babylon.certificatetransparency.sampleapp.examples.okhttp.kotlin.OkHttpKotlinExampleFragment"
+        android:name="com.appmattus.certificatetransparency.sampleapp.examples.okhttp.kotlin.OkHttpKotlinExampleFragment"
         tools:layout="@layout/example_fragment" />
 
     <fragment
         android:id="@+id/okhttp_java_example_fragment"
-        android:name="com.babylon.certificatetransparency.sampleapp.examples.okhttp.java.OkHttpJavaExampleFragment"
+        android:name="com.appmattus.certificatetransparency.sampleapp.examples.okhttp.java.OkHttpJavaExampleFragment"
         tools:layout="@layout/example_fragment" />
 
     <fragment
         android:id="@+id/volley_kotlin_example_fragment"
-        android:name="com.babylon.certificatetransparency.sampleapp.examples.volley.kotlin.VolleyKotlinExampleFragment"
+        android:name="com.appmattus.certificatetransparency.sampleapp.examples.volley.kotlin.VolleyKotlinExampleFragment"
         tools:layout="@layout/example_fragment" />
 
     <fragment
         android:id="@+id/volley_java_example_fragment"
-        android:name="com.babylon.certificatetransparency.sampleapp.examples.volley.java.VolleyJavaExampleFragment"
+        android:name="com.appmattus.certificatetransparency.sampleapp.examples.volley.java.VolleyJavaExampleFragment"
         tools:layout="@layout/example_fragment" />
 
     <fragment
         android:id="@+id/httpurlconnection_kotlin_example_fragment"
-        android:name="com.babylon.certificatetransparency.sampleapp.examples.httpurlconnection.kotlin.HttpURLConnectionKotlinExampleFragment"
+        android:name="com.appmattus.certificatetransparency.sampleapp.examples.httpurlconnection.kotlin.HttpURLConnectionKotlinExampleFragment"
         tools:layout="@layout/example_fragment" />
 
     <fragment
         android:id="@+id/httpurlconnection_java_example_fragment"
-        android:name="com.babylon.certificatetransparency.sampleapp.examples.httpurlconnection.java.HttpURLConnectionJavaExampleFragment"
+        android:name="com.appmattus.certificatetransparency.sampleapp.examples.httpurlconnection.java.HttpURLConnectionJavaExampleFragment"
         tools:layout="@layout/example_fragment" />
 
 </navigation>

@@ -10,7 +10,7 @@ plugins {
 android {
     compileSdk = 30
     defaultConfig {
-        applicationId = "com.babylon.certificatetransparency.sampleapp"
+        applicationId = "com.appmattus.certificatetransparency.sampleapp"
         minSdk = 19
         targetSdk = 30
         versionCode = 1
