@@ -24,8 +24,6 @@ import com.babylon.certificatetransparency.datasource.DataSource
 import com.babylon.certificatetransparency.internal.utils.isTooBigException
 import com.babylon.certificatetransparency.loglist.LogListService
 import com.babylon.certificatetransparency.loglist.RawLogListResult
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 
 internal class LogListNetworkDataSource(
     private val logListService: LogListService
@@ -33,17 +31,14 @@ internal class LogListNetworkDataSource(
 
     @Suppress("ReturnCount")
     override suspend fun get(): RawLogListResult {
-        val logListJob = coroutineScope { async { logListService.getLogList() } }
-        val signatureJob = coroutineScope { async { logListService.getLogListSignature() } }
-
         val logListJson = try {
-            logListJob.await()
+            logListService.getLogList()
         } catch (expected: Exception) {
             return if (expected.isTooBigException()) RawLogListJsonFailedTooBig else RawLogListJsonFailedLoadingWithException(expected)
         }
 
         val signature = try {
-            signatureJob.await()
+            logListService.getLogListSignature()
         } catch (expected: Exception) {
             return if (expected.isTooBigException()) RawLogListSigFailedTooBig else RawLogListSigFailedLoadingWithException(expected)
         }
