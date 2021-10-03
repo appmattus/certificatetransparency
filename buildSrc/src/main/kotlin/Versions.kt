@@ -51,6 +51,10 @@ object Versions {
         const val fragment = "1.3.0"
         const val lifecycle = "2.3.1"
         const val navigation = "2.3.5"
+        const val compose = "1.0.3"
+        const val activityCompose = "1.3.1"
+        const val lifecycleViewmodelCompose = "1.0.0-alpha07"
+        const val navigationCompose = "2.4.0-alpha06"
 
         const val testCore = "1.4.0"
         const val testExtJunit = "1.1.3"
