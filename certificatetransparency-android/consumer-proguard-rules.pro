@@ -23,6 +23,13 @@
 
 
 ## OkHttp3
+
+-dontwarn org.conscrypt.Conscrypt
+-dontwarn org.conscrypt.Conscrypt$*
+-dontwarn org.openjsse.javax.net.ssl.SSLParameters
+-dontwarn org.openjsse.javax.net.ssl.SSLSocket
+-dontwarn org.openjsse.net.ssl.OpenJSSE
+
 # From https://github.com/square/okhttp/blob/master/okhttp/src/main/resources/META-INF/proguard/okhttp3.pro
 
 # JSR 305 annotations are for embedding nullability information.
@@ -36,7 +43,7 @@
 
 # OkHttp platform used only on JVM and when Conscrypt dependency is available.
 -dontwarn okhttp3.internal.platform.ConscryptPlatform
-
+-dontwarn org.conscrypt.ConscryptHostnameVerifier
 
 
 ## Gson
@@ -75,10 +82,10 @@
 
 ## Ensure network models are not obfuscated
 # See https://github.com/babylonhealth/certificate-transparency-android/issues/38
--keep class com.babylon.certificatetransparency.internal.loglist.model.v2.* { *; }
+-keep class com.appmattus.certificatetransparency.internal.loglist.model.v2.* { *; }
 
 # Ensure chain cleaner classes are kept as they're loaded through reflection
--keep class com.babylon.certificatetransparency.chaincleaner.* { *; }
+-keep class com.appmattus.certificatetransparency.chaincleaner.* { *; }
 
 
 # Specifically for ProGuard (not needed for R8)
