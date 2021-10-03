@@ -28,7 +28,6 @@ import com.babylon.certificatetransparency.internal.utils.PublicKeyFactory
 import com.babylon.certificatetransparency.loglist.LogListResult
 import com.babylon.certificatetransparency.loglist.LogServer
 import com.google.gson.GsonBuilder
-import kotlinx.coroutines.GlobalScope
 
 internal object LogListDataSourceTestFactory {
 
