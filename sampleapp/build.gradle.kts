@@ -1,7 +1,5 @@
 @file:Suppress("MagicNumber")
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -32,12 +30,9 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
         allWarningsAsErrors = true
-        freeCompilerArgs = freeCompilerArgs + listOf(
-           "-P", "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
-        )
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.0.1"
+        kotlinCompilerExtensionVersion = "1.1.0-alpha05"
     }
     packagingOptions {
         resources.excludes.add("META-INF/DEPENDENCIES")

@@ -21,12 +21,42 @@
 package com.appmattus.certificatetransparency.sampleapp
 
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material.Text
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        //setContentView(R.layout.activity_main)
+
+        setContent {
+            val navController = rememberNavController()
+            NavHost(navController, startDestination = "main") {
+                composable("main") {
+                    MainScreen(navController = navController)
+                }
+                composable("okhttp/kotlin") {
+                    Text("okhttp/kotlin")
+                    /*val itemStr = it.arguments?.getString("item")!!
+
+                    val result = itemStr.toRouteParcelable<PostOverview>()
+
+                    // Work around a bug in Koin
+                    val viewModel = viewModel<PostDetailsViewModel>(factory = object : ViewModelProvider.Factory {
+                        @Suppress("UNCHECKED_CAST")
+                        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+                            // it.savedStateHandle
+                            PostDetailsViewModel(get(), result) as T
+                    })
+
+                    PostDetailsScreen(navController, viewModel)*/
+                }
+            }
+        }
     }
 }
