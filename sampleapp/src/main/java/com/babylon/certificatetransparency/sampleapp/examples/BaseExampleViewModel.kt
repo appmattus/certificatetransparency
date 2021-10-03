@@ -27,7 +27,7 @@ import androidx.lifecycle.MutableLiveData
 import com.babylon.certificatetransparency.CTLogger
 import com.babylon.certificatetransparency.VerificationResult
 import com.github.mustachejava.DefaultMustacheFactory
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import java.io.StringWriter
 import javax.net.ssl.SSLPeerUnverifiedException
 
@@ -112,7 +112,12 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
         }
     }
 
-    abstract fun openConnection(connectionHost: String, hosts: Set<String>, isFailOnError: Boolean, defaultLogger: CTLogger)
+    abstract fun openConnection(
+        connectionHost: String,
+        hosts: Set<String>,
+        isFailOnError: Boolean,
+        defaultLogger: CTLogger
+    )
 
     fun openConnection(connectionHost: String) {
         openConnection(connectionHost, state.hosts, state.failOnError, defaultLogger)
@@ -123,9 +128,9 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
 
         private fun isValidHost(pattern: CharSequence): Boolean {
             val host = if (pattern.startsWith(WILDCARD)) {
-                HttpUrl.parse("http://" + pattern.substring(WILDCARD.length))?.host()
+                ("http://" + pattern.substring(WILDCARD.length)).toHttpUrlOrNull()?.host
             } else {
-                HttpUrl.parse("http://$pattern")?.host()
+                "http://$pattern".toHttpUrlOrNull()?.host
             }
 
             return host != null

@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +15,9 @@
  * limitations under the License.
  *
  * Code derived from https://github.com/google/certificate-transparency-java
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.internal.utils
@@ -29,7 +33,6 @@ import java.security.NoSuchAlgorithmException
 import java.security.cert.Certificate
 import java.security.cert.CertificateEncodingException
 import java.security.cert.X509Certificate
-import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
 /** Helper class for finding out all kinds of information about a certificate.  */
@@ -39,7 +42,7 @@ private const val X509_AUTHORITY_KEY_IDENTIFIER = "2.5.29.35"
 /**
  * @throws java.security.cert.CertificateParsingException
  */
-@OptIn(ExperimentalContracts::class)
+@Suppress("EXPERIMENTAL_API_USAGE_ERROR", "EXPERIMENTAL_API_USAGE_FUTURE_ERROR")
 internal fun Certificate.isPreCertificateSigningCert(): Boolean {
     contract {
         returns(true) implies (this@isPreCertificateSigningCert is X509Certificate)
@@ -47,7 +50,7 @@ internal fun Certificate.isPreCertificateSigningCert(): Boolean {
     return this is X509Certificate && extendedKeyUsage?.contains(PRECERTIFICATE_SIGNING_OID) == true
 }
 
-@OptIn(ExperimentalContracts::class)
+@Suppress("EXPERIMENTAL_API_USAGE_ERROR", "EXPERIMENTAL_API_USAGE_FUTURE_ERROR")
 internal fun Certificate.isPreCertificate(): Boolean {
     contract {
         returns(true) implies (this@isPreCertificate is X509Certificate)
@@ -55,7 +58,7 @@ internal fun Certificate.isPreCertificate(): Boolean {
     return this is X509Certificate && criticalExtensionOIDs?.contains(POISON_EXTENSION_OID) == true
 }
 
-@OptIn(ExperimentalContracts::class)
+@Suppress("EXPERIMENTAL_API_USAGE_ERROR", "EXPERIMENTAL_API_USAGE_FUTURE_ERROR")
 internal fun Certificate.hasEmbeddedSct(): Boolean {
     contract {
         returns(true) implies (this@hasEmbeddedSct is X509Certificate)

@@ -28,9 +28,8 @@ import com.babylon.certificatetransparency.internal.utils.PublicKeyFactory
 import com.babylon.certificatetransparency.loglist.LogListResult
 import com.babylon.certificatetransparency.loglist.LogServer
 import com.google.gson.GsonBuilder
-import kotlinx.coroutines.GlobalScope
 
-object LogListDataSourceTestFactory {
+internal object LogListDataSourceTestFactory {
 
     val logListDataSource: DataSource<LogListResult> by lazy {
         // Collection of CT logs that are trusted from https://www.gstatic.com/ct/log_list/v2/log_list.json
@@ -47,8 +46,6 @@ object LogListDataSourceTestFactory {
             override suspend fun get() = list
 
             override suspend fun set(value: LogListResult) = Unit
-
-            override val coroutineContext = GlobalScope.coroutineContext
         }
     }
 
@@ -57,8 +54,6 @@ object LogListDataSourceTestFactory {
             override suspend fun get() = LogListResult.Valid(emptyList())
 
             override suspend fun set(value: LogListResult) = Unit
-
-            override val coroutineContext = GlobalScope.coroutineContext
         }
     }
 
@@ -67,8 +62,6 @@ object LogListDataSourceTestFactory {
             override suspend fun get(): LogListResult? = null
 
             override suspend fun set(value: LogListResult) = Unit
-
-            override val coroutineContext = GlobalScope.coroutineContext
         }
     }
 }

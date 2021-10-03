@@ -1,7 +1,7 @@
 # Certificate Transparency for Android
 
-[![CI status](https://github.com/babylonhealth/certificate-transparency-android/workflows/CI/badge.svg)](https://github.com/babylonhealth/certificate-transparency-android/actions)
-[![codecov](https://codecov.io/gh/babylonhealth/certificate-transparency-android/branch/main/graph/badge.svg)](https://codecov.io/gh/babylonhealth/certificate-transparency-android)
+[![CI status](https://github.com/appmattus/certificatetransparency/workflows/CI/badge.svg)](https://github.com/appmattus/certificatetransparency/actions)
+[![codecov](https://codecov.io/gh/appmattus/certificatetransparency/branch/main/graph/badge.svg)](https://codecov.io/gh/appmattus/certificatetransparency)
 [![Maven Central](https://img.shields.io/maven-central/v/com.appmattus.certificatetransparency/certificatetransparency)](https://search.maven.org/search?q=g:com.appmattus.certificatetransparency)
 
 To protect our apps from man-in-the-middle attacks one of the first
@@ -84,16 +84,16 @@ implementation("com.appmattus.certificatetransparency:certificatetransparency:<l
 
 The library allows you to create a network interceptor for use with
 OkHttp where you specify which hosts to perform certificate transparency
-checks on. Wildcards are accepted but note that *.babylonhealth.com will
-match any sub-domain but not "babylonhealth.com" with no subdomain.
+checks on. Wildcards are accepted but note that *.appmattus.com will
+match any sub-domain but not "appmattus.com" with no subdomain.
 
 ```kotlin
 val interceptor = certificateTransparencyInterceptor {
     // Enable for the provided hosts
-    +"*.babylonhealth.com"
+    +"*.appmattus.com"
 
     // Exclude specific hosts
-    -"legacy.babylonhealth.com"
+    -"legacy.appmattus.com"
 }
 
 val client = OkHttpClient.Builder().apply {
@@ -109,7 +109,7 @@ val interceptor = certificateTransparencyInterceptor {
     +"*.*"
 
     // Exclude specific hosts as necessary
-    -"legacy.babylonhealth.com"
+    -"legacy.appmattus.com"
 }
 ```
 
@@ -124,7 +124,7 @@ and supplying that to your Retrofit.Builder.
 
 ```kotlin
 val retrofit = Retrofit.Builder()
-    .baseUrl("https://babylonhealth.com")
+    .baseUrl("https://appmattus.com")
     .addConverterFactory(GsonConverterFactory.create())
     .client(okHttpClient)
     .build()
@@ -140,14 +140,14 @@ To use with HttpURLConnection you wrap the original hostname verifier
 before calling connect() on the connection:
 
 ```kotlin
-val connection = URL("https://www.babylonhealth.com").openConnection()
+val connection = URL("https://www.appmattus.com").openConnection()
 if (connection is HttpsURLConnection) {
     connection.hostnameVerifier = certificateTransparencyHostnameVerifier(connection.hostnameVerifier) {
         // Enable for the provided hosts
-        +"*.babylonhealth.com"
+        +"*.appmattus.com"
 
         // Exclude specific hosts
-        -"legacy.babylonhealth.com"
+        -"legacy.appmattus.com"
     }
 }
 ```
@@ -167,10 +167,10 @@ val requestQueue = Volley.newRequestQueue(applicationContext, object : HurlStack
         if (connection is HttpsURLConnection) {
             connection.hostnameVerifier = certificateTransparencyHostnameVerifier(connection.hostnameVerifier) {
                 // Enable for the provided hosts
-                +"*.babylonhealth.com"
+                +"*.appmattus.com"
 
                 // Exclude specific hosts
-                -"legacy.babylonhealth.com"
+                -"legacy.appmattus.com"
             }
         }
         return connection
@@ -285,7 +285,7 @@ requests to us.
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning. For the versions
-available, see the [tags on this repository](https://github.com/babylonhealth/certificate-transparency-android/tags).
+available, see the [tags on this repository](https://github.com/appmattus/certificatetransparency/tags).
 
 ## License
 

@@ -29,7 +29,7 @@ import com.babylon.certificatetransparency.internal.loglist.await
 import com.babylon.certificatetransparency.internal.loglist.parser.RawLogListToLogListResultTransformer
 import com.babylon.certificatetransparency.internal.utils.MaxSizeInterceptor
 import okhttp3.CacheControl
-import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.util.concurrent.TimeUnit
@@ -61,7 +61,7 @@ public object LogListDataSourceFactory {
 
             private suspend fun get(pathSegment: String, maxSize: Long): ByteArray {
                 val request = Request.Builder()
-                    .url(HttpUrl.get(baseUrl).newBuilder().addPathSegment(pathSegment).build())
+                    .url(baseUrl.toHttpUrl().newBuilder().addPathSegment(pathSegment).build())
                     .cacheControl(CacheControl.Builder().noCache().noStore().build())
                     .addHeader(MaxSizeInterceptor.HEADER, maxSize.toString())
                     .build()

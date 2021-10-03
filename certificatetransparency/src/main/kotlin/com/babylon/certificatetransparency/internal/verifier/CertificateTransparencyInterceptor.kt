@@ -59,11 +59,11 @@ internal class CertificateTransparencyInterceptor(
 ), Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val host = chain.request().url().host()
+        val host = chain.request().url.host
         val connection = chain.connection()
             ?: throw IllegalStateException("No connection found. Verify interceptor is added using addNetworkInterceptor")
 
-        val certs = connection.handshake()?.peerCertificates() ?: emptyList()
+        val certs = connection.handshake()?.peerCertificates ?: emptyList()
 
         val result = if (connection.socket() is SSLSocket) {
             verifyCertificateTransparency(host, certs)

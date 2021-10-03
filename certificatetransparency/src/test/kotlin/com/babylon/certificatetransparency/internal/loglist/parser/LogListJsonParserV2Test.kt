@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.internal.loglist.parser
@@ -27,7 +31,7 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Test
 
-class LogListJsonParserV2Test {
+internal class LogListJsonParserV2Test {
 
     @Test
     fun `parses the json`() = runBlocking {

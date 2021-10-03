@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +15,9 @@
  * limitations under the License.
  *
  * Code derived from https://github.com/google/certificate-transparency-java
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.internal.verifier
@@ -62,7 +66,7 @@ import java.io.File
  * This test verifies that the data is correctly serialized for signature comparison, so signature
  * verification is actually effective.
  */
-class LogSignatureVerifierTest {
+internal class LogSignatureVerifierTest {
 
     /** Returns a LogSignatureVerifier for the test log with an EC key  */
     private val verifier by lazy {

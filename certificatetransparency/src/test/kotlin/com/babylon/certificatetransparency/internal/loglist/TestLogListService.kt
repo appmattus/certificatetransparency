@@ -20,7 +20,7 @@ import com.babylon.certificatetransparency.loglist.LogListService
 import retrofit2.http.GET
 import retrofit2.http.Headers
 
-public interface TestLogListService : LogListService {
+internal interface TestLogListService : LogListService {
     @GET("log_list.json")
     @Headers("Cache-Control: no-cache", "Max-Size: 1048576")
     override suspend fun getLogList(): ByteArray

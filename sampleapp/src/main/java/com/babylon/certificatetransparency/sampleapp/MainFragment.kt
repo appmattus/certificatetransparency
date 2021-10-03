@@ -23,6 +23,7 @@ package com.babylon.certificatetransparency.sampleapp
 import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,8 +40,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private val binding by viewBinding<FragmentMainBinding>()
 
     @Suppress("LongMethod")
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.recyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 

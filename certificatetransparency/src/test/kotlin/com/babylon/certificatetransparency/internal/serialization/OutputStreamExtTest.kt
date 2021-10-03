@@ -33,7 +33,7 @@ import org.junit.Test
 import java.io.ByteArrayOutputStream
 
 /** Test serialization.  */
-class OutputStreamExtTest {
+internal class OutputStreamExtTest {
 
     @Test
     fun serializeSct() {

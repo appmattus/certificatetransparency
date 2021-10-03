@@ -21,9 +21,6 @@
 package com.babylon.certificatetransparency.datasource
 
 import com.babylon.certificatetransparency.internal.loglist.InMemoryDataSource
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
@@ -31,9 +28,12 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.mockito.kotlin.spy
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import java.util.concurrent.atomic.AtomicInteger
 
-class DataSourceReuseInflightTest {
+internal class DataSourceReuseInflightTest {
 
     private val cache = spy(InMemoryDataSource<Any>())
 

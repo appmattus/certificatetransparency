@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,6 +13,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.internal
@@ -31,15 +35,15 @@ import com.babylon.certificatetransparency.utils.TestData.TEST_MITMPROXY_ORIGINA
 import com.babylon.certificatetransparency.utils.TestData.TEST_MITMPROXY_ROOT_CERT
 import com.babylon.certificatetransparency.utils.TrustedSocketFactory
 import com.babylon.certificatetransparency.utils.assertIsA
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.mockito.kotlin.spy
+import org.mockito.kotlin.whenever
 import java.security.cert.X509Certificate
 import javax.net.ssl.SSLPeerUnverifiedException
 import javax.net.ssl.X509TrustManager
 
-class CertificateTransparencyBaseTest {
+internal class CertificateTransparencyBaseTest {
 
     @Test
     fun mitmDisallowedWhenHostChecked() {

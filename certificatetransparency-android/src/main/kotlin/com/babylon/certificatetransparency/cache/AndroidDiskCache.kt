@@ -23,11 +23,9 @@ package com.babylon.certificatetransparency.cache
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import com.babylon.certificatetransparency.loglist.RawLogListResult
-import kotlinx.coroutines.Dispatchers
 import java.io.File
 import java.io.IOException
 import java.util.Date
-import kotlin.coroutines.CoroutineContext
 
 /**
  * A default log list and signature cache implementation for Android.
@@ -91,9 +89,6 @@ public class AndroidDiskCache @JvmOverloads constructor(
                     currentDate = Date()
                 )
     }
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.IO
 
     public companion object {
         private const val LOG_LIST_FILE = "loglist.json"

@@ -209,7 +209,10 @@ internal class LogSignatureVerifier(private val logServer: LogServer) : Signatur
         }
     }
 
-    private fun getExtensionsWithoutPoisonAndSct(extensions: Extensions, replacementX509authorityKeyIdentifier: Extension?): List<Extension> {
+    private fun getExtensionsWithoutPoisonAndSct(
+        extensions: Extensions,
+        replacementX509authorityKeyIdentifier: Extension?
+    ): List<Extension> {
         // Order is important, which is why a list is used.
         return extensions.extensionOIDs
             // Do nothing - skip copying this extension

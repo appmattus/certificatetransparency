@@ -10,13 +10,11 @@ plugins {
 apply(from = "$rootDir/gradle/scripts/jacoco-android.gradle.kts")
 
 android {
-    compileSdkVersion(30)
+    compileSdk = 30
 
     defaultConfig {
-        minSdkVersion(19)
-        targetSdkVersion(30)
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = 19
+        targetSdk = 30
 
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
 
@@ -44,7 +42,7 @@ dependencies {
 
     testImplementation("junit:junit:${Versions.junit4}")
     testImplementation("org.mockito:mockito-core:${Versions.mockito}")
-    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:${Versions.mockitoKotlin}")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:${Versions.mockitoKotlin}")
 
     testImplementation("androidx.test:core:${Versions.AndroidX.testCore}")
     testImplementation("androidx.test:runner:${Versions.AndroidX.testRunner}")

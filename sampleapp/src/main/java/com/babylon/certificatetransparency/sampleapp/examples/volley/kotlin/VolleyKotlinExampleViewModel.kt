@@ -72,7 +72,12 @@ class VolleyKotlinExampleViewModel(application: Application) : BaseExampleViewMo
         )
     }
 
-    override fun openConnection(connectionHost: String, hosts: Set<String>, isFailOnError: Boolean, defaultLogger: CTLogger) {
+    override fun openConnection(
+        connectionHost: String,
+        hosts: Set<String>,
+        isFailOnError: Boolean,
+        defaultLogger: CTLogger
+    ) {
         val queue = createRequestQueue(hosts, isFailOnError, defaultLogger)
 
         val request = StringRequest(

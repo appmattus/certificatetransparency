@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion(30)
+    compileSdk = 30
     defaultConfig {
         applicationId = "com.babylon.certificatetransparency.sampleapp"
-        minSdkVersion(19)
-        targetSdkVersion(30)
+        minSdk = 19
+        targetSdk = 30
         versionCode = 1
         versionName = "1.0"
         multiDexEnabled = true
@@ -31,8 +31,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     packagingOptions {
-        exclude("META-INF/DEPENDENCIES")
-        exclude("META-INF/atomicfu.kotlin_module")
+        resources.excludes.add("META-INF/DEPENDENCIES")
+        resources.excludes.add("META-INF/atomicfu.kotlin_module")
     }
     buildFeatures {
         viewBinding = true

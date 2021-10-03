@@ -1,4 +1,5 @@
 /*
+ * Copyright 2021 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +15,9 @@
  * limitations under the License.
  *
  * Code derived from https://github.com/google/certificate-transparency-java
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.babylon.certificatetransparency.internal.utils
@@ -28,7 +32,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** Make sure the correct info about certificates is provided.  */
-class CertificateExtTest {
+internal class CertificateExtTest {
     @Test
     fun correctlyIdentifiesPreCertificateSigningCert() {
         val preCertificateSigningCert = loadCertificates(PRE_CERT_SIGNING_CERT)[0]
