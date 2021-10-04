@@ -39,8 +39,8 @@ fun RemovableItem(title: String, onRemoveClick: () -> Unit, modifier: Modifier =
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier.fillMaxWidth()
     ) {
-        Text(title, style = MaterialTheme.typography.body1, modifier = Modifier.padding(8.dp))
-        TextButton(onClick = onRemoveClick) {
+        Text(title, style = MaterialTheme.typography.body1)
+        TextButton(onClick = onRemoveClick, modifier = Modifier.padding(start = 8.dp)) {
             Icon(painter = painterResource(id = R.drawable.close), contentDescription = null, Modifier.padding(end = 8.dp))
             Text(text = stringResource(R.string.remove))
         }

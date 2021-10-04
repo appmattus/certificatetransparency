@@ -129,13 +129,15 @@ private fun LazyListScope.configurationSection(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
     }
+    item { Spacer(modifier = Modifier.height(8.dp)) }
     items(state?.hosts?.toList() ?: emptyList()) { host ->
         RemovableItem(
             host,
             onRemoveClick = { viewModel.removeHost(host) },
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
     }
+    item { Spacer(modifier = Modifier.height(8.dp)) }
     item {
         OutlinedButton(
             onClick = { showIncludeHostDialog(context, viewModel) },
