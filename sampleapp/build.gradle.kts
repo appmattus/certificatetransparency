@@ -1,5 +1,7 @@
 @file:Suppress("MagicNumber")
 
+import com.android.build.api.dsl.ApplicationBuildType
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -16,7 +18,7 @@ android {
         proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
     }
     buildTypes {
-        getByName("release") {
+        getByName<ApplicationBuildType>("release") {
             isMinifyEnabled = true
             signingConfig = signingConfigs.getByName("debug")
         }
@@ -28,7 +30,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        jvmTarget = "1.8"
         allWarningsAsErrors = true
     }
     composeOptions {
@@ -39,7 +41,6 @@ android {
         resources.excludes.add("META-INF/atomicfu.kotlin_module")
     }
     buildFeatures {
-        viewBinding = true
         compose = true
     }
 }
@@ -48,22 +49,15 @@ dependencies {
     implementation(project(":certificatetransparency-android"))
     implementation(kotlin("stdlib-jdk8"))
     implementation("androidx.appcompat:appcompat:${Versions.AndroidX.appCompat}")
-    implementation("androidx.constraintlayout:constraintlayout:${Versions.AndroidX.constraintLayout}")
-    implementation("com.google.android.material:material:${Versions.Google.material}")
     implementation("com.google.android.gms:play-services-base:${Versions.Google.playServices}")
     implementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:${Versions.AndroidX.lifecycle}")
     implementation("androidx.lifecycle:lifecycle-common-java8:${Versions.AndroidX.lifecycle}")
-    implementation("androidx.navigation:navigation-fragment-ktx:${Versions.AndroidX.navigation}")
-    implementation("androidx.navigation:navigation-ui-ktx:${Versions.AndroidX.navigation}")
-    implementation("com.xwray:groupie:${Versions.groupie}")
-    implementation("com.xwray:groupie-viewbinding:${Versions.groupie}")
     implementation("com.afollestad.material-dialogs:core:${Versions.materialDialogs}")
     implementation("com.afollestad.material-dialogs:input:${Versions.materialDialogs}")
     implementation("com.pddstudio:highlightjs-android:${Versions.highlightJs}")
     implementation("com.android.volley:volley:${Versions.volley}")
     implementation("com.github.spullara.mustache.java:compiler:${Versions.mustache}")
-
 
     implementation("androidx.compose.ui:ui:${Versions.AndroidX.compose}")
     // Tooling support (Previews, etc.)
@@ -72,9 +66,6 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:${Versions.AndroidX.compose}")
     // Material Design
     implementation("androidx.compose.material:material:${Versions.AndroidX.compose}")
-    // Material design icons
-    implementation("androidx.compose.material:material-icons-core:${Versions.AndroidX.compose}")
-    implementation("androidx.compose.material:material-icons-extended:${Versions.AndroidX.compose}")
     // Integration with activities
     implementation("androidx.activity:activity-compose:${Versions.AndroidX.activityCompose}")
     // Integration with ViewModels
@@ -83,7 +74,6 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:${Versions.AndroidX.compose}")
     // Navigation
     implementation("androidx.navigation:navigation-compose:${Versions.AndroidX.navigationCompose}")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0-alpha03")
 
     // UI Tests
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:${Versions.AndroidX.compose}")

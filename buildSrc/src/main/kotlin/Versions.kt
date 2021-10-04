@@ -28,7 +28,6 @@ object Versions {
 
     const val bouncyCastle = "1.69"
     const val coroutines = "1.5.2"
-    const val groupie = "2.9.0"
     const val highlightJs = "1.5.0"
     const val materialDialogs = "3.3.0"
     const val mustache = "0.8.18" // Cannot update due to use of ThreadLocal which is not desugared
@@ -47,10 +46,7 @@ object Versions {
 
     object AndroidX {
         const val appCompat = "1.3.1"
-        const val constraintLayout = "2.1.1"
-        const val fragment = "1.3.0"
         const val lifecycle = "2.3.1"
-        const val navigation = "2.3.5"
         const val compose = "1.0.3"
         const val activityCompose = "1.3.1"
         const val lifecycleViewmodelCompose = "1.0.0-alpha07"
@@ -62,7 +58,6 @@ object Versions {
     }
 
     object Google {
-        const val material = "1.4.0"
         const val playServices = "17.6.0"
     }
 }
