@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
@@ -83,85 +84,15 @@ fun ExampleScreen(viewModel: BaseExampleViewModel) {
             }
         }
     ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxHeight()
-        ) {
+        LazyColumn(modifier = Modifier.fillMaxHeight()) {
             item { Spacer(modifier = Modifier.height(8.dp)) }
 
             item {
                 HeaderTextItem(title = viewModel.title, modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
             }
-            item {
-                SubHeaderTextItem(
-                    title = stringResource(R.string.configuration),
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-            }
 
-            // Hosts
-            item {
-                BodyTextItem(
-                    title = "Verify certificate transparency for hosts that match one of the patterns.",
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-            }
-            items(state?.hosts?.toList() ?: emptyList()) { host ->
-                RemovableItem(
-                    host,
-                    onRemoveClick = { viewModel.removeHost(host) },
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-            }
-            item {
-                OutlinedButton(
-                    onClick = { showIncludeHostDialog(context, viewModel) },
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                        .fillMaxWidth()
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.plus),
-                        contentDescription = null,
-                        Modifier.padding(end = 8.dp)
-                    )
-                    Text(text = stringResource(R.string.include_host))
-                }
-            }
-
-            // Fail On Error
-            item {
-                BodyTextItem(
-                    title = "Determine if a failure to pass certificate transparency results in the connection being closed. " +
-                            "A value of true ensures the connection is closed on errors.\nDefault: true",
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-            }
-            item {
-                CheckboxItem(
-                    title = stringResource(R.string.fail_on_error),
-                    checked = state?.failOnError ?: true,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                ) {
-                    viewModel.setFailOnError(it)
-                }
-            }
-
-            item {
-                SubHeaderTextItem(
-                    title = stringResource(R.string.sample_code),
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-            }
-
-            // CodeViewItem
-            item {
-                CodeViewItem(
-                    language = Language.JAVA,
-                    sourceCode = state?.sampleCode,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-            }
+            configurationSection(context, viewModel, state)
+            sampleCodeSection(state)
 
             item {
                 Button(
@@ -176,6 +107,83 @@ fun ExampleScreen(viewModel: BaseExampleViewModel) {
 
             item { Spacer(modifier = Modifier.height(8.dp)) }
         }
+    }
+}
+
+private fun LazyListScope.configurationSection(
+    context: Context,
+    viewModel: BaseExampleViewModel,
+    state: State?
+) {
+    item {
+        SubHeaderTextItem(
+            title = stringResource(R.string.configuration),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
+    }
+
+    // Hosts
+    item {
+        BodyTextItem(
+            title = "Verify certificate transparency for hosts that match one of the patterns.",
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
+    }
+    items(state?.hosts?.toList() ?: emptyList()) { host ->
+        RemovableItem(
+            host,
+            onRemoveClick = { viewModel.removeHost(host) },
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
+    }
+    item {
+        OutlinedButton(
+            onClick = { showIncludeHostDialog(context, viewModel) },
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .fillMaxWidth()
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.plus),
+                contentDescription = null,
+                Modifier.padding(end = 8.dp)
+            )
+            Text(text = stringResource(R.string.include_host))
+        }
+    }
+
+    // Fail on error
+    item {
+        BodyTextItem(
+            title = "Determine if a failure to pass certificate transparency results in the connection being closed. " +
+                    "A value of true ensures the connection is closed on errors.\nDefault: true",
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
+    }
+    item {
+        CheckboxItem(
+            title = stringResource(R.string.fail_on_error),
+            checked = state?.failOnError ?: true,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        ) {
+            viewModel.setFailOnError(it)
+        }
+    }
+}
+
+private fun LazyListScope.sampleCodeSection(state: State?) {
+    item {
+        SubHeaderTextItem(
+            title = stringResource(R.string.sample_code),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
+    }
+    item {
+        CodeViewItem(
+            language = Language.JAVA,
+            sourceCode = state?.sampleCode,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
     }
 }
 
