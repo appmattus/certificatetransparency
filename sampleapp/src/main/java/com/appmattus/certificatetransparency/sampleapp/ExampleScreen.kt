@@ -70,7 +70,6 @@ fun ExampleScreen(viewModel: BaseExampleViewModel) {
 
             val result = scaffoldState.snackbarHostState.showSnackbar(it.text, color.toString())
             if (result == SnackbarResult.Dismissed) {
-                println("dismissed")
                 viewModel.dismissMessage()
             }
         }
@@ -78,8 +77,8 @@ fun ExampleScreen(viewModel: BaseExampleViewModel) {
 
     Scaffold(
         scaffoldState = scaffoldState,
-        snackbarHost = {
-            SnackbarHost(it) {
+        snackbarHost = { snackbarHostState ->
+            SnackbarHost(snackbarHostState) {
                 Snackbar(backgroundColor = colorResource(it.actionLabel!!.toInt()), modifier = Modifier.padding(8.dp)) { Text(it.message) }
             }
         }
