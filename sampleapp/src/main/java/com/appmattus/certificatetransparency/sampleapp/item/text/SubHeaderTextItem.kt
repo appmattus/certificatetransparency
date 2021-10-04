@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.appmattus.certificatetransparency.sampleapp.compose.text
+package com.appmattus.certificatetransparency.sampleapp.item.text
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.appmattus.certificatetransparency.sampleapp.compose
+package com.appmattus.certificatetransparency.sampleapp.item
 
 import android.content.ActivityNotFoundException
 import android.content.Context

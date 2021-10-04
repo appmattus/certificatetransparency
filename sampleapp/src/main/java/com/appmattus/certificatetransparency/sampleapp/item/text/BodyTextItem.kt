@@ -14,35 +14,30 @@
  * limitations under the License.
  */
 
-package com.appmattus.certificatetransparency.sampleapp.compose
+package com.appmattus.certificatetransparency.sampleapp.item.text
 
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.viewinterop.AndroidView
-import com.pddstudio.highlightjs.HighlightJsView
-import com.pddstudio.highlightjs.models.Language
-import com.pddstudio.highlightjs.models.Theme
 
 @Composable
-fun CodeViewItem(language: Language, sourceCode: String?, modifier: Modifier = Modifier) {
-    AndroidView(
-        modifier = modifier.fillMaxWidth(),
-        factory = { context ->
-            HighlightJsView(context).apply {
-                theme = Theme.DARKULA
-            }
-        },
-        update = {
-            it.highlightLanguage = language
-            it.setSource(sourceCode)
-        }
-    )
+fun BodyTextItem(title: String, modifier: Modifier = Modifier) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
+        Text(text = title, style = MaterialTheme.typography.subtitle1, modifier = Modifier.fillMaxWidth())
+    }
 }
 
 @Preview
 @Composable
-fun PreviewCodeViewItem() {
-    CodeViewItem(language = Language.JAVA, sourceCode = "fun main() {\n    System.out.println(\"Hello world!\");\n}")
+fun PreviewBodyTextItem() {
+    Row {
+        BodyTextItem(
+            title = "Verify certificate transparency for hosts that match one of the patterns."
+        )
+    }
 }

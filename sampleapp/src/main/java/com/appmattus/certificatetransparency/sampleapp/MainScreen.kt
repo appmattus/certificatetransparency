@@ -27,8 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.appmattus.certificatetransparency.sampleapp.compose.ExampleCardItem
-import com.appmattus.certificatetransparency.sampleapp.compose.text.HeaderTextItem
+import com.appmattus.certificatetransparency.sampleapp.item.ExampleCardItem
+import com.appmattus.certificatetransparency.sampleapp.item.text.HeaderTextItem
+import com.appmattus.certificatetransparency.sampleapp.item.AppmattusLogo
 
 @Composable
 fun MainScreen(navController: NavController) {
@@ -80,7 +81,9 @@ fun MainScreen(navController: NavController) {
                 )
             }
 
-            // TODO Add Appmattus logo here...
+            item {
+                AppmattusLogo(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+            }
         }
     }
 }

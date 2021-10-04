@@ -46,14 +46,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
-import com.appmattus.certificatetransparency.sampleapp.compose.CheckboxItem
-import com.appmattus.certificatetransparency.sampleapp.compose.CodeViewItem
-import com.appmattus.certificatetransparency.sampleapp.compose.RemovableItem
-import com.appmattus.certificatetransparency.sampleapp.compose.text.BodyTextItem
-import com.appmattus.certificatetransparency.sampleapp.compose.text.HeaderTextItem
-import com.appmattus.certificatetransparency.sampleapp.compose.text.SubHeaderTextItem
 import com.appmattus.certificatetransparency.sampleapp.examples.BaseExampleViewModel
 import com.appmattus.certificatetransparency.sampleapp.examples.State
+import com.appmattus.certificatetransparency.sampleapp.item.CheckboxItem
+import com.appmattus.certificatetransparency.sampleapp.item.CodeViewItem
+import com.appmattus.certificatetransparency.sampleapp.item.RemovableItem
+import com.appmattus.certificatetransparency.sampleapp.item.text.BodyTextItem
+import com.appmattus.certificatetransparency.sampleapp.item.text.HeaderTextItem
+import com.appmattus.certificatetransparency.sampleapp.item.text.SubHeaderTextItem
 import com.pddstudio.highlightjs.models.Language
 import kotlinx.coroutines.launch
 
