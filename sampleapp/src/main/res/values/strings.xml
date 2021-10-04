@@ -13,7 +13,7 @@
     <string name="test_connection_dialog_connect">Connect</string>
     <string name="test_connection_dialog_cancel">Cancel</string>
     <string name="fail_on_error">Fail on error</string>
-    <string name="test_certificate_transparency">Test certificate transparency</string>
+    <string name="test_certificate_transparency">Test Certificate Transparency</string>
     <string name="include_host">Include Host</string>
     <string name="configuration">Configuration</string>
     <string name="sample_code">Sample code</string>
