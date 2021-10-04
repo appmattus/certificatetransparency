@@ -18,18 +18,16 @@
  * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
-package com.appmattus.certificatetransparency.sampleapp.examples.volley.java;
+package com.appmattus.certificatetransparency.sampleapp.examples.httpurlconnection;
 
 import android.app.Application;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import androidx.annotation.NonNull;
+
 import com.appmattus.certificatetransparency.CTHostnameVerifierBuilder;
 import com.appmattus.certificatetransparency.CTLogger;
 import com.appmattus.certificatetransparency.cache.AndroidDiskCache;
+import com.appmattus.certificatetransparency.sampleapp.R;
 import com.appmattus.certificatetransparency.sampleapp.examples.BaseExampleViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -41,16 +39,22 @@ import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class VolleyJavaExampleViewModel extends BaseExampleViewModel {
+public class HttpURLConnectionJavaExampleViewModel extends BaseExampleViewModel {
 
-    public VolleyJavaExampleViewModel(@NotNull Application application) {
+    public HttpURLConnectionJavaExampleViewModel(@NotNull Application application) {
         super(application);
     }
 
     @NotNull
     @Override
     public String getSampleCodeTemplate() {
-        return "volley-java.txt";
+        return "httpurlconnection-java.txt";
+    }
+
+    @NonNull
+    @Override
+    public String getTitle() {
+        return getApplication().getString(R.string.httpurlconnection_java_example);
     }
 
     private void enableCertificateTransparencyChecks(
@@ -76,39 +80,19 @@ public class VolleyJavaExampleViewModel extends BaseExampleViewModel {
         }
     }
 
-    // A normal client would create this ahead of time and share it between network requests
-    // We create it dynamically as we allow the user to set the hosts for certificate transparency
-    private RequestQueue createRequestQueue(Set<String> hosts, boolean isFailOnError, CTLogger defaultLogger) {
-        return Volley.newRequestQueue(getApplication(),
-            new HurlStack() {
-                @Override
-                protected HttpURLConnection createConnection(URL url) throws IOException {
-                    HttpURLConnection connection = super.createConnection(url);
-
-                    enableCertificateTransparencyChecks(connection, hosts, isFailOnError, defaultLogger);
-
-                    return connection;
-                }
-            }
-        );
-    }
-
     @Override
     public void openConnection(@NotNull String connectionHost, @NotNull Set<String> hosts, boolean isFailOnError, @NotNull CTLogger defaultLogger) {
-        RequestQueue queue = createRequestQueue(hosts, isFailOnError, defaultLogger);
+        // Quick and dirty way to push the network call onto a background thread, don't do this is a real app
+        new Thread(() -> {
+            try {
+                HttpURLConnection connection = (HttpURLConnection) new URL("https://" + connectionHost).openConnection();
 
-        // Failure. Send message to the UI as logger won't catch generic network exceptions
-        Request<String> request = new StringRequest(Request.Method.GET, "https://" + connectionHost,
-            response -> {
-                // Success. Reason will have been sent to the logger
-            },
-            this::sendException);
+                enableCertificateTransparencyChecks(connection, hosts, isFailOnError, defaultLogger);
 
-        // Explicitly disable cache so we always call the interceptor and thus see the certificate transparency results
-        request.setShouldCache(false);
-
-        // Add the request to the RequestQueue.
-        queue.add(request);
-
+                connection.connect();
+            } catch (IOException e) {
+                sendException(e);
+            }
+        }).start();
     }
 }

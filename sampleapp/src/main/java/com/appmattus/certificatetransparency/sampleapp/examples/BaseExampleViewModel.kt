@@ -35,6 +35,8 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
 
     abstract val sampleCodeTemplate: String
 
+    abstract val title: String
+
     private var state = State(
         hosts = setOf("*.babylonhealth.com"),
         failOnError = true,
@@ -120,7 +122,11 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
     )
 
     fun openConnection(connectionHost: String) {
-        openConnection(connectionHost, state.hosts, state.failOnError, defaultLogger)
+        try {
+            openConnection(connectionHost, state.hosts, state.failOnError, defaultLogger)
+        } catch (expected: Exception) {
+            sendException(expected)
+        }
     }
 
     companion object {

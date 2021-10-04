@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import com.appmattus.certificatetransparency.sampleapp.R
 
 @Composable
-fun HeaderTextItem(title: String, modifier: Modifier = Modifier, @DrawableRes icon: Int? = null) {
+fun SubHeaderTextItem(title: String, modifier: Modifier = Modifier, @DrawableRes icon: Int? = null) {
     Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
         icon?.let {
             Image(
@@ -44,20 +44,20 @@ fun HeaderTextItem(title: String, modifier: Modifier = Modifier, @DrawableRes ic
             )
         }
 
-        Text(text = title, style = MaterialTheme.typography.h4, modifier = Modifier.fillMaxWidth())
+        Text(text = title, style = MaterialTheme.typography.h6, modifier = Modifier.fillMaxWidth())
     }
 }
 
 @Preview
 @Composable
-fun PreviewHeaderTextItem() {
+fun PreviewSubHeaderTextItem() {
     Row {
-        HeaderTextItem(
+        SubHeaderTextItem(
             title = "Certificate Transparency",
             icon = R.drawable.ic_launcher_foreground
         )
         Spacer(modifier = Modifier.height(16.dp))
-        HeaderTextItem(
+        SubHeaderTextItem(
             title = "OkHttp Kotlin Example"
         )
     }

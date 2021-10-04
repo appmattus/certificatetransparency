@@ -1,6 +1,6 @@
 /*
  * Copyright 2021 Appmattus Limited
- * Copyright 2020 Babylon Partners Limited
+ * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,26 +18,26 @@
  * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
-package com.appmattus.certificatetransparency.sampleapp.examples.volley.kotlin
+package com.appmattus.certificatetransparency.sampleapp.examples.httpurlconnection
 
 import android.app.Application
-import com.android.volley.Request
-import com.android.volley.RequestQueue
-import com.android.volley.toolbox.HurlStack
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import com.appmattus.certificatetransparency.CTLogger
 import com.appmattus.certificatetransparency.cache.AndroidDiskCache
 import com.appmattus.certificatetransparency.certificateTransparencyHostnameVerifier
+import com.appmattus.certificatetransparency.sampleapp.R
 import com.appmattus.certificatetransparency.sampleapp.examples.BaseExampleViewModel
+import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
-class VolleyKotlinExampleViewModel(application: Application) : BaseExampleViewModel(application) {
+class HttpURLConnectionKotlinExampleViewModel(application: Application) : BaseExampleViewModel(application) {
 
     override val sampleCodeTemplate
-        get() = "volley-kotlin.txt"
+        get() = "httpurlconnection-kotlin.txt"
+
+    override val title
+        get() = getApplication<Application>().getString(R.string.httpurlconnection_kotlin_example)
 
     private fun HttpURLConnection.enableCertificateTransparencyChecks(
         hosts: Set<String>,
@@ -57,46 +57,23 @@ class VolleyKotlinExampleViewModel(application: Application) : BaseExampleViewMo
         }
     }
 
-    // A normal client would create this ahead of time and share it between network requests
-    // We create it dynamically as we allow the user to set the hosts for certificate transparency
-    private fun createRequestQueue(hosts: Set<String>, isFailOnError: Boolean, defaultLogger: CTLogger): RequestQueue {
-        return Volley.newRequestQueue(
-            getApplication(),
-            object : HurlStack() {
-                override fun createConnection(url: URL): HttpURLConnection {
-                    return super.createConnection(url).apply {
-                        enableCertificateTransparencyChecks(hosts, isFailOnError, defaultLogger)
-                    }
-                }
-            }
-        )
-    }
-
     override fun openConnection(
         connectionHost: String,
         hosts: Set<String>,
         isFailOnError: Boolean,
         defaultLogger: CTLogger
     ) {
-        val queue = createRequestQueue(hosts, isFailOnError, defaultLogger)
+        // Quick and dirty way to push the network call onto a background thread, don't do this is a real app
+        Thread {
+            try {
+                val connection = URL("https://$connectionHost").openConnection() as HttpURLConnection
 
-        val request = StringRequest(
-            Request.Method.GET,
-            "https://$connectionHost",
-            { response ->
-                // Success. Reason will have been sent to the logger
-                println(response)
-            },
-            { error ->
-                // Failure. Send message to the UI as logger won't catch generic network exceptions
-                sendException(error)
+                connection.enableCertificateTransparencyChecks(hosts, isFailOnError, defaultLogger)
+
+                connection.connect()
+            } catch (e: IOException) {
+                sendException(e)
             }
-        )
-
-        // Explicitly disable cache so we always call the interceptor and thus see the certificate transparency results
-        request.setShouldCache(false)
-
-        // Add the request to the RequestQueue.
-        queue.add(request)
+        }.start()
     }
 }

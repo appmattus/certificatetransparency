@@ -19,10 +19,16 @@ package com.appmattus.certificatetransparency.sampleapp
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.Text
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.appmattus.certificatetransparency.sampleapp.examples.httpurlconnection.HttpURLConnectionJavaExampleViewModel
+import com.appmattus.certificatetransparency.sampleapp.examples.httpurlconnection.HttpURLConnectionKotlinExampleViewModel
+import com.appmattus.certificatetransparency.sampleapp.examples.okhttp.OkHttpJavaExampleViewModel
+import com.appmattus.certificatetransparency.sampleapp.examples.okhttp.OkHttpKotlinExampleViewModel
+import com.appmattus.certificatetransparency.sampleapp.examples.volley.VolleyJavaExampleViewModel
+import com.appmattus.certificatetransparency.sampleapp.examples.volley.VolleyKotlinExampleViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,20 +41,22 @@ class MainActivity : AppCompatActivity() {
                     MainScreen(navController = navController)
                 }
                 composable("okhttp/kotlin") {
-                    Text("okhttp/kotlin")
-                    /*val itemStr = it.arguments?.getString("item")!!
-
-                    val result = itemStr.toRouteParcelable<PostOverview>()
-
-                    // Work around a bug in Koin
-                    val viewModel = viewModel<PostDetailsViewModel>(factory = object : ViewModelProvider.Factory {
-                        @Suppress("UNCHECKED_CAST")
-                        override fun <T : ViewModel> create(modelClass: Class<T>): T =
-                            // it.savedStateHandle
-                            PostDetailsViewModel(get(), result) as T
-                    })
-
-                    PostDetailsScreen(navController, viewModel)*/
+                    ExampleScreen(viewModel = viewModel<OkHttpKotlinExampleViewModel>())
+                }
+                composable("okhttp/java") {
+                    ExampleScreen(viewModel = viewModel<OkHttpJavaExampleViewModel>())
+                }
+                composable("httpurlconnection/kotlin") {
+                    ExampleScreen(viewModel = viewModel<HttpURLConnectionKotlinExampleViewModel>())
+                }
+                composable("httpurlconnection/java") {
+                    ExampleScreen(viewModel = viewModel<HttpURLConnectionJavaExampleViewModel>())
+                }
+                composable("volley/kotlin") {
+                    ExampleScreen(viewModel = viewModel<VolleyKotlinExampleViewModel>())
+                }
+                composable("volley/java") {
+                    ExampleScreen(viewModel = viewModel<VolleyJavaExampleViewModel>())
                 }
             }
         }

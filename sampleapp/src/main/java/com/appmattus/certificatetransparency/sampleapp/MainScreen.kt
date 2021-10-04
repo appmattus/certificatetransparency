@@ -24,6 +24,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appmattus.certificatetransparency.sampleapp.compose.ExampleCardItem
@@ -43,7 +44,7 @@ fun MainScreen(navController: NavController) {
         ) {
             item {
                 HeaderTextItem(
-                    title = "Certificate Transparency",
+                    title = stringResource(R.string.certificate_transparency),
                     icon = R.drawable.ic_launcher_foreground,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                 )
@@ -51,7 +52,7 @@ fun MainScreen(navController: NavController) {
             item {
                 ExampleCardItem(
                     scaffoldState = scaffoldState,
-                    title = "OkHttp",
+                    title = stringResource(R.string.okhttp),
                     moreInfoUri = Uri.parse("https://square.github.io/okhttp/"),
                     onKotlinClick = { navController.navigate("okhttp/kotlin") },
                     onJavaClick = { navController.navigate("okhttp/java") },
@@ -61,7 +62,7 @@ fun MainScreen(navController: NavController) {
             item {
                 ExampleCardItem(
                     scaffoldState = scaffoldState,
-                    title = "HttpURLConnection",
+                    title = stringResource(R.string.httpurlconnection),
                     moreInfoUri = Uri.parse("https://developer.android.com/reference/java/net/HttpURLConnection"),
                     onKotlinClick = { navController.navigate("httpurlconnection/kotlin") },
                     onJavaClick = { navController.navigate("httpurlconnection/java") },
@@ -71,13 +72,15 @@ fun MainScreen(navController: NavController) {
             item {
                 ExampleCardItem(
                     scaffoldState = scaffoldState,
-                    title = "Volley",
+                    title = stringResource(R.string.volley),
                     moreInfoUri = Uri.parse("https://developer.android.com/training/volley/index.html"),
                     onKotlinClick = { navController.navigate("volley/kotlin") },
                     onJavaClick = { navController.navigate("volley/java") },
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                 )
             }
+
+            // TODO Add Appmattus logo here...
         }
     }
 }
