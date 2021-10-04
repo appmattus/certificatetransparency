@@ -1,6 +1,5 @@
 /*
  * Copyright 2021 Appmattus Limited
- * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +12,53 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * File modified by Appmattus Limited
- * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.appmattus.certificatetransparency.sampleapp
 
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.appmattus.certificatetransparency.sampleapp.examples.httpurlconnection.HttpURLConnectionJavaExampleViewModel
+import com.appmattus.certificatetransparency.sampleapp.examples.httpurlconnection.HttpURLConnectionKotlinExampleViewModel
+import com.appmattus.certificatetransparency.sampleapp.examples.okhttp.OkHttpJavaExampleViewModel
+import com.appmattus.certificatetransparency.sampleapp.examples.okhttp.OkHttpKotlinExampleViewModel
+import com.appmattus.certificatetransparency.sampleapp.examples.volley.VolleyJavaExampleViewModel
+import com.appmattus.certificatetransparency.sampleapp.examples.volley.VolleyKotlinExampleViewModel
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContent {
+            val navController = rememberNavController()
+            NavHost(navController, startDestination = "main") {
+                composable("main") {
+                    MainScreen(navController = navController)
+                }
+                composable("okhttp/kotlin") {
+                    ExampleScreen(viewModel = viewModel<OkHttpKotlinExampleViewModel>())
+                }
+                composable("okhttp/java") {
+                    ExampleScreen(viewModel = viewModel<OkHttpJavaExampleViewModel>())
+                }
+                composable("httpurlconnection/kotlin") {
+                    ExampleScreen(viewModel = viewModel<HttpURLConnectionKotlinExampleViewModel>())
+                }
+                composable("httpurlconnection/java") {
+                    ExampleScreen(viewModel = viewModel<HttpURLConnectionJavaExampleViewModel>())
+                }
+                composable("volley/kotlin") {
+                    ExampleScreen(viewModel = viewModel<VolleyKotlinExampleViewModel>())
+                }
+                composable("volley/java") {
+                    ExampleScreen(viewModel = viewModel<VolleyJavaExampleViewModel>())
+                }
+            }
+        }
     }
 }

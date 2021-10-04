@@ -1,6 +1,5 @@
 /*
  * Copyright 2021 Appmattus Limited
- * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,40 +12,48 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * File modified by Appmattus Limited
- * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.appmattus.certificatetransparency.sampleapp.item
 
-import android.view.View
-import com.appmattus.certificatetransparency.sampleapp.R
-import com.appmattus.certificatetransparency.sampleapp.databinding.CheckboxItemBinding
-import com.xwray.groupie.viewbinding.BindableItem
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Checkbox
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 
-typealias CheckboxCallback = ((Boolean) -> Unit)
-
-class CheckboxItem(
-    private val title: String,
-    private val isChecked: Boolean,
-    private val callback: CheckboxCallback? = null
-) : BindableItem<CheckboxItemBinding>() {
-
-    override fun initializeViewBinding(view: View) = CheckboxItemBinding.bind(view)
-
-    override fun getLayout() = R.layout.checkbox_item
-
-    override fun bind(viewBinding: CheckboxItemBinding, position: Int) {
-        viewBinding.checkbox.text = title
-        viewBinding.checkbox.isChecked = isChecked
-
-        viewBinding.checkbox.setOnCheckedChangeListener { _, isChecked ->
-            callback?.invoke(isChecked)
-        }
+@Composable
+fun CheckboxItem(
+    title: String,
+    checked: Boolean,
+    modifier: Modifier = Modifier,
+    onCheckedChange: (Boolean) -> Unit = {}
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = modifier.clickable { onCheckedChange(!checked) }
+    ) {
+        Checkbox(checked = checked, onCheckedChange = null)
+        Text(title, style = MaterialTheme.typography.body1, modifier = Modifier.padding(start = 8.dp))
     }
+}
 
-    override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {
-        return (other is CheckboxItem && title == other.title && isChecked == other.isChecked)
+@Preview
+@Composable
+fun PreviewCheckboxItem() {
+    Column {
+        CheckboxItem(title = "Fail on error", checked = true)
+        Spacer(modifier = Modifier.height(8.dp))
+        CheckboxItem(title = "Fail on error", checked = false)
     }
 }

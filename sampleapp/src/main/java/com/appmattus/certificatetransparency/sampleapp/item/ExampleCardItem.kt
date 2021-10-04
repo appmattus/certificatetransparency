@@ -1,6 +1,5 @@
 /*
  * Copyright 2021 Appmattus Limited
- * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,57 +12,104 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * File modified by Appmattus Limited
- * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.appmattus.certificatetransparency.sampleapp.item
 
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
-import androidx.core.content.ContextCompat.startActivity
-import androidx.navigation.NavController
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import com.appmattus.certificatetransparency.sampleapp.R
-import com.appmattus.certificatetransparency.sampleapp.databinding.ExampleCardItemBinding
-import com.google.android.material.snackbar.Snackbar
-import com.xwray.groupie.viewbinding.BindableItem
+import kotlinx.coroutines.launch
 
-class ExampleCardItem(
-    private val navController: NavController,
-    private val title: String,
-    private val uri: Uri,
-    private val kotlinNav: Int,
-    private val javaNav: Int
-) : BindableItem<ExampleCardItemBinding>() {
+@Suppress("LongParameterList")
+@Composable
+fun ExampleCardItem(
+    scaffoldState: ScaffoldState,
+    title: String,
+    moreInfoUri: Uri,
+    onKotlinClick: () -> Unit,
+    onJavaClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
-    override fun initializeViewBinding(view: View) = ExampleCardItemBinding.bind(view)
-
-    override fun getLayout() = R.layout.example_card_item
-
-    override fun bind(viewBinding: ExampleCardItemBinding, position: Int) {
-        val context = viewBinding.root.context
-
-        viewBinding.title.text = title
-
-        viewBinding.link.setOnClickListener {
-            try {
-                val myIntent = Intent(Intent.ACTION_VIEW, uri)
-                startActivity(context, myIntent, Bundle())
-            } catch (ignored: ActivityNotFoundException) {
-                Snackbar.make(viewBinding.root, "Unable to open external link", Snackbar.LENGTH_SHORT).show()
+    Card(shape = RoundedCornerShape(2.dp), modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(title, style = MaterialTheme.typography.h5, modifier = Modifier.padding(8.dp))
+                TextButton(onClick = { scope.launch { launchUri(context = context, scaffoldState = scaffoldState, uri = moreInfoUri) } }) {
+                    Icon(painter = painterResource(id = R.drawable.open_in_new), contentDescription = null, Modifier.padding(end = 8.dp))
+                    Text(text = "More info")
+                }
+            }
+            Row {
+                OutlinedButton(onClick = onKotlinClick) {
+                    Icon(painter = painterResource(id = R.drawable.kotlin), contentDescription = null, Modifier.padding(end = 8.dp))
+                    Text(text = "Kotlin")
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                OutlinedButton(onClick = onJavaClick) {
+                    Icon(painter = painterResource(id = R.drawable.java), contentDescription = null, Modifier.padding(end = 8.dp))
+                    Text(text = "Java")
+                }
             }
         }
-
-        viewBinding.kotlin.setOnClickListener {
-            navController.navigate(kotlinNav)
-        }
-
-        viewBinding.java.setOnClickListener {
-            navController.navigate(javaNav)
-        }
     }
+}
+
+private suspend fun launchUri(context: Context, scaffoldState: ScaffoldState, uri: Uri) {
+    try {
+        val myIntent = Intent(Intent.ACTION_VIEW, uri)
+        ContextCompat.startActivity(context, myIntent, Bundle())
+    } catch (ignored: ActivityNotFoundException) {
+        scaffoldState.snackbarHostState.showSnackbar("Unable to open external link")
+    }
+}
+
+@Preview
+@Composable
+fun PreviewExampleCardItem() {
+    ExampleCardItem(
+        scaffoldState = rememberScaffoldState(),
+        title = "OkHttp",
+        moreInfoUri = Uri.parse("https://example.com/"),
+        onKotlinClick = {},
+        onJavaClick = {}
+    )
 }

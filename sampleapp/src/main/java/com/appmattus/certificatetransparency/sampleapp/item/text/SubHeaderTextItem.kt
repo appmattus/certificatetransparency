@@ -1,6 +1,5 @@
 /*
  * Copyright 2021 Appmattus Limited
- * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,34 +12,53 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * File modified by Appmattus Limited
- * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.appmattus.certificatetransparency.sampleapp.item.text
 
-import android.view.View
-import androidx.annotation.StringRes
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.appmattus.certificatetransparency.sampleapp.R
-import com.appmattus.certificatetransparency.sampleapp.databinding.SubHeaderTextItemBinding
-import com.xwray.groupie.viewbinding.BindableItem
 
-class SubHeaderTextItem(
-    @StringRes private val titleResId: Int? = null,
-    private val title: String? = null
-) : BindableItem<SubHeaderTextItemBinding>() {
+@Composable
+fun SubHeaderTextItem(title: String, modifier: Modifier = Modifier, @DrawableRes icon: Int? = null) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
+        icon?.let {
+            Image(
+                painter = painterResource(id = icon),
+                contentDescription = null,
+                modifier = Modifier.size(72.dp)
+            )
+        }
 
-    init {
-        check((titleResId != null) xor (title != null)) { "Provide either titleResId or title" }
+        Text(text = title, style = MaterialTheme.typography.h6, modifier = Modifier.fillMaxWidth())
     }
+}
 
-    override fun initializeViewBinding(view: View) = SubHeaderTextItemBinding.bind(view)
-
-    override fun getLayout() = R.layout.sub_header_text_item
-
-    override fun bind(viewBinding: SubHeaderTextItemBinding, position: Int) {
-        val context = viewBinding.root.context
-        viewBinding.title.text = if (titleResId != null) context.getString(titleResId) else title
+@Preview
+@Composable
+fun PreviewSubHeaderTextItem() {
+    Row {
+        SubHeaderTextItem(
+            title = "Certificate Transparency",
+            icon = R.drawable.ic_launcher_foreground
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        SubHeaderTextItem(
+            title = "OkHttp Kotlin Example"
+        )
     }
 }

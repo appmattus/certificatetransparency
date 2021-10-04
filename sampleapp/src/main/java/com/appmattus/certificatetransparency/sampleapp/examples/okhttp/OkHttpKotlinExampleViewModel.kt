@@ -18,12 +18,13 @@
  * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
-package com.appmattus.certificatetransparency.sampleapp.examples.okhttp.kotlin
+package com.appmattus.certificatetransparency.sampleapp.examples.okhttp
 
 import android.app.Application
 import com.appmattus.certificatetransparency.CTLogger
 import com.appmattus.certificatetransparency.cache.AndroidDiskCache
 import com.appmattus.certificatetransparency.certificateTransparencyInterceptor
+import com.appmattus.certificatetransparency.sampleapp.R
 import com.appmattus.certificatetransparency.sampleapp.examples.BaseExampleViewModel
 import okhttp3.Call
 import okhttp3.Callback
@@ -36,6 +37,9 @@ class OkHttpKotlinExampleViewModel(application: Application) : BaseExampleViewMo
 
     override val sampleCodeTemplate
         get() = "okhttp-kotlin.txt"
+
+    override val title
+        get() = getApplication<Application>().getString(R.string.okhttp_kotlin_example)
 
     // A normal client would create this ahead of time and share it between network requests
     // We create it dynamically as we allow the user to set the hosts for certificate transparency

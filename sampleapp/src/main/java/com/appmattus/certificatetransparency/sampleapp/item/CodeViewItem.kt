@@ -1,6 +1,5 @@
 /*
  * Copyright 2021 Appmattus Limited
- * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,36 +12,37 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * File modified by Appmattus Limited
- * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.appmattus.certificatetransparency.sampleapp.item
 
-import android.view.View
-import com.appmattus.certificatetransparency.sampleapp.R
-import com.appmattus.certificatetransparency.sampleapp.databinding.CodeViewItemBinding
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.viewinterop.AndroidView
+import com.pddstudio.highlightjs.HighlightJsView
 import com.pddstudio.highlightjs.models.Language
 import com.pddstudio.highlightjs.models.Theme
-import com.xwray.groupie.viewbinding.BindableItem
 
-class CodeViewItem : BindableItem<CodeViewItemBinding>() {
-    var source: String = ""
-        set(value) {
-            field = value
-            notifyChanged()
+@Composable
+fun CodeViewItem(language: Language, sourceCode: String?, modifier: Modifier = Modifier) {
+    AndroidView(
+        modifier = modifier.fillMaxWidth(),
+        factory = { context ->
+            HighlightJsView(context).apply {
+                theme = Theme.DARKULA
+            }
+        },
+        update = {
+            it.highlightLanguage = language
+            it.setSource(sourceCode)
         }
+    )
+}
 
-    override fun initializeViewBinding(view: View) = CodeViewItemBinding.bind(view)
-
-    override fun getLayout() = R.layout.code_view_item
-
-    override fun bind(viewBinding: CodeViewItemBinding, position: Int) {
-        viewBinding.codeView.apply {
-            theme = Theme.DARKULA
-            highlightLanguage = Language.JAVA
-            setSource(source)
-        }
-    }
+@Preview
+@Composable
+fun PreviewCodeViewItem() {
+    CodeViewItem(language = Language.JAVA, sourceCode = "fun main() {\n    System.out.println(\"Hello world!\");\n}")
 }

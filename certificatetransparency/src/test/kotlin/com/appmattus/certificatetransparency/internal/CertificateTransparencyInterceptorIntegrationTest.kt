@@ -33,7 +33,7 @@ internal class CertificateTransparencyInterceptorIntegrationTest {
         private const val invalidSctDomain = "no-sct.badssl.com"
 
         val networkInterceptor = certificateTransparencyInterceptor {
-            +"*.babylonhealth.com"
+            +"*.appmattus.com"
             +invalidSctDomain
 
             logListDataSource {
@@ -42,7 +42,7 @@ internal class CertificateTransparencyInterceptorIntegrationTest {
         }
 
         val networkInterceptorAllowFails = certificateTransparencyInterceptor {
-            +"*.babylonhealth.com"
+            +"*.appmattus.com"
             +invalidSctDomain
 
             logListDataSource {
@@ -54,11 +54,11 @@ internal class CertificateTransparencyInterceptorIntegrationTest {
     }
 
     @Test
-    fun babylonHealthAllowed() {
+    fun appmattusAllowed() {
         val client = OkHttpClient.Builder().addNetworkInterceptor(networkInterceptor).build()
 
         val request = Request.Builder()
-            .url("https://www.babylonhealth.com")
+            .url("https://www.appmattus.com")
             .build()
 
         client.newCall(request).execute()
@@ -69,7 +69,7 @@ internal class CertificateTransparencyInterceptorIntegrationTest {
         val client = OkHttpClient.Builder().addNetworkInterceptor(networkInterceptor).build()
 
         val request = Request.Builder()
-            .url("http://www.babylonhealth.com")
+            .url("http://www.appmattus.com")
             .build()
 
         client.newCall(request).execute()
@@ -102,7 +102,7 @@ internal class CertificateTransparencyInterceptorIntegrationTest {
         val client =
             OkHttpClient.Builder().addNetworkInterceptor(
                 certificateTransparencyInterceptor {
-                    +"*.babylonhealth.com"
+                    +"*.appmattus.com"
 
                     logListDataSource {
                         LogListDataSourceTestFactory.logListDataSource
@@ -163,7 +163,7 @@ internal class CertificateTransparencyInterceptorIntegrationTest {
         val client = OkHttpClient.Builder().addInterceptor(networkInterceptor).build()
 
         val request = Request.Builder()
-            .url("https://www.babylonhealth.com")
+            .url("https://www.appmattus.com")
             .build()
 
         client.newCall(request).execute()

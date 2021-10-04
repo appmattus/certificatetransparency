@@ -20,14 +20,14 @@
 
 package com.appmattus.certificatetransparency.sampleapp
 
-import androidx.multidex.MultiDexApplication
+import android.app.Application
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.security.ProviderInstaller
 
 // Used by AndroidManifest.xml
 @Suppress("unused")
-class Application : MultiDexApplication() {
+class SampleApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 

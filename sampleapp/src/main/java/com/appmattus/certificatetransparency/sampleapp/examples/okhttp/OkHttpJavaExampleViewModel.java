@@ -18,13 +18,16 @@
  * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
-package com.appmattus.certificatetransparency.sampleapp.examples.okhttp.java;
+package com.appmattus.certificatetransparency.sampleapp.examples.okhttp;
 
 import android.app.Application;
+
+import androidx.annotation.NonNull;
 
 import com.appmattus.certificatetransparency.CTInterceptorBuilder;
 import com.appmattus.certificatetransparency.CTLogger;
 import com.appmattus.certificatetransparency.cache.AndroidDiskCache;
+import com.appmattus.certificatetransparency.sampleapp.R;
 import com.appmattus.certificatetransparency.sampleapp.examples.BaseExampleViewModel;
 
 import org.jetbrains.annotations.NotNull;
@@ -51,6 +54,11 @@ public class OkHttpJavaExampleViewModel extends BaseExampleViewModel {
         return "okhttp-java.txt";
     }
 
+    @NonNull
+    @Override
+    public String getTitle() {
+        return getApplication().getString(R.string.okhttp_java_example);
+    }
 
     // A normal client would create this ahead of time and share it between network requests
     // We create it dynamically as we allow the user to set the hosts for certificate transparency
