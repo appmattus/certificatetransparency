@@ -102,7 +102,6 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
                 is VerificationResult.Failure -> State.Message.Failure(result.toString())
             }
 
-            println("defaultLogger: message = $message")
             state = state.copy(message = message)
             _liveData.postValue(state)
         }
@@ -124,7 +123,6 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
 
     fun openConnection(connectionHost: String) {
         try {
-            println("openConnection(connectionHost: $connectionHost)")
             openConnection(connectionHost, state.hosts, state.failOnError, defaultLogger)
         } catch (expected: Exception) {
             sendException(expected)
