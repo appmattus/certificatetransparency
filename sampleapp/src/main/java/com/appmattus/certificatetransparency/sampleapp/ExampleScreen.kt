@@ -16,8 +16,7 @@
 
 package com.appmattus.certificatetransparency.sampleapp
 
-import android.annotation.SuppressLint
-import android.content.Context
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +25,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedButton
@@ -34,18 +34,19 @@ import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarResult
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.input.input
 import com.appmattus.certificatetransparency.sampleapp.examples.BaseExampleViewModel
 import com.appmattus.certificatetransparency.sampleapp.examples.State
 import com.appmattus.certificatetransparency.sampleapp.item.CheckboxItem
@@ -62,7 +63,6 @@ fun ExampleScreen(viewModel: BaseExampleViewModel) {
     val state = viewModel.liveData.observeAsState().value
 
     val scaffoldState = rememberScaffoldState()
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
     state?.message?.let {
@@ -74,6 +74,16 @@ fun ExampleScreen(viewModel: BaseExampleViewModel) {
                 viewModel.dismissMessage()
             }
         }
+    }
+
+    val showConnectionDialog = remember { mutableStateOf(false) }
+    TestConnectionDialog(showConnectionDialog) {
+        viewModel.openConnection(it)
+    }
+
+    val showIncludeHostDialog = remember { mutableStateOf(false) }
+    IncludeHostDialog(showIncludeHostDialog) {
+        viewModel.includeHost(it)
     }
 
     Scaffold(
@@ -91,12 +101,14 @@ fun ExampleScreen(viewModel: BaseExampleViewModel) {
                 HeaderTextItem(title = viewModel.title, modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
             }
 
-            configurationSection(context, viewModel, state)
-            sampleCodeSection(state)
+            configurationSection(viewModel = viewModel, state = state, showIncludeHostDialog = showIncludeHostDialog)
+            sampleCodeSection(state = state)
 
             item {
                 Button(
-                    onClick = { showConnectionDialog(context, viewModel) },
+                    onClick = {
+                        showConnectionDialog.value = true
+                    },
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 8.dp)
                         .fillMaxWidth()
@@ -111,9 +123,9 @@ fun ExampleScreen(viewModel: BaseExampleViewModel) {
 }
 
 private fun LazyListScope.configurationSection(
-    context: Context,
     viewModel: BaseExampleViewModel,
-    state: State?
+    state: State?,
+    showIncludeHostDialog: MutableState<Boolean>
 ) {
     item {
         SubHeaderTextItem(
@@ -140,7 +152,7 @@ private fun LazyListScope.configurationSection(
     item { Spacer(modifier = Modifier.height(8.dp)) }
     item {
         OutlinedButton(
-            onClick = { showIncludeHostDialog(context, viewModel) },
+            onClick = { showIncludeHostDialog.value = true },
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .fillMaxWidth()
@@ -189,30 +201,66 @@ private fun LazyListScope.sampleCodeSection(state: State?) {
     }
 }
 
-@SuppressLint("CheckResult")
-private fun showIncludeHostDialog(context: Context, viewModel: BaseExampleViewModel) {
-    MaterialDialog(context).show {
-        title(R.string.include_host_title)
-        message(R.string.include_host_message)
-        input { _, text ->
-            viewModel.includeHost(text.toString())
-        }
+@Composable
+fun IncludeHostDialog(showIncludeHostDialog: MutableState<Boolean>, onInclude: (String) -> Unit) {
+    if (showIncludeHostDialog.value) {
 
-        positiveButton(text = "Include")
-        negativeButton(text = "Cancel")
+        val text = remember { mutableStateOf("") }
+
+        AlertDialog(
+            onDismissRequest = { showIncludeHostDialog.value = false },
+            confirmButton = {
+                Button(onClick = {
+                    showIncludeHostDialog.value = false
+                    onInclude(text.value)
+                }) { Text("Include") }
+            },
+            dismissButton = { Button(onClick = { showIncludeHostDialog.value = false }) { Text("Cancel") } },
+            title = { Text(stringResource(R.string.include_host_title)) },
+            text = {
+                Column {
+                    Text(
+                        text = stringResource(R.string.include_host_message),
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    TextField(
+                        value = text.value,
+                        onValueChange = { text.value = it }
+                    )
+                }
+            }
+        )
     }
 }
 
-@SuppressLint("CheckResult")
-private fun showConnectionDialog(context: Context, viewModel: BaseExampleViewModel) {
-    MaterialDialog(context).show {
-        title(text = "Test connection")
-        message(text = "Please provide a host to test a connection to. 'https://' will be automatically added")
-        input { _, text ->
-            viewModel.openConnection(text.toString())
-        }
+@Composable
+fun TestConnectionDialog(showConnectionDialog: MutableState<Boolean>, onConnect: (String) -> Unit) {
+    if (showConnectionDialog.value) {
 
-        positiveButton(text = "Connect")
-        negativeButton(text = "Cancel")
+        val text = remember { mutableStateOf("") }
+
+        AlertDialog(
+            onDismissRequest = { showConnectionDialog.value = false },
+            confirmButton = {
+                Button(onClick = {
+                    showConnectionDialog.value = false
+                    onConnect(text.value)
+                }) { Text("Connect") }
+            },
+            dismissButton = { Button(onClick = { showConnectionDialog.value = false }) { Text("Cancel") } },
+            title = { Text("Test connection") },
+            text = {
+                Column {
+                    Text(
+                        text = "Please provide a host to test a connection to. 'https://' will be automatically added",
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    TextField(
+                        value = text.value,
+                        onValueChange = { text.value = it }
+                    )
+                }
+            }
+        )
     }
 }
