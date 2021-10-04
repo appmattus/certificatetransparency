@@ -49,6 +49,7 @@ import androidx.core.content.ContextCompat
 import com.appmattus.certificatetransparency.sampleapp.R
 import kotlinx.coroutines.launch
 
+@Suppress("LongParameterList")
 @Composable
 fun ExampleCardItem(
     scaffoldState: ScaffoldState,

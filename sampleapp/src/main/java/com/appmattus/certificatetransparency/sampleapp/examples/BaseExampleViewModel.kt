@@ -38,7 +38,7 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
     abstract val title: String
 
     private var state = State(
-        hosts = setOf("*.babylonhealth.com"),
+        hosts = setOf("*.appmattus.com", "appmattus.com"),
         failOnError = true,
         sampleCode = "",
         message = null
@@ -102,6 +102,7 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
                 is VerificationResult.Failure -> State.Message.Failure(result.toString())
             }
 
+            println("defaultLogger: message = $message")
             state = state.copy(message = message)
             _liveData.postValue(state)
         }
@@ -123,6 +124,7 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
 
     fun openConnection(connectionHost: String) {
         try {
+            println("openConnection(connectionHost: $connectionHost)")
             openConnection(connectionHost, state.hosts, state.failOnError, defaultLogger)
         } catch (expected: Exception) {
             sendException(expected)

@@ -42,11 +42,11 @@ internal class CertificateRevocationHostnameVerifierIntegrationTest {
     }
 
     @Test
-    fun babylonHealthAllowed() {
+    fun appmattusAllowed() {
         val client = OkHttpClient.Builder().hostnameVerifier(hostnameVerifier).build()
 
         val request = Request.Builder()
-            .url("https://www.babylonhealth.com")
+            .url("https://www.appmattus.com")
             .build()
 
         client.newCall(request).execute()

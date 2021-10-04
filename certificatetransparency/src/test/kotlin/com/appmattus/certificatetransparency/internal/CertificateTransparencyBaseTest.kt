@@ -50,14 +50,14 @@ internal class CertificateTransparencyBaseTest {
         val trustManager = mitmProxyTrustManager()
 
         val ctb = CertificateTransparencyBase(
-            includeHosts = setOf(Host("*.babylonhealth.com")),
+            includeHosts = setOf(Host("*.appmattus.com")),
             trustManager = trustManager,
             logListDataSource = LogListDataSourceTestFactory.logListDataSource
         )
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ATTACK_CHAIN)
 
-        assertIsA<VerificationResult.Failure.NoScts>(ctb.verifyCertificateTransparency("www.babylonhealth.com", certsToCheck))
+        assertIsA<VerificationResult.Failure.NoScts>(ctb.verifyCertificateTransparency("www.appmattus.com", certsToCheck))
     }
 
     @Test
@@ -72,7 +72,7 @@ internal class CertificateTransparencyBaseTest {
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ATTACK_CHAIN)
 
-        assertIsA<VerificationResult.Success.DisabledForHost>(ctb.verifyCertificateTransparency("www.babylonhealth.com", certsToCheck))
+        assertIsA<VerificationResult.Success.DisabledForHost>(ctb.verifyCertificateTransparency("www.appmattus.com", certsToCheck))
     }
 
     @Test
@@ -84,19 +84,19 @@ internal class CertificateTransparencyBaseTest {
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
 
-        assertIsA<VerificationResult.Success.DisabledForHost>(ctb.verifyCertificateTransparency("www.babylonhealth.com", certsToCheck))
+        assertIsA<VerificationResult.Success.DisabledForHost>(ctb.verifyCertificateTransparency("www.appmattus.com", certsToCheck))
     }
 
     @Test
     fun originalChainAllowedWhenHostChecked() {
         val ctb = CertificateTransparencyBase(
-            includeHosts = setOf(Host("*.babylonhealth.com")),
+            includeHosts = setOf(Host("*.appmattus.com")),
             logListDataSource = LogListDataSourceTestFactory.logListDataSource
         )
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
 
-        val result = ctb.verifyCertificateTransparency("www.babylonhealth.com", certsToCheck)
+        val result = ctb.verifyCertificateTransparency("www.appmattus.com", certsToCheck)
 
         require(result is VerificationResult.Success.Trusted)
         assertEquals(2, result.scts.count { it.value is SctVerificationResult.Valid })
@@ -105,13 +105,13 @@ internal class CertificateTransparencyBaseTest {
     @Test(expected = SSLPeerUnverifiedException::class)
     fun untrustedCertificateThrowsException() {
         val ctb = CertificateTransparencyBase(
-            includeHosts = setOf(Host("*.babylonhealth.com")),
+            includeHosts = setOf(Host("*.appmattus.com")),
             logListDataSource = LogListDataSourceTestFactory.logListDataSource
         )
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ATTACK_CHAIN)
 
-        ctb.verifyCertificateTransparency("www.babylonhealth.com", certsToCheck)
+        ctb.verifyCertificateTransparency("www.appmattus.com", certsToCheck)
     }
 
     @Test(expected = IllegalArgumentException::class)
@@ -122,31 +122,31 @@ internal class CertificateTransparencyBaseTest {
     @Test
     fun originalChainDisallowedWhenEmptyLogs() {
         val ctb = CertificateTransparencyBase(
-            includeHosts = setOf(Host("*.babylonhealth.com")),
+            includeHosts = setOf(Host("*.appmattus.com")),
             logListDataSource = LogListDataSourceTestFactory.emptySource
         )
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
 
-        assertIsA<VerificationResult.Failure.TooFewSctsTrusted>(ctb.verifyCertificateTransparency("www.babylonhealth.com", certsToCheck))
+        assertIsA<VerificationResult.Failure.TooFewSctsTrusted>(ctb.verifyCertificateTransparency("www.appmattus.com", certsToCheck))
     }
 
     @Test
     fun originalChainDisallowedWhenNullLogs() {
         val ctb = CertificateTransparencyBase(
-            includeHosts = setOf(Host("*.babylonhealth.com")),
+            includeHosts = setOf(Host("*.appmattus.com")),
             logListDataSource = LogListDataSourceTestFactory.nullSource
         )
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
 
-        assertIsA<VerificationResult.Failure.LogServersFailed>(ctb.verifyCertificateTransparency("www.babylonhealth.com", certsToCheck))
+        assertIsA<VerificationResult.Failure.LogServersFailed>(ctb.verifyCertificateTransparency("www.appmattus.com", certsToCheck))
     }
 
     @Test
     fun originalChainDisallowedWhenOnlyOneSct() {
         val ctb = CertificateTransparencyBase(
-            includeHosts = setOf(Host("*.babylonhealth.com")),
+            includeHosts = setOf(Host("*.appmattus.com")),
             logListDataSource = LogListDataSourceTestFactory.logListDataSource
         )
 
@@ -156,17 +156,17 @@ internal class CertificateTransparencyBaseTest {
 
         val filtered = listOf(certWithSingleSct, *certsToCheck.drop(1).toTypedArray())
 
-        assertIsA<VerificationResult.Failure.TooFewSctsTrusted>(ctb.verifyCertificateTransparency("www.babylonhealth.com", filtered))
+        assertIsA<VerificationResult.Failure.TooFewSctsTrusted>(ctb.verifyCertificateTransparency("www.appmattus.com", filtered))
     }
 
     @Test
     fun noCertificatesDisallowed() {
         val ctb = CertificateTransparencyBase(
-            includeHosts = setOf(Host("*.babylonhealth.com")),
+            includeHosts = setOf(Host("*.appmattus.com")),
             logListDataSource = LogListDataSourceTestFactory.nullSource
         )
 
-        assertIsA<VerificationResult.Failure.NoCertificates>(ctb.verifyCertificateTransparency("www.babylonhealth.com", emptyList()))
+        assertIsA<VerificationResult.Failure.NoCertificates>(ctb.verifyCertificateTransparency("www.appmattus.com", emptyList()))
     }
 
     @Test
