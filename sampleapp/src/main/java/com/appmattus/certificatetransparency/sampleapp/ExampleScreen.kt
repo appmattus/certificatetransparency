@@ -204,7 +204,6 @@ private fun LazyListScope.sampleCodeSection(state: State?) {
 @Composable
 fun IncludeHostDialog(showIncludeHostDialog: MutableState<Boolean>, onInclude: (String) -> Unit) {
     if (showIncludeHostDialog.value) {
-
         val text = remember { mutableStateOf("") }
 
         AlertDialog(
@@ -213,14 +212,18 @@ fun IncludeHostDialog(showIncludeHostDialog: MutableState<Boolean>, onInclude: (
                 Button(onClick = {
                     showIncludeHostDialog.value = false
                     onInclude(text.value)
-                }) { Text("Include") }
+                }) { Text(stringResource(R.string.include_host_dialog_include)) }
             },
-            dismissButton = { Button(onClick = { showIncludeHostDialog.value = false }) { Text("Cancel") } },
-            title = { Text(stringResource(R.string.include_host_title)) },
+            dismissButton = {
+                Button(onClick = {
+                    showIncludeHostDialog.value = false
+                }) { Text(stringResource(R.string.include_host_dialog_cancel)) }
+            },
+            title = { Text(stringResource(R.string.include_host_dialog_title)) },
             text = {
                 Column {
                     Text(
-                        text = stringResource(R.string.include_host_message),
+                        text = stringResource(R.string.include_host_dialog_message),
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     TextField(
@@ -236,7 +239,6 @@ fun IncludeHostDialog(showIncludeHostDialog: MutableState<Boolean>, onInclude: (
 @Composable
 fun TestConnectionDialog(showConnectionDialog: MutableState<Boolean>, onConnect: (String) -> Unit) {
     if (showConnectionDialog.value) {
-
         val text = remember { mutableStateOf("") }
 
         AlertDialog(
@@ -245,14 +247,18 @@ fun TestConnectionDialog(showConnectionDialog: MutableState<Boolean>, onConnect:
                 Button(onClick = {
                     showConnectionDialog.value = false
                     onConnect(text.value)
-                }) { Text("Connect") }
+                }) { Text(stringResource(R.string.test_connection_dialog_connect)) }
             },
-            dismissButton = { Button(onClick = { showConnectionDialog.value = false }) { Text("Cancel") } },
-            title = { Text("Test connection") },
+            dismissButton = {
+                Button(onClick = {
+                    showConnectionDialog.value = false
+                }) { Text(stringResource(R.string.test_connection_dialog_cancel)) }
+            },
+            title = { Text(stringResource(R.string.test_connection_dialog_title)) },
             text = {
                 Column {
                     Text(
-                        text = "Please provide a host to test a connection to. 'https://' will be automatically added",
+                        text = stringResource(R.string.test_connection_dialog_message),
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     TextField(

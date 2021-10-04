@@ -49,12 +49,11 @@ dependencies {
     implementation(project(":certificatetransparency-android"))
     implementation(kotlin("stdlib-jdk8"))
     implementation("androidx.appcompat:appcompat:${Versions.AndroidX.appCompat}")
+    implementation("com.google.android.material:material:${Versions.Google.material}")
     implementation("com.google.android.gms:play-services-base:${Versions.Google.playServices}")
     implementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:${Versions.AndroidX.lifecycle}")
     implementation("androidx.lifecycle:lifecycle-common-java8:${Versions.AndroidX.lifecycle}")
-    implementation("com.afollestad.material-dialogs:core:${Versions.materialDialogs}")
-    implementation("com.afollestad.material-dialogs:input:${Versions.materialDialogs}")
     implementation("com.pddstudio:highlightjs-android:${Versions.highlightJs}")
     implementation("com.android.volley:volley:${Versions.volley}")
     implementation("com.github.spullara.mustache.java:compiler:${Versions.mustache}")
@@ -74,10 +73,6 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:${Versions.AndroidX.compose}")
     // Navigation
     implementation("androidx.navigation:navigation-compose:${Versions.AndroidX.navigationCompose}")
-
-    // UI Tests
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:${Versions.AndroidX.compose}")
-
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:${Versions.desugar}")
 }

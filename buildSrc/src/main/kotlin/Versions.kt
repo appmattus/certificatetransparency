@@ -29,7 +29,6 @@ object Versions {
     const val bouncyCastle = "1.69"
     const val coroutines = "1.5.2"
     const val highlightJs = "1.5.0"
-    const val materialDialogs = "3.3.0"
     const val mustache = "0.8.18" // Cannot update due to use of ThreadLocal which is not desugared
     const val okhttp = "4.9.2"
     const val retrofit = "2.9.0"
@@ -58,6 +57,7 @@ object Versions {
     }
 
     object Google {
+        const val material = "1.4.0"
         const val playServices = "17.6.0"
     }
 }
