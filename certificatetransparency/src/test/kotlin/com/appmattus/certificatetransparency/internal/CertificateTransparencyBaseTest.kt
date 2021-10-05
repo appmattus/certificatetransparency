@@ -50,7 +50,6 @@ internal class CertificateTransparencyBaseTest {
         val trustManager = mitmProxyTrustManager()
 
         val ctb = CertificateTransparencyBase(
-            includeHosts = setOf(Host("*.appmattus.com")),
             trustManager = trustManager,
             logListDataSource = LogListDataSourceTestFactory.logListDataSource
         )
@@ -65,7 +64,7 @@ internal class CertificateTransparencyBaseTest {
         val trustManager = mitmProxyTrustManager()
 
         val ctb = CertificateTransparencyBase(
-            includeHosts = setOf(Host("*.random.com")),
+            excludeHosts = setOf(Host("*.appmattus.com")),
             trustManager = trustManager,
             logListDataSource = LogListDataSourceTestFactory.logListDataSource
         )
@@ -76,21 +75,8 @@ internal class CertificateTransparencyBaseTest {
     }
 
     @Test
-    fun originalChainAllowedWhenHostNotChecked() {
-        val ctb = CertificateTransparencyBase(
-            includeHosts = setOf(Host("*.random.com")),
-            logListDataSource = LogListDataSourceTestFactory.logListDataSource
-        )
-
-        val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
-
-        assertIsA<VerificationResult.Success.DisabledForHost>(ctb.verifyCertificateTransparency("www.appmattus.com", certsToCheck))
-    }
-
-    @Test
     fun originalChainAllowedWhenHostChecked() {
         val ctb = CertificateTransparencyBase(
-            includeHosts = setOf(Host("*.appmattus.com")),
             logListDataSource = LogListDataSourceTestFactory.logListDataSource
         )
 
@@ -112,11 +98,6 @@ internal class CertificateTransparencyBaseTest {
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ATTACK_CHAIN)
 
         ctb.verifyCertificateTransparency("www.appmattus.com", certsToCheck)
-    }
-
-    @Test(expected = IllegalArgumentException::class)
-    fun noHostsDefinedThrowsException() {
-        CertificateTransparencyBase(includeHosts = emptySet())
     }
 
     @Test
@@ -182,44 +163,6 @@ internal class CertificateTransparencyBaseTest {
     }
 
     @Test
-    fun excludeHostsRuleBlocksSubdomainMatching() {
-        val ctb = CertificateTransparencyBase(
-            includeHosts = setOf(Host("*.random.com")),
-            excludeHosts = setOf(Host("disallowed.random.com")),
-            logListDataSource = LogListDataSourceTestFactory.logListDataSource
-        )
-
-        val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
-
-        assertIsA<VerificationResult.Success.DisabledForHost>(ctb.verifyCertificateTransparency("disallowed.random.com", certsToCheck))
-    }
-
-    @Test
-    fun includeAllHostsRuleMatchesDomain() {
-        val ctb = CertificateTransparencyBase(
-            includeHosts = setOf(Host("*.*")),
-            logListDataSource = LogListDataSourceTestFactory.logListDataSource
-        )
-
-        val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
-
-        assertIsA<VerificationResult.Success.Trusted>(ctb.verifyCertificateTransparency("allowed.random.com", certsToCheck))
-    }
-
-    @Test
-    fun excludeHostFromAllRuleBlocksMatching() {
-        val ctb = CertificateTransparencyBase(
-            includeHosts = setOf(Host("*.*")),
-            excludeHosts = setOf(Host("allowed.random.com")),
-            logListDataSource = LogListDataSourceTestFactory.logListDataSource
-        )
-
-        val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
-
-        assertIsA<VerificationResult.Success.DisabledForHost>(ctb.verifyCertificateTransparency("allowed.random.com", certsToCheck))
-    }
-
-    @Test
     fun excludeHostsRuleOnlyBlocksSpecifiedSubdomainMatching() {
         val ctb = CertificateTransparencyBase(
             includeHosts = setOf(Host("*.random.com")),
@@ -235,7 +178,6 @@ internal class CertificateTransparencyBaseTest {
     @Test
     fun emptyCleanedCertificateChainFailsWithNoCertificates() {
         val ctb = CertificateTransparencyBase(
-            includeHosts = setOf(Host("*.*")),
             logListDataSource = LogListDataSourceTestFactory.logListDataSource,
             certificateChainCleanerFactory = EmptyCertificateChainCleanerFactory()
         )
@@ -251,15 +193,6 @@ internal class CertificateTransparencyBaseTest {
                 override fun clean(chain: List<X509Certificate>, hostname: String) = emptyList<X509Certificate>()
             }
         }
-    }
-
-    @Test(expected = IllegalArgumentException::class)
-    fun excludeHostsWithWildcardNotAllowed() {
-        CertificateTransparencyBase(
-            includeHosts = setOf(Host("allowed.random.com")),
-            excludeHosts = setOf(Host("*.random.com")),
-            logListDataSource = LogListDataSourceTestFactory.logListDataSource
-        )
     }
 
     @Test(expected = IllegalArgumentException::class)
@@ -281,5 +214,161 @@ internal class CertificateTransparencyBaseTest {
             @Suppress("MaxLineLength")
             Base64.decode("BHwEegB4AHYAu9nfvB+KcbWTlCOXqpJ7RzhXlQqrUugakJZkNo4e0YUAAAFj7ztQ3wAABAMARzBFAiEA53gntK6Dnr6ROwYGBjqjt5dS4tWM6Zw/TtxIxOvobW8CIF3n4XjIX7/w66gThQD47iF7YmxelwgUQgPzEWNlHQiu")
         }
+    }
+
+    @Test
+    fun defaultVerifiesTransparencyForDomain() {
+        val ctb = CertificateTransparencyBase(
+            logListDataSource = LogListDataSourceTestFactory.logListDataSource
+        )
+
+        val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
+
+        assertIsA<VerificationResult.Success.Trusted>(ctb.verifyCertificateTransparency("appmattus.com", certsToCheck))
+    }
+
+    @Test
+    fun defaultVerifiesTransparencyForSubdomain() {
+        val ctb = CertificateTransparencyBase(
+            logListDataSource = LogListDataSourceTestFactory.logListDataSource
+        )
+
+        val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
+
+        assertIsA<VerificationResult.Success.Trusted>(ctb.verifyCertificateTransparency("enabled.appmattus.com", certsToCheck))
+    }
+
+    @Test
+    fun excludeDomainIgnoresTransparencyForDomain() {
+        val ctb = CertificateTransparencyBase(
+            excludeHosts = setOf(Host("appmattus.com")),
+            logListDataSource = LogListDataSourceTestFactory.logListDataSource
+        )
+
+        val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
+
+        assertIsA<VerificationResult.Success.DisabledForHost>(ctb.verifyCertificateTransparency("appmattus.com", certsToCheck))
+    }
+
+    @Test
+    fun excludeSpecifiedSubdomainIgnoresTransparencyForSubdomain() {
+        val ctb = CertificateTransparencyBase(
+            excludeHosts = setOf(Host("disabled.appmattus.com")),
+            logListDataSource = LogListDataSourceTestFactory.logListDataSource
+        )
+
+        val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
+
+        assertIsA<VerificationResult.Success.DisabledForHost>(ctb.verifyCertificateTransparency("disabled.appmattus.com", certsToCheck))
+    }
+
+    @Test
+    fun excludeAllSubdomainsIgnoresTransparencyForSubdomain() {
+        val ctb = CertificateTransparencyBase(
+            excludeHosts = setOf(Host("*.appmattus.com")),
+            logListDataSource = LogListDataSourceTestFactory.logListDataSource
+        )
+
+        val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
+
+        assertIsA<VerificationResult.Success.DisabledForHost>(ctb.verifyCertificateTransparency("disabled.appmattus.com", certsToCheck))
+    }
+
+    @Test
+    fun excludeAllSubdomainsVerifiesTransparencyForDomain() {
+        val ctb = CertificateTransparencyBase(
+            excludeHosts = setOf(Host("*.appmattus.com")),
+            logListDataSource = LogListDataSourceTestFactory.logListDataSource
+        )
+
+        val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
+
+        assertIsA<VerificationResult.Success.Trusted>(ctb.verifyCertificateTransparency("appmattus.com", certsToCheck))
+    }
+
+    @Test
+    fun excludeAllSubdomainsAndIncludeSpecifiedSubdomainVerifiesTransparencyForIncludedDomain() {
+        val ctb = CertificateTransparencyBase(
+            includeHosts = setOf(Host("enabled.appmattus.com")), // but do ensure they're done on these
+            excludeHosts = setOf(Host("*.appmattus.com")), // don't do ct checks on these domains
+            logListDataSource = LogListDataSourceTestFactory.logListDataSource
+        )
+
+        val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
+
+        assertIsA<VerificationResult.Success.Trusted>(ctb.verifyCertificateTransparency("enabled.appmattus.com", certsToCheck))
+    }
+
+    @Test
+    fun excludeAllSubdomainsAndIncludeSpecifiedSubdomainIgnoresTransparencyForExcludedSubdomain() {
+        val ctb = CertificateTransparencyBase(
+            includeHosts = setOf(Host("enabled.appmattus.com")), // but do ensure they're done on these
+            excludeHosts = setOf(Host("*.appmattus.com")), // don't do ct checks on these domains
+            logListDataSource = LogListDataSourceTestFactory.logListDataSource
+        )
+
+        val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
+
+        assertIsA<VerificationResult.Success.DisabledForHost>(ctb.verifyCertificateTransparency("disabled.appmattus.com", certsToCheck))
+    }
+
+    @Test
+    fun excludeAllAndIncludeSpecifiedSubdomainVerifiesTransparencyForIncludedSubdomain() {
+        val ctb = CertificateTransparencyBase(
+            includeHosts = setOf(Host("enabled.appmattus.com")), // but do ensure they're done on these
+            excludeHosts = setOf(Host("*.*")),
+            logListDataSource = LogListDataSourceTestFactory.logListDataSource
+        )
+
+        val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
+
+        assertIsA<VerificationResult.Success.Trusted>(ctb.verifyCertificateTransparency("enabled.appmattus.com", certsToCheck))
+    }
+
+    @Test
+    fun excludeAllAndIncludeSpecifiedSubdomainIgnoresTransparencyForUnspecifiedSubdomain() {
+        val ctb = CertificateTransparencyBase(
+            includeHosts = setOf(Host("enabled.appmattus.com")), // but do ensure they're done on these
+            excludeHosts = setOf(Host("*.*")),
+            logListDataSource = LogListDataSourceTestFactory.logListDataSource
+        )
+
+        val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
+
+        assertIsA<VerificationResult.Success.DisabledForHost>(ctb.verifyCertificateTransparency("disabled.appmattus.com", certsToCheck))
+    }
+
+    @Test
+    fun excludeAllAndIncludeAllSubdomainsVerifiesTransparencyForSubdomain() {
+        val ctb = CertificateTransparencyBase(
+            includeHosts = setOf(Host("*.appmattus.com")), // but do ensure they're done on these
+            excludeHosts = setOf(Host("*.*")), // don't do ct checks on any domain
+            logListDataSource = LogListDataSourceTestFactory.logListDataSource
+        )
+
+        val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
+
+        assertIsA<VerificationResult.Success.Trusted>(ctb.verifyCertificateTransparency("enabled.appmattus.com", certsToCheck))
+    }
+
+    @Test
+    fun excludeAllAndIncludeAllSubdomainsIgnoresTransparencyForDomain() {
+        val ctb = CertificateTransparencyBase(
+            includeHosts = setOf(Host("*.appmattus.com")), // but do ensure they're done on these
+            excludeHosts = setOf(Host("*.*")), // don't do ct checks on any domain
+            logListDataSource = LogListDataSourceTestFactory.logListDataSource
+        )
+
+        val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
+
+        assertIsA<VerificationResult.Success.DisabledForHost>(ctb.verifyCertificateTransparency("appmattus.com", certsToCheck))
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun includeAllThrowsException() {
+        CertificateTransparencyBase(
+            includeHosts = setOf(Host("*.*")),
+            logListDataSource = LogListDataSourceTestFactory.logListDataSource
+        )
     }
 }

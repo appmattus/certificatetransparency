@@ -35,7 +35,7 @@ internal data class Host(
 
     val startsWithWildcard = pattern.startsWith(WILDCARD)
 
-    private val matchAll = pattern == "*.*"
+    val matchAll = pattern == "*.*"
 
     init {
         this.canonicalHostname = if (startsWithWildcard) {

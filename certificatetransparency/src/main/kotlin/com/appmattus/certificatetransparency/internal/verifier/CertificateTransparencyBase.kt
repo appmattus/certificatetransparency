@@ -47,7 +47,7 @@ import javax.net.ssl.X509TrustManager
 
 @Suppress("LongParameterList")
 internal open class CertificateTransparencyBase(
-    private val includeHosts: Set<Host>,
+    private val includeHosts: Set<Host> = emptySet(),
     private val excludeHosts: Set<Host> = emptySet(),
     private val certificateChainCleanerFactory: CertificateChainCleanerFactory? = null,
     trustManager: X509TrustManager? = null,
@@ -57,10 +57,9 @@ internal open class CertificateTransparencyBase(
     diskCache: DiskCache? = null
 ) {
     init {
-        require(includeHosts.isNotEmpty()) { "Please provide at least one host to enable certificate transparency verification" }
-        excludeHosts.forEach {
-            require(!it.startsWithWildcard) { "Certificate transparency exclusions cannot use wildcards" }
-            require(!includeHosts.contains(it)) { "Certificate transparency exclusions must not match include directly" }
+        includeHosts.forEach {
+            require(!it.matchAll) { "Certificate transparency is enabled by default on all domain names" }
+            require(!excludeHosts.contains(it)) { "Certificate transparency inclusions must not match exclude directly" }
         }
 
         require(logListDataSource == null || logListService == null) { "LogListService is ignored when overriding logListDataSource" }
@@ -137,5 +136,5 @@ internal open class CertificateTransparencyBase(
         }
     }
 
-    private fun enabledForCertificateTransparency(host: String) = includeHosts.any { it.matches(host) } && !excludeHosts.any { it.matches(host) }
+    private fun enabledForCertificateTransparency(host: String) = !excludeHosts.any { it.matches(host) } || includeHosts.any { it.matches(host) }
 }
