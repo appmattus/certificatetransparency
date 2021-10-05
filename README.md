@@ -125,7 +125,6 @@ and supplying that to your Retrofit.Builder.
 ```kotlin
 val retrofit = Retrofit.Builder()
     .baseUrl("https://appmattus.com")
-    .addConverterFactory(GsonConverterFactory.create())
     .client(okHttpClient)
     .build()
 ```

@@ -91,6 +91,8 @@ public class LogListDataSourceFactoryTest {
             val dataSource = LogListDataSourceFactory.createDataSource(logListService = logListService)
             val result = dataSource.get()
 
+            println(result)
+
             // Then a valid result is returned
             assertIsA<LogListResult.Valid>(result)
         }

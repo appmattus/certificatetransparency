@@ -21,10 +21,10 @@
 package com.appmattus.certificatetransparency.internal.loglist.model.v2
 
 import com.appmattus.certificatetransparency.internal.loglist.deserializer.HostnameDeserializer
-import com.google.gson.annotations.JsonAdapter
+import kotlinx.serialization.Serializable
 import okhttp3.HttpUrl.Companion.toHttpUrl
 
-@JsonAdapter(HostnameDeserializer::class)
+@Serializable(with = HostnameDeserializer::class)
 internal data class Hostname(
     val value: String
 ) {

@@ -7,6 +7,7 @@ plugins {
     id("com.android.lint")
     id("com.vanniktech.maven.publish")
     id("org.jetbrains.dokka")
+    kotlin("plugin.serialization") version Versions.kotlin
 }
 
 apply(from = "$rootDir/gradle/scripts/jacoco.gradle.kts")
@@ -28,7 +29,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
 
     implementation("com.squareup.okhttp3:okhttp:${Versions.okhttp}")
-    implementation("com.google.code.gson:gson:${Versions.gson}")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.KotlinX.serialization}")
     testImplementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
     testImplementation("com.squareup.retrofit2:retrofit-mock:${Versions.retrofit}")
     testImplementation("com.squareup.okhttp3:mockwebserver:${Versions.okhttp}")

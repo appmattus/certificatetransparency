@@ -21,14 +21,15 @@
 package com.appmattus.certificatetransparency.internal.loglist.model.v2
 
 import com.appmattus.certificatetransparency.internal.loglist.deserializer.Rfc3339Deserializer
-import com.google.gson.annotations.JsonAdapter
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * @property startInclusive All certificates must expire on this date or later. (format: date-time)
  * @property endExclusive All certificates must expire before this date. (format: date-time)
  */
+@Serializable
 internal data class TemporalInterval(
-    @JsonAdapter(Rfc3339Deserializer::class) @SerializedName("start_inclusive") val startInclusive: Long,
-    @JsonAdapter(Rfc3339Deserializer::class) @SerializedName("end_exclusive") val endExclusive: Long
+    @Serializable(with = Rfc3339Deserializer::class) @SerialName("start_inclusive") val startInclusive: Long,
+    @Serializable(with = Rfc3339Deserializer::class) @SerialName("end_exclusive") val endExclusive: Long
 )

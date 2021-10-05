@@ -21,8 +21,9 @@
 package com.appmattus.certificatetransparency.internal.loglist.model.v2
 
 import com.appmattus.certificatetransparency.internal.loglist.deserializer.HttpUrlDeserializer
-import com.google.gson.annotations.JsonAdapter
-import com.google.gson.annotations.SerializedName
+import com.appmattus.certificatetransparency.internal.loglist.deserializer.StateDeserializer
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import okhttp3.HttpUrl
 
 /**
@@ -40,16 +41,17 @@ import okhttp3.HttpUrl
  * @property logType The purpose of this log, e.g. test.
  * @property state The state of the log from the log list distributor's perspective.
  */
+@Serializable
 internal data class Log(
-    @SerializedName("description") val description: String?,
-    @SerializedName("key") val key: String,
-    @SerializedName("log_id") val logId: String,
-    @SerializedName("mmd") val maximumMergeDelay: Int,
-    @SerializedName("url") @JsonAdapter(HttpUrlDeserializer::class) val url: HttpUrl,
-    @SerializedName("dns") val dns: Hostname?,
-    @SerializedName("temporal_interval") val temporalInterval: TemporalInterval?,
-    @SerializedName("log_type") val logType: LogType?,
-    @SerializedName("state") val state: State?
+    @SerialName("description") val description: String? = null,
+    @SerialName("key") val key: String,
+    @SerialName("log_id") val logId: String,
+    @SerialName("mmd") val maximumMergeDelay: Int,
+    @SerialName("url") @Serializable(with = HttpUrlDeserializer::class) val url: HttpUrl,
+    @SerialName("dns") val dns: Hostname? = null,
+    @SerialName("temporal_interval") val temporalInterval: TemporalInterval? = null,
+    @SerialName("log_type") val logType: LogType? = null,
+    @SerialName("state") @Serializable(with = StateDeserializer::class) val state: State? = null
 ) {
     init {
         require(description == null || description.isNotEmpty())

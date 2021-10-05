@@ -1,6 +1,5 @@
 /*
  * Copyright 2021 Appmattus Limited
- * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,35 +12,25 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * File modified by Appmattus Limited
- * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.appmattus.certificatetransparency.internal.loglist.deserializer
 
 import com.appmattus.certificatetransparency.internal.loglist.model.v2.State
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import java.lang.reflect.Type
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.JsonTransformingSerializer
 
-internal class StateDeserializer : JsonDeserializer<State> {
+internal class StateDeserializer : JsonTransformingSerializer<State>(State.serializer()) {
 
-    override fun deserialize(jsonElement: JsonElement, type: Type, context: JsonDeserializationContext): State {
-        // Schema specifies there is exactly 1 element
-        val (stateType, data) = jsonElement.asJsonObject.entrySet().first()
-
-        val stateClass = when (stateType) {
-            "pending" -> State.Pending::class
-            "qualified" -> State.Qualified::class
-            "usable" -> State.Usable::class
-            "readonly" -> State.ReadOnly::class
-            "retired" -> State.Retired::class
-            "rejected" -> State.Rejected::class
-            else -> throw IllegalStateException("Unknown state: $stateType")
+    override fun transformDeserialize(element: JsonElement): JsonElement {
+        if (element is JsonObject) {
+            val key = element.keys.first()
+            val entry = element[key] as JsonObject
+            return JsonObject(entry + ("type" to JsonPrimitive(key)))
         }
 
-        return context.deserialize(data, stateClass.java)
+        return element
     }
 }
