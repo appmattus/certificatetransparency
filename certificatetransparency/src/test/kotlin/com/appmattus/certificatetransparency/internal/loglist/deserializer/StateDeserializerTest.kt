@@ -42,7 +42,8 @@ internal class StateDeserializerTest {
     fun readOnly() {
         val result = json.decodeFromString(
             deserializer = TestObject.serializer(),
-            string = "{\"state\":{\"readonly\":{\"timestamp\":\"2019-06-04T00:00:00Z\",\"final_tree_head\":{\"tree_size\":0,\"sha256_root_hash\":\"12345678901234567890123456789012345678901234\"}}}}"
+            string = "{\"state\":{\"readonly\":{\"timestamp\":\"2019-06-04T00:00:00Z\"," +
+                    "\"final_tree_head\":{\"tree_size\":0,\"sha256_root_hash\":\"12345678901234567890123456789012345678901234\"}}}}"
         )
         assertIsA<State.ReadOnly>(result.state)
     }
