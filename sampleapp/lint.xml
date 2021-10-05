@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="TrustAllX509TrustManager">
+        <!-- The Certificate Transparency library doesn't call these TrustManagers so the warnings are safe to ignore -->
+        <ignore path="org/bouncycastle/jsse/BCX509ExtendedTrustManager.class" />
+        <ignore path="org/bouncycastle/est/jcajce/JcaJceUtils$1.class" />
+        <ignore path="org/bouncycastle/est/jcajce/JcaJceUtils$2.class" />
+    </issue>
+</lint>

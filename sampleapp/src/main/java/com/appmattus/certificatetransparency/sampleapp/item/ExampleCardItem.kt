@@ -43,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -75,18 +76,18 @@ fun ExampleCardItem(
                 Text(title, style = MaterialTheme.typography.h5, modifier = Modifier.padding(8.dp))
                 TextButton(onClick = { scope.launch { launchUri(context = context, scaffoldState = scaffoldState, uri = moreInfoUri) } }) {
                     Icon(painter = painterResource(id = R.drawable.open_in_new), contentDescription = null, Modifier.padding(end = 8.dp))
-                    Text(text = "More info")
+                    Text(stringResource(R.string.more_info))
                 }
             }
             Row {
                 OutlinedButton(onClick = onKotlinClick) {
                     Icon(painter = painterResource(id = R.drawable.kotlin), contentDescription = null, Modifier.padding(end = 8.dp))
-                    Text(text = "Kotlin")
+                    Text(stringResource(R.string.kotlin))
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 OutlinedButton(onClick = onJavaClick) {
                     Icon(painter = painterResource(id = R.drawable.java), contentDescription = null, Modifier.padding(end = 8.dp))
-                    Text(text = "Java")
+                    Text(stringResource(R.string.java))
                 }
             }
         }
