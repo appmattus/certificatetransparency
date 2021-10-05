@@ -20,17 +20,19 @@
 
 package com.appmattus.certificatetransparency.internal.loglist.model.v2
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * @property name Name of this log operator
  * @property email CT log operator email addresses. The log operator can be contacted using any of these email addresses. (format: email)
  * @property logs Details of Certificate Transparency logs run by this operator.
  */
+@Serializable
 internal data class Operator(
-    @SerializedName("name") val name: String,
-    @SerializedName("email") val email: List<String>,
-    @SerializedName("logs") val logs: List<Log>
+    @SerialName("name") val name: String,
+    @SerialName("email") val email: List<String>,
+    @SerialName("logs") val logs: List<Log>
 ) {
     init {
         require(name.isNotEmpty())

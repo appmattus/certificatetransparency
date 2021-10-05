@@ -20,11 +20,13 @@
 
 package com.appmattus.certificatetransparency.internal.loglist.model.v2
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 internal data class FinalTreeHead(
-    @SerializedName("tree_size") val treeSize: Int,
-    @SerializedName("sha256_root_hash") val sha256RootHash: String
+    @SerialName("tree_size") val treeSize: Int,
+    @SerialName("sha256_root_hash") val sha256RootHash: String
 ) {
     init {
         require(treeSize >= 0)

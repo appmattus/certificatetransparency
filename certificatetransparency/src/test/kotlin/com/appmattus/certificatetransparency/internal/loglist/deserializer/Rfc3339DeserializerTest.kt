@@ -20,9 +20,9 @@
 
 package com.appmattus.certificatetransparency.internal.loglist.deserializer
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.annotations.JsonAdapter
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Test
@@ -38,16 +38,17 @@ internal class Rfc3339DeserializerTest {
     @Parameterized.Parameter(1)
     lateinit var expected: String
 
-    data class TestObject(@JsonAdapter(Rfc3339Deserializer::class) val timestamp: Long)
+    @Serializable
+    data class TestObject(@Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") val timestamp: Long)
 
     @Test
     fun test() {
         if (expected == "fail") {
             assertThrows(NumberFormatException::class.java) {
-                gson.fromJson("{'timestamp':'$input'}", TestObject::class.java).timestamp
+                json.decodeFromString(TestObject.serializer(), "{\"timestamp\":\"$input\"}").timestamp
             }
         } else {
-            val result = gson.fromJson("{'timestamp':'$input'}", TestObject::class.java).timestamp
+            val result = json.decodeFromString(TestObject.serializer(), "{\"timestamp\":\"$input\"}").timestamp
 
             assertEquals(expected.toLong(), result)
         }
@@ -55,7 +56,7 @@ internal class Rfc3339DeserializerTest {
 
     companion object {
 
-        val gson: Gson = GsonBuilder().create()
+        val json: Json = Json
 
         @JvmStatic
         @Parameterized.Parameters(name = "Rfc3339Deserializer({0}) = {1}")

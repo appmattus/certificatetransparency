@@ -1,6 +1,5 @@
 /*
  * Copyright 2021 Appmattus Limited
- * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +12,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * File modified by Appmattus Limited
- * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.appmattus.certificatetransparency.internal.loglist.deserializer
 
 import com.appmattus.certificatetransparency.internal.utils.toRfc3339Long
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import java.lang.reflect.Type
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
-internal class Rfc3339Deserializer : JsonDeserializer<Long> {
+internal class Rfc3339Deserializer : KSerializer<Long> {
 
-    override fun deserialize(jsonElement: JsonElement, type: Type, context: JsonDeserializationContext) = jsonElement.asString.toRfc3339Long()
+    override val descriptor = PrimitiveSerialDescriptor("Rfc3339", PrimitiveKind.STRING)
+
+    override fun deserialize(decoder: Decoder) = decoder.decodeString().toRfc3339Long()
+
+    override fun serialize(encoder: Encoder, value: Long) = throw IllegalStateException("Serialization not supported")
 }

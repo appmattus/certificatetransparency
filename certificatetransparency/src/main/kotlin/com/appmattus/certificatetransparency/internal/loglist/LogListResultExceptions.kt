@@ -22,7 +22,7 @@ package com.appmattus.certificatetransparency.internal.loglist
 
 import com.appmattus.certificatetransparency.internal.utils.stringStackTrace
 import com.appmattus.certificatetransparency.loglist.LogListResult
-import com.google.gson.JsonParseException
+import kotlinx.serialization.SerializationException
 
 internal data class SignatureVerificationFailed(val signatureResult: LogServerSignatureResult.Invalid) : LogListResult.Invalid()
 
@@ -42,7 +42,7 @@ internal data class LogListSigFailedLoadingWithException(val exception: Exceptio
     override fun toString() = "log-list.sig failed to load with ${exception.stringStackTrace()}"
 }
 
-internal data class LogListJsonBadFormat(val exception: JsonParseException) : LogListResult.Invalid() {
+internal data class LogListJsonBadFormat(val exception: SerializationException) : LogListResult.Invalid() {
     override fun toString() = "log-list.json badly formatted with ${exception.stringStackTrace()}"
 }
 

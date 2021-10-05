@@ -28,8 +28,8 @@ import com.appmattus.certificatetransparency.internal.utils.Base64
 import com.appmattus.certificatetransparency.internal.utils.PublicKeyFactory
 import com.appmattus.certificatetransparency.loglist.LogListResult
 import com.appmattus.certificatetransparency.loglist.LogServer
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonParseException
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.Json
 import java.security.NoSuchAlgorithmException
 import java.security.spec.InvalidKeySpecException
 
@@ -37,8 +37,8 @@ internal class LogListJsonParserV2 : LogListJsonParser {
 
     override fun parseJson(logListJson: String): LogListResult {
         val logList = try {
-            GsonBuilder().setLenient().create().fromJson(logListJson, LogListV2::class.java)
-        } catch (e: JsonParseException) {
+            json.decodeFromString(LogListV2.serializer(), logListJson)
+        } catch (e: SerializationException) {
             return LogListJsonBadFormat(e)
         }
 
@@ -70,5 +70,9 @@ internal class LogListJsonParserV2 : LogListJsonParser {
 
                 LogServer(key, validUntil)
             }.let(LogListResult::Valid)
+    }
+
+    companion object {
+        private val json = Json { ignoreUnknownKeys = true }
     }
 }

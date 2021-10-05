@@ -21,7 +21,7 @@
 package com.appmattus.certificatetransparency.internal.loglist.model.v2
 
 import com.appmattus.certificatetransparency.utils.TestData
-import com.google.gson.GsonBuilder
+import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -29,10 +29,10 @@ import org.junit.Test
 internal class LogListV2Test {
 
     @Test
-    fun verifyGsonParser() {
+    fun verifyJsonParser() {
         val json = TestData.file(TestData.TEST_LOG_LIST_JSON).readText()
 
-        val logList = GsonBuilder().setLenient().create().fromJson(json, LogListV2::class.java)
+        val logList = Json.decodeFromString(LogListV2.serializer(), json)
 
         val google = logList.operators.first { it.name == "Google" }
         val cloudflare = logList.operators.first { it.name == "Cloudflare" }

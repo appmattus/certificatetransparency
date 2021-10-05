@@ -21,58 +21,69 @@
 package com.appmattus.certificatetransparency.internal.loglist.model.v2
 
 import com.appmattus.certificatetransparency.internal.loglist.deserializer.Rfc3339Deserializer
-import com.appmattus.certificatetransparency.internal.loglist.deserializer.StateDeserializer
-import com.google.gson.annotations.JsonAdapter
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * @property timestamp The time at which the log entered this state.
  */
-@JsonAdapter(StateDeserializer::class)
+@Serializable
 internal sealed class State {
     abstract val timestamp: Long
 
     /**
      * An SCT associated with this log server would be treated as untrusted
      */
+    @Serializable
+    @SerialName("pending")
     data class Pending(
-        @JsonAdapter(Rfc3339Deserializer::class) override val timestamp: Long
+        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Long
     ) : State()
 
     /**
      * Validate SCT against this (any timestamp okay)
      */
+    @Serializable
+    @SerialName("qualified")
     data class Qualified(
-        @JsonAdapter(Rfc3339Deserializer::class) override val timestamp: Long
+        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Long
     ) : State()
 
     /**
      * Validate SCT against this (any timestamp okay)
      */
+    @SerialName("usable")
+    @Serializable
     data class Usable(
-        @JsonAdapter(Rfc3339Deserializer::class) override val timestamp: Long
+        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Long
     ) : State()
 
     /**
      * Validate SCT against this if it was issued before the timestamp, otherwise SCT is untrusted
      * @property finalTreeHead The tree head (tree size and root hash) at which the log was frozen.
      */
+    @Serializable
+    @SerialName("readonly")
     data class ReadOnly(
-        @JsonAdapter(Rfc3339Deserializer::class) override val timestamp: Long,
-        @SerializedName("final_tree_head") val finalTreeHead: FinalTreeHead
+        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Long,
+        @SerialName("final_tree_head") val finalTreeHead: FinalTreeHead
     ) : State()
 
     /**
      * Validate SCT against this if it was issued before the state timestamp, otherwise SCT is untrusted
      */
+    @Serializable
+    @SerialName("retired")
     data class Retired(
-        @JsonAdapter(Rfc3339Deserializer::class) override val timestamp: Long
+        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Long
     ) : State()
 
     /**
      * An SCT associated with this log server would be treated as untrusted
      */
+    @Serializable
+    @SerialName("rejected")
     data class Rejected(
-        @JsonAdapter(Rfc3339Deserializer::class) override val timestamp: Long
+        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Long
     ) : State()
 }

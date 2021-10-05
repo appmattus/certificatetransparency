@@ -32,7 +32,6 @@ object Versions {
     const val mustache = "0.8.18" // Cannot update due to use of ThreadLocal which is not desugared
     const val okhttp = "4.9.2"
     const val retrofit = "2.9.0"
-    const val gson = "2.8.8"
     const val volley = "1.2.0"
 
     const val equalsVerifier = "3.7.1"
@@ -59,5 +58,9 @@ object Versions {
     object Google {
         const val material = "1.4.0"
         const val playServices = "17.6.0"
+    }
+
+    object KotlinX {
+        const val serialization = "1.3.0"
     }
 }

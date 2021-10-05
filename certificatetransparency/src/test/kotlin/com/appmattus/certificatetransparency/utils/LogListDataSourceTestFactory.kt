@@ -27,14 +27,14 @@ import com.appmattus.certificatetransparency.internal.utils.Base64
 import com.appmattus.certificatetransparency.internal.utils.PublicKeyFactory
 import com.appmattus.certificatetransparency.loglist.LogListResult
 import com.appmattus.certificatetransparency.loglist.LogServer
-import com.google.gson.GsonBuilder
+import kotlinx.serialization.json.Json
 
 internal object LogListDataSourceTestFactory {
 
     val logListDataSource: DataSource<LogListResult> by lazy {
         // Collection of CT logs that are trusted from https://www.gstatic.com/ct/log_list/v2/log_list.json
         val json = TestData.file(TestData.TEST_LOG_LIST_JSON).readText()
-        val trustedLogKeys = GsonBuilder().create().fromJson(json, LogListV2::class.java).operators.flatMap { it.logs.map(Log::key) }
+        val trustedLogKeys = Json.decodeFromString(LogListV2.serializer(), json).operators.flatMap { it.logs.map(Log::key) }
 
         val list = LogListResult.Valid(
             trustedLogKeys.map { Base64.decode(it) }.map {

@@ -20,14 +20,16 @@
 
 package com.appmattus.certificatetransparency.internal.loglist.model.v2
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 internal enum class LogType {
     @Suppress("unused")
-    @SerializedName("prod")
+    @SerialName("prod")
     PROD,
 
     @Suppress("unused")
-    @SerializedName("test")
+    @SerialName("test")
     TEST
 }

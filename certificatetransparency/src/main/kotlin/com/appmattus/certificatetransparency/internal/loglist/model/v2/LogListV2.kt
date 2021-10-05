@@ -20,13 +20,15 @@
 
 package com.appmattus.certificatetransparency.internal.loglist.model.v2
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * @property version Version of this log list. The version will change whenever a change is made to any part of this log list.
  * @property operators CT log operators. People/organizations that run Certificate Transparency logs.
  */
+@Serializable
 internal data class LogListV2(
-    @SerializedName("version") val version: String?,
-    @SerializedName("operators") val operators: List<Operator>
+    @SerialName("version") val version: String? = null,
+    @SerialName("operators") val operators: List<Operator>
 )
