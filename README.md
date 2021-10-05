@@ -82,34 +82,30 @@ implementation("com.appmattus.certificatetransparency:certificatetransparency:<l
 
 ### OkHttp
 
-The library allows you to create a network interceptor for use with
-OkHttp where you specify which hosts to perform certificate transparency
-checks on. Wildcards are accepted but note that *.appmattus.com will
-match any sub-domain but not "appmattus.com" with no subdomain.
+The library allows you to create a network interceptor for use with OkHttp
+where by default certificate transparency checks are run on all domains.
 
 ```kotlin
-val interceptor = certificateTransparencyInterceptor {
-    // Enable for the provided hosts
-    +"*.appmattus.com"
-
-    // Exclude specific hosts
-    -"legacy.appmattus.com"
-}
+val interceptor = certificateTransparencyInterceptor()
 
 val client = OkHttpClient.Builder().apply {
     addNetworkInterceptor(interceptor)
 }.build()
 ```
 
-You can also enable certificate transparency for all hosts with `*.*`:
+You can also specify which hosts to disable certificate transparency
+checks on through exclusions.
 
 ```kotlin
 val interceptor = certificateTransparencyInterceptor {
-    // Enable for all hosts
-    +"*.*"
+    // Exclude any subdomain but not "appmattus.com" with no subdomain
+    -"*.appmattus.com"
 
-    // Exclude specific hosts as necessary
-    -"legacy.appmattus.com"
+    // Exclude specified domain
+    -"example.com"
+
+    // Override the exclusion by include a specific subdomain
+    +"allowed.appmattus.com"
 }
 ```
 
@@ -141,13 +137,23 @@ before calling connect() on the connection:
 ```kotlin
 val connection = URL("https://www.appmattus.com").openConnection()
 if (connection is HttpsURLConnection) {
-    connection.hostnameVerifier = certificateTransparencyHostnameVerifier(connection.hostnameVerifier) {
-        // Enable for the provided hosts
-        +"*.appmattus.com"
+    connection.hostnameVerifier = certificateTransparencyHostnameVerifier(connection.hostnameVerifier)
+}
+```
 
-        // Exclude specific hosts
-        -"legacy.appmattus.com"
-    }
+You can also specify which hosts to disable certificate transparency
+checks on through exclusions.
+
+```kotlin
+connection.hostnameVerifier = certificateTransparencyHostnameVerifier(connection.hostnameVerifier) {
+    // Exclude any subdomain but not "appmattus.com" with no subdomain
+    -"*.appmattus.com"
+
+    // Exclude specified domain
+    -"example.com"
+
+    // Override the exclusion by include a specific subdomain
+    +"allowed.appmattus.com"
 }
 ```
 
@@ -164,17 +170,27 @@ val requestQueue = Volley.newRequestQueue(applicationContext, object : HurlStack
     override fun createConnection(url: URL): HttpURLConnection {
         val connection = super.createConnection(url)
         if (connection is HttpsURLConnection) {
-            connection.hostnameVerifier = certificateTransparencyHostnameVerifier(connection.hostnameVerifier) {
-                // Enable for the provided hosts
-                +"*.appmattus.com"
-
-                // Exclude specific hosts
-                -"legacy.appmattus.com"
-            }
+            connection.hostnameVerifier = certificateTransparencyHostnameVerifier(connection.hostnameVerifier)
         }
         return connection
     }
 })
+```
+
+You can also specify which hosts to disable certificate transparency
+checks on through exclusions.
+
+```kotlin
+connection.hostnameVerifier = certificateTransparencyHostnameVerifier(connection.hostnameVerifier) {
+    // Exclude any subdomain but not "appmattus.com" with no subdomain
+    -"*.appmattus.com"
+
+    // Exclude specified domain
+    -"example.com"
+
+    // Override the exclusion by include a specific subdomain
+    +"allowed.appmattus.com"
+}
 ```
 
 ### Apache HttpClient
