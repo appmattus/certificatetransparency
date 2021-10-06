@@ -31,6 +31,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import java.io.StringWriter
 import javax.net.ssl.SSLPeerUnverifiedException
 
+@Suppress("TooManyFunctions")
 abstract class BaseExampleViewModel(application: Application) : AndroidViewModel(application) {
 
     abstract val sampleCodeTemplate: String

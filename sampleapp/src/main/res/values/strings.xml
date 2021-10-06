@@ -17,6 +17,7 @@
     <string name="test_connection_dialog_connect">Connect</string>
     <string name="test_connection_dialog_cancel">Cancel</string>
     <string name="fail_on_error">Fail on error</string>
+    <string name="fail_on_error_description">Determine if a failure to pass certificate transparency results in the connection being closed. A value of true ensures the connection is closed on errors.\nDefault: true</string>
     <string name="test_certificate_transparency">Test Certificate Transparency</string>
     <string name="include_host">Include Host</string>
     <string name="exclude_host">Exclude Host</string>

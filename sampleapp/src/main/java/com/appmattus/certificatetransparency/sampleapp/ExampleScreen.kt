@@ -27,8 +27,6 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
@@ -44,13 +42,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.appmattus.certificatetransparency.sampleapp.examples.BaseExampleViewModel
 import com.appmattus.certificatetransparency.sampleapp.examples.State
 import com.appmattus.certificatetransparency.sampleapp.item.CheckboxItem
 import com.appmattus.certificatetransparency.sampleapp.item.CodeViewItem
+import com.appmattus.certificatetransparency.sampleapp.item.OutlineButtonItem
 import com.appmattus.certificatetransparency.sampleapp.item.RemovableItem
 import com.appmattus.certificatetransparency.sampleapp.item.text.BodyTextItem
 import com.appmattus.certificatetransparency.sampleapp.item.text.HeaderTextItem
@@ -77,19 +75,13 @@ fun ExampleScreen(viewModel: BaseExampleViewModel) {
     }
 
     val showConnectionDialog = remember { mutableStateOf(false) }
-    TestConnectionDialog(showConnectionDialog) {
-        viewModel.openConnection(it)
-    }
+    TestConnectionDialog(showConnectionDialog) { viewModel.openConnection(it) }
 
     val showIncludeHostDialog = remember { mutableStateOf(false) }
-    IncludeHostDialog(showIncludeHostDialog) {
-        viewModel.includeHost(it)
-    }
+    IncludeHostDialog(showIncludeHostDialog) { viewModel.includeHost(it) }
 
     val showExcludeHostDialog = remember { mutableStateOf(false) }
-    ExcludeHostDialog(showExcludeHostDialog) {
-        viewModel.excludeHost(it)
-    }
+    ExcludeHostDialog(showExcludeHostDialog) { viewModel.excludeHost(it) }
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -116,9 +108,7 @@ fun ExampleScreen(viewModel: BaseExampleViewModel) {
 
             item {
                 Button(
-                    onClick = {
-                        showConnectionDialog.value = true
-                    },
+                    onClick = { showConnectionDialog.value = true },
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 8.dp)
                         .fillMaxWidth()
@@ -155,55 +145,40 @@ private fun LazyListScope.configurationSection(
     item { Spacer(modifier = Modifier.height(8.dp)) }
     items(state?.excludeHosts?.toList() ?: emptyList()) { host ->
         RemovableItem(
-            "-\"$host\"",
+            title = "-\"$host\"",
             onRemoveClick = { viewModel.removeExcludeHost(host) },
             modifier = Modifier.padding(horizontal = 16.dp)
         )
     }
     items(state?.includeHosts?.toList() ?: emptyList()) { host ->
         RemovableItem(
-            "+\"$host\"",
+            title = "+\"$host\"",
             onRemoveClick = { viewModel.removeIncludeHost(host) },
             modifier = Modifier.padding(horizontal = 16.dp)
         )
     }
     item { Spacer(modifier = Modifier.height(8.dp)) }
     item {
-        OutlinedButton(
+        OutlineButtonItem(
+            title = stringResource(R.string.exclude_host),
+            icon = R.drawable.minus,
             onClick = { showExcludeHostDialog.value = true },
-            modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-                .fillMaxWidth()
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.minus),
-                contentDescription = null,
-                Modifier.padding(end = 8.dp)
-            )
-            Text(text = stringResource(R.string.exclude_host))
-        }
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
     }
     item {
-        OutlinedButton(
+        OutlineButtonItem(
+            title = stringResource(R.string.include_host),
+            icon = R.drawable.plus,
             onClick = { showIncludeHostDialog.value = true },
-            modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-                .fillMaxWidth()
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.plus),
-                contentDescription = null,
-                Modifier.padding(end = 8.dp)
-            )
-            Text(text = stringResource(R.string.include_host))
-        }
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+        )
     }
 
     // Fail on error
     item {
         BodyTextItem(
-            title = "Determine if a failure to pass certificate transparency results in the connection being closed. " +
-                    "A value of true ensures the connection is closed on errors.\nDefault: true",
+            title = stringResource(R.string.fail_on_error_description),
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
     }
@@ -212,9 +187,7 @@ private fun LazyListScope.configurationSection(
             title = stringResource(R.string.fail_on_error),
             checked = state?.failOnError ?: true,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-        ) {
-            viewModel.setFailOnError(it)
-        }
+        ) { viewModel.setFailOnError(it) }
     }
 }
 
