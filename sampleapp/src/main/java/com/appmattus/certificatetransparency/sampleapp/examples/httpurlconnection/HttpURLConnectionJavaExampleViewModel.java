@@ -59,7 +59,8 @@ public class HttpURLConnectionJavaExampleViewModel extends BaseExampleViewModel 
 
     private void enableCertificateTransparencyChecks(
         HttpURLConnection connection,
-        Set<String> hosts,
+        Set<String> includeHosts,
+        Set<String> excludeHosts,
         boolean isFailOnError,
         CTLogger defaultLogger
     ) {
@@ -72,7 +73,10 @@ public class HttpURLConnectionJavaExampleViewModel extends BaseExampleViewModel 
                 .setLogger(defaultLogger)
                 .setDiskCache(new AndroidDiskCache(getApplication()));
 
-            for (String host : hosts) {
+            for (String host : excludeHosts) {
+                builder.excludeHost(host);
+            }
+            for (String host : includeHosts) {
                 builder.includeHost(host);
             }
 
@@ -81,13 +85,19 @@ public class HttpURLConnectionJavaExampleViewModel extends BaseExampleViewModel 
     }
 
     @Override
-    public void openConnection(@NotNull String connectionHost, @NotNull Set<String> hosts, boolean isFailOnError, @NotNull CTLogger defaultLogger) {
+    public void openConnection(
+        @NotNull String connectionHost,
+        @NotNull Set<String> includeHosts,
+        @NotNull Set<String> excludeHosts,
+        boolean isFailOnError,
+        @NotNull CTLogger defaultLogger
+    ) {
         // Quick and dirty way to push the network call onto a background thread, don't do this is a real app
         new Thread(() -> {
             try {
                 HttpURLConnection connection = (HttpURLConnection) new URL("https://" + connectionHost).openConnection();
 
-                enableCertificateTransparencyChecks(connection, hosts, isFailOnError, defaultLogger);
+                enableCertificateTransparencyChecks(connection, includeHosts, excludeHosts, isFailOnError, defaultLogger);
 
                 connection.connect();
             } catch (IOException e) {

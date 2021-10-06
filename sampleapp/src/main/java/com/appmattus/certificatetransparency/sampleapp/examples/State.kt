@@ -20,7 +20,13 @@
 
 package com.appmattus.certificatetransparency.sampleapp.examples
 
-data class State(val hosts: Set<String>, val failOnError: Boolean, val sampleCode: String, val message: Message? = null) {
+data class State(
+    val includeHosts: Set<String>,
+    val excludeHosts: Set<String>,
+    val failOnError: Boolean,
+    val sampleCode: String,
+    val message: Message? = null
+) {
 
     sealed class Message {
         abstract val text: String

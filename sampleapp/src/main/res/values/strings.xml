@@ -8,6 +8,10 @@
     <string name="include_host_dialog_message">e.g. example.com, *.example.com, subdomain.example.com</string>
     <string name="include_host_dialog_include">Include</string>
     <string name="include_host_dialog_cancel">Cancel</string>
+    <string name="exclude_host_dialog_title">Exclude host</string>
+    <string name="exclude_host_dialog_message">e.g. *.*, example.com, *.example.com, subdomain.example.com</string>
+    <string name="exclude_host_dialog_exclude">Exclude</string>
+    <string name="exclude_host_dialog_cancel">Cancel</string>
     <string name="test_connection_dialog_title">Test connection</string>
     <string name="test_connection_dialog_message">Please provide a host to test a connection to. \'https://\' will be automatically added</string>
     <string name="test_connection_dialog_connect">Connect</string>
@@ -15,6 +19,7 @@
     <string name="fail_on_error">Fail on error</string>
     <string name="test_certificate_transparency">Test Certificate Transparency</string>
     <string name="include_host">Include Host</string>
+    <string name="exclude_host">Exclude Host</string>
     <string name="configuration">Configuration</string>
     <string name="sample_code">Sample code</string>
     <string name="remove">Remove</string>

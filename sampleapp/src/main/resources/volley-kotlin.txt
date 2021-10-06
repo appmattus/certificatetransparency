@@ -2,9 +2,12 @@ private fun HttpURLConnection.enableCertificateTransparencyChecks() {
     if (this is HttpsURLConnection) {
         // Create a hostname verifier wrapping the original
         hostnameVerifier = certificateTransparencyHostnameVerifier(hostnameVerifier) {
-{{#hosts}}
+{{#excludeHosts}}
+            -"{{.}}"
+{{/excludeHosts}}
+{{#includeHosts}}
             +"{{.}}"
-{{/hosts}}
+{{/includeHosts}}
 {{^failOnError}}
             failOnError = false
 {{/failOnError}}

@@ -86,6 +86,11 @@ fun ExampleScreen(viewModel: BaseExampleViewModel) {
         viewModel.includeHost(it)
     }
 
+    val showExcludeHostDialog = remember { mutableStateOf(false) }
+    ExcludeHostDialog(showExcludeHostDialog) {
+        viewModel.excludeHost(it)
+    }
+
     Scaffold(
         scaffoldState = scaffoldState,
         snackbarHost = { snackbarHostState ->
@@ -101,7 +106,12 @@ fun ExampleScreen(viewModel: BaseExampleViewModel) {
                 HeaderTextItem(title = viewModel.title, modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
             }
 
-            configurationSection(viewModel = viewModel, state = state, showIncludeHostDialog = showIncludeHostDialog)
+            configurationSection(
+                viewModel = viewModel,
+                state = state,
+                showIncludeHostDialog = showIncludeHostDialog,
+                showExcludeHostDialog = showExcludeHostDialog
+            )
             sampleCodeSection(state = state)
 
             item {
@@ -125,7 +135,8 @@ fun ExampleScreen(viewModel: BaseExampleViewModel) {
 private fun LazyListScope.configurationSection(
     viewModel: BaseExampleViewModel,
     state: State?,
-    showIncludeHostDialog: MutableState<Boolean>
+    showIncludeHostDialog: MutableState<Boolean>,
+    showExcludeHostDialog: MutableState<Boolean>
 ) {
     item {
         SubHeaderTextItem(
@@ -142,14 +153,36 @@ private fun LazyListScope.configurationSection(
         )
     }
     item { Spacer(modifier = Modifier.height(8.dp)) }
-    items(state?.hosts?.toList() ?: emptyList()) { host ->
+    items(state?.excludeHosts?.toList() ?: emptyList()) { host ->
         RemovableItem(
-            host,
-            onRemoveClick = { viewModel.removeHost(host) },
+            "-\"$host\"",
+            onRemoveClick = { viewModel.removeExcludeHost(host) },
+            modifier = Modifier.padding(horizontal = 16.dp)
+        )
+    }
+    items(state?.includeHosts?.toList() ?: emptyList()) { host ->
+        RemovableItem(
+            "+\"$host\"",
+            onRemoveClick = { viewModel.removeIncludeHost(host) },
             modifier = Modifier.padding(horizontal = 16.dp)
         )
     }
     item { Spacer(modifier = Modifier.height(8.dp)) }
+    item {
+        OutlinedButton(
+            onClick = { showExcludeHostDialog.value = true },
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .fillMaxWidth()
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.minus),
+                contentDescription = null,
+                Modifier.padding(end = 8.dp)
+            )
+            Text(text = stringResource(R.string.exclude_host))
+        }
+    }
     item {
         OutlinedButton(
             onClick = { showIncludeHostDialog.value = true },
@@ -224,6 +257,41 @@ fun IncludeHostDialog(showIncludeHostDialog: MutableState<Boolean>, onInclude: (
                 Column {
                     Text(
                         text = stringResource(R.string.include_host_dialog_message),
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    TextField(
+                        value = text.value,
+                        onValueChange = { text.value = it }
+                    )
+                }
+            }
+        )
+    }
+}
+
+@Composable
+fun ExcludeHostDialog(showExcludeHostDialog: MutableState<Boolean>, onExclude: (String) -> Unit) {
+    if (showExcludeHostDialog.value) {
+        val text = remember { mutableStateOf("") }
+
+        AlertDialog(
+            onDismissRequest = { showExcludeHostDialog.value = false },
+            confirmButton = {
+                Button(onClick = {
+                    showExcludeHostDialog.value = false
+                    onExclude(text.value)
+                }) { Text(stringResource(R.string.exclude_host_dialog_exclude)) }
+            },
+            dismissButton = {
+                Button(onClick = {
+                    showExcludeHostDialog.value = false
+                }) { Text(stringResource(R.string.exclude_host_dialog_cancel)) }
+            },
+            title = { Text(stringResource(R.string.exclude_host_dialog_title)) },
+            text = {
+                Column {
+                    Text(
+                        text = stringResource(R.string.exclude_host_dialog_message),
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     TextField(

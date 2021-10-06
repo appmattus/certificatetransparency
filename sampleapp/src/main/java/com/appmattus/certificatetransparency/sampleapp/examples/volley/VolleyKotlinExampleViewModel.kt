@@ -43,14 +43,18 @@ class VolleyKotlinExampleViewModel(application: Application) : BaseExampleViewMo
         get() = getApplication<Application>().getString(R.string.volley_kotlin_example)
 
     private fun HttpURLConnection.enableCertificateTransparencyChecks(
-        hosts: Set<String>,
+        includeHosts: Set<String>,
+        excludeHosts: Set<String>,
         isFailOnError: Boolean,
         defaultLogger: CTLogger
     ) {
         if (this is HttpsURLConnection) {
             // Create a hostname verifier wrapping the original
             hostnameVerifier = certificateTransparencyHostnameVerifier(hostnameVerifier) {
-                hosts.forEach {
+                excludeHosts.forEach {
+                    -it
+                }
+                includeHosts.forEach {
                     +it
                 }
                 failOnError = isFailOnError
@@ -62,13 +66,18 @@ class VolleyKotlinExampleViewModel(application: Application) : BaseExampleViewMo
 
     // A normal client would create this ahead of time and share it between network requests
     // We create it dynamically as we allow the user to set the hosts for certificate transparency
-    private fun createRequestQueue(hosts: Set<String>, isFailOnError: Boolean, defaultLogger: CTLogger): RequestQueue {
+    private fun createRequestQueue(
+        includeHosts: Set<String>,
+        excludeHosts: Set<String>,
+        isFailOnError: Boolean,
+        defaultLogger: CTLogger
+    ): RequestQueue {
         return Volley.newRequestQueue(
             getApplication(),
             object : HurlStack() {
                 override fun createConnection(url: URL): HttpURLConnection {
                     return super.createConnection(url).apply {
-                        enableCertificateTransparencyChecks(hosts, isFailOnError, defaultLogger)
+                        enableCertificateTransparencyChecks(includeHosts, excludeHosts, isFailOnError, defaultLogger)
                     }
                 }
             }
@@ -77,11 +86,12 @@ class VolleyKotlinExampleViewModel(application: Application) : BaseExampleViewMo
 
     override fun openConnection(
         connectionHost: String,
-        hosts: Set<String>,
+        includeHosts: Set<String>,
+        excludeHosts: Set<String>,
         isFailOnError: Boolean,
         defaultLogger: CTLogger
     ) {
-        val queue = createRequestQueue(hosts, isFailOnError, defaultLogger)
+        val queue = createRequestQueue(includeHosts, excludeHosts, isFailOnError, defaultLogger)
 
         val request = StringRequest(
             Request.Method.GET,

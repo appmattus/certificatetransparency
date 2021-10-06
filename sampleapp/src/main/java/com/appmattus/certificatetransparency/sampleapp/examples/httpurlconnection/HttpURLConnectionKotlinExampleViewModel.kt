@@ -40,14 +40,18 @@ class HttpURLConnectionKotlinExampleViewModel(application: Application) : BaseEx
         get() = getApplication<Application>().getString(R.string.httpurlconnection_kotlin_example)
 
     private fun HttpURLConnection.enableCertificateTransparencyChecks(
-        hosts: Set<String>,
+        includeHosts: Set<String>,
+        excludeHosts: Set<String>,
         isFailOnError: Boolean,
         defaultLogger: CTLogger
     ) {
         if (this is HttpsURLConnection) {
             // Create a hostname verifier wrapping the original
             hostnameVerifier = certificateTransparencyHostnameVerifier(hostnameVerifier) {
-                hosts.forEach {
+                excludeHosts.forEach {
+                    -it
+                }
+                includeHosts.forEach {
                     +it
                 }
                 failOnError = isFailOnError
@@ -59,7 +63,8 @@ class HttpURLConnectionKotlinExampleViewModel(application: Application) : BaseEx
 
     override fun openConnection(
         connectionHost: String,
-        hosts: Set<String>,
+        includeHosts: Set<String>,
+        excludeHosts: Set<String>,
         isFailOnError: Boolean,
         defaultLogger: CTLogger
     ) {
@@ -68,7 +73,7 @@ class HttpURLConnectionKotlinExampleViewModel(application: Application) : BaseEx
             try {
                 val connection = URL("https://$connectionHost").openConnection() as HttpURLConnection
 
-                connection.enableCertificateTransparencyChecks(hosts, isFailOnError, defaultLogger)
+                connection.enableCertificateTransparencyChecks(includeHosts, excludeHosts, isFailOnError, defaultLogger)
 
                 connection.connect()
             } catch (e: IOException) {

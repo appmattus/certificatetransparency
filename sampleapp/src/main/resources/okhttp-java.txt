@@ -1,7 +1,10 @@
 Interceptor networkInterceptor = new CTInterceptorBuilder()
-{{#hosts}}
+{{#excludeHosts}}
+        .excludeHost("{{.}}")
+{{/excludeHosts}}
+{{#includeHosts}}
         .includeHost("{{.}}")
-{{/hosts}}
+{{/includeHosts}}
 {{^failOnError}}
         .setFailOnError(false)
 {{/failOnError}}
