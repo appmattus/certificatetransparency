@@ -34,9 +34,6 @@ internal class CertificateTransparencyHostnameVerifierIntegrationTest {
         private const val invalidSctDomain = "no-sct.badssl.com"
 
         val hostnameVerifier = certificateTransparencyHostnameVerifier(OkHostnameVerifier) {
-            +"*.appmattus.com"
-            +invalidSctDomain
-
             logListDataSource {
                 LogListDataSourceTestFactory.logListDataSource
             }
@@ -69,9 +66,9 @@ internal class CertificateTransparencyHostnameVerifierIntegrationTest {
     fun invalidAllowedWhenSctNotChecked() {
         val client = OkHttpClient.Builder().hostnameVerifier(
             certificateTransparencyHostnameVerifier(OkHostnameVerifier) {
-                +"*.appmattus.com"
+                -invalidSctDomain
 
-logListDataSource {
+                logListDataSource {
                     LogListDataSourceTestFactory.logListDataSource
                 }
             }

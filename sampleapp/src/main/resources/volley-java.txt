@@ -4,9 +4,12 @@ private void enableCertificateTransparencyChecks(HttpURLConnection connection) {
 
         // Create a hostname verifier wrapping the original
         HostnameVerifier verifier = new CTHostnameVerifierBuilder(httpsConnection.getHostnameVerifier())
-{{#hosts}}
+{{#excludeHosts}}
+                .excludeHost("{{.}}")
+{{/excludeHosts}}
+{{#includeHosts}}
                 .includeHost("{{.}}")
-{{/hosts}}
+{{/includeHosts}}
 {{^failOnError}}
                 .setFailOnError(false)
 {{/failOnError}}

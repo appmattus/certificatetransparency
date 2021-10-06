@@ -1,8 +1,11 @@
 val interceptor =
     certificateTransparencyInterceptor {
-{{#hosts}}
+{{#excludeHosts}}
+        -"{{.}}"
+{{/excludeHosts}}
+{{#includeHosts}}
         +"{{.}}"
-{{/hosts}}
+{{/includeHosts}}
 {{^failOnError}}
         failOnError = false
 {{/failOnError}}

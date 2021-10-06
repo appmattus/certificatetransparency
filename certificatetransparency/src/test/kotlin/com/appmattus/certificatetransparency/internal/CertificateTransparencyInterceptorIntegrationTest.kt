@@ -33,18 +33,12 @@ internal class CertificateTransparencyInterceptorIntegrationTest {
         private const val invalidSctDomain = "no-sct.badssl.com"
 
         val networkInterceptor = certificateTransparencyInterceptor {
-            +"*.appmattus.com"
-            +invalidSctDomain
-
             logListDataSource {
                 LogListDataSourceTestFactory.logListDataSource
             }
         }
 
         val networkInterceptorAllowFails = certificateTransparencyInterceptor {
-            +"*.appmattus.com"
-            +invalidSctDomain
-
             logListDataSource {
                 LogListDataSourceTestFactory.logListDataSource
             }
@@ -102,7 +96,7 @@ internal class CertificateTransparencyInterceptorIntegrationTest {
         val client =
             OkHttpClient.Builder().addNetworkInterceptor(
                 certificateTransparencyInterceptor {
-                    +"*.appmattus.com"
+                    -invalidSctDomain
 
                     logListDataSource {
                         LogListDataSourceTestFactory.logListDataSource
@@ -122,29 +116,6 @@ internal class CertificateTransparencyInterceptorIntegrationTest {
         val client =
             OkHttpClient.Builder().addNetworkInterceptor(
                 certificateTransparencyInterceptor {
-                    +"*.*"
-
-                    logListDataSource {
-                        LogListDataSourceTestFactory.logListDataSource
-                    }
-                }
-            ).build()
-
-        val request = Request.Builder()
-            .url("https://$invalidSctDomain/")
-            .build()
-
-        client.newCall(request).execute()
-    }
-
-    @Test
-    fun invalidAllowedWhenHostExcludedFromAll() {
-        val client =
-            OkHttpClient.Builder().addNetworkInterceptor(
-                certificateTransparencyInterceptor {
-                    +"*.*"
-                    -invalidSctDomain
-
                     logListDataSource {
                         LogListDataSourceTestFactory.logListDataSource
                     }

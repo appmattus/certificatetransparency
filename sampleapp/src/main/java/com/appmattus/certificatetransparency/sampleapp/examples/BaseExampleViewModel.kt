@@ -31,6 +31,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import java.io.StringWriter
 import javax.net.ssl.SSLPeerUnverifiedException
 
+@Suppress("TooManyFunctions")
 abstract class BaseExampleViewModel(application: Application) : AndroidViewModel(application) {
 
     abstract val sampleCodeTemplate: String
@@ -38,7 +39,8 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
     abstract val title: String
 
     private var state = State(
-        hosts = setOf("*.appmattus.com", "appmattus.com"),
+        includeHosts = setOf(),
+        excludeHosts = setOf(),
         failOnError = true,
         sampleCode = "",
         message = null
@@ -56,7 +58,7 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
 
     fun includeHost(title: String) {
         state = if (isValidHost(title)) {
-            state.copy(hosts = state.hosts.toMutableSet().apply { add(title) }.toSet())
+            state.copy(includeHosts = state.includeHosts.toMutableSet().apply { add(title) }.toSet())
         } else {
             state.copy(message = State.Message.Failure("Invalid host"))
         }
@@ -65,8 +67,25 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
         _liveData.postValue(state)
     }
 
-    fun removeHost(title: String) {
-        state = state.copy(hosts = state.hosts.toMutableSet().apply { remove(title) }.toSet())
+    fun excludeHost(title: String) {
+        state = if (isValidHost(title)) {
+            state.copy(excludeHosts = state.excludeHosts.toMutableSet().apply { add(title) }.toSet())
+        } else {
+            state.copy(message = State.Message.Failure("Invalid host"))
+        }
+
+        updateSourceCode()
+        _liveData.postValue(state)
+    }
+
+    fun removeIncludeHost(title: String) {
+        state = state.copy(includeHosts = state.includeHosts.toMutableSet().apply { remove(title) }.toSet())
+        updateSourceCode()
+        _liveData.postValue(state)
+    }
+
+    fun removeExcludeHost(title: String) {
+        state = state.copy(excludeHosts = state.excludeHosts.toMutableSet().apply { remove(title) }.toSet())
         updateSourceCode()
         _liveData.postValue(state)
     }
@@ -76,8 +95,8 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
         _liveData.postValue(state)
     }
 
-    private fun generateSourceCode(hosts: Set<String>, failOnError: Boolean): String {
-        val scopes = mapOf("hosts" to hosts.toSet(), "failOnError" to failOnError)
+    private fun generateSourceCode(includeHosts: Set<String>, excludeHosts: Set<String>, failOnError: Boolean): String {
+        val scopes = mapOf("includeHosts" to includeHosts, "excludeHosts" to excludeHosts, "failOnError" to failOnError)
 
         return StringWriter().use {
             DefaultMustacheFactory().compile(sampleCodeTemplate).execute(it, scopes)
@@ -85,7 +104,7 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
     }
 
     private fun updateSourceCode() {
-        val source = generateSourceCode(state.hosts, state.failOnError)
+        val source = generateSourceCode(state.includeHosts, state.excludeHosts, state.failOnError)
         state = state.copy(sampleCode = source)
     }
 
@@ -116,14 +135,15 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
 
     abstract fun openConnection(
         connectionHost: String,
-        hosts: Set<String>,
+        includeHosts: Set<String>,
+        excludeHosts: Set<String>,
         isFailOnError: Boolean,
         defaultLogger: CTLogger
     )
 
     fun openConnection(connectionHost: String) {
         try {
-            openConnection(connectionHost, state.hosts, state.failOnError, defaultLogger)
+            openConnection(connectionHost, state.includeHosts, state.excludeHosts, state.failOnError, defaultLogger)
         } catch (expected: Exception) {
             sendException(expected)
         }

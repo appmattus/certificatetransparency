@@ -64,7 +64,8 @@ public class VolleyJavaExampleViewModel extends BaseExampleViewModel {
 
     private void enableCertificateTransparencyChecks(
         HttpURLConnection connection,
-        Set<String> hosts,
+        Set<String> includeHosts,
+        Set<String> excludeHosts,
         boolean isFailOnError,
         CTLogger defaultLogger
     ) {
@@ -77,7 +78,10 @@ public class VolleyJavaExampleViewModel extends BaseExampleViewModel {
                 .setLogger(defaultLogger)
                 .setDiskCache(new AndroidDiskCache(getApplication()));
 
-            for (String host : hosts) {
+            for (String host : excludeHosts) {
+                builder.excludeHost(host);
+            }
+            for (String host : includeHosts) {
                 builder.includeHost(host);
             }
 
@@ -87,14 +91,14 @@ public class VolleyJavaExampleViewModel extends BaseExampleViewModel {
 
     // A normal client would create this ahead of time and share it between network requests
     // We create it dynamically as we allow the user to set the hosts for certificate transparency
-    private RequestQueue createRequestQueue(Set<String> hosts, boolean isFailOnError, CTLogger defaultLogger) {
+    private RequestQueue createRequestQueue(Set<String> includeHosts, Set<String> excludeHosts, boolean isFailOnError, CTLogger defaultLogger) {
         return Volley.newRequestQueue(getApplication(),
             new HurlStack() {
                 @Override
                 protected HttpURLConnection createConnection(URL url) throws IOException {
                     HttpURLConnection connection = super.createConnection(url);
 
-                    enableCertificateTransparencyChecks(connection, hosts, isFailOnError, defaultLogger);
+                    enableCertificateTransparencyChecks(connection, includeHosts, excludeHosts, isFailOnError, defaultLogger);
 
                     return connection;
                 }
@@ -103,8 +107,14 @@ public class VolleyJavaExampleViewModel extends BaseExampleViewModel {
     }
 
     @Override
-    public void openConnection(@NotNull String connectionHost, @NotNull Set<String> hosts, boolean isFailOnError, @NotNull CTLogger defaultLogger) {
-        RequestQueue queue = createRequestQueue(hosts, isFailOnError, defaultLogger);
+    public void openConnection(
+        @NotNull String connectionHost,
+        @NotNull Set<String> includeHosts,
+        @NotNull Set<String> excludeHosts,
+        boolean isFailOnError,
+        @NotNull CTLogger defaultLogger
+    ) {
+        RequestQueue queue = createRequestQueue(includeHosts, excludeHosts, isFailOnError, defaultLogger);
 
         // Failure. Send message to the UI as logger won't catch generic network exceptions
         Request<String> request = new StringRequest(Request.Method.GET, "https://" + connectionHost,

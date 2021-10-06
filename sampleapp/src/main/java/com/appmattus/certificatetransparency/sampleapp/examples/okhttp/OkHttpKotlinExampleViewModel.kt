@@ -43,10 +43,18 @@ class OkHttpKotlinExampleViewModel(application: Application) : BaseExampleViewMo
 
     // A normal client would create this ahead of time and share it between network requests
     // We create it dynamically as we allow the user to set the hosts for certificate transparency
-    private fun createOkHttpClient(hosts: Set<String>, isFailOnError: Boolean, defaultLogger: CTLogger): OkHttpClient {
+    private fun createOkHttpClient(
+        includeHosts: Set<String>,
+        excludeHosts: Set<String>,
+        isFailOnError: Boolean,
+        defaultLogger: CTLogger
+    ): OkHttpClient {
         // Create a network interceptor
         val networkInterceptor = certificateTransparencyInterceptor {
-            hosts.forEach {
+            excludeHosts.forEach {
+                -it
+            }
+            includeHosts.forEach {
                 +it
             }
             failOnError = isFailOnError
@@ -62,11 +70,12 @@ class OkHttpKotlinExampleViewModel(application: Application) : BaseExampleViewMo
 
     override fun openConnection(
         connectionHost: String,
-        hosts: Set<String>,
+        includeHosts: Set<String>,
+        excludeHosts: Set<String>,
         isFailOnError: Boolean,
         defaultLogger: CTLogger
     ) {
-        val client = createOkHttpClient(hosts, isFailOnError, defaultLogger)
+        val client = createOkHttpClient(includeHosts, excludeHosts, isFailOnError, defaultLogger)
 
         val request = Request.Builder().url("https://$connectionHost").build()
 

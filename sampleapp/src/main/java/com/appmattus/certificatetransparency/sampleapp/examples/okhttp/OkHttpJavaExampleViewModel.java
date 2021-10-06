@@ -62,14 +62,17 @@ public class OkHttpJavaExampleViewModel extends BaseExampleViewModel {
 
     // A normal client would create this ahead of time and share it between network requests
     // We create it dynamically as we allow the user to set the hosts for certificate transparency
-    private OkHttpClient createOkHttpClient(Set<String> hosts, boolean isFailOnError, CTLogger defaultLogger) {
+    private OkHttpClient createOkHttpClient(Set<String> includeHosts, Set<String> excludeHosts, boolean isFailOnError, CTLogger defaultLogger) {
         // Create a network interceptor
         CTInterceptorBuilder builder = new CTInterceptorBuilder()
             .setFailOnError(isFailOnError)
             .setLogger(defaultLogger)
             .setDiskCache(new AndroidDiskCache(getApplication()));
 
-        for (String host : hosts) {
+        for (String host : excludeHosts) {
+            builder.excludeHost(host);
+        }
+        for (String host : includeHosts) {
             builder.includeHost(host);
         }
 
@@ -82,8 +85,14 @@ public class OkHttpJavaExampleViewModel extends BaseExampleViewModel {
     }
 
     @Override
-    public void openConnection(@NotNull String connectionHost, @NotNull Set<String> hosts, boolean isFailOnError, @NotNull CTLogger defaultLogger) {
-        OkHttpClient client = createOkHttpClient(hosts, isFailOnError, defaultLogger);
+    public void openConnection(
+        @NotNull String connectionHost,
+        @NotNull Set<String> includeHosts,
+        @NotNull Set<String> excludeHosts,
+        boolean isFailOnError,
+        @NotNull CTLogger defaultLogger
+    ) {
+        OkHttpClient client = createOkHttpClient(includeHosts, excludeHosts, isFailOnError, defaultLogger);
 
         Request request = new Request.Builder().url("https://" + connectionHost).build();
 
