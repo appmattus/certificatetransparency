@@ -1,0 +1,12 @@
+// Create a TrustManager wrapping the original
+val wrappedTrustManager = certificateTransparencyTrustManager(trustManager) {
+{{#excludeHosts}}
+    -"{{.}}"
+{{/excludeHosts}}
+{{#includeHosts}}
+    +"{{.}}"
+{{/includeHosts}}
+{{^failOnError}}
+    failOnError = false
+{{/failOnError}}
+}
