@@ -32,6 +32,7 @@ import com.appmattus.certificatetransparency.sampleapp.item.ExampleCardItem
 import com.appmattus.certificatetransparency.sampleapp.item.text.HeaderTextItem
 
 @Composable
+@Suppress("LongMethod")
 fun MainScreen(navController: NavController) {
     val scaffoldState = rememberScaffoldState()
 
