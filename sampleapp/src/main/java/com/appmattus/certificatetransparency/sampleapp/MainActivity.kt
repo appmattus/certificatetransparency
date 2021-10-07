@@ -27,6 +27,8 @@ import com.appmattus.certificatetransparency.sampleapp.examples.httpurlconnectio
 import com.appmattus.certificatetransparency.sampleapp.examples.httpurlconnection.HttpURLConnectionKotlinExampleViewModel
 import com.appmattus.certificatetransparency.sampleapp.examples.okhttp.OkHttpJavaExampleViewModel
 import com.appmattus.certificatetransparency.sampleapp.examples.okhttp.OkHttpKotlinExampleViewModel
+import com.appmattus.certificatetransparency.sampleapp.examples.trustmanager.TrustManagerJavaExampleViewModel
+import com.appmattus.certificatetransparency.sampleapp.examples.trustmanager.TrustManagerKotlinExampleViewModel
 import com.appmattus.certificatetransparency.sampleapp.examples.volley.VolleyJavaExampleViewModel
 import com.appmattus.certificatetransparency.sampleapp.examples.volley.VolleyKotlinExampleViewModel
 
@@ -57,6 +59,12 @@ class MainActivity : AppCompatActivity() {
                 }
                 composable("volley/java") {
                     ExampleScreen(viewModel = viewModel<VolleyJavaExampleViewModel>())
+                }
+                composable("trustmanager/kotlin") {
+                    ExampleScreen(viewModel = viewModel<TrustManagerKotlinExampleViewModel>())
+                }
+                composable("trustmanager/java") {
+                    ExampleScreen(viewModel = viewModel<TrustManagerJavaExampleViewModel>())
                 }
             }
         }

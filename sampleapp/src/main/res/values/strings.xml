@@ -33,4 +33,7 @@
     <string name="httpurlconnection">HttpURLConnection</string>
     <string name="httpurlconnection_kotlin_example">HttpURLConnection Kotlin Example</string>
     <string name="httpurlconnection_java_example">HttpURLConnection Java Example</string>
+    <string name="trust_manager">TrustManager</string>
+    <string name="trust_manager_kotlin_example">TrustManager Kotlin Example</string>
+    <string name="trust_manager_java_example">TrustManager Java Example</string>
 </resources>

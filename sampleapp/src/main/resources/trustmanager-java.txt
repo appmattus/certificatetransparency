@@ -1,0 +1,12 @@
+// Create a TrustManager wrapping the original
+X509TrustManager wrappedTrustManager = new CTTrustManagerBuilder(trustManager)
+{{#excludeHosts}}
+    .excludeCommonName("{{.}}")
+{{/excludeHosts}}
+{{#includeHosts}}
+    .includeCommonName("{{.}}")
+{{/includeHosts}}
+{{^failOnError}}
+    .setFailOnError(false)
+{{/failOnError}}
+    .build();

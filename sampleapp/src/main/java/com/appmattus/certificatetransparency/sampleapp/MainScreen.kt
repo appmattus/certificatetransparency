@@ -27,9 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.appmattus.certificatetransparency.sampleapp.item.AppmattusLogo
 import com.appmattus.certificatetransparency.sampleapp.item.ExampleCardItem
 import com.appmattus.certificatetransparency.sampleapp.item.text.HeaderTextItem
-import com.appmattus.certificatetransparency.sampleapp.item.AppmattusLogo
 
 @Composable
 fun MainScreen(navController: NavController) {
@@ -77,6 +77,16 @@ fun MainScreen(navController: NavController) {
                     moreInfoUri = Uri.parse("https://developer.android.com/training/volley/index.html"),
                     onKotlinClick = { navController.navigate("volley/kotlin") },
                     onJavaClick = { navController.navigate("volley/java") },
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+            }
+            item {
+                ExampleCardItem(
+                    scaffoldState = scaffoldState,
+                    title = stringResource(R.string.trust_manager),
+                    moreInfoUri = Uri.parse("https://developer.android.com/reference/javax/net/ssl/X509TrustManager"),
+                    onKotlinClick = { navController.navigate("trustmanager/kotlin") },
+                    onJavaClick = { navController.navigate("trustmanager/java") },
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                 )
             }
