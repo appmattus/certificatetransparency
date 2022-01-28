@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2022 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -75,7 +75,7 @@ internal open class CertificateTransparencyBase(
     }
 
     private val logListDataSource = (logListDataSource ?: LogListDataSourceFactory.createDataSource(
-        logListService = logListService ?: LogListDataSourceFactory.createLogListService(),
+        logListService = logListService ?: LogListDataSourceFactory.createLogListService(trustManager = trustManager),
         diskCache = diskCache
     ))
 
