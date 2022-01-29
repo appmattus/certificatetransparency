@@ -1,6 +1,7 @@
 # Using Certificate Transparency with OkHttp
 
-The library allows you to create a network interceptor for use with OkHttp where by default certificate transparency checks are run on all
+The library allows you to create a network interceptor for use with OkHttp where
+by default certificate transparency checks are run on all
 domains.
 
 ```kotlin
@@ -11,7 +12,8 @@ val client = OkHttpClient.Builder().apply {
 }.build()
 ```
 
-You can also specify which hosts to disable certificate transparency checks on through exclusions.
+You can also specify which hosts to disable certificate transparency checks on
+through exclusions.
 
 ```kotlin
 val interceptor = certificateTransparencyInterceptor {
@@ -27,4 +29,4 @@ val interceptor = certificateTransparencyInterceptor {
 ```
 
 In Java, you can create the network interceptor through
-[CTInterceptorBuilder](./certificatetransparency/src/main/kotlin/com/appmattus/certificatetransparency/CTInterceptorBuilder.kt).
+[CTInterceptorBuilder](../certificatetransparency/src/main/kotlin/com/appmattus/certificatetransparency/CTInterceptorBuilder.kt).

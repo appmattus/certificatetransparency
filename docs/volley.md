@@ -15,7 +15,8 @@ val requestQueue = Volley.newRequestQueue(applicationContext, object : HurlStack
 })
 ```
 
-You can also specify which hosts to disable certificate transparency checks on through exclusions.
+You can also specify which hosts to disable certificate transparency checks on
+through exclusions.
 
 ```kotlin
 connection.hostnameVerifier = certificateTransparencyHostnameVerifier(connection.hostnameVerifier) {
