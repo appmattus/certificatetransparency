@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    compileSdk = 30
+    compileSdk = 31
     defaultConfig {
         applicationId = "com.appmattus.certificatetransparency.sampleapp"
         minSdk = 21
-        targetSdk = 30
+        targetSdk = 31
         versionCode = 1
         versionName = "1.0"
         proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
@@ -34,7 +34,7 @@ android {
         allWarningsAsErrors = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.1.0-alpha05"
+        kotlinCompilerExtensionVersion = "1.1.0-rc03"
     }
     packagingOptions {
         resources.excludes.add("META-INF/DEPENDENCIES")

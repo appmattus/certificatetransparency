@@ -57,9 +57,9 @@ dependencyCheck {
     skipConfigurations = listOf("lintClassPath", "jacocoAgent", "jacocoAnt", "kotlinCompilerClasspath", "kotlinCompilerPluginClasspath")
 }
 
-lintOptions {
-    isAbortOnError = true
-    isWarningsAsErrors = true
+lint {
+    abortOnError = true
+    warningsAsErrors = true
 }
 
 tasks.getByName("check").dependsOn(tasks.dependencyCheckAnalyze)

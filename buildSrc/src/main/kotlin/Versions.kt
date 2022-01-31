@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2022 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,39 +16,39 @@
 
 object Versions {
 
-    const val kotlin = "1.5.31"
+    const val kotlin = "1.6.10"
 
-    const val androidGradlePlugin = "7.0.2"
+    const val androidGradlePlugin = "7.1.0"
     const val detektGradlePlugin = "1.18.1"
-    const val dokkaPlugin = "1.5.30"
+    const val dokkaPlugin = "1.6.10"
     const val gradleMavenPublishPlugin = "0.18.0"
     const val gradleVersionsPlugin = "0.36.0"
     const val markdownlintGradlePlugin = "0.6.0"
-    const val owaspDependencyCheckPlugin = "6.3.2"
+    const val owaspDependencyCheckPlugin = "6.5.3"
 
-    const val bouncyCastle = "1.69"
-    const val coroutines = "1.5.2"
+    const val bouncyCastle = "1.70"
+    const val coroutines = "1.6.0"
     const val highlightJs = "1.5.0"
     const val mustache = "0.8.18" // Cannot update due to use of ThreadLocal which is not desugared
-    const val okhttp = "4.9.2"
+    const val okhttp = "4.9.3"
     const val retrofit = "2.9.0"
     const val volley = "1.2.0"
 
-    const val equalsVerifier = "3.7.1"
+    const val equalsVerifier = "3.8.3"
     const val junit4 = "4.13.2"
-    const val mockito = "3.12.4"
-    const val mockitoKotlin = "3.2.0"
-    const val robolectric = "4.6.1"
+    const val mockito = "4.3.1"
+    const val mockitoKotlin = "4.0.0"
+    const val robolectric = "4.7.3"
 
     const val desugar = "1.1.5"
 
     object AndroidX {
-        const val appCompat = "1.3.1"
-        const val lifecycle = "2.3.1"
-        const val compose = "1.0.3"
-        const val activityCompose = "1.3.1"
-        const val lifecycleViewmodelCompose = "1.0.0-alpha07"
-        const val navigationCompose = "2.4.0-alpha06"
+        const val appCompat = "1.4.1"
+        const val lifecycle = "2.4.0"
+        const val compose = "1.0.5"
+        const val activityCompose = "1.4.0"
+        const val lifecycleViewmodelCompose = "2.4.0"
+        const val navigationCompose = "2.4.0"
 
         const val testCore = "1.4.0"
         const val testExtJunit = "1.1.3"
@@ -56,11 +56,11 @@ object Versions {
     }
 
     object Google {
-        const val material = "1.4.0"
-        const val playServices = "17.6.0"
+        const val material = "1.5.0"
+        const val playServices = "18.0.1"
     }
 
     object KotlinX {
-        const val serialization = "1.3.0"
+        const val serialization = "1.3.2"
     }
 }

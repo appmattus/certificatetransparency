@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2022 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,6 +42,7 @@ import com.appmattus.certificatetransparency.internal.verifier.model.Version
 import com.appmattus.certificatetransparency.loglist.LogServer
 import org.bouncycastle.asn1.ASN1InputStream
 import org.bouncycastle.asn1.ASN1ObjectIdentifier
+import org.bouncycastle.asn1.DERBitString
 import org.bouncycastle.asn1.x509.Extension
 import org.bouncycastle.asn1.x509.Extensions
 import org.bouncycastle.asn1.x509.TBSCertificate
@@ -202,8 +203,8 @@ internal class LogSignatureVerifier(private val logServer: LogServer) : Signatur
                 setEndDate(tbsPart.endDate)
                 setSubject(tbsPart.subject)
                 setSubjectPublicKeyInfo(tbsPart.subjectPublicKeyInfo)
-                setIssuerUniqueID(tbsPart.issuerUniqueId)
-                setSubjectUniqueID(tbsPart.subjectUniqueId)
+                setIssuerUniqueID(tbsPart.issuerUniqueId as DERBitString?)
+                setSubjectUniqueID(tbsPart.subjectUniqueId as DERBitString?)
                 setExtensions(Extensions(orderedExtensions.toTypedArray()))
             }.generateTBSCertificate()
         }

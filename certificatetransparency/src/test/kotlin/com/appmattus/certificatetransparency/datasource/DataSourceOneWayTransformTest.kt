@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2022 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,8 +31,8 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.reset
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.verifyNoMoreInteractions
-import org.mockito.kotlin.verifyZeroInteractions
 import org.mockito.kotlin.whenever
 
 internal class DataSourceOneWayTransformTest {
@@ -120,7 +120,7 @@ internal class DataSourceOneWayTransformTest {
         mappedValuesCache.set(1)
 
         // then the parent cache is not called
-        verifyZeroInteractions(function)
+        verifyNoInteractions(function)
     }
 
     class TestException : Exception()

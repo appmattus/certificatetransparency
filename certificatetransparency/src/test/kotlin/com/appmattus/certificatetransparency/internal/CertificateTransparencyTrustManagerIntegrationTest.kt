@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2022 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import org.junit.Test
 import java.security.KeyStore
 import java.security.SecureRandom
 import javax.net.ssl.SSLContext
-import javax.net.ssl.SSLPeerUnverifiedException
+import javax.net.ssl.SSLHandshakeException
 import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManager
 import javax.net.ssl.TrustManagerFactory
@@ -82,7 +82,7 @@ internal class CertificateTransparencyTrustManagerIntegrationTest {
         client.newCall(request).execute()
     }
 
-    @Test(expected = SSLPeerUnverifiedException::class)
+    @Test(expected = SSLHandshakeException::class)
     fun invalidDisallowedWithException() {
         val client = OkHttpClient.Builder().sslSocketFactory(trustManager.createSocketFactory(), trustManager).build()
 
@@ -123,7 +123,7 @@ internal class CertificateTransparencyTrustManagerIntegrationTest {
         client.newCall(request).execute()
     }
 
-    @Test(expected = SSLPeerUnverifiedException::class)
+    @Test(expected = SSLHandshakeException::class)
     fun invalidNotAllowedWhenAllHostsIncluded() {
         val trustManager = certificateTransparencyTrustManager(originalTrustManager) {
             logListDataSource {

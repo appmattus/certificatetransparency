@@ -28,8 +28,8 @@ import com.appmattus.certificatetransparency.loglist.LogListService
 import org.bouncycastle.asn1.x500.X500Name
 import org.bouncycastle.asn1.x500.style.BCStyle
 import java.lang.reflect.Method
+import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
-import javax.net.ssl.SSLPeerUnverifiedException
 import javax.net.ssl.X509TrustManager
 
 @Suppress("LongParameterList", "CustomX509TrustManager")
@@ -57,13 +57,13 @@ internal class CertificateTransparencyTrustManager(
 
     private val checkServerTrustedMethod: Method? = try {
         delegate::class.java.getDeclaredMethod("checkServerTrusted", Array<X509Certificate>::class.java, String::class.java, String::class.java)
-    } catch (e: NoSuchMethodException) {
+    } catch (ignored: NoSuchMethodException) {
         null
     }
 
     private val isSameTrustConfigurationMethod: Method? = try {
         delegate::class.java.getDeclaredMethod("isSameTrustConfiguration", String::class.java, String::class.java)
-    } catch (e: NoSuchMethodException) {
+    } catch (ignored: NoSuchMethodException) {
         null
     }
 
@@ -86,7 +86,7 @@ internal class CertificateTransparencyTrustManager(
         logger?.log(commonName, result)
 
         if (result is VerificationResult.Failure && failOnError) {
-            throw SSLPeerUnverifiedException("Certificate transparency failed")
+            throw CertificateException("Certificate transparency failed")
         }
     }
 
@@ -101,7 +101,7 @@ internal class CertificateTransparencyTrustManager(
         logger?.log(host, result)
 
         if (result is VerificationResult.Failure && failOnError) {
-            throw SSLPeerUnverifiedException("Certificate transparency failed")
+            throw CertificateException("Certificate transparency failed")
         }
 
         return certs
