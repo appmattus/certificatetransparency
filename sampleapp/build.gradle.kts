@@ -56,7 +56,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-common-java8:${Versions.AndroidX.lifecycle}")
     implementation("com.pddstudio:highlightjs-android:${Versions.highlightJs}")
     implementation("com.android.volley:volley:${Versions.volley}")
-    implementation("com.github.spullara.mustache.java:compiler:${Versions.mustache}")
+    implementation("com.samskivert:jmustache:1.15")
 
     implementation("androidx.compose.ui:ui:${Versions.AndroidX.compose}")
     // Tooling support (Previews, etc.)
