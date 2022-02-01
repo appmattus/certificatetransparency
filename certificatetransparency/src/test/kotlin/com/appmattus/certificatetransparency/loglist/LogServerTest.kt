@@ -28,7 +28,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** Mostly for verifying the log info calculates the log ID correctly.  */
-class LogServerTest {
+internal class LogServerTest {
 
     @Test
     fun testCalculatesLogIdCorrectly() {
