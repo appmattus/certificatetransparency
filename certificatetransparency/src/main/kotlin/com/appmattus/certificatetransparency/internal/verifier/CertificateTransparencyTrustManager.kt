@@ -44,7 +44,7 @@ internal class CertificateTransparencyTrustManager(
     diskCache: DiskCache?,
     private val failOnError: Boolean = true,
     private val logger: CTLogger? = null
-) : CertificateTransparencyBase(
+) : X509TrustManager, CertificateTransparencyBase(
     includeHosts = includeHosts,
     excludeHosts = excludeHosts,
     certificateChainCleanerFactory = certificateChainCleanerFactory,
@@ -53,7 +53,7 @@ internal class CertificateTransparencyTrustManager(
     logListDataSource = logListDataSource,
     policy = policy,
     diskCache = diskCache
-), X509TrustManager {
+) {
 
     private val checkServerTrustedMethod: Method? = try {
         delegate::class.java.getDeclaredMethod("checkServerTrusted", Array<X509Certificate>::class.java, String::class.java, String::class.java)

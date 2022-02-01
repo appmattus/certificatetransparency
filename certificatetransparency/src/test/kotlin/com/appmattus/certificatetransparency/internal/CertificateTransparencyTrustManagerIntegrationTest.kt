@@ -35,9 +35,9 @@ internal class CertificateTransparencyTrustManagerIntegrationTest {
     companion object {
         private const val invalidSctDomain = "no-sct.badssl.com"
 
-        private val originalTrustManager = (TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()).apply {
+        private val originalTrustManager = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()).apply {
             init(null as KeyStore?)
-        }.trustManagers.first { it is X509TrustManager } as X509TrustManager)
+        }.trustManagers.first { it is X509TrustManager } as X509TrustManager
 
         private val trustManager = certificateTransparencyTrustManager(originalTrustManager) {
             logListDataSource {

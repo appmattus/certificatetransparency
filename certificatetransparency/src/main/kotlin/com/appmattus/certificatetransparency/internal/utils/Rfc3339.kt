@@ -30,10 +30,10 @@ private val GMT = TimeZone.getTimeZone("GMT")
 private val Rfc3339Pattern = Regex(
     // yyyy-MM-dd
     "^(\\d{4})-(\\d{2})-(\\d{2})" +
-            // 'T'HH:mm:ss.milliseconds
-            "([Tt](\\d{2}):(\\d{2}):(\\d{2})(\\.\\d+)?)?" +
-            // 'Z' or time zone shift HH:mm following '+' or '-'
-            "([Zz]|([+-])(\\d{2}):(\\d{2}))?"
+        // 'T'HH:mm:ss.milliseconds
+        "([Tt](\\d{2}):(\\d{2}):(\\d{2})(\\.\\d+)?)?" +
+        // 'Z' or time zone shift HH:mm following '+' or '-'
+        "([Zz]|([+-])(\\d{2}):(\\d{2}))?"
 )
 
 /**
@@ -90,8 +90,10 @@ internal fun String.toRfc3339Long(): Long {
     if (isTimeGiven && isTzShiftGiven) {
         @Suppress("EXPERIMENTAL_API_USAGE_ERROR")
         if (tzShiftRegexGroup[0].uppercaseChar() != 'Z') {
-            var tzShift = (results.groupValues[11].toInt() * 60 + // time zone shift HH
-                    results.groupValues[12].toInt()) // time zone shift mm
+            var tzShift = (
+                results.groupValues[11].toInt() * 60 + // time zone shift HH
+                    results.groupValues[12].toInt()
+                ) // time zone shift mm
             if (results.groupValues[10][0] == '-') { // time zone shift + or -
                 tzShift = -tzShift
             }
