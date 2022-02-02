@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2022 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -99,7 +99,7 @@ internal class BasicCertificateChainCleaner(
      *  @receiver An [X509Certificate]
      **/
     private fun X509Certificate.isSignedBy(signingCert: X509Certificate): Boolean {
-        if (issuerDN != signingCert.subjectDN) return false
+        if (issuerX500Principal != signingCert.subjectX500Principal) return false
         return try {
             verify(signingCert.publicKey)
             true

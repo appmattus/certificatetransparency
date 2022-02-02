@@ -26,9 +26,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.appmattus.certificatetransparency.CTLogger
 import com.appmattus.certificatetransparency.VerificationResult
-import com.github.mustachejava.DefaultMustacheFactory
+import com.samskivert.mustache.Mustache
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
-import java.io.StringWriter
 import javax.net.ssl.SSLPeerUnverifiedException
 
 @Suppress("TooManyFunctions")
@@ -98,9 +97,8 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
     private fun generateSourceCode(includeHosts: Set<String>, excludeHosts: Set<String>, failOnError: Boolean): String {
         val scopes = mapOf("includeHosts" to includeHosts, "excludeHosts" to excludeHosts, "failOnError" to failOnError)
 
-        return StringWriter().use {
-            DefaultMustacheFactory().compile(sampleCodeTemplate).execute(it, scopes)
-        }.toString()
+        val template = BaseExampleViewModel::class.java.classLoader!!.getResourceAsStream(sampleCodeTemplate).bufferedReader().readText()
+        return Mustache.compiler().compile(template).execute(scopes)
     }
 
     private fun updateSourceCode() {

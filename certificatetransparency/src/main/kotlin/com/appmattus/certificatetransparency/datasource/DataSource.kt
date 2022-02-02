@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2022 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -88,15 +88,15 @@ public interface DataSource<Value : Any> {
 
             override suspend fun get(): Value? {
                 return coroutineScope {
-                    (job ?: async { this@DataSource.get() }.apply {
+                    job ?: async { this@DataSource.get() }.apply {
                         job = this
 
                         launch {
                             this@apply.join()
                             job = null
                         }
-                    }).await()
-                }
+                    }
+                }.await()
             }
 
             override suspend fun isValid(value: Value?) = this@DataSource.isValid(value)

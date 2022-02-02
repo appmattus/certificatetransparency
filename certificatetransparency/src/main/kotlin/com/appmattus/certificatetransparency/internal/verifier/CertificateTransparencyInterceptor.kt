@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2022 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,7 +47,7 @@ internal class CertificateTransparencyInterceptor(
     diskCache: DiskCache? = null,
     private val failOnError: Boolean = true,
     private val logger: CTLogger? = null
-) : CertificateTransparencyBase(
+) : Interceptor, CertificateTransparencyBase(
     includeHosts,
     excludeHosts,
     certificateChainCleanerFactory,
@@ -56,7 +56,7 @@ internal class CertificateTransparencyInterceptor(
     logListDataSource,
     policy,
     diskCache
-), Interceptor {
+) {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val host = chain.request().url.host

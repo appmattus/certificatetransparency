@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2022 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -64,7 +64,7 @@ internal class DefaultPolicy : CTPolicy {
         @Suppress("MagicNumber")
         return MonthDifference(
             roundedMonthDifference = (expiry.year - start.year) * 12 + (expiry.month - start.month) -
-                    if (expiry.dayOfMonth < start.dayOfMonth) 1 else 0,
+                if (expiry.dayOfMonth < start.dayOfMonth) 1 else 0,
             hasPartialMonth = expiry.dayOfMonth != start.dayOfMonth
         )
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2022 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,12 @@ import okhttp3.CacheControl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.security.KeyManagementException
+import java.security.NoSuchAlgorithmException
+import java.security.SecureRandom
 import java.util.concurrent.TimeUnit
+import javax.net.ssl.SSLContext
+import javax.net.ssl.X509TrustManager
 
 public object LogListDataSourceFactory {
 
@@ -43,16 +48,32 @@ public object LogListDataSourceFactory {
     public fun createLogListService(
         baseUrl: String = "https://www.gstatic.com/ct/log_list/v2/",
         okHttpClient: OkHttpClient? = null,
-        networkTimeoutSeconds: Long = 30
+        networkTimeoutSeconds: Long = 30,
+        trustManager: X509TrustManager? = null
     ): LogListService {
 
-        val client = (okHttpClient?.newBuilder() ?: OkHttpClient.Builder())
-            .addInterceptor(MaxSizeInterceptor())
-            .connectTimeout(networkTimeoutSeconds, TimeUnit.SECONDS)
-            .readTimeout(networkTimeoutSeconds, TimeUnit.SECONDS)
-            .writeTimeout(networkTimeoutSeconds, TimeUnit.SECONDS)
-            .cache(null)
-            .build()
+        val client = (okHttpClient?.newBuilder() ?: OkHttpClient.Builder()).apply {
+            // If a TrustManager is provided then use it. This will be the case when using the Certificate Transparency provider
+            trustManager?.let {
+                val sslContext: SSLContext
+                try {
+                    sslContext = SSLContext.getInstance("SSL")
+                    sslContext.init(null, arrayOf(trustManager), SecureRandom())
+                } catch (expected: NoSuchAlgorithmException) {
+                    throw IllegalStateException("Unable to create an SSLContext")
+                } catch (expected: KeyManagementException) {
+                    throw IllegalStateException("Unable to create an SSLContext")
+                }
+
+                sslSocketFactory(sslContext.socketFactory, trustManager)
+            }
+
+            addInterceptor(MaxSizeInterceptor())
+            connectTimeout(networkTimeoutSeconds, TimeUnit.SECONDS)
+            readTimeout(networkTimeoutSeconds, TimeUnit.SECONDS)
+            writeTimeout(networkTimeoutSeconds, TimeUnit.SECONDS)
+            cache(null)
+        }.build()
 
         return object : LogListService {
             override suspend fun getLogList() = get("log_list.json", maxSize = 1048576)

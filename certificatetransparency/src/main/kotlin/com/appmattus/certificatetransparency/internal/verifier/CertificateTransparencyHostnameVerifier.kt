@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2022 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,7 +46,7 @@ internal class CertificateTransparencyHostnameVerifier(
     diskCache: DiskCache?,
     private val failOnError: Boolean = true,
     private val logger: CTLogger? = null
-) : CertificateTransparencyBase(
+) : HostnameVerifier, CertificateTransparencyBase(
     includeHosts,
     excludeHosts,
     certificateChainCleanerFactory,
@@ -55,7 +55,7 @@ internal class CertificateTransparencyHostnameVerifier(
     logListDataSource,
     policy,
     diskCache
-), HostnameVerifier {
+) {
 
     override fun verify(host: String, sslSession: SSLSession): Boolean {
         if (!delegate.verify(host, sslSession)) {

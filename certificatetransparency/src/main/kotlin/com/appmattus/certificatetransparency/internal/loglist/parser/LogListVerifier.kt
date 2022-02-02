@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2022 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,9 +35,10 @@ internal class LogListVerifier(
     fun verify(message: ByteArray, signature: ByteArray): LogServerSignatureResult {
         return try {
             if (Signature.getInstance("SHA256withRSA").apply {
-                    initVerify(publicKey)
-                    update(message)
-                }.verify(signature)) {
+                initVerify(publicKey)
+                update(message)
+            }.verify(signature)
+            ) {
                 LogServerSignatureResult.Valid
             } else {
                 LogServerSignatureResult.Invalid.SignatureFailed

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2022 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -84,10 +84,10 @@ public class AndroidDiskCache @JvmOverloads constructor(
 
     override suspend fun isValid(value: RawLogListResult?): Boolean {
         return value is RawLogListResult.Success &&
-                !diskCachePolicy.isExpired(
-                    lastWriteDate = Date(prefs.getLong(PREF_KEY_LAST_WRITE, System.currentTimeMillis())),
-                    currentDate = Date()
-                )
+            !diskCachePolicy.isExpired(
+                lastWriteDate = Date(prefs.getLong(PREF_KEY_LAST_WRITE, System.currentTimeMillis())),
+                currentDate = Date()
+            )
     }
 
     public companion object {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2022 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -67,17 +67,17 @@ internal open class CertificateTransparencyBase(
     }
 
     private val cleaner: CertificateChainCleaner by lazy {
-        val localTrustManager = trustManager ?: (TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()).apply {
+        val localTrustManager = trustManager ?: TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()).apply {
             init(null as KeyStore?)
-        }.trustManagers.first { it is X509TrustManager } as X509TrustManager)
+        }.trustManagers.first { it is X509TrustManager } as X509TrustManager
 
         certificateChainCleanerFactory?.get(localTrustManager) ?: CertificateChainCleaner.get(localTrustManager)
     }
 
-    private val logListDataSource = (logListDataSource ?: LogListDataSourceFactory.createDataSource(
-        logListService = logListService ?: LogListDataSourceFactory.createLogListService(),
+    private val logListDataSource = logListDataSource ?: LogListDataSourceFactory.createDataSource(
+        logListService = logListService ?: LogListDataSourceFactory.createLogListService(trustManager = trustManager),
         diskCache = diskCache
-    ))
+    )
 
     private val policy = (policy ?: DefaultPolicy())
 

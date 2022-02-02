@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2022 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,8 +90,6 @@ public class LogListDataSourceFactoryTest {
             // When we request the log list
             val dataSource = LogListDataSourceFactory.createDataSource(logListService = logListService)
             val result = dataSource.get()
-
-            println(result)
 
             // Then a valid result is returned
             assertIsA<LogListResult.Valid>(result)

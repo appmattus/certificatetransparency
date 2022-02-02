@@ -1,5 +1,6 @@
 /*
- * Copyright 2021-2022 Appmattus Limited
+ * Copyright 2021 Appmattus Limited
+ * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,57 +13,56 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * File modified by Appmattus Limited
+ * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.appmattus.certificatetransparency.internal
 
-import com.appmattus.certificatetransparency.certificateTransparencyTrustManager
+import com.appmattus.certificatetransparency.installCertificateTransparencyProvider
+import com.appmattus.certificatetransparency.removeCertificateTransparencyProvider
 import com.appmattus.certificatetransparency.utils.LogListDataSourceTestFactory
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.junit.After
 import org.junit.Test
-import java.security.KeyStore
-import java.security.SecureRandom
-import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLHandshakeException
-import javax.net.ssl.SSLSocketFactory
-import javax.net.ssl.TrustManager
-import javax.net.ssl.TrustManagerFactory
-import javax.net.ssl.X509TrustManager
 
-internal class CertificateTransparencyTrustManagerIntegrationTest {
+internal class CertificateTransparencyProviderIntegrationTest {
 
     companion object {
         private const val invalidSctDomain = "no-sct.badssl.com"
 
-        private val originalTrustManager = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()).apply {
-            init(null as KeyStore?)
-        }.trustManagers.first { it is X509TrustManager } as X509TrustManager
-
-        private val trustManager = certificateTransparencyTrustManager(originalTrustManager) {
-            logListDataSource {
-                LogListDataSourceTestFactory.logListDataSource
+        private fun installProvider() {
+            installCertificateTransparencyProvider {
+                logListDataSource {
+                    LogListDataSourceTestFactory.logListDataSource
+                }
             }
         }
 
-        private val trustManagerAllowFails = certificateTransparencyTrustManager(originalTrustManager) {
-            logListDataSource {
-                LogListDataSourceTestFactory.logListDataSource
+        private fun installProviderAllowFails() {
+            installCertificateTransparencyProvider {
+                logListDataSource {
+                    LogListDataSourceTestFactory.logListDataSource
+                }
+
+                failOnError = false
             }
-
-            failOnError = false
         }
+    }
 
-        private fun X509TrustManager.createSocketFactory(): SSLSocketFactory {
-            return SSLContext.getInstance("SSL").apply {
-                init(null, arrayOf<TrustManager>(this@createSocketFactory), SecureRandom())
-            }.socketFactory
-        }
+    @After
+    fun removeProvider() {
+        removeCertificateTransparencyProvider()
     }
 
     @Test
     fun appmattusAllowed() {
-        val client = OkHttpClient.Builder().sslSocketFactory(trustManager.createSocketFactory(), trustManager).build()
+        installProvider()
+
+        val client = OkHttpClient.Builder().build()
 
         val request = Request.Builder()
             .url("https://www.appmattus.com")
@@ -73,7 +73,9 @@ internal class CertificateTransparencyTrustManagerIntegrationTest {
 
     @Test
     fun insecureConnectionAllowed() {
-        val client = OkHttpClient.Builder().sslSocketFactory(trustManager.createSocketFactory(), trustManager).build()
+        installProvider()
+
+        val client = OkHttpClient.Builder().build()
 
         val request = Request.Builder()
             .url("http://www.appmattus.com")
@@ -84,7 +86,9 @@ internal class CertificateTransparencyTrustManagerIntegrationTest {
 
     @Test(expected = SSLHandshakeException::class)
     fun invalidDisallowedWithException() {
-        val client = OkHttpClient.Builder().sslSocketFactory(trustManager.createSocketFactory(), trustManager).build()
+        installProvider()
+
+        val client = OkHttpClient.Builder().build()
 
         val request = Request.Builder()
             .url("https://$invalidSctDomain/")
@@ -95,7 +99,9 @@ internal class CertificateTransparencyTrustManagerIntegrationTest {
 
     @Test
     fun invalidAllowedWhenFailsAllowed() {
-        val client = OkHttpClient.Builder().sslSocketFactory(trustManagerAllowFails.createSocketFactory(), trustManagerAllowFails).build()
+        installProviderAllowFails()
+
+        val client = OkHttpClient.Builder().build()
 
         val request = Request.Builder()
             .url("https://$invalidSctDomain/")
@@ -106,7 +112,7 @@ internal class CertificateTransparencyTrustManagerIntegrationTest {
 
     @Test
     fun invalidAllowedWhenSctNotChecked() {
-        val trustManager = certificateTransparencyTrustManager(originalTrustManager) {
+        installCertificateTransparencyProvider {
             -invalidSctDomain
 
             logListDataSource {
@@ -114,7 +120,7 @@ internal class CertificateTransparencyTrustManagerIntegrationTest {
             }
         }
 
-        val client = OkHttpClient.Builder().sslSocketFactory(trustManager.createSocketFactory(), trustManager).build()
+        val client = OkHttpClient.Builder().build()
 
         val request = Request.Builder()
             .url("https://$invalidSctDomain/")
@@ -125,13 +131,13 @@ internal class CertificateTransparencyTrustManagerIntegrationTest {
 
     @Test(expected = SSLHandshakeException::class)
     fun invalidNotAllowedWhenAllHostsIncluded() {
-        val trustManager = certificateTransparencyTrustManager(originalTrustManager) {
+        installCertificateTransparencyProvider {
             logListDataSource {
                 LogListDataSourceTestFactory.logListDataSource
             }
         }
 
-        val client = OkHttpClient.Builder().sslSocketFactory(trustManager.createSocketFactory(), trustManager).build()
+        val client = OkHttpClient.Builder().build()
 
         val request = Request.Builder()
             .url("https://$invalidSctDomain/")

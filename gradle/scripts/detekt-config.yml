@@ -18,3 +18,7 @@ complexity:
 exceptions:
   TooGenericExceptionThrown:
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+
+naming:
+  FunctionNaming:
+    ignoreAnnotated: ['Composable']
