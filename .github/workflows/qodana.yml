@@ -1,0 +1,21 @@
+name: Qodana
+
+on:
+    push:
+        branches:
+            - main
+        tags:
+            - '*'
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    qodana:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: 'Qodana Scan'
+              uses: JetBrains/qodana-action@v4.2.2
+              with:
+                  linter: jetbrains/qodana-jvm-android
