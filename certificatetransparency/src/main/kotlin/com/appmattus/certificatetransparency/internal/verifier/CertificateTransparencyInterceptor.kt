@@ -55,7 +55,8 @@ internal class CertificateTransparencyInterceptor(
     logListService,
     logListDataSource,
     policy,
-    diskCache
+    diskCache,
+    logger
 ) {
 
     override fun intercept(chain: Interceptor.Chain): Response {
