@@ -22,6 +22,7 @@
 
 package com.appmattus.certificatetransparency.internal.verifier
 
+import com.appmattus.certificatetransparency.CTLogger
 import com.appmattus.certificatetransparency.CTPolicy
 import com.appmattus.certificatetransparency.SctVerificationResult
 import com.appmattus.certificatetransparency.VerificationResult
@@ -54,7 +55,8 @@ internal open class CertificateTransparencyBase(
     logListService: LogListService? = null,
     logListDataSource: DataSource<LogListResult>? = null,
     policy: CTPolicy? = null,
-    diskCache: DiskCache? = null
+    diskCache: DiskCache? = null,
+    private val logger: CTLogger? = null
 ) {
     init {
         includeHosts.forEach {
@@ -92,7 +94,7 @@ internal open class CertificateTransparencyBase(
             if (cleanedCerts.isEmpty()) {
                 VerificationResult.Failure.NoCertificates
             } else {
-                hasValidSignedCertificateTimestamp(cleanedCerts)
+                hasValidSignedCertificateTimestamp(cleanedCerts, host)
             }
         }
     }
@@ -105,10 +107,15 @@ internal open class CertificateTransparencyBase(
      * @return [VerificationResult.Success] if the certificates can be trusted, [VerificationResult.Failure] otherwise.
      */
     @Suppress("ReturnCount")
-    private fun hasValidSignedCertificateTimestamp(certificates: List<X509Certificate>): VerificationResult {
+    private fun hasValidSignedCertificateTimestamp(certificates: List<X509Certificate>, host: String): VerificationResult {
 
-        val result = runBlocking {
-            logListDataSource.get()
+        val result = try {
+            runBlocking {
+                logListDataSource.get()
+            }
+        } catch (e: Exception) {
+            logger?.log(host, VerificationResult.Failure.LogServersFailed(NoLogServers))
+            null
         }
 
         val verifiers = when (result) {
