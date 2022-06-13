@@ -22,7 +22,6 @@
 
 package com.appmattus.certificatetransparency.internal.verifier
 
-import com.appmattus.certificatetransparency.CTLogger
 import com.appmattus.certificatetransparency.CTPolicy
 import com.appmattus.certificatetransparency.SctVerificationResult
 import com.appmattus.certificatetransparency.VerificationResult
@@ -30,6 +29,7 @@ import com.appmattus.certificatetransparency.cache.DiskCache
 import com.appmattus.certificatetransparency.chaincleaner.CertificateChainCleaner
 import com.appmattus.certificatetransparency.chaincleaner.CertificateChainCleanerFactory
 import com.appmattus.certificatetransparency.datasource.DataSource
+import com.appmattus.certificatetransparency.internal.loglist.LogListJsonFailedLoadingWithException
 import com.appmattus.certificatetransparency.internal.loglist.NoLogServers
 import com.appmattus.certificatetransparency.internal.utils.Base64
 import com.appmattus.certificatetransparency.internal.utils.hasEmbeddedSct
@@ -55,8 +55,7 @@ internal open class CertificateTransparencyBase(
     logListService: LogListService? = null,
     logListDataSource: DataSource<LogListResult>? = null,
     policy: CTPolicy? = null,
-    diskCache: DiskCache? = null,
-    private val logger: CTLogger? = null
+    diskCache: DiskCache? = null
 ) {
     init {
         includeHosts.forEach {
@@ -94,7 +93,7 @@ internal open class CertificateTransparencyBase(
             if (cleanedCerts.isEmpty()) {
                 VerificationResult.Failure.NoCertificates
             } else {
-                hasValidSignedCertificateTimestamp(cleanedCerts, host)
+                hasValidSignedCertificateTimestamp(cleanedCerts)
             }
         }
     }
@@ -107,15 +106,14 @@ internal open class CertificateTransparencyBase(
      * @return [VerificationResult.Success] if the certificates can be trusted, [VerificationResult.Failure] otherwise.
      */
     @Suppress("ReturnCount")
-    private fun hasValidSignedCertificateTimestamp(certificates: List<X509Certificate>, host: String): VerificationResult {
+    private fun hasValidSignedCertificateTimestamp(certificates: List<X509Certificate>): VerificationResult {
 
         val result = try {
             runBlocking {
                 logListDataSource.get()
             }
-        } catch (e: Exception) {
-            logger?.log(host, VerificationResult.Failure.LogServersFailed(NoLogServers))
-            null
+        } catch (expected: Exception) {
+            LogListJsonFailedLoadingWithException(expected)
         }
 
         val verifiers = when (result) {

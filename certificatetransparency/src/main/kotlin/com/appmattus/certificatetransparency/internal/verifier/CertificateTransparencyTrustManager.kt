@@ -52,8 +52,7 @@ internal class CertificateTransparencyTrustManager(
     logListService = logListService,
     logListDataSource = logListDataSource,
     policy = policy,
-    diskCache = diskCache,
-    logger = logger
+    diskCache = diskCache
 ) {
 
     private val checkServerTrustedMethod: Method? = try {

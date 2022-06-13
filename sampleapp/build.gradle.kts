@@ -34,7 +34,7 @@ android {
         allWarningsAsErrors = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.1.0-rc03"
+        kotlinCompilerExtensionVersion = "1.2.0-beta01"
     }
     packagingOptions {
         resources.excludes.add("META-INF/DEPENDENCIES")
