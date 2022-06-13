@@ -55,5 +55,5 @@ public sealed class RawLogListResult {
     /**
      * Class representing raw log list data loading failed
      */
-    public abstract class Failure : RawLogListResult()
+    public open class Failure : RawLogListResult()
 }

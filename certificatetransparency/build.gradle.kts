@@ -44,6 +44,7 @@ dependencies {
 tasks.withType(KotlinCompile::class.java).all {
     kotlinOptions {
         allWarningsAsErrors = true
+        freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
 }
 

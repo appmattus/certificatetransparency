@@ -41,13 +41,13 @@ internal class CertificateTransparencyTrustManagerIntegrationTest {
 
         private val trustManager = certificateTransparencyTrustManager(originalTrustManager) {
             logListDataSource {
-                LogListDataSourceTestFactory.logListDataSource
+                LogListDataSourceTestFactory.realLogListDataSource
             }
         }
 
         private val trustManagerAllowFails = certificateTransparencyTrustManager(originalTrustManager) {
             logListDataSource {
-                LogListDataSourceTestFactory.logListDataSource
+                LogListDataSourceTestFactory.realLogListDataSource
             }
 
             failOnError = false
@@ -110,7 +110,7 @@ internal class CertificateTransparencyTrustManagerIntegrationTest {
             -invalidSctDomain
 
             logListDataSource {
-                LogListDataSourceTestFactory.logListDataSource
+                LogListDataSourceTestFactory.realLogListDataSource
             }
         }
 
@@ -127,7 +127,7 @@ internal class CertificateTransparencyTrustManagerIntegrationTest {
     fun invalidNotAllowedWhenAllHostsIncluded() {
         val trustManager = certificateTransparencyTrustManager(originalTrustManager) {
             logListDataSource {
-                LogListDataSourceTestFactory.logListDataSource
+                LogListDataSourceTestFactory.realLogListDataSource
             }
         }
 
