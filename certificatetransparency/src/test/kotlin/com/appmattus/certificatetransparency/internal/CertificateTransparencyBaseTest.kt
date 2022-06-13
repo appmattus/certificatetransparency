@@ -24,10 +24,13 @@ import com.appmattus.certificatetransparency.SctVerificationResult
 import com.appmattus.certificatetransparency.VerificationResult
 import com.appmattus.certificatetransparency.chaincleaner.CertificateChainCleaner
 import com.appmattus.certificatetransparency.chaincleaner.CertificateChainCleanerFactory
+import com.appmattus.certificatetransparency.datasource.DataSource
+import com.appmattus.certificatetransparency.internal.loglist.LogListJsonFailedLoadingWithException
 import com.appmattus.certificatetransparency.internal.serialization.CTConstants
 import com.appmattus.certificatetransparency.internal.utils.Base64
 import com.appmattus.certificatetransparency.internal.verifier.CertificateTransparencyBase
 import com.appmattus.certificatetransparency.internal.verifier.model.Host
+import com.appmattus.certificatetransparency.loglist.LogListResult
 import com.appmattus.certificatetransparency.utils.LogListDataSourceTestFactory
 import com.appmattus.certificatetransparency.utils.TestData
 import com.appmattus.certificatetransparency.utils.TestData.TEST_MITMPROXY_ATTACK_CHAIN
@@ -36,6 +39,7 @@ import com.appmattus.certificatetransparency.utils.TestData.TEST_MITMPROXY_ROOT_
 import com.appmattus.certificatetransparency.utils.TrustedSocketFactory
 import com.appmattus.certificatetransparency.utils.assertIsA
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.whenever
@@ -86,6 +90,26 @@ internal class CertificateTransparencyBaseTest {
 
         require(result is VerificationResult.Success.Trusted)
         assertEquals(2, result.scts.count { it.value is SctVerificationResult.Valid })
+    }
+
+    @Test
+    fun dataSourceThrowsException() {
+        val ctb = CertificateTransparencyBase(
+            logListDataSource = object : DataSource<LogListResult> {
+                override suspend fun get() = throw InterruptedException()
+                override suspend fun set(value: LogListResult) = Unit
+            }
+        )
+
+        val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
+
+        val result = ctb.verifyCertificateTransparency("www.appmattus.com", certsToCheck)
+        require(result is VerificationResult.Failure.LogServersFailed)
+
+        val logListResult = result.logListResult
+        require(logListResult is LogListJsonFailedLoadingWithException)
+
+        assertTrue(logListResult.exception is InterruptedException)
     }
 
     @Test(expected = SSLPeerUnverifiedException::class)
