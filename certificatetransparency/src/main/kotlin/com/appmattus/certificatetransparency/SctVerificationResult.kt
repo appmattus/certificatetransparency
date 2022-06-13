@@ -85,7 +85,7 @@ public sealed class SctVerificationResult {
         /**
          * Signed Certificate Timestamp checks failed for an unspecified reason
          */
-        public abstract class Failed : Invalid()
+        public open class Failed : Invalid()
 
         /**
          * Signed Certificate Timestamp checks failed as an [exception] was detected

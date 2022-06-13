@@ -16,18 +16,18 @@
 
 object Versions {
 
-    const val kotlin = "1.6.10"
+    const val kotlin = "1.6.21"
 
     const val androidGradlePlugin = "7.1.0"
-    const val detektGradlePlugin = "1.19.0"
-    const val dokkaPlugin = "1.6.10"
+    const val detektGradlePlugin = "1.20.0"
+    const val dokkaPlugin = "1.6.21"
     const val gradleMavenPublishPlugin = "0.18.0"
     const val gradleVersionsPlugin = "0.36.0"
     const val markdownlintGradlePlugin = "0.6.0"
     const val owaspDependencyCheckPlugin = "6.5.3"
 
     const val bouncyCastle = "1.70"
-    const val coroutines = "1.6.0"
+    const val coroutines = "1.6.2"
     const val highlightJs = "1.5.0"
     const val mustache = "0.8.18" // Cannot update due to use of ThreadLocal which is not desugared
     const val okhttp = "4.9.3"

@@ -29,6 +29,7 @@ import com.appmattus.certificatetransparency.cache.DiskCache
 import com.appmattus.certificatetransparency.chaincleaner.CertificateChainCleaner
 import com.appmattus.certificatetransparency.chaincleaner.CertificateChainCleanerFactory
 import com.appmattus.certificatetransparency.datasource.DataSource
+import com.appmattus.certificatetransparency.internal.loglist.LogListJsonFailedLoadingWithException
 import com.appmattus.certificatetransparency.internal.loglist.NoLogServers
 import com.appmattus.certificatetransparency.internal.utils.Base64
 import com.appmattus.certificatetransparency.internal.utils.hasEmbeddedSct
@@ -107,8 +108,12 @@ internal open class CertificateTransparencyBase(
     @Suppress("ReturnCount")
     private fun hasValidSignedCertificateTimestamp(certificates: List<X509Certificate>): VerificationResult {
 
-        val result = runBlocking {
-            logListDataSource.get()
+        val result = try {
+            runBlocking {
+                logListDataSource.get()
+            }
+        } catch (expected: Exception) {
+            LogListJsonFailedLoadingWithException(expected)
         }
 
         val verifiers = when (result) {

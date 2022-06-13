@@ -34,13 +34,13 @@ internal class CertificateTransparencyInterceptorIntegrationTest {
 
         val networkInterceptor = certificateTransparencyInterceptor {
             logListDataSource {
-                LogListDataSourceTestFactory.logListDataSource
+                LogListDataSourceTestFactory.realLogListDataSource
             }
         }
 
         val networkInterceptorAllowFails = certificateTransparencyInterceptor {
             logListDataSource {
-                LogListDataSourceTestFactory.logListDataSource
+                LogListDataSourceTestFactory.realLogListDataSource
             }
 
             failOnError = false
@@ -99,7 +99,7 @@ internal class CertificateTransparencyInterceptorIntegrationTest {
                     -invalidSctDomain
 
                     logListDataSource {
-                        LogListDataSourceTestFactory.logListDataSource
+                        LogListDataSourceTestFactory.realLogListDataSource
                     }
                 }
             ).build()
@@ -117,7 +117,7 @@ internal class CertificateTransparencyInterceptorIntegrationTest {
             OkHttpClient.Builder().addNetworkInterceptor(
                 certificateTransparencyInterceptor {
                     logListDataSource {
-                        LogListDataSourceTestFactory.logListDataSource
+                        LogListDataSourceTestFactory.realLogListDataSource
                     }
                 }
             ).build()

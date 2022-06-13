@@ -25,11 +25,16 @@ import com.appmattus.certificatetransparency.internal.loglist.model.v2.Log
 import com.appmattus.certificatetransparency.internal.loglist.model.v2.LogListV2
 import com.appmattus.certificatetransparency.internal.utils.Base64
 import com.appmattus.certificatetransparency.internal.utils.PublicKeyFactory
+import com.appmattus.certificatetransparency.loglist.LogListDataSourceFactory
 import com.appmattus.certificatetransparency.loglist.LogListResult
 import com.appmattus.certificatetransparency.loglist.LogServer
 import kotlinx.serialization.json.Json
 
 internal object LogListDataSourceTestFactory {
+
+    val realLogListDataSource: DataSource<LogListResult> by lazy {
+        LogListDataSourceFactory.createDataSource()
+    }
 
     val logListDataSource: DataSource<LogListResult> by lazy {
         // Collection of CT logs that are trusted from https://www.gstatic.com/ct/log_list/v2/log_list.json

@@ -35,7 +35,7 @@ internal class CertificateTransparencyHostnameVerifierIntegrationTest {
 
         val hostnameVerifier = certificateTransparencyHostnameVerifier(OkHostnameVerifier) {
             logListDataSource {
-                LogListDataSourceTestFactory.logListDataSource
+                LogListDataSourceTestFactory.realLogListDataSource
             }
         }
     }
@@ -69,7 +69,7 @@ internal class CertificateTransparencyHostnameVerifierIntegrationTest {
                 -invalidSctDomain
 
                 logListDataSource {
-                    LogListDataSourceTestFactory.logListDataSource
+                    LogListDataSourceTestFactory.realLogListDataSource
                 }
             }
         ).build()

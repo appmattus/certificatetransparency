@@ -37,7 +37,7 @@ internal class CertificateTransparencyProviderIntegrationTest {
         private fun installProvider() {
             installCertificateTransparencyProvider {
                 logListDataSource {
-                    LogListDataSourceTestFactory.logListDataSource
+                    LogListDataSourceTestFactory.realLogListDataSource
                 }
             }
         }
@@ -45,7 +45,7 @@ internal class CertificateTransparencyProviderIntegrationTest {
         private fun installProviderAllowFails() {
             installCertificateTransparencyProvider {
                 logListDataSource {
-                    LogListDataSourceTestFactory.logListDataSource
+                    LogListDataSourceTestFactory.realLogListDataSource
                 }
 
                 failOnError = false
@@ -116,7 +116,7 @@ internal class CertificateTransparencyProviderIntegrationTest {
             -invalidSctDomain
 
             logListDataSource {
-                LogListDataSourceTestFactory.logListDataSource
+                LogListDataSourceTestFactory.realLogListDataSource
             }
         }
 
@@ -133,7 +133,7 @@ internal class CertificateTransparencyProviderIntegrationTest {
     fun invalidNotAllowedWhenAllHostsIncluded() {
         installCertificateTransparencyProvider {
             logListDataSource {
-                LogListDataSourceTestFactory.logListDataSource
+                LogListDataSourceTestFactory.realLogListDataSource
             }
         }
 

@@ -29,5 +29,5 @@ public sealed class LogListResult {
     /**
      * Abstract class representing log list loading failed
      */
-    public abstract class Invalid : LogListResult()
+    public open class Invalid : LogListResult()
 }
