@@ -78,8 +78,9 @@ class SampleApplication : Application() {
 Take a look at the [advanced configuration](docs/advanced-configuration.md) for
 documentation on all the available options.
 
-> :warning: Using the Java Security Provider may not work on all JVMs so you are
-> recommended to use one of the alternatives documented below.
+> :warning: Using the Java Security Provider may not work on all JVMs so if you
+> are not on Android you are recommended to use one of the alternatives
+> documented below.
 
 Certificate transparency can also be setup in specific network connections,
 instructions are available for:
