@@ -87,6 +87,9 @@
 # Ensure chain cleaner classes are kept as they're loaded through reflection
 -keep class com.appmattus.certificatetransparency.chaincleaner.* { *; }
 
+# CertificateTransparencyTrustManager contains methods called through reflection
+-keep class com.appmattus.certificatetransparency.internal.verifier.CertificateTransparencyTrustManager { *; }
+
 
 # Specifically for ProGuard (not needed for R8)
 -dontwarn module-info
