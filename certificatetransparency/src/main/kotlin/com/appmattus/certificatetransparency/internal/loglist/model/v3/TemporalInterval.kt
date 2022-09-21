@@ -18,25 +18,18 @@
  * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
-package com.appmattus.certificatetransparency.internal.loglist.model.v2
+package com.appmattus.certificatetransparency.internal.loglist.model.v3
 
+import com.appmattus.certificatetransparency.internal.loglist.deserializer.Rfc3339Deserializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * @property name Name of this log operator
- * @property email CT log operator email addresses. The log operator can be contacted using any of these email addresses. (format: email)
- * @property logs Details of Certificate Transparency logs run by this operator.
+ * @property startInclusive All certificates must expire on this date or later. (format: date-time)
+ * @property endExclusive All certificates must expire before this date. (format: date-time)
  */
 @Serializable
-internal data class Operator(
-    @SerialName("name") val name: String,
-    @SerialName("email") val email: List<String>,
-    @SerialName("logs") val logs: List<Log>
-) {
-    init {
-        require(name.isNotEmpty())
-        require(email.isNotEmpty())
-        require(logs.isNotEmpty())
-    }
-}
+internal data class TemporalInterval(
+    @Serializable(with = Rfc3339Deserializer::class) @SerialName("start_inclusive") val startInclusive: Long,
+    @Serializable(with = Rfc3339Deserializer::class) @SerialName("end_exclusive") val endExclusive: Long
+)

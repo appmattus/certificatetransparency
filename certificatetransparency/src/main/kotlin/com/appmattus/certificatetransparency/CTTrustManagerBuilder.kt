@@ -94,7 +94,7 @@ public class CTTrustManagerBuilder(
 
     /**
      * A [LogListService] providing log list data from network
-     * Default: Log list loaded from https://www.gstatic.com/ct/log_list/v2/log_list.json
+     * Default: Log list loaded from https://www.gstatic.com/ct/log_list/v3/log_list.json
      */
     @Suppress("MemberVisibilityCanBePrivate")
     public fun setLogListService(logListService: LogListService): CTTrustManagerBuilder =
@@ -104,7 +104,7 @@ public class CTTrustManagerBuilder(
 
     /**
      * A [LogListService] providing log list data from network
-     * Default: Log list loaded from https://www.gstatic.com/ct/log_list/v2/log_list.json
+     * Default: Log list loaded from https://www.gstatic.com/ct/log_list/v3/log_list.json
      */
     @JvmSynthetic
     @Suppress("unused")
@@ -114,7 +114,7 @@ public class CTTrustManagerBuilder(
 
     /**
      * A [DataSource] providing a list of [LogServer]
-     * Default: In memory cached log list loaded from https://www.gstatic.com/ct/log_list/v2/log_list.json
+     * Default: In memory cached log list loaded from https://www.gstatic.com/ct/log_list/v3/log_list.json
      */
     @Suppress("MemberVisibilityCanBePrivate")
     public fun setLogListDataSource(logListDataSource: DataSource<LogListResult>): CTTrustManagerBuilder =
@@ -124,7 +124,7 @@ public class CTTrustManagerBuilder(
 
     /**
      * A [DataSource] providing a list of [LogServer]
-     * Default: In memory cached log list loaded from https://www.gstatic.com/ct/log_list/v2/log_list.json
+     * Default: In memory cached log list loaded from https://www.gstatic.com/ct/log_list/v3/log_list.json
      */
     @JvmSynthetic
     @Suppress("unused")

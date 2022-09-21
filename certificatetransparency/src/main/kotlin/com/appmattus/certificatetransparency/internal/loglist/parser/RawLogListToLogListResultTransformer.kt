@@ -32,7 +32,7 @@ import com.appmattus.certificatetransparency.loglist.RawLogListResult
 
 internal class RawLogListToLogListResultTransformer(
     private val logListVerifier: LogListVerifier = LogListVerifier(),
-    private val logListJsonParser: LogListJsonParser = LogListJsonParserV2()
+    private val logListJsonParser: LogListJsonParser = LogListJsonParserV3()
 ) {
     fun transform(rawLogListResult: RawLogListResult) =
         when (rawLogListResult) {

@@ -14,12 +14,12 @@ A [LogListService](../certificatetransparency/src/main/kotlin/com/appmattus/cert
 providing log_list.json and log_list.sig byte data from the network. Can be used
 to override the OkHttpClient by creating through [LogListDataSourceFactory.createLogListService](../certificatetransparency/src/main/kotlin/com/appmattus/certificatetransparency/loglist/LogListDataSourceFactory.kt).
 *Default:* log_list.json and log_list.sig byte data loaded
-from [https://www.gstatic.com/ct/log_list/v2/log_list.json](https://www.gstatic.com/ct/log_list/v2/log_list.json)
+from [https://www.gstatic.com/ct/log_list/v3/log_list.json](https://www.gstatic.com/ct/log_list/v3/log_list.json)
 
 **Log List Data Source** A [DataSource](../certificatetransparency/src/main/kotlin/com/appmattus/certificatetransparency/datasource/DataSource.kt)
 providing a list of [LogServer](../certificatetransparency/src/main/kotlin/com/appmattus/certificatetransparency/loglist/LogServer.kt).
 *Default:* In memory cached log list loaded
-from [https://www.gstatic.com/ct/log_list/v2/log_list.json](https://www.gstatic.com/ct/log_list/v2/log_list.json)
+from [https://www.gstatic.com/ct/log_list/v3/log_list.json](https://www.gstatic.com/ct/log_list/v3/log_list.json)
 
 **Policy** [CTPolicy](../certificatetransparency/src/main/kotlin/com/appmattus/certificatetransparency/CTPolicy.kt)
 which will verify correct number of SCTs are present

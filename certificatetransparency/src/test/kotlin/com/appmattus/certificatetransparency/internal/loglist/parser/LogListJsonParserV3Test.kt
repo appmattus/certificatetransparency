@@ -31,19 +31,19 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Test
 
-internal class LogListJsonParserV2Test {
+internal class LogListJsonParserV3Test {
 
     @Test
     fun `parses the json`() = runBlocking {
         // given we have a valid json file
 
         // when we parse the data
-        val result = LogListJsonParserV2().parseJson(json)
+        val result = LogListJsonParserV3().parseJson(json)
 
         // then 41 items are returned
         require(result is LogListResult.Valid)
-        assertEquals(41, result.servers.size)
-        assertEquals("Y/Lbzeg7zCzPC3KEJ1drM6SNYXePvXWmOLHHaFRL2I0=", Base64.toBase64String(result.servers[0].id))
+        assertEquals(29, result.servers.size)
+        assertEquals("KXm+8J45OSHwVnOfY6V35b5XfZxgCvj5TV0mXCVdx4Q=", Base64.toBase64String(result.servers[0].id))
     }
 
     @Test
@@ -51,7 +51,7 @@ internal class LogListJsonParserV2Test {
         // given we have an incomplete json file
 
         // when we parse the data
-        val result = LogListJsonParserV2().parseJson(jsonIncomplete)
+        val result = LogListJsonParserV3().parseJson(jsonIncomplete)
 
         // then invalid is returned
         assertIsA<LogListJsonBadFormat>(result)
@@ -62,7 +62,7 @@ internal class LogListJsonParserV2Test {
         // given we have a valid json file and signature
 
         // when we parse the data
-        val result = LogListJsonParserV2().parseJson(json)
+        val result = LogListJsonParserV3().parseJson(json)
 
         // then validUntil is set to the the STH timestamp
         require(result is LogListResult.Valid)
@@ -75,16 +75,16 @@ internal class LogListJsonParserV2Test {
         // given we have a valid json file and signature
 
         // when we parse the data
-        val result = LogListJsonParserV2().parseJson(json)
+        val result = LogListJsonParserV3().parseJson(json)
 
         // then validUntil is set to the the STH timestamp
         require(result is LogListResult.Valid)
 
-        val symantecId = Base64.decode("3esdK3oNT6Ygi4GtgWhwfi6OnQHVXIiNPRHEzbbsvsw=")
+        val symantecId = Base64.decode("h3W/51l8+IxDmV+9827/Vo1HVjb/SrVgwbTq/16ggw8=")
 
         val logServer = result.servers.first { it.id.contentEquals(symantecId) }
         assertNotNull(logServer.validUntil)
-        assertEquals(1550275200000, logServer.validUntil)
+        assertEquals(1588550440000, logServer.validUntil)
     }
 
     companion object {

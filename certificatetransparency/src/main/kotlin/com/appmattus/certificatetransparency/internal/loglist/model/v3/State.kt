@@ -18,7 +18,7 @@
  * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
-package com.appmattus.certificatetransparency.internal.loglist.model.v2
+package com.appmattus.certificatetransparency.internal.loglist.model.v3
 
 import com.appmattus.certificatetransparency.internal.loglist.deserializer.Rfc3339Deserializer
 import kotlinx.serialization.SerialName

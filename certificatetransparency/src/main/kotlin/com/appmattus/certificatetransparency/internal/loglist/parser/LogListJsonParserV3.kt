@@ -22,8 +22,8 @@ package com.appmattus.certificatetransparency.internal.loglist.parser
 
 import com.appmattus.certificatetransparency.internal.loglist.LogListJsonBadFormat
 import com.appmattus.certificatetransparency.internal.loglist.LogServerInvalidKey
-import com.appmattus.certificatetransparency.internal.loglist.model.v2.LogListV2
-import com.appmattus.certificatetransparency.internal.loglist.model.v2.State
+import com.appmattus.certificatetransparency.internal.loglist.model.v3.LogListV3
+import com.appmattus.certificatetransparency.internal.loglist.model.v3.State
 import com.appmattus.certificatetransparency.internal.utils.Base64
 import com.appmattus.certificatetransparency.internal.utils.PublicKeyFactory
 import com.appmattus.certificatetransparency.loglist.LogListResult
@@ -33,11 +33,11 @@ import kotlinx.serialization.json.Json
 import java.security.NoSuchAlgorithmException
 import java.security.spec.InvalidKeySpecException
 
-internal class LogListJsonParserV2 : LogListJsonParser {
+internal class LogListJsonParserV3 : LogListJsonParser {
 
     override fun parseJson(logListJson: String): LogListResult {
         val logList = try {
-            json.decodeFromString(LogListV2.serializer(), logListJson)
+            json.decodeFromString(LogListV3.serializer(), logListJson)
         } catch (e: SerializationException) {
             return LogListJsonBadFormat(e)
         }
@@ -46,7 +46,7 @@ internal class LogListJsonParserV2 : LogListJsonParser {
     }
 
     @Suppress("ReturnCount")
-    private fun buildLogServerList(logList: LogListV2): LogListResult {
+    private fun buildLogServerList(logList: LogListV3): LogListResult {
         return logList.operators
             .flatMap { it.logs }
             // null, PENDING, REJECTED -> An SCT associated with this log server would be treated as untrusted

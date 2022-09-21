@@ -54,8 +54,8 @@ internal class RawLogListToLogListResultTransformerTest {
 
         // then 41 items are returned
         require(result is LogListResult.Valid)
-        assertEquals(41, result.servers.size)
-        assertEquals("Y/Lbzeg7zCzPC3KEJ1drM6SNYXePvXWmOLHHaFRL2I0=", Base64.toBase64String(result.servers[0].id))
+        assertEquals(29, result.servers.size)
+        assertEquals("KXm+8J45OSHwVnOfY6V35b5XfZxgCvj5TV0mXCVdx4Q=", Base64.toBase64String(result.servers[0].id))
     }
 
     @Test
