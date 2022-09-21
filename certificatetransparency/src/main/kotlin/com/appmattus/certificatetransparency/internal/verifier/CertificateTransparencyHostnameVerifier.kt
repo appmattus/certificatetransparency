@@ -54,8 +54,7 @@ internal class CertificateTransparencyHostnameVerifier(
     logListService,
     logListDataSource,
     policy,
-    diskCache,
-    logger
+    diskCache
 ) {
 
     override fun verify(host: String, sslSession: SSLSession): Boolean {
