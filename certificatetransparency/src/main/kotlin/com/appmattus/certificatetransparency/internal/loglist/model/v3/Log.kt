@@ -34,7 +34,8 @@ import okhttp3.HttpUrl
  * (https://tools.ietf.org/html/rfc6962#section-3.2).
  * @property maximumMergeDelay The Maximum Merge Delay, in seconds. The CT log should not take longer than this to incorporate a certificate
  * (https://tools.ietf.org/html/rfc6962#section-3).
- * @property listOfPreviousOperators Previous operators that ran this log in the past, if any. If the log has changed operators, this will contain a list of the previous operators, along with the timestamp when they stopped operating the log.
+ * @property listOfPreviousOperators Previous operators that ran this log in the past, if any. If the log has changed operators,
+ * this will contain a list of the previous operators, along with the timestamp when they stopped operating the log.
  * @property url The base URL of the CT log's HTTP API. The API endpoints are defined in https://tools.ietf.org/html/rfc6962#section-4.
  * @property dns The domain name of the CT log's DNS API. The API endpoints are defined in
  * https://github.com/google/certificate-transparency-rfcs/blob/master/dns/draft-ct-over-dns.md.
