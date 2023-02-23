@@ -28,7 +28,6 @@ import com.appmattus.certificatetransparency.internal.verifier.model.SignedCerti
 import org.bouncycastle.asn1.ASN1OctetString
 import org.bouncycastle.asn1.ASN1Primitive
 import org.bouncycastle.asn1.DEROctetString
-import org.bouncycastle.tls.TlsUtils
 import java.io.IOException
 import java.security.cert.X509Certificate
 
@@ -49,9 +48,9 @@ internal fun X509Certificate.signedCertificateTimestamps(): List<SignedCertifica
 private fun parseSctsFromCertExtension(extensionValue: ByteArray): List<SignedCertificateTimestamp> {
     val sctList = mutableListOf<SignedCertificateTimestamp>()
     val bis = extensionValue.inputStream()
-    TlsUtils.readUint16(bis) // first one is the length of all SCTs concatenated, we don't actually need this
+    bis.readUint16() // first one is the length of all SCTs concatenated, we don't actually need this
     while (bis.available() > 2) {
-        val sctBytes = TlsUtils.readOpaque16(bis)
+        val sctBytes = bis.readOpaque16()
         sctList.add(Deserializer.parseSctFromBinary(sctBytes.inputStream()))
     }
     return sctList.toList()
