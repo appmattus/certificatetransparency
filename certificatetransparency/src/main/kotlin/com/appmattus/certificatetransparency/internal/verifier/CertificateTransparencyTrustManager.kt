@@ -110,7 +110,7 @@ internal class CertificateTransparencyTrustManager(
     // Called through reflection by X509TrustManagerExtensions on Android
     @Suppress("unused")
     fun isSameTrustConfiguration(hostname1: String?, hostname2: String?): Boolean {
-        return isSameTrustConfigurationMethod!!.invoke(hostname1, hostname2) as Boolean
+        return isSameTrustConfigurationMethod!!.invoke(delegate, hostname1, hostname2) as Boolean
     }
 
     override fun getAcceptedIssuers(): Array<X509Certificate> = delegate.acceptedIssuers
