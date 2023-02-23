@@ -59,7 +59,7 @@ internal class CertificateRevocationHostnameVerifierIntegrationTest {
 
     @Test
     fun revokedCertificateAllowedByPlatform() {
-        val client = OkHttpClient.Builder().hostnameVerifier(emptyHostnameVerifier).build()
+        val client = trustAllOkHttpClient { hostnameVerifier(emptyHostnameVerifier) }
 
         val request = Request.Builder()
             .url("https://revoked.badssl.com")
@@ -70,7 +70,7 @@ internal class CertificateRevocationHostnameVerifierIntegrationTest {
 
     @Test(expected = SSLPeerUnverifiedException::class)
     fun certificateRejectedWhenRulePresentForCert() {
-        val client = OkHttpClient.Builder().hostnameVerifier(hostnameVerifier).build()
+        val client = trustAllOkHttpClient { hostnameVerifier(hostnameVerifier) }
 
         val request = Request.Builder()
             .url("https://revoked.badssl.com")
