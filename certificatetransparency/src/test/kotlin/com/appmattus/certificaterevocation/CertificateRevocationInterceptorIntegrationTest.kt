@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,12 +25,12 @@ import okhttp3.Request
 import org.junit.Test
 import javax.net.ssl.SSLPeerUnverifiedException
 
-internal class CertificateRevocationInterceptorntegrationTest {
+internal class CertificateRevocationInterceptorIntegrationTest {
 
     companion object {
-        val emptyHostnameVerifier = certificateRevocationInterceptor()
+        val emptyRevocationInterceptor = certificateRevocationInterceptor()
 
-        val hostnameVerifier = certificateRevocationInterceptor {
+        val revocationInterceptor = certificateRevocationInterceptor {
             // revoked.badssl.com
             @Suppress("MaxLineLength")
             addCrl(
@@ -47,7 +47,7 @@ internal class CertificateRevocationInterceptorntegrationTest {
 
     @Test
     fun appmattusAllowed() {
-        val client = OkHttpClient.Builder().addNetworkInterceptor(hostnameVerifier).build()
+        val client = OkHttpClient.Builder().addNetworkInterceptor(revocationInterceptor).build()
 
         val request = Request.Builder()
             .url("https://www.appmattus.com")
@@ -58,7 +58,7 @@ internal class CertificateRevocationInterceptorntegrationTest {
 
     @Test
     fun revokedCertificateAllowedByPlatform() {
-        val client = OkHttpClient.Builder().addNetworkInterceptor(emptyHostnameVerifier).build()
+        val client = trustAllOkHttpClient { addNetworkInterceptor(emptyRevocationInterceptor) }
 
         val request = Request.Builder()
             .url("https://revoked.badssl.com")
@@ -69,7 +69,8 @@ internal class CertificateRevocationInterceptorntegrationTest {
 
     @Test(expected = SSLPeerUnverifiedException::class)
     fun certificateRejectedWhenRulePresentForCert() {
-        val client = OkHttpClient.Builder().addNetworkInterceptor(hostnameVerifier).build()
+
+        val client = trustAllOkHttpClient { addNetworkInterceptor(revocationInterceptor) }
 
         val request = Request.Builder()
             .url("https://revoked.badssl.com")

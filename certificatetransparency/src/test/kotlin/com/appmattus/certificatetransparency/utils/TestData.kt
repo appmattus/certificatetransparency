@@ -61,6 +61,9 @@ internal object TestData {
     // intermediate CA cert signed by ca-cert
     const val INTERMEDIATE_CA_CERT = DATA_ROOT + "intermediate-cert.pem"
 
+    // intermediate CA cert used by revoked.badssl.com
+    const val REVOKED_BADSSL_INTERMEDIATE_CA_CERT = DATA_ROOT + "badssl-intermediate-cert.pem"
+
     // Certificate signed by intermediate CA.
     const val TEST_INTERMEDIATE_CERT = DATA_ROOT + "test-intermediate-cert.pem"
     const val TEST_INTERMEDIATE_CERT_SCT = DATA_ROOT + "test-intermediate-cert.proof"
