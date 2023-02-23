@@ -18,17 +18,18 @@
  * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
-package com.appmattus.certificatetransparency.internal.loglist.model.v2
+package com.appmattus.certificatetransparency.internal.loglist.model.v3
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-/**
- * @property version Version of this log list. The version will change whenever a change is made to any part of this log list.
- * @property operators CT log operators. People/organizations that run Certificate Transparency logs.
- */
 @Serializable
-internal data class LogListV2(
-    @SerialName("version") val version: String? = null,
-    @SerialName("operators") val operators: List<Operator>
-)
+internal enum class LogType {
+    @Suppress("unused")
+    @SerialName("prod")
+    PROD,
+
+    @Suppress("unused")
+    @SerialName("test")
+    TEST
+}

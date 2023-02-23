@@ -16,7 +16,7 @@
 
 package com.appmattus.certificatetransparency.internal.loglist.deserializer
 
-import com.appmattus.certificatetransparency.internal.loglist.model.v2.Hostname
+import com.appmattus.certificatetransparency.internal.loglist.model.v3.Hostname
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor

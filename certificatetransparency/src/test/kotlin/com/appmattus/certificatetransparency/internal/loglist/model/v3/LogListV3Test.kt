@@ -18,7 +18,7 @@
  * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
-package com.appmattus.certificatetransparency.internal.loglist.model.v2
+package com.appmattus.certificatetransparency.internal.loglist.model.v3
 
 import com.appmattus.certificatetransparency.utils.TestData
 import kotlinx.serialization.json.Json
@@ -26,35 +26,31 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-internal class LogListV2Test {
+internal class LogListV3Test {
 
     @Test
     fun verifyJsonParser() {
         val json = TestData.file(TestData.TEST_LOG_LIST_JSON).readText()
 
-        val logList = Json.decodeFromString(LogListV2.serializer(), json)
+        val logList = Json.decodeFromString(LogListV3.serializer(), json)
 
         val google = logList.operators.first { it.name == "Google" }
         val cloudflare = logList.operators.first { it.name == "Cloudflare" }
-        val certly = logList.operators.first { it.name == "Certly" }
+        val digiCert = logList.operators.first { it.name == "DigiCert" }
 
-        assertEquals(12, google.logs.size)
-        assertEquals(5, cloudflare.logs.size)
-        assertEquals(1, certly.logs.size)
+        assertEquals(11, digiCert.logs.size)
+        assertEquals(10, google.logs.size)
+        assertEquals(2, cloudflare.logs.size)
 
-        val argon2021 = google.logs.first { it.description == "Google 'Argon2021' log" }
+        val argon2022 = google.logs.first { it.description == "Google 'Argon2022' log" }
         assertEquals(
-            "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAETeBmZOrzZKo4xYktx9gI2chEce3cw/tbr5xkoQlmhB18aKfsxD+MnILgGNl0FOm0eYGilFVi85wLRIOhK8lxKw==",
-            argon2021.key
+            "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEeIPc6fGmuBg6AJkv/z7NFckmHvf/OqmjchZJ6wm2qN200keRDg352dWpi7CHnSV51BpQYAj1CQY5JuRAwrrDwg==",
+            argon2022.key
         )
-        assertTrue(argon2021.state is State.Usable)
-
-        val aviatorLog = google.logs.first { it.description == "Google 'Aviator' log" }
-        assertTrue(aviatorLog.state is State.ReadOnly)
-        assertEquals(46466472, (aviatorLog.state as State.ReadOnly).finalTreeHead.treeSize)
+        assertTrue(argon2022.state is State.Usable)
 
         val nimbusLog = cloudflare.logs.first { it.description == "Cloudflare 'Nimbus2022' Log" }
         assertEquals(86400, nimbusLog.maximumMergeDelay)
-        assertEquals(1559606400000, nimbusLog.state?.timestamp)
+        assertEquals(1572549720000, nimbusLog.state?.timestamp)
     }
 }

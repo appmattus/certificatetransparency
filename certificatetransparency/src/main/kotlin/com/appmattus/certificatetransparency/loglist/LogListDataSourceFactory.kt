@@ -43,10 +43,10 @@ public object LogListDataSourceFactory {
 
     /**
      * Create a [LogListService] allowing the override of [baseUrl], [okHttpClient] and [networkTimeoutSeconds].
-     * Default: baseUrl = https://www.gstatic.com/ct/log_list/v2/
+     * Default: baseUrl = https://www.gstatic.com/ct/log_list/v3/
      */
     public fun createLogListService(
-        baseUrl: String = "https://www.gstatic.com/ct/log_list/v2/",
+        baseUrl: String = "https://www.gstatic.com/ct/log_list/v3/",
         okHttpClient: OkHttpClient? = null,
         networkTimeoutSeconds: Long = 30,
         trustManager: X509TrustManager? = null

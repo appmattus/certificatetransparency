@@ -18,7 +18,7 @@
  * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
-package com.appmattus.certificatetransparency.internal.loglist.model.v2
+package com.appmattus.certificatetransparency.internal.loglist.model.v3
 
 import com.appmattus.certificatetransparency.internal.loglist.deserializer.HttpUrlDeserializer
 import com.appmattus.certificatetransparency.internal.loglist.deserializer.StateDeserializer
@@ -34,6 +34,8 @@ import okhttp3.HttpUrl
  * (https://tools.ietf.org/html/rfc6962#section-3.2).
  * @property maximumMergeDelay The Maximum Merge Delay, in seconds. The CT log should not take longer than this to incorporate a certificate
  * (https://tools.ietf.org/html/rfc6962#section-3).
+ * @property listOfPreviousOperators Previous operators that ran this log in the past, if any. If the log has changed operators,
+ * this will contain a list of the previous operators, along with the timestamp when they stopped operating the log.
  * @property url The base URL of the CT log's HTTP API. The API endpoints are defined in https://tools.ietf.org/html/rfc6962#section-4.
  * @property dns The domain name of the CT log's DNS API. The API endpoints are defined in
  * https://github.com/google/certificate-transparency-rfcs/blob/master/dns/draft-ct-over-dns.md.
@@ -47,6 +49,7 @@ internal data class Log(
     @SerialName("key") val key: String,
     @SerialName("log_id") val logId: String,
     @SerialName("mmd") val maximumMergeDelay: Int,
+    @SerialName("previous_operators") val listOfPreviousOperators: List<PreviousOperator>? = null,
     @SerialName("url") @Serializable(with = HttpUrlDeserializer::class) val url: HttpUrl,
     @SerialName("dns") val dns: Hostname? = null,
     @SerialName("temporal_interval") val temporalInterval: TemporalInterval? = null,

@@ -18,17 +18,19 @@
  * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
-package com.appmattus.certificatetransparency.internal.loglist.model.v2
+package com.appmattus.certificatetransparency.internal.loglist.model.v3
 
-import com.appmattus.certificatetransparency.internal.loglist.deserializer.HostnameDeserializer
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import okhttp3.HttpUrl.Companion.toHttpUrl
 
-@Serializable(with = HostnameDeserializer::class)
-internal data class Hostname(
-    val value: String
+@Serializable
+internal data class FinalTreeHead(
+    @SerialName("tree_size") val treeSize: Int,
+    @SerialName("sha256_root_hash") val sha256RootHash: String
 ) {
     init {
-        "http://$value".toHttpUrl().host
+        require(treeSize >= 0)
+        @Suppress("MagicNumber")
+        require(sha256RootHash.length == 44)
     }
 }

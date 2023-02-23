@@ -116,7 +116,7 @@ public class CTInterceptorBuilder {
 
     /**
      * A [LogListService] providing log list data from network
-     * Default: Log list loaded from https://www.gstatic.com/ct/log_list/v2/log_list.json
+     * Default: Log list loaded from https://www.gstatic.com/ct/log_list/v3/log_list.json
      */
     @Suppress("MemberVisibilityCanBePrivate")
     public fun setLogListService(logListService: LogListService): CTInterceptorBuilder =
@@ -126,7 +126,7 @@ public class CTInterceptorBuilder {
 
     /**
      * A [LogListService] providing log list data from network
-     * Default: Log list loaded from https://www.gstatic.com/ct/log_list/v2/log_list.json
+     * Default: Log list loaded from https://www.gstatic.com/ct/log_list/v3/log_list.json
      */
     @JvmSynthetic
     @Suppress("unused")
@@ -136,7 +136,7 @@ public class CTInterceptorBuilder {
 
     /**
      * A [DataSource] providing a list of [LogServer]
-     * Default: In memory cached log list loaded from https://www.gstatic.com/ct/log_list/v2/log_list.json
+     * Default: In memory cached log list loaded from https://www.gstatic.com/ct/log_list/v3/log_list.json
      */
     @Suppress("MemberVisibilityCanBePrivate")
     public fun setLogListDataSource(logListDataSource: DataSource<LogListResult>): CTInterceptorBuilder =
@@ -146,7 +146,7 @@ public class CTInterceptorBuilder {
 
     /**
      * A [DataSource] providing a list of [LogServer]
-     * Default: In memory cached log list loaded from https://www.gstatic.com/ct/log_list/v2/log_list.json
+     * Default: In memory cached log list loaded from https://www.gstatic.com/ct/log_list/v3/log_list.json
      */
     @JvmSynthetic
     @Suppress("unused")

@@ -18,18 +18,17 @@
  * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
-package com.appmattus.certificatetransparency.internal.loglist.model.v2
+package com.appmattus.certificatetransparency.internal.loglist.model.v3
 
-import com.appmattus.certificatetransparency.internal.loglist.deserializer.Rfc3339Deserializer
-import kotlinx.serialization.SerialName
+import com.appmattus.certificatetransparency.internal.loglist.deserializer.HostnameDeserializer
 import kotlinx.serialization.Serializable
+import okhttp3.HttpUrl.Companion.toHttpUrl
 
-/**
- * @property startInclusive All certificates must expire on this date or later. (format: date-time)
- * @property endExclusive All certificates must expire before this date. (format: date-time)
- */
-@Serializable
-internal data class TemporalInterval(
-    @Serializable(with = Rfc3339Deserializer::class) @SerialName("start_inclusive") val startInclusive: Long,
-    @Serializable(with = Rfc3339Deserializer::class) @SerialName("end_exclusive") val endExclusive: Long
-)
+@Serializable(with = HostnameDeserializer::class)
+internal data class Hostname(
+    val value: String
+) {
+    init {
+        "http://$value".toHttpUrl().host
+    }
+}

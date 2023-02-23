@@ -16,7 +16,7 @@
 
 package com.appmattus.certificatetransparency.internal.loglist.deserializer
 
-import com.appmattus.certificatetransparency.internal.loglist.model.v2.State
+import com.appmattus.certificatetransparency.internal.loglist.model.v3.State
 import com.appmattus.certificatetransparency.utils.assertIsA
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
