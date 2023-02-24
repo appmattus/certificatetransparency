@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,8 +27,6 @@ import org.bouncycastle.asn1.ASN1Sequence
 import org.bouncycastle.asn1.DLSequence
 import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers
 import org.bouncycastle.asn1.x9.X9ObjectIdentifiers
-import org.bouncycastle.util.io.pem.PemReader
-import java.io.StringReader
 import java.security.KeyFactory
 import java.security.NoSuchAlgorithmException
 import java.security.PublicKey
@@ -48,7 +46,12 @@ internal object PublicKeyFactory {
     }
 
     fun fromPemString(keyText: String): PublicKey {
-        val pemContent = PemReader(StringReader(keyText)).readPemObject().content
+        // Equivalent of val pemContent = PemReader(StringReader(keyText)).readPemObject().content
+        val start = keyText.indexOf("-----BEGIN PUBLIC KEY-----")
+        val end = keyText.indexOf("-----END PUBLIC KEY-----")
+        if (start < 0 || end < 0) throw IllegalArgumentException("Missing public key entry in PEM file")
+        val pemContent = Base64.decode(keyText.substring(start + 26, end).replace("\\s+".toRegex(), ""))
+
         return fromByteArray(pemContent)
     }
 
