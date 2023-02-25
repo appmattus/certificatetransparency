@@ -31,6 +31,7 @@ import com.appmattus.certificatetransparency.internal.serialization.CTConstants.
 import com.appmattus.certificatetransparency.internal.serialization.CTConstants.VERSION_LENGTH
 import com.appmattus.certificatetransparency.internal.serialization.writeUint
 import com.appmattus.certificatetransparency.internal.serialization.writeVariableLength
+import com.appmattus.certificatetransparency.internal.utils.Base64
 import com.appmattus.certificatetransparency.internal.utils.hasEmbeddedSct
 import com.appmattus.certificatetransparency.internal.utils.isPreCertificate
 import com.appmattus.certificatetransparency.internal.utils.isPreCertificateSigningCert
@@ -47,7 +48,6 @@ import org.bouncycastle.asn1.x509.Extension
 import org.bouncycastle.asn1.x509.Extensions
 import org.bouncycastle.asn1.x509.TBSCertificate
 import org.bouncycastle.asn1.x509.V3TBSCertificateGenerator
-import org.bouncycastle.util.encoders.Base64
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.OutputStream
@@ -233,9 +233,9 @@ internal class LogSignatureVerifier(private val logServer: LogServer) : Signatur
 
     @Suppress("ComplexMethod")
     private fun verifySctSignatureOverBytes(sct: SignedCertificateTimestamp, toVerify: ByteArray): SctVerificationResult {
-        val sigAlg = when {
-            logServer.key.algorithm == "EC" -> "SHA256withECDSA"
-            logServer.key.algorithm == "RSA" -> "SHA256withRSA"
+        val sigAlg = when (logServer.key.algorithm) {
+            "EC" -> "SHA256withECDSA"
+            "RSA" -> "SHA256withRSA"
             else -> return UnsupportedSignatureAlgorithm(logServer.key.algorithm)
         }
 
