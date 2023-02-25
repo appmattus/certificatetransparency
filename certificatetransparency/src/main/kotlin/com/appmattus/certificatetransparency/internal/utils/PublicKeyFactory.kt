@@ -1,6 +1,5 @@
 /*
  * Copyright 2023 Appmattus Limited
- * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +14,10 @@
  * limitations under the License.
  *
  * Code derived from https://github.com/google/certificate-transparency-java
- *
- * File modified by Appmattus Limited
- * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.appmattus.certificatetransparency.internal.utils
 
-import org.bouncycastle.asn1.ASN1ObjectIdentifier
-import org.bouncycastle.asn1.ASN1Sequence
-import org.bouncycastle.asn1.DLSequence
-import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers
-import org.bouncycastle.asn1.x9.X9ObjectIdentifiers
 import java.security.KeyFactory
 import java.security.NoSuchAlgorithmException
 import java.security.PublicKey
@@ -58,12 +49,18 @@ internal object PublicKeyFactory {
     /**
      * Parses the beginning of a key, and determines the key algorithm (RSA or EC) based on the OID
      */
-    private fun determineKeyAlgorithm(keyBytes: ByteArray): String {
+    fun determineKeyAlgorithm(keyBytes: ByteArray): String {
+        /* Equivalent of the following code
         val seq = ASN1Sequence.getInstance(keyBytes)
         val seq1 = seq.objects.nextElement() as DLSequence
         return when (val oid = seq1.objects.nextElement() as ASN1ObjectIdentifier) {
             PKCSObjectIdentifiers.rsaEncryption -> "RSA"
             X9ObjectIdentifiers.id_ecPublicKey -> "EC"
+            else -> throw IllegalArgumentException("Unsupported key type $oid")
+        }*/
+        return when (val oid = keyBytes.readSequence().readSequence().readObjectIdentifier()) {
+            "1.2.840.113549.1.1.1" -> "RSA"
+            "1.2.840.10045.2.1" -> "EC"
             else -> throw IllegalArgumentException("Unsupported key type $oid")
         }
     }
