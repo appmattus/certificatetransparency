@@ -16,29 +16,28 @@
 
 package com.appmattus.certificatetransparency.internal.utils
 
+import okio.ByteString.Companion.decodeHex
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class PublicKeyFactoryTest {
 
     @Test
-    fun determineKeyAlgorithm() {
-        val input = byteArrayOf(
-            0x30, 0x81.toByte(), 0x9f.toByte(), 0x30, 0x0d, 0x06, 0x09, 0x2a, 0x86.toByte(), 0x48, 0x86.toByte(), 0xf7.toByte(), 0x0d, 0x01,
-            0x01, 0x01, 0x05, 0x00, 0x03, 0x81.toByte(), 0x8d.toByte(), 0x00, 0x30, 0x81.toByte(), 0x89.toByte(), 0x02, 0x81.toByte(),
-            0x81.toByte(), 0x00, 0x8f.toByte(), 0xe2.toByte(), 0x41, 0x2a, 0x08, 0xe8.toByte(), 0x51, 0xa8.toByte(), 0x8c.toByte(),
-            0xb3.toByte(), 0xe8.toByte(), 0x53, 0xe7.toByte(), 0xd5.toByte(), 0x49, 0x50, 0xb3.toByte(), 0x27, 0x8a.toByte(), 0x2b,
-            0xcb.toByte(), 0xea.toByte(), 0xb5.toByte(), 0x42, 0x73, 0xea.toByte(), 0x02, 0x57, 0xcc.toByte(), 0x65, 0x33, 0xee.toByte(),
-            0x88.toByte(), 0x20, 0x61, 0xa1.toByte(), 0x17, 0x56, 0xc1.toByte(), 0x24, 0x18, 0xe3.toByte(), 0xa8.toByte(), 0x08, 0xd3.toByte(),
-            0xbe.toByte(), 0xd9.toByte(), 0x31, 0xf3.toByte(), 0x37, 0x0b, 0x94.toByte(), 0xb8.toByte(), 0xcc.toByte(), 0x43, 0x08, 0x0b, 0x70,
-            0x24, 0xf7.toByte(), 0x9c.toByte(), 0xb1.toByte(), 0x8d.toByte(), 0x5d, 0xd6.toByte(), 0x6d, 0x82.toByte(), 0xd0.toByte(), 0x54,
-            0x09, 0x84.toByte(), 0xf8.toByte(), 0x9f.toByte(), 0x97.toByte(), 0x01, 0x75, 0x05, 0x9c.toByte(), 0x89.toByte(), 0xd4.toByte(),
-            0xd5.toByte(), 0xc9.toByte(), 0x1e, 0xc9.toByte(), 0x13, 0xd7.toByte(), 0x2a, 0x6b, 0x30, 0x91.toByte(), 0x19, 0xd6.toByte(),
-            0xd4.toByte(), 0x42, 0xe0.toByte(), 0xc4.toByte(), 0x9d.toByte(), 0x7c, 0x92.toByte(), 0x71, 0xe1.toByte(), 0xb2.toByte(), 0x2f,
-            0x5c, 0x8d.toByte(), 0xee.toByte(), 0xf0.toByte(), 0xf1.toByte(), 0x17, 0x1e, 0xd2.toByte(), 0x5f, 0x31, 0x5b, 0xb1.toByte(),
-            0x9c.toByte(), 0xbc.toByte(), 0x20, 0x55, 0xbf.toByte(), 0x3a, 0x37, 0x42, 0x45, 0x75, 0xdc.toByte(), 0x90.toByte(), 0x65, 0x02,
-            0x03, 0x01, 0x00, 0x01
-        )
-        assertEquals("RSA", PublicKeyFactory.determineKeyAlgorithm(input))
+    fun determineKeyAlgorithmRSA() {
+        val input =
+            "30819f300d06092a864886f70d010101050003818d00308189028181008fe2412a08e851a88cb3e853e7d54950b3278a2bcbeab54273ea0257cc6533ee882061" +
+                "a11756c12418e3a808d3bed931f3370b94b8cc43080b7024f79cb18d5dd66d82d0540984f89f970175059c89d4d5c91ec913d72a6b309119d6d442e0c49d" +
+                "7c9271e1b22f5c8deef0f1171ed25f315bb19cbc2055bf3a37424575dc90650203010001"
+        val bytes = input.decodeHex().toByteArray()
+        assertEquals("RSA", PublicKeyFactory.determineKeyAlgorithm(bytes))
+    }
+
+    @Test
+    fun determineKeyAlgorithmEC() {
+        val input =
+            "3059301306072a8648ce3d020106082a8648ce3d030107034200047883dce9f1a6b8183a00992fff3ecd15c9261ef7ff3aa9a3721649eb09b6a8ddb4d247910e" +
+                "0df9d9d5a98bb0879d2579d41a506008f509063926e440c2bac3c2"
+        val bytes = input.decodeHex().toByteArray()
+        assertEquals("EC", PublicKeyFactory.determineKeyAlgorithm(bytes))
     }
 }

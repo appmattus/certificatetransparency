@@ -29,6 +29,7 @@ internal data class ASN1Header(val tag: Int, val headerLength: Int, val dataLeng
         get() = headerLength + dataLength
 }
 
+@Suppress("MagicNumber")
 internal fun ByteBuffer.header(): ASN1Header {
     val tag = this[0].toInt() and 0xff
 

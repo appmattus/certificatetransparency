@@ -55,7 +55,7 @@ class TbsCertificateTest {
 
         // When we copy the TbsCertificate and create a new extension block
         val tbsCertificate = Certificate.create(certificate.encoded).tbsCertificate
-        val result = tbsCertificate.copy(extensions = Extensions.create(tbsCertificate.extensions!!.extensions))
+        val result = tbsCertificate.copy(extensions = Extensions.create(tbsCertificate.extensions!!.values))
 
         // Then the bytes match expected
         val expected = org.bouncycastle.asn1.x509.Certificate.getInstance(certificate.encoded).tbsCertificate.encoded.toHexString()

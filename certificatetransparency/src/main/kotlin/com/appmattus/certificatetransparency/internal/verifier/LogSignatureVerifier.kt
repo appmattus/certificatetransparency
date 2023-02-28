@@ -199,7 +199,7 @@ internal class LogSignatureVerifier(private val logServer: LogServer) : Signatur
         replacementX509authorityKeyIdentifier: Extension?
     ): List<Extension> {
         // Order is important, which is why a list is used.
-        return extensions.extensions
+        return extensions.values
             .mapNotNull {
                 when (it.objectIdentifier) {
                     // Do nothing - skip copying this extension
@@ -236,7 +236,7 @@ internal class LogSignatureVerifier(private val logServer: LogServer) : Signatur
     }
 
     private fun Certificate.hasX509AuthorityKeyIdentifier(): Boolean {
-        return tbsCertificate.extensions?.extensions?.any { it.objectIdentifier == X509_AUTHORITY_KEY_IDENTIFIER } ?: false
+        return tbsCertificate.extensions?.values?.any { it.objectIdentifier == X509_AUTHORITY_KEY_IDENTIFIER } ?: false
     }
 
     /**

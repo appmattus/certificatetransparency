@@ -19,7 +19,7 @@ package com.appmattus.certificatetransparency.internal.verifier.model
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Sequence
 import com.appmattus.certificatetransparency.internal.utils.asn1.x509.Extension
 
-internal class IssuerInformation constructor(
+internal class IssuerInformation(
     val name: ASN1Sequence? = null,
     val keyHash: ByteArray,
     val x509authorityKeyIdentifier: Extension? = null,

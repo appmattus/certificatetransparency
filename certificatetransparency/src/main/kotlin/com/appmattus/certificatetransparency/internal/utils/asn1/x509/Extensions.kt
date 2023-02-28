@@ -27,16 +27,17 @@ internal class Extensions private constructor(
     override val encoded: ByteBuffer,
 ) : ASN1Object {
 
-    val extensions: List<Extension> by lazy { (encoded.toAsn1() as ASN1Sequence).values.map { Extension.create(it as ASN1Sequence) } }
+    val values: List<Extension> by lazy { (encoded.toAsn1() as ASN1Sequence).values.map { Extension.create(it as ASN1Sequence) } }
 
     override fun toString(): String {
-        val values = extensions
+        val values = values
         return values.joinToString(separator = "\n\n") { it.toString() }
     }
 
     companion object {
         fun create(tag: Int, encoded: ByteBuffer) = Extensions(tag, encoded)
 
+        @Suppress("MagicNumber")
         fun create(extensions: List<Extension>): Extensions {
             val encoded = extensions.map { it.bytes }.joinToByteBuffer()
             return Extensions(0xa3, ASN1Sequence(0x30, encoded).bytes)

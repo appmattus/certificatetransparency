@@ -26,9 +26,9 @@ internal class Version private constructor(
     override val encoded: ByteBuffer,
 ) : ASN1Object {
 
-    val version: Int by lazy { (encoded.toAsn1() as ASN1Integer).value.toInt() + 1 }
+    val value: Int by lazy { (encoded.toAsn1() as ASN1Integer).value.toInt() + 1 }
 
-    override fun toString(): String = "Version $version"
+    override fun toString(): String = "Version $value"
 
     companion object {
         fun create(tag: Int, encoded: ByteBuffer) = Version(tag, encoded)

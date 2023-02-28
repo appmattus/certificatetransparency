@@ -82,7 +82,7 @@ internal fun Certificate.issuerInformationFromPreCertificate(preCertificate: Cer
     val parsedIssuerCert = com.appmattus.certificatetransparency.internal.utils.asn1.x509.Certificate.create(encoded)
 
     val issuerExtensions = parsedIssuerCert.tbsCertificate.extensions
-    val x509authorityKeyIdentifier = issuerExtensions?.extensions?.firstOrNull { it.objectIdentifier == X509_AUTHORITY_KEY_IDENTIFIER }
+    val x509authorityKeyIdentifier = issuerExtensions?.values?.firstOrNull { it.objectIdentifier == X509_AUTHORITY_KEY_IDENTIFIER }
 
     return IssuerInformation(parsedIssuerCert.tbsCertificate.issuer, preCertificate.keyHash(), x509authorityKeyIdentifier, true)
 }

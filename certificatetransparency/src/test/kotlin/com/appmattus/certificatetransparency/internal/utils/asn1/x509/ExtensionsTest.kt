@@ -53,7 +53,7 @@ class ExtensionsTest {
         val originalExtensions = Certificate.create(certificate.encoded).tbsCertificate.extensions!!
 
         // When we copy the existing extensions
-        val result = Extensions.create(originalExtensions.extensions)
+        val result = Extensions.create(originalExtensions.values)
 
         // Then the bytes match expected
         assertEquals(expected, result.bytes.toHexString())

@@ -33,7 +33,9 @@ import java.security.cert.X509Certificate
  */
 internal fun X509Certificate.signedCertificateTimestamps(): List<SignedCertificateTimestamp> {
     val bytes = getExtensionValue(CTConstants.SCT_CERTIFICATE_OID)
+
     // Equivalent of (ASN1Primitive.fromByteArray(ASN1OctetString.getInstance(bytes).octets) as DEROctetString).octet
+    // These are serialized SCTs, we must de-serialize them into an array with one SCT each
     return parseSctsFromCertExtension(bytes.readNestedOctets(2))
 }
 

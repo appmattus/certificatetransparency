@@ -69,13 +69,17 @@ internal class TbsCertificate private constructor(private val sequence: ASN1Sequ
 
     override fun toString(): String {
         return "TbsCertificate" +
-            "\n  version=${version?.version ?: 0}," +
+            "\n  version=${version?.value ?: 0}," +
             "\n  serialNumber=$serialNumber" +
             "\n  subjectUniqueIdentifier=$subjectUniqueIdentifier" +
             "\n  extensions=$extensions"
     }
 
-    fun copy(version: Version? = this.version, issuer: ASN1Sequence = this.issuer, extensions: Extensions? = this.extensions): TbsCertificate {
+    fun copy(
+        version: Version? = this.version,
+        issuer: ASN1Sequence = this.issuer,
+        extensions: Extensions? = this.extensions
+    ): TbsCertificate {
         val values = buildList {
             version?.let { add(it) }
             add(serialNumber)
