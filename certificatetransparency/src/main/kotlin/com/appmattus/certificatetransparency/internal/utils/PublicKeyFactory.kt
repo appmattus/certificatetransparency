@@ -18,6 +18,8 @@
 
 package com.appmattus.certificatetransparency.internal.utils
 
+import com.appmattus.certificatetransparency.internal.utils.asn1.query.query
+import com.appmattus.certificatetransparency.internal.utils.asn1.toAsn1
 import java.security.KeyFactory
 import java.security.NoSuchAlgorithmException
 import java.security.PublicKey
@@ -38,10 +40,10 @@ internal object PublicKeyFactory {
 
     fun fromPemString(keyText: String): PublicKey {
         // Equivalent of val pemContent = PemReader(StringReader(keyText)).readPemObject().content
-        val start = keyText.indexOf("-----BEGIN PUBLIC KEY-----")
-        val end = keyText.indexOf("-----END PUBLIC KEY-----")
+        val start = keyText.indexOf(publicKeyStart)
+        val end = keyText.indexOf(publicKeyEnd)
         if (start < 0 || end < 0) throw IllegalArgumentException("Missing public key entry in PEM file")
-        val pemContent = Base64.decode(keyText.substring(start + 26, end).replace("\\s+".toRegex(), ""))
+        val pemContent = Base64.decode(keyText.substring(start + publicKeyStart.length, end).replace("\\s+".toRegex(), ""))
 
         return fromByteArray(pemContent)
     }
@@ -58,10 +60,13 @@ internal object PublicKeyFactory {
             X9ObjectIdentifiers.id_ecPublicKey -> "EC"
             else -> throw IllegalArgumentException("Unsupported key type $oid")
         }*/
-        return when (val oid = keyBytes.readSequence().readSequence().readObjectIdentifier()) {
+        return when (val oid = keyBytes.toAsn1().query { seq(0).seq(0).oid() }) {
             "1.2.840.113549.1.1.1" -> "RSA"
             "1.2.840.10045.2.1" -> "EC"
             else -> throw IllegalArgumentException("Unsupported key type $oid")
         }
     }
+
+    private const val publicKeyStart = "-----BEGIN PUBLIC KEY-----"
+    private const val publicKeyEnd = "-----END PUBLIC KEY-----"
 }

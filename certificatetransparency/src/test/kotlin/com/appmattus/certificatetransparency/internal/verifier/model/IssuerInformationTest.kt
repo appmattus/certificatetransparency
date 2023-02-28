@@ -18,9 +18,8 @@
  * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
-package com.appmattus.certificatetransparency.internal.verifier
+package com.appmattus.certificatetransparency.internal.verifier.model
 
-import com.appmattus.certificatetransparency.internal.verifier.model.IssuerInformation
 import com.appmattus.certificatetransparency.utils.equalsVerifier
 import org.bouncycastle.asn1.x500.X500Name
 import org.junit.Test

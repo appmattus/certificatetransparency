@@ -36,6 +36,7 @@ import kotlin.math.min
  *
  * @see Base64Decoder
  */
+@Suppress("MagicNumber")
 internal class Base64Encoder {
     private fun outLength(sourceLength: Int): Int = 4 * ((sourceLength + 2) / 3)
 
@@ -44,9 +45,9 @@ internal class Base64Encoder {
      * byte array using the [Base64] encoding scheme. The returned byte
      * array is of the length of the resulting bytes.
      *
-     * @param   src
+     * @param src
      * the byte array to encode
-     * @return  A newly-allocated byte array containing the resulting encoded bytes.
+     * @return A newly-allocated byte array containing the resulting encoded bytes.
      */
     fun encode(src: ByteArray): ByteArray {
         val len = outLength(src.size) // dst array size
@@ -79,7 +80,7 @@ internal class Base64Encoder {
             dp += dlen
             sp = sl0
         }
-        if (sp < src.size) {               // 1 or 2 leftover bytes
+        if (sp < src.size) { // 1 or 2 leftover bytes
             val b0: Int = src[sp++].toInt() and 0xff
             dst[dp++] = base64[b0 shr 2]
             if (sp == src.size) {

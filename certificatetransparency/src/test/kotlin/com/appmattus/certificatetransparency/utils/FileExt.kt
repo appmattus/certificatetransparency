@@ -26,6 +26,4 @@ import java.security.PublicKey
  * @receiver [File] containing the key.
  * @return [PublicKey] represented by this [File].
  */
-internal fun File.readPemFile(): PublicKey {
-    return PublicKeyFactory.fromPemString(readText())
-}
+internal fun File.readPemFile(): PublicKey = PublicKeyFactory.fromPemString(readText())

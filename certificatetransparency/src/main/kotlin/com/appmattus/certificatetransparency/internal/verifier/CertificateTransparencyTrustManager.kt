@@ -25,11 +25,10 @@ import com.appmattus.certificatetransparency.datasource.DataSource
 import com.appmattus.certificatetransparency.internal.verifier.model.Host
 import com.appmattus.certificatetransparency.loglist.LogListResult
 import com.appmattus.certificatetransparency.loglist.LogListService
-import org.bouncycastle.asn1.x500.X500Name
-import org.bouncycastle.asn1.x500.style.BCStyle
 import java.lang.reflect.Method
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
+import javax.naming.ldap.LdapName
 import javax.net.ssl.X509TrustManager
 
 @Suppress("LongParameterList", "CustomX509TrustManager")
@@ -74,12 +73,7 @@ internal class CertificateTransparencyTrustManager(
 
         val leafCertificate = chain.first()
 
-        val commonName = X500Name(leafCertificate.subjectX500Principal.name).getRDNs(BCStyle.CN)[0].first.value.toString()
-
-        // val subjectAlternativeNames = leafCertificate.subjectAlternativeNames.filter { it[0] == 2 }.map { it[1].toString() }
-        // val dnsNames = listOf(cn) + subjectAlternativeNames
-
-        // val host = dnsNames.firstOrNull { enabledForCertificateTransparency(it) } ?: cn
+        val commonName = LdapName(leafCertificate.subjectX500Principal.name).rdns.first { it.type.equals("CN", true) }?.value.toString()
 
         val result = verifyCertificateTransparency(commonName, chain.toList())
 

@@ -24,7 +24,7 @@ import org.bouncycastle.asn1.x500.X500Name
 import org.bouncycastle.asn1.x509.Extension
 import java.util.Objects
 
-internal data class IssuerInformation(
+internal data class IssuerInformation constructor(
     val name: X500Name? = null,
     val keyHash: ByteArray,
     val x509authorityKeyIdentifier: Extension? = null,

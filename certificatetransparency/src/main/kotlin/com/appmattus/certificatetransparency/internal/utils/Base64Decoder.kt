@@ -46,6 +46,10 @@ package com.appmattus.certificatetransparency.internal.utils
  *
  * @see Base64Encoder
  */
+@Suppress(
+    "MagicNumber", "ThrowsCount", "LoopWithTooManyJumpStatements", "LongMethod", "ComplexMethod", "NestedBlockDepth",
+    "ComplexCondition"
+)
 internal class Base64Decoder {
     /**
      * Decodes all bytes from the input byte array using the [Base64]
@@ -53,12 +57,12 @@ internal class Base64Decoder {
      * byte array. The returned byte array is of the length of the resulting
      * bytes.
      *
-     * @param   src
+     * @param src
      * the byte array to decode
      *
-     * @return  A newly-allocated byte array containing the decoded bytes.
+     * @return A newly-allocated byte array containing the decoded bytes.
      *
-     * @throws  IllegalArgumentException
+     * @throws IllegalArgumentException
      * if `src` is not in valid Base64 scheme
      */
     fun decode(src: ByteArray): ByteArray {
@@ -93,14 +97,14 @@ internal class Base64Decoder {
         var bits = 0
         var shiftTo = 18 // pos of first byte of 4-byte atom
         while (sp < sl) {
-            if (shiftTo == 18 && sp + 4 < sl) {       // fast path
+            if (shiftTo == 18 && sp + 4 < sl) { // fast path
                 val sl0 = sp + (sl - sp and 3.inv())
                 while (sp < sl0) {
                     val b1 = base64[src[sp++].toInt() and 0xff]
                     val b2 = base64[src[sp++].toInt() and 0xff]
                     val b3 = base64[src[sp++].toInt() and 0xff]
                     val b4 = base64[src[sp++].toInt() and 0xff]
-                    if (b1 or b2 or b3 or b4 < 0) {    // non base64 byte
+                    if (b1 or b2 or b3 or b4 < 0) { // non base64 byte
                         sp -= 4
                         break
                     }

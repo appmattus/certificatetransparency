@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("MagicNumber")
+
 package com.appmattus.certificatetransparency.internal.utils
 
 import java.io.EOFException

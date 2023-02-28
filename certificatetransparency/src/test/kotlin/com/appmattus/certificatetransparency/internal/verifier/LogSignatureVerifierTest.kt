@@ -175,7 +175,7 @@ internal class LogSignatureVerifierTest {
     }
 
     @Test
-    fun signatureOnPreCertificateSignedByPreCertificateSigningCertVerifies() {//TODO
+    fun signatureOnPreCertificateSignedByPreCertificateSigningCertVerifies() {
         // Flow:
         // test-embedded-with-preca-pre-cert.pem -> ca-pre-cert.pem -> ca-cert.pem
         val certsChain = listOf(TEST_PRE_CERT_SIGNED_BY_PRECA_CERT, PRE_CERT_SIGNING_CERT, ROOT_CA_CERT).flatMap(::loadCertificates)
@@ -196,9 +196,8 @@ internal class LogSignatureVerifierTest {
         assertIsA<SctVerificationResult.Valid>("Expected PreCertificate to verify OK", verifier.verifySignature(sct, certsChain))
     }
 
-
     @Test
-    fun signatureOnPreCertificateSignedByPreCertSigningCertSignedByIntermediateVerifies() {//TODO
+    fun signatureOnPreCertificateSignedByPreCertSigningCertSignedByIntermediateVerifies() {
         // Flow:
         // test-embedded-with-intermediate-preca-pre-cert.pem -> intermediate-pre-cert.pem
         //   -> intermediate-cert.pem -> ca-cert.pem

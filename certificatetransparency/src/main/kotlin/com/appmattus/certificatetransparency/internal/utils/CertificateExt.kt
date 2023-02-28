@@ -81,43 +81,14 @@ internal fun Certificate.issuerInformation(): IssuerInformation {
  * @throws IOException
  */
 internal fun Certificate.issuerInformationFromPreCertificate(preCertificate: Certificate): IssuerInformation {
-
-    println("certificate: " + encoded.toHexString())
-
-    val seq = encoded.readSequence()
-    println("seq: ${seq.toHexString()}")
-
-    val tbs = seq.readSequence()
-    println("tbs: ${tbs.toHexString()}")
-
-    val stream = tbs.inputStream()
-    if (stream.read() != 0xa0) throw IOException("Not right type")
-
-    println("length: " + stream.readLength())
-
-
-
-    val x509authorityKeyIdentifierBytes = (this as X509Certificate).getExtensionValue(X509_AUTHORITY_KEY_IDENTIFIER)
-
-println(this.issuerX500Principal)
-
     ASN1InputStream(encoded).use { aIssuerIn ->
         val parsedIssuerCert = org.bouncycastle.asn1.x509.Certificate.getInstance(aIssuerIn.readObject())
 
         val issuerExtensions = parsedIssuerCert.tbsCertificate.extensions
         val x509authorityKeyIdentifier = issuerExtensions?.getExtension(ASN1ObjectIdentifier(X509_AUTHORITY_KEY_IDENTIFIER))
 
-
-
-        println("java: " + x509authorityKeyIdentifierBytes.toHexString())
-        println("bncy: " + x509authorityKeyIdentifier?.encoded?.toHexString())
-
         return IssuerInformation(parsedIssuerCert.issuer, preCertificate.keyHash(), x509authorityKeyIdentifier, true)
     }
-}
-
-private fun ByteArray.toHexString(): String {
-    return joinToString("") { (0xFF and it.toInt()).toString(16).padStart(2, '0') }
 }
 
 private fun Certificate.keyHash() = publicKey.sha256Hash()
