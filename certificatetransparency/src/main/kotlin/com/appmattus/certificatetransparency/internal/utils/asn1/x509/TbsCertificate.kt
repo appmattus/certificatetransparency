@@ -1,12 +1,31 @@
+/*
+ * Copyright 2023 Appmattus Limited
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.appmattus.certificatetransparency.internal.utils.asn1.x509
 
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Integer
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Object
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Sequence
-import com.appmattus.certificatetransparency.internal.utils.asn1.ByteBuffer
+import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
 
 @Suppress("MagicNumber")
 internal class TbsCertificate private constructor(private val sequence: ASN1Sequence) : ASN1Object {
+
+    override val tag: Int = sequence.tag
+    override val encoded: ByteBuffer = sequence.encoded
 
     private val versionOffset = if (sequence.values[0] is Version) 1 else 0
 
@@ -46,17 +65,7 @@ internal class TbsCertificate private constructor(private val sequence: ASN1Sequ
         get() = sequence.values.firstOrNull { it.tag == 0xa2 }
 
     // Extensions 0xa3 (optional)
-    val extensions: Extensions?
-        get() = sequence.values.firstOrNull { it.tag == 0xa3 } as Extensions?
-
-    override val tag: Int
-        get() = sequence.tag
-
-    override val totalLength: Int
-        get() = sequence.totalLength
-
-    override val encoded: ByteBuffer
-        get() = sequence.encoded
+    val extensions: Extensions? by lazy { sequence.values.firstOrNull { it.tag == 0xa3 } as? Extensions }
 
     override fun toString(): String {
         return "TbsCertificate" +
@@ -66,8 +75,22 @@ internal class TbsCertificate private constructor(private val sequence: ASN1Sequ
             "\n  extensions=$extensions"
     }
 
-    // optional a2
-    // optional a3
+    fun copy(version: Version? = this.version, issuer: ASN1Sequence = this.issuer, extensions: Extensions? = this.extensions): TbsCertificate {
+        val values = buildList {
+            version?.let { add(it) }
+            add(serialNumber)
+            add(signature)
+            add(issuer)
+            add(validity)
+            add(subject)
+            add(subjectPublicKeyInfo)
+            issuerUniqueIdentifier?.let { add(it) }
+            subjectUniqueIdentifier?.let { add(it) }
+            extensions?.let { add(it) }
+        }
+
+        return create(ASN1Sequence.create(0x30, values))
+    }
 
     companion object {
         fun create(sequence: ASN1Sequence): TbsCertificate = TbsCertificate(sequence)

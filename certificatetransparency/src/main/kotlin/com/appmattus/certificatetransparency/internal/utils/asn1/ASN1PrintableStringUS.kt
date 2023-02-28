@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-package com.appmattus.certificatetransparency.internal.utils.asn1.x509
+package com.appmattus.certificatetransparency.internal.utils.asn1
 
-import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Integer
-import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Object
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
-import com.appmattus.certificatetransparency.internal.utils.asn1.toAsn1
 
-internal class Version private constructor(
+internal class ASN1PrintableStringUS private constructor(
     override val tag: Int,
+    override val totalLength: Int,
     override val encoded: ByteBuffer,
 ) : ASN1Object {
 
-    val version: Int by lazy { (encoded.toAsn1() as ASN1Integer).value.toInt() + 1 }
+    val value: String by lazy { String(encoded.copyOfRange(0, encoded.size), Charsets.US_ASCII) }
 
-    override fun toString(): String = "Version $version"
+    override fun toString(): String = "PRINTABLE STRING $value"
 
     companion object {
-        fun create(tag: Int, encoded: ByteBuffer) = Version(tag, encoded)
+        fun create(tag: Int, totalLength: Int, encoded: ByteBuffer) = ASN1PrintableStringUS(tag, totalLength, encoded)
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@ package com.appmattus.certificatetransparency.internal.verifier
 
 import com.appmattus.certificatetransparency.SctVerificationResult
 import com.appmattus.certificatetransparency.internal.verifier.model.SignedCertificateTimestamp
-import java.security.cert.Certificate
+import java.security.cert.X509Certificate
 
 /**
  * A [SignatureVerifier] verifies a Signed Certificate Timestamp is trusted by a particular log server
@@ -40,5 +40,5 @@ internal interface SignatureVerifier {
      * @property chain The certificates chain as sent to the log.
      * @return [SctVerificationResult.Valid] if the log's signature over this SCT can be verified, [SctVerificationResult.Invalid] otherwise.
      */
-    fun verifySignature(sct: SignedCertificateTimestamp, chain: List<Certificate>): SctVerificationResult
+    fun verifySignature(sct: SignedCertificateTimestamp, chain: List<X509Certificate>): SctVerificationResult
 }

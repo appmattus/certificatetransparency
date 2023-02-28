@@ -20,12 +20,6 @@ java {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
-    implementation("org.bouncycastle:bcpkix-jdk15to18:${Versions.bouncyCastle}")
-    implementation("org.bouncycastle:bcprov-jdk15to18:${Versions.bouncyCastle}")
-    implementation("org.bouncycastle:bctls-jdk15to18:${Versions.bouncyCastle}")
-    // Adding bcutil directly as it's used through bcprov-jdk15to18 but not directly added
-    implementation("org.bouncycastle:bcutil-jdk15to18:${Versions.bouncyCastle}")
-
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
 
     implementation("com.squareup.okhttp3:okhttp:${Versions.okhttp}")
@@ -33,6 +27,12 @@ dependencies {
     testImplementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
     testImplementation("com.squareup.retrofit2:retrofit-mock:${Versions.retrofit}")
     testImplementation("com.squareup.okhttp3:mockwebserver:${Versions.okhttp}")
+
+    testImplementation("org.bouncycastle:bcpkix-jdk15to18:${Versions.bouncyCastle}")
+    testImplementation("org.bouncycastle:bcprov-jdk15to18:${Versions.bouncyCastle}")
+    testImplementation("org.bouncycastle:bctls-jdk15to18:${Versions.bouncyCastle}")
+    // Adding bcutil directly as it's used through bcprov-jdk15to18 but not directly added
+    testImplementation("org.bouncycastle:bcutil-jdk15to18:${Versions.bouncyCastle}")
 
     testImplementation("junit:junit:${Versions.junit4}")
     testImplementation("org.mockito:mockito-core:${Versions.mockito}")

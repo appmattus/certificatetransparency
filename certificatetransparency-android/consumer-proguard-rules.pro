@@ -96,6 +96,3 @@
 -dontnote module-info
 -dontwarn kotlinx.coroutines.debug.AgentPremain
 -dontwarn kotlinx.coroutines.debug.AgentPremain$DebugProbesTransformer
--dontwarn org.bouncycastle.jce.provider.OcspCache
--dontwarn org.bouncycastle.jce.provider.ProvOcspRevocationChecker
--dontwarn org.bouncycastle.jsse.util.CustomSSLSocketFactory
