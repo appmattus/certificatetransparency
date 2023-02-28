@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,8 +26,6 @@ import com.appmattus.certificatetransparency.internal.serialization.CTConstants.
 import com.appmattus.certificatetransparency.internal.serialization.CTConstants.PRECERTIFICATE_SIGNING_OID
 import com.appmattus.certificatetransparency.internal.serialization.CTConstants.SCT_CERTIFICATE_OID
 import com.appmattus.certificatetransparency.internal.verifier.model.IssuerInformation
-import org.bouncycastle.asn1.ASN1InputStream
-import org.bouncycastle.asn1.ASN1ObjectIdentifier
 import java.io.IOException
 import java.security.NoSuchAlgorithmException
 import java.security.cert.Certificate
@@ -81,14 +79,12 @@ internal fun Certificate.issuerInformation(): IssuerInformation {
  * @throws IOException
  */
 internal fun Certificate.issuerInformationFromPreCertificate(preCertificate: Certificate): IssuerInformation {
-    ASN1InputStream(encoded).use { aIssuerIn ->
-        val parsedIssuerCert = org.bouncycastle.asn1.x509.Certificate.getInstance(aIssuerIn.readObject())
+    val parsedIssuerCert = com.appmattus.certificatetransparency.internal.utils.asn1.x509.Certificate.create(encoded)
 
-        val issuerExtensions = parsedIssuerCert.tbsCertificate.extensions
-        val x509authorityKeyIdentifier = issuerExtensions?.getExtension(ASN1ObjectIdentifier(X509_AUTHORITY_KEY_IDENTIFIER))
+    val issuerExtensions = parsedIssuerCert.tbsCertificate.extensions
+    val x509authorityKeyIdentifier = issuerExtensions?.values?.firstOrNull { it.objectIdentifier == X509_AUTHORITY_KEY_IDENTIFIER }
 
-        return IssuerInformation(parsedIssuerCert.issuer, preCertificate.keyHash(), x509authorityKeyIdentifier, true)
-    }
+    return IssuerInformation(parsedIssuerCert.tbsCertificate.issuer, preCertificate.keyHash(), x509authorityKeyIdentifier, true)
 }
 
 private fun Certificate.keyHash() = publicKey.sha256Hash()

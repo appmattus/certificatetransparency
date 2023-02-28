@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,11 +20,9 @@
 
 package com.appmattus.certificatetransparency.internal.verifier.model
 
-import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo
-
 /**
  * @property keyId [keyId] is the SHA-256 hash of the log's public key, calculated over the DER encoding of the key represented as
- * [SubjectPublicKeyInfo].
+ * SubjectPublicKeyInfo.
  */
 public data class LogId(
     public val keyId: ByteArray

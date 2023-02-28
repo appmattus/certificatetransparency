@@ -2,6 +2,7 @@
 
 ## Certificate Transparency for Android
 
+Copyright &copy; 2023 Appmattus Limited.
 Copyright &copy; 2019 Babylon Partners Limited.
 
 This product includes software developed at [Babylon Health](http://www.babylonhealth.com/).

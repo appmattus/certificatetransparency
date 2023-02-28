@@ -14,11 +14,32 @@
  * limitations under the License.
  */
 
+@file:Suppress("MagicNumber")
+
 package com.appmattus.certificatetransparency.internal.utils
 
-import java.security.MessageDigest
-import java.security.PublicKey
+import java.io.EOFException
+import java.io.InputStream
 
-internal fun PublicKey.sha256Hash(): ByteArray = MessageDigest.getInstance("SHA-256").digest(encoded)
+internal fun InputStream.readUint16(): Int {
+    val i1: Int = read()
+    val i2: Int = read()
+    if (i2 < 0) {
+        throw EOFException()
+    }
+    return i1 shl 8 or i2
+}
 
-internal fun PublicKey.sha1Hash(): ByteArray = MessageDigest.getInstance("SHA-1").digest(encoded)
+internal fun InputStream.readOpaque16(): ByteArray {
+    val length = readUint16()
+    return readFully(length)
+}
+
+private fun InputStream.readFully(length: Int): ByteArray {
+    if (length < 1) return byteArrayOf()
+
+    val buf = ByteArray(length)
+    if (length != read(buf, 0, buf.size)) throw EOFException()
+
+    return buf
+}

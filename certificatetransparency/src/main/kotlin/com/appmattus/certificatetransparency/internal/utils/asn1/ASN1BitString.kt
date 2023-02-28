@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-package com.appmattus.certificatetransparency.internal.verifier.model
+package com.appmattus.certificatetransparency.internal.utils.asn1
 
-import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Sequence
-import com.appmattus.certificatetransparency.internal.utils.asn1.x509.Extension
+import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
 
-internal class IssuerInformation(
-    val name: ASN1Sequence? = null,
-    val keyHash: ByteArray,
-    val x509authorityKeyIdentifier: Extension? = null,
-    val issuedByPreCertificateSigningCert: Boolean
-)
+internal data class ASN1BitString(
+    override val tag: Int,
+    override val totalLength: Int,
+    override val encoded: ByteBuffer,
+) : ASN1Object {
+
+    override fun toString(): String = "BIT STRING"
+
+    companion object {
+        fun create(tag: Int, totalLength: Int, encoded: ByteBuffer) = ASN1BitString(tag, totalLength, encoded)
+    }
+}

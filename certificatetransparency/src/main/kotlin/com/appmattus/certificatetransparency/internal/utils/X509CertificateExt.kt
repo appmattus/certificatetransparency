@@ -25,10 +25,6 @@ package com.appmattus.certificatetransparency.internal.utils
 import com.appmattus.certificatetransparency.internal.serialization.CTConstants
 import com.appmattus.certificatetransparency.internal.serialization.Deserializer
 import com.appmattus.certificatetransparency.internal.verifier.model.SignedCertificateTimestamp
-import org.bouncycastle.asn1.ASN1OctetString
-import org.bouncycastle.asn1.ASN1Primitive
-import org.bouncycastle.asn1.DEROctetString
-import org.bouncycastle.tls.TlsUtils
 import java.io.IOException
 import java.security.cert.X509Certificate
 
@@ -37,10 +33,10 @@ import java.security.cert.X509Certificate
  */
 internal fun X509Certificate.signedCertificateTimestamps(): List<SignedCertificateTimestamp> {
     val bytes = getExtensionValue(CTConstants.SCT_CERTIFICATE_OID)
-    val p = ASN1Primitive.fromByteArray(ASN1OctetString.getInstance(bytes).octets) as DEROctetString
 
+    // Equivalent of (ASN1Primitive.fromByteArray(ASN1OctetString.getInstance(bytes).octets) as DEROctetString).octet
     // These are serialized SCTs, we must de-serialize them into an array with one SCT each
-    return parseSctsFromCertExtension(p.octets)
+    return parseSctsFromCertExtension(bytes.readNestedOctets(2))
 }
 
 /**
@@ -49,9 +45,9 @@ internal fun X509Certificate.signedCertificateTimestamps(): List<SignedCertifica
 private fun parseSctsFromCertExtension(extensionValue: ByteArray): List<SignedCertificateTimestamp> {
     val sctList = mutableListOf<SignedCertificateTimestamp>()
     val bis = extensionValue.inputStream()
-    TlsUtils.readUint16(bis) // first one is the length of all SCTs concatenated, we don't actually need this
+    bis.readUint16() // first one is the length of all SCTs concatenated, we don't actually need this
     while (bis.available() > 2) {
-        val sctBytes = TlsUtils.readOpaque16(bis)
+        val sctBytes = bis.readOpaque16()
         sctList.add(Deserializer.parseSctFromBinary(sctBytes.inputStream()))
     }
     return sctList.toList()

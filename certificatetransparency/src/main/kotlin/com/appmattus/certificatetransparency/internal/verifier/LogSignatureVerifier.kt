@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Appmattus Limited
+ * Copyright 2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,6 +31,11 @@ import com.appmattus.certificatetransparency.internal.serialization.CTConstants.
 import com.appmattus.certificatetransparency.internal.serialization.CTConstants.VERSION_LENGTH
 import com.appmattus.certificatetransparency.internal.serialization.writeUint
 import com.appmattus.certificatetransparency.internal.serialization.writeVariableLength
+import com.appmattus.certificatetransparency.internal.utils.Base64
+import com.appmattus.certificatetransparency.internal.utils.asn1.x509.Certificate
+import com.appmattus.certificatetransparency.internal.utils.asn1.x509.Extension
+import com.appmattus.certificatetransparency.internal.utils.asn1.x509.Extensions
+import com.appmattus.certificatetransparency.internal.utils.asn1.x509.TbsCertificate
 import com.appmattus.certificatetransparency.internal.utils.hasEmbeddedSct
 import com.appmattus.certificatetransparency.internal.utils.isPreCertificate
 import com.appmattus.certificatetransparency.internal.utils.isPreCertificateSigningCert
@@ -40,14 +45,6 @@ import com.appmattus.certificatetransparency.internal.verifier.model.IssuerInfor
 import com.appmattus.certificatetransparency.internal.verifier.model.SignedCertificateTimestamp
 import com.appmattus.certificatetransparency.internal.verifier.model.Version
 import com.appmattus.certificatetransparency.loglist.LogServer
-import org.bouncycastle.asn1.ASN1InputStream
-import org.bouncycastle.asn1.ASN1ObjectIdentifier
-import org.bouncycastle.asn1.DERBitString
-import org.bouncycastle.asn1.x509.Extension
-import org.bouncycastle.asn1.x509.Extensions
-import org.bouncycastle.asn1.x509.TBSCertificate
-import org.bouncycastle.asn1.x509.V3TBSCertificateGenerator
-import org.bouncycastle.util.encoders.Base64
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.OutputStream
@@ -55,7 +52,6 @@ import java.security.InvalidKeyException
 import java.security.NoSuchAlgorithmException
 import java.security.Signature
 import java.security.SignatureException
-import java.security.cert.Certificate
 import java.security.cert.CertificateEncodingException
 import java.security.cert.CertificateException
 import java.security.cert.CertificateParsingException
@@ -70,7 +66,7 @@ import java.security.cert.X509Certificate
 internal class LogSignatureVerifier(private val logServer: LogServer) : SignatureVerifier {
 
     @Suppress("ReturnCount", "ComplexMethod")
-    override fun verifySignature(sct: SignedCertificateTimestamp, chain: List<Certificate>): SctVerificationResult {
+    override fun verifySignature(sct: SignedCertificateTimestamp, chain: List<X509Certificate>): SctVerificationResult {
 
         // If the timestamp is in the future then we have to reject it
         val now = System.currentTimeMillis()
@@ -158,7 +154,7 @@ internal class LogSignatureVerifier(private val logServer: LogServer) : Signatur
     ): SctVerificationResult {
         return try {
             val preCertificateTBS = createTbsForVerification(certificate, issuerInfo)
-            val toVerify = serializeSignedSctDataForPreCertificate(preCertificateTBS.encoded, issuerInfo.keyHash, sct)
+            val toVerify = serializeSignedSctDataForPreCertificate(preCertificateTBS.bytes.toList().toByteArray(), issuerInfo.keyHash, sct)
             verifySctSignatureOverBytes(sct, toVerify)
         } catch (e: IOException) {
             CertificateEncodingFailed(e)
@@ -171,43 +167,31 @@ internal class LogSignatureVerifier(private val logServer: LogServer) : Signatur
      * @throws CertificateException Certificate error
      * @throws IOException Error deleting extension
      */
-    private fun createTbsForVerification(preCertificate: X509Certificate, issuerInformation: IssuerInformation): TBSCertificate {
+    private fun createTbsForVerification(preCertificate: X509Certificate, issuerInformation: IssuerInformation): TbsCertificate {
         @Suppress("MagicNumber")
         require(preCertificate.version >= 3)
-        // We have to use bouncycastle's certificate parsing code because Java's X509 certificate
+        // We have to use our own parsing code because Java's X509 certificate
         // parsing discards the order of the extensions. The signature from SCT we're verifying
         // is over the TBSCertificate in its original form, including the order of the extensions.
         // Get the list of extensions, in its original order, minus the poison extension.
-        return ASN1InputStream(preCertificate.encoded).use { aIn ->
-            val parsedPreCertificate = org.bouncycastle.asn1.x509.Certificate.getInstance(aIn.readObject())
-            // Make sure that we have the X509AuthorityKeyIdentifier of the real issuer if:
-            // The PreCertificate has this extension, AND:
-            // The PreCertificate was signed by a PreCertificate signing cert.
-            if (parsedPreCertificate.hasX509AuthorityKeyIdentifier() && issuerInformation.issuedByPreCertificateSigningCert) {
-                require(issuerInformation.x509authorityKeyIdentifier != null)
-            }
-
-            val orderedExtensions = getExtensionsWithoutPoisonAndSct(
-                parsedPreCertificate.tbsCertificate.extensions,
-                issuerInformation.x509authorityKeyIdentifier
-            )
-
-            V3TBSCertificateGenerator().apply {
-                val tbsPart = parsedPreCertificate.tbsCertificate
-                // Copy certificate.
-                // Version 3 is implied by the generator.
-                setSerialNumber(tbsPart.serialNumber)
-                setSignature(tbsPart.signature)
-                setIssuer(issuerInformation.name ?: tbsPart.issuer)
-                setStartDate(tbsPart.startDate)
-                setEndDate(tbsPart.endDate)
-                setSubject(tbsPart.subject)
-                setSubjectPublicKeyInfo(tbsPart.subjectPublicKeyInfo)
-                setIssuerUniqueID(tbsPart.issuerUniqueId as DERBitString?)
-                setSubjectUniqueID(tbsPart.subjectUniqueId as DERBitString?)
-                setExtensions(Extensions(orderedExtensions.toTypedArray()))
-            }.generateTBSCertificate()
+        val parsedPreCertificate = Certificate.create(preCertificate.encoded)
+        // Make sure that we have the X509AuthorityKeyIdentifier of the real issuer if:
+        // The PreCertificate has this extension, AND:
+        // The PreCertificate was signed by a PreCertificate signing cert.
+        if (parsedPreCertificate.hasX509AuthorityKeyIdentifier() && issuerInformation.issuedByPreCertificateSigningCert) {
+            require(issuerInformation.x509authorityKeyIdentifier != null)
         }
+
+        val orderedExtensions = getExtensionsWithoutPoisonAndSct(
+            parsedPreCertificate.tbsCertificate.extensions!!,
+            issuerInformation.x509authorityKeyIdentifier
+        )
+
+        val tbsPart = parsedPreCertificate.tbsCertificate
+        return tbsPart.copy(
+            issuer = issuerInformation.name ?: tbsPart.issuer,
+            extensions = Extensions.create(orderedExtensions)
+        )
     }
 
     private fun getExtensionsWithoutPoisonAndSct(
@@ -215,27 +199,23 @@ internal class LogSignatureVerifier(private val logServer: LogServer) : Signatur
         replacementX509authorityKeyIdentifier: Extension?
     ): List<Extension> {
         // Order is important, which is why a list is used.
-        return extensions.extensionOIDs
-            // Do nothing - skip copying this extension
-            .filterNot { it.id == CTConstants.POISON_EXTENSION_OID }
-            // Do nothing - skip copying this extension
-            .filterNot { it.id == CTConstants.SCT_CERTIFICATE_OID }
-            .map {
-                if (it.id == X509_AUTHORITY_KEY_IDENTIFIER && replacementX509authorityKeyIdentifier != null) {
+        return extensions.values
+            .mapNotNull {
+                when (it.objectIdentifier) {
+                    // Do nothing - skip copying this extension
+                    CTConstants.POISON_EXTENSION_OID, CTConstants.SCT_CERTIFICATE_OID -> null
                     // Use the real issuer's authority key identifier, since it's present.
-                    replacementX509authorityKeyIdentifier
-                } else {
-                    // Copy the extension as-is.
-                    extensions.getExtension(it)
+                    X509_AUTHORITY_KEY_IDENTIFIER -> replacementX509authorityKeyIdentifier ?: it
+                    else -> it
                 }
             }
     }
 
     @Suppress("ComplexMethod")
     private fun verifySctSignatureOverBytes(sct: SignedCertificateTimestamp, toVerify: ByteArray): SctVerificationResult {
-        val sigAlg = when {
-            logServer.key.algorithm == "EC" -> "SHA256withECDSA"
-            logServer.key.algorithm == "RSA" -> "SHA256withRSA"
+        val sigAlg = when (logServer.key.algorithm) {
+            "EC" -> "SHA256withECDSA"
+            "RSA" -> "SHA256withRSA"
             else -> return UnsupportedSignatureAlgorithm(logServer.key.algorithm)
         }
 
@@ -255,15 +235,15 @@ internal class LogSignatureVerifier(private val logServer: LogServer) : Signatur
         }
     }
 
-    private fun org.bouncycastle.asn1.x509.Certificate.hasX509AuthorityKeyIdentifier(): Boolean {
-        return tbsCertificate.extensions.getExtension(ASN1ObjectIdentifier(X509_AUTHORITY_KEY_IDENTIFIER)) != null
+    private fun Certificate.hasX509AuthorityKeyIdentifier(): Boolean {
+        return tbsCertificate.extensions?.values?.any { it.objectIdentifier == X509_AUTHORITY_KEY_IDENTIFIER } ?: false
     }
 
     /**
      * @throws IOException
      * @throws CertificateEncodingException
      */
-    private fun serializeSignedSctData(certificate: Certificate, sct: SignedCertificateTimestamp): ByteArray {
+    private fun serializeSignedSctData(certificate: X509Certificate, sct: SignedCertificateTimestamp): ByteArray {
         return ByteArrayOutputStream().use {
             it.serializeCommonSctFields(sct)
             it.writeUint(X509_ENTRY, LOG_ENTRY_TYPE_LENGTH)

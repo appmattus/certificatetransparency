@@ -14,14 +14,23 @@
  * limitations under the License.
  */
 
-package com.appmattus.certificatetransparency.internal.verifier.model
+package com.appmattus.certificatetransparency.internal.utils.asn1
 
-import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Sequence
-import com.appmattus.certificatetransparency.internal.utils.asn1.x509.Extension
+import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
+import java.math.BigInteger
 
-internal class IssuerInformation(
-    val name: ASN1Sequence? = null,
-    val keyHash: ByteArray,
-    val x509authorityKeyIdentifier: Extension? = null,
-    val issuedByPreCertificateSigningCert: Boolean
-)
+internal class ASN1Integer private constructor(
+    override val tag: Int,
+    override val encoded: ByteBuffer
+) : ASN1Object {
+
+    val value: BigInteger by lazy {
+        BigInteger(encoded.toList().toByteArray())
+    }
+
+    override fun toString(): String = "INTEGER $value"
+
+    companion object {
+        fun create(tag: Int, encoded: ByteBuffer) = ASN1Integer(tag, encoded)
+    }
+}
