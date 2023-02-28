@@ -19,7 +19,6 @@ package com.appmattus.certificatetransparency.internal.utils.asn1
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBufferArray
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.toByteBuffer
-import java.math.BigInteger
 
 internal interface ASN1Object {
     val tag: Int
@@ -27,12 +26,16 @@ internal interface ASN1Object {
 
     @Suppress("MagicNumber")
     private val lengthBytes: ByteArray
-        get() = if (encoded.size <= 0x7f) {
-            byteArrayOf(encoded.size.toByte())
-        } else {
-            val bytes = BigInteger.valueOf(encoded.size.toLong()).toByteArray()
-
-            byteArrayOf((0x80 + bytes.size).toByte()) + bytes
+        get() = when {
+            encoded.size < 128 ->
+                byteArrayOf(encoded.size.toByte())
+            encoded.size <= 0xff ->
+                byteArrayOf(0x81.toByte(), encoded.size.toByte())
+            encoded.size <= 0xffff ->
+                byteArrayOf(0x82.toByte(), (encoded.size shr 8).toByte(), encoded.size.toByte())
+            encoded.size <= 0xffffff ->
+                byteArrayOf(0x83.toByte(), (encoded.size shr 16).toByte(), (encoded.size shr 8).toByte(), encoded.size.toByte())
+            else -> throw IllegalArgumentException("Length too long")
         }
 
     val totalLength: Int
