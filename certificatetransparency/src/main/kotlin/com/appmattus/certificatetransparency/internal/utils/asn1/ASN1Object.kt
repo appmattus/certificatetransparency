@@ -4,8 +4,6 @@ import java.math.BigInteger
 
 internal interface ASN1Object {
     val tag: Int
-
-    // val totalLength: Int
     val encoded: ByteBuffer
 
     @Suppress("MagicNumber")
@@ -19,5 +17,5 @@ internal interface ASN1Object {
         }
 
     val totalLength: Int
-        get() = encoded.size + lengthBytes.size
+        get() = encoded.size + lengthBytes.size + 1
 }

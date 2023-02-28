@@ -13,7 +13,6 @@ internal class ASN1PrintableString private constructor(
     override fun toString(): String = "PRINTABLE STRING $value"
 
     companion object {
-        fun create(tag: Int, totalLength: Int, encoded: ByteBuffer): ASN1PrintableString =
-            ASN1PrintableString(tag, totalLength, encoded)
+        fun create(tag: Int, totalLength: Int, encoded: ByteBuffer) = ASN1PrintableString(tag, totalLength, encoded)
     }
 }

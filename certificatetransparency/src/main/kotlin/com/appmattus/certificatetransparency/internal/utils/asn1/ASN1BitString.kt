@@ -9,7 +9,6 @@ internal data class ASN1BitString(
     override fun toString(): String = "BIT STRING"
 
     companion object {
-        fun create(tag: Int, totalLength: Int, encoded: ByteBuffer): ASN1BitString =
-            ASN1BitString(tag, totalLength, encoded)
+        fun create(tag: Int, totalLength: Int, encoded: ByteBuffer) = ASN1BitString(tag, totalLength, encoded)
     }
 }

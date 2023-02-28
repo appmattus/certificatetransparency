@@ -27,13 +27,13 @@ internal class Certificate private constructor(private val sequence: ASN1Sequenc
             "\n\n  Issuer Name" +
             "\n$issuer" +
             "\n\n${tbsCertificate.serialNumber.toString().prependIndent("  ")}" +
-            "\n${tbsCertificate.version.toString().prependIndent("  ")}" +
+            "\n${tbsCertificate.version?.toString()?.prependIndent("  ") ?: "  Version 1"}" +
             "\n\n${tbsCertificate.validity.toString().prependIndent("  ")}" +
-            "\n\n  Signature ${signatureValue.encoded.size - 1} bytes"
+            "\n\n  Signature ${signatureValue.encoded.size - 1} bytes" +
+            "\n\n${tbsCertificate.extensions?.toString()?.prependIndent("  ") ?: ""}"
     }
 
     companion object {
-        fun create(byteArray: ByteArray): Certificate =
-            Certificate(byteArray.toByteBuffer().toAsn1() as ASN1Sequence)
+        fun create(byteArray: ByteArray) = Certificate(byteArray.toByteBuffer().toAsn1() as ASN1Sequence)
     }
 }

@@ -4,7 +4,6 @@ import java.math.BigInteger
 
 internal class ASN1Integer private constructor(
     override val tag: Int,
-    override val totalLength: Int,
     override val encoded: ByteBuffer
 ) : ASN1Object {
 
@@ -15,7 +14,6 @@ internal class ASN1Integer private constructor(
     override fun toString(): String = "INTEGER $value"
 
     companion object {
-        fun create(tag: Int, totalLength: Int, encoded: ByteBuffer): ASN1Integer =
-            ASN1Integer(tag, totalLength, encoded)
+        fun create(tag: Int, encoded: ByteBuffer) = ASN1Integer(tag, encoded)
     }
 }

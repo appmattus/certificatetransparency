@@ -96,6 +96,8 @@ internal object TestData {
     const val TEST_MITMPROXY_ATTACK_CHAIN = DATA_ROOT + "mitmproxy-attack-chain.pem"
     const val TEST_MITMPROXY_ORIGINAL_CHAIN = DATA_ROOT + "mitmproxy-original-chain.pem"
 
+    const val TEST_V1_CERT = DATA_ROOT + "test-no-ca-cert.pem"
+
     const val TEN_CERTS_CHAIN = DATA_ROOT + "chaincleaner/ten-certs-chain.pem"
     const val TEN_CERTS_ROOT_CERT = DATA_ROOT + "chaincleaner/ten-certs-root-cert.pem"
 

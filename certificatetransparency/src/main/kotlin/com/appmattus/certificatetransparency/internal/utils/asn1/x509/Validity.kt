@@ -10,11 +10,9 @@ import java.time.format.FormatStyle
 
 internal class Validity private constructor(private val sequence: ASN1Sequence) : ASN1Object {
 
-    val notValidBefore: ASN1Time
-        get() = sequence.values[0] as ASN1Time
+    val notValidBefore: ASN1Time by lazy { sequence.values[0] as ASN1Time }
 
-    val notValidAfter: ASN1Time
-        get() = sequence.values[1] as ASN1Time
+    val notValidAfter: ASN1Time by lazy { sequence.values[1] as ASN1Time }
 
     override val tag: Int
         get() = sequence.tag
@@ -24,9 +22,9 @@ internal class Validity private constructor(private val sequence: ASN1Sequence) 
 
     override fun toString(): String =
         "Not Valid Before ${
-        notValidBefore.value.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL))
+            notValidBefore.value.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL))
         }\nNot Valid After ${
-        notValidAfter.value.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL))
+            notValidAfter.value.atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL))
         }"
 
     companion object {

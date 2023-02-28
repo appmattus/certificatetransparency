@@ -6,7 +6,7 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.toByteBuffer
 import com.appmattus.certificatetransparency.internal.utils.asn1.x509.Certificate
 import com.appmattus.certificatetransparency.utils.TestData
 import okio.ByteString.Companion.decodeHex
-import org.bouncycastle.util.encoders.Hex
+import okio.ByteString.Companion.toByteString
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import kotlin.math.max
@@ -47,6 +47,12 @@ class ASN1Awesome {
     }
 
     @Test
+    fun v1() {
+        val cert = TestData.loadCertificates(TestData.TEST_V1_CERT).first()
+        println(Certificate.create(cert.encoded))
+    }
+
+    @Test
     fun simple() {
         val bytes =
             "308187020100301306072A8648CE3D020106082A8648CE3D030107046D306B0201010420898C9DA36EDA3463BD0C151678610F0FCA0D8B52D90EA7F13E642589" +
@@ -74,10 +80,8 @@ class ASN1Awesome {
     }
 
     companion object {
-        private fun ByteArray.toHexString(): String =
-            Hex.toHexString(this)
+        private fun ByteArray.toHexString(): String = toByteString().hex()
 
-        private fun ByteBuffer.toHexString(): String =
-            Hex.toHexString(this.toList().toByteArray())
+        private fun ByteBuffer.toHexString(): String = toList().toByteArray().toHexString()
     }
 }

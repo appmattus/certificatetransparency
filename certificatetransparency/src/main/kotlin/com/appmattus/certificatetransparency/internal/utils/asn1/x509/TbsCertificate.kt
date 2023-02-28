@@ -1,20 +1,18 @@
 package com.appmattus.certificatetransparency.internal.utils.asn1.x509
 
-import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Extensions
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Integer
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Object
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Sequence
-import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Version
 import com.appmattus.certificatetransparency.internal.utils.asn1.ByteBuffer
 
 @Suppress("MagicNumber")
 internal class TbsCertificate private constructor(private val sequence: ASN1Sequence) : ASN1Object {
 
-    private val versionOffset = if (sequence.values[0] is ASN1Version) 1 else 0
+    private val versionOffset = if (sequence.values[0] is Version) 1 else 0
 
     // Version
-    val version: ASN1Version?
-        get() = sequence.values[0] as? ASN1Version
+    val version: Version?
+        get() = sequence.values[0] as? Version
 
     // CertificateSerialNumber
     val serialNumber: CertificateSerialNumber
@@ -48,8 +46,8 @@ internal class TbsCertificate private constructor(private val sequence: ASN1Sequ
         get() = sequence.values.firstOrNull { it.tag == 0xa2 }
 
     // Extensions 0xa3 (optional)
-    val extensions: ASN1Extensions?
-        get() = sequence.values.firstOrNull { it.tag == 0xa3 } as ASN1Extensions?
+    val extensions: Extensions?
+        get() = sequence.values.firstOrNull { it.tag == 0xa3 } as Extensions?
 
     override val tag: Int
         get() = sequence.tag
