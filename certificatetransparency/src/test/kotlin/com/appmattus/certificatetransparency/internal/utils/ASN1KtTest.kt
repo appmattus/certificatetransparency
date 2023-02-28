@@ -29,7 +29,7 @@ class ASN1KtTest {
         // Given the input
 
         // When we read the octet
-        val result = input.readOctet()
+        val result = input.readNestedOctets(1)
 
         // Then the result matches the expected output
         assertTrue(octet1Expected.contentEquals(result))
@@ -41,7 +41,7 @@ class ASN1KtTest {
         val input = byteArrayOf(0x00, 0x00)
 
         // When we read the octet
-        input.readOctet()
+        input.readNestedOctets(1)
 
         // Then an exception is thrown
     }

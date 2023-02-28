@@ -21,10 +21,6 @@ package com.appmattus.certificatetransparency.internal.utils
 import java.io.IOException
 import java.io.InputStream
 
-internal fun ByteArray.readOctet(): ByteArray {
-    return readNestedOctets(1)
-}
-
 internal fun ByteArray.readNestedOctets(count: Int): ByteArray {
     val stream = inputStream()
     var length = 0
