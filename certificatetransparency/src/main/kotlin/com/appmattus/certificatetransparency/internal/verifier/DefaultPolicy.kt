@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,29 +24,38 @@ import com.appmattus.certificatetransparency.CTPolicy
 import com.appmattus.certificatetransparency.SctVerificationResult
 import com.appmattus.certificatetransparency.VerificationResult
 import java.security.cert.X509Certificate
-import java.util.Calendar
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 
+/**
+ * Default [CTPolicy] which follows most of the rules of https://github.com/GoogleChrome/CertificateTransparency/blob/master/ct_policy.md
+ */
 internal class DefaultPolicy : CTPolicy {
 
+    @Suppress("MagicNumber")
     override fun policyVerificationResult(
         leafCertificate: X509Certificate,
         sctResults: Map<String, SctVerificationResult>
     ): VerificationResult {
-        val before = Calendar.getInstance().apply {
-            time = leafCertificate.notBefore
-        }
-        val after = Calendar.getInstance().apply {
-            time = leafCertificate.notAfter
-        }
+        // By default we use the 2022 policy when there are no valid SCTs
+        val issuanceDate = sctResults.values.filterIsInstance<SctVerificationResult.Valid>().minOfOrNull { it.sct.timestamp } ?: Long.MAX_VALUE
+        val use2022policy = issuanceDate >= policyUpdateDate
 
-        val (lifetimeInMonths, hasPartialMonth) = roundedDownMonthDifference(before, after)
+        val before = leafCertificate.notBefore.toInstant().atZone(ZoneOffset.UTC)
+        val after = leafCertificate.notAfter.toInstant().atZone(ZoneOffset.UTC)
 
-        @Suppress("MagicNumber")
-        val minimumValidSignedCertificateTimestamps = when {
-            lifetimeInMonths > 39 || lifetimeInMonths == 39 && hasPartialMonth -> 5
-            lifetimeInMonths > 27 || lifetimeInMonths == 27 && hasPartialMonth -> 4
-            lifetimeInMonths >= 15 -> 3
-            else -> 2
+        val minimumValidSignedCertificateTimestamps = if (use2022policy) {
+            if (ChronoUnit.DAYS.between(before, after) > 180) 3 else 2
+        } else {
+            val (lifetimeInMonths, hasPartialMonth) = roundedDownMonthDifference(before, after)
+
+            when {
+                lifetimeInMonths > 39 || lifetimeInMonths == 39 && hasPartialMonth -> 5
+                lifetimeInMonths > 27 || lifetimeInMonths == 27 && hasPartialMonth -> 4
+                lifetimeInMonths >= 15 -> 3
+                else -> 2
+            }
         }
 
         return if (sctResults.count { it.value is SctVerificationResult.Valid } < minimumValidSignedCertificateTimestamps) {
@@ -56,27 +65,22 @@ internal class DefaultPolicy : CTPolicy {
         }
     }
 
-    private fun roundedDownMonthDifference(start: Calendar, expiry: Calendar): MonthDifference {
+    private fun roundedDownMonthDifference(start: ZonedDateTime, expiry: ZonedDateTime): MonthDifference {
         if (expiry < start) {
             return MonthDifference(roundedMonthDifference = 0, hasPartialMonth = false)
         }
 
         @Suppress("MagicNumber")
         return MonthDifference(
-            roundedMonthDifference = (expiry.year - start.year) * 12 + (expiry.month - start.month) -
-                if (expiry.dayOfMonth < start.dayOfMonth) 1 else 0,
+            roundedMonthDifference = ChronoUnit.MONTHS.between(start, expiry).toInt(),
             hasPartialMonth = expiry.dayOfMonth != start.dayOfMonth
         )
     }
 
     private data class MonthDifference(val roundedMonthDifference: Int, val hasPartialMonth: Boolean)
 
-    private val Calendar.year
-        get() = get(Calendar.YEAR)
-
-    private val Calendar.month
-        get() = get(Calendar.MONTH)
-
-    private val Calendar.dayOfMonth
-        get() = get(Calendar.DAY_OF_MONTH)
+    companion object {
+        // 15 April 2022
+        private const val policyUpdateDate = 1649980800000
+    }
 }

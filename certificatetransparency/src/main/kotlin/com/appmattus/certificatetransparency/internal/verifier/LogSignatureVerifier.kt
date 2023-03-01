@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -225,7 +225,7 @@ internal class LogSignatureVerifier(private val logServer: LogServer) : Signatur
                 update(toVerify)
             }.verify(sct.signature.signature)
 
-            if (result) SctVerificationResult.Valid else SctVerificationResult.Invalid.FailedVerification
+            if (result) SctVerificationResult.Valid(sct) else SctVerificationResult.Invalid.FailedVerification
         } catch (e: SignatureException) {
             SignatureNotValid(e)
         } catch (e: InvalidKeyException) {

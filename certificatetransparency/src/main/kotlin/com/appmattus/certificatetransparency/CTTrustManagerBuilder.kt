@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ public class CTTrustManagerBuilder(
 
     /**
      * [CTPolicy] which will verify correct number of SCTs are present
-     * Default: [CTPolicy] which follows rules of https://github.com/chromium/ct-policy/blob/master/ct_policy.md
+     * Default: Follows rules of https://github.com/GoogleChrome/CertificateTransparency/blob/master/ct_policy.md
      */
     public var policy: CTPolicy? = null
         @JvmSynthetic get
@@ -149,7 +149,6 @@ public class CTTrustManagerBuilder(
 
     /**
      * [CTPolicy] which will verify correct number of SCTs are present
-     * Default: [CTPolicy] which follows rules of https://github.com/chromium/ct-policy/blob/master/ct_policy.md
      */
     @Suppress("unused")
     public fun setPolicy(policy: CTPolicy): CTTrustManagerBuilder = apply { this.policy = policy }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,14 +20,16 @@
 
 package com.appmattus.certificatetransparency
 
+import com.appmattus.certificatetransparency.internal.verifier.model.SignedCertificateTimestamp
+
 /**
  * Abstract class providing the results of verifying a Signed Certificate Timestamp
  */
-public sealed class SctVerificationResult {
+public sealed interface SctVerificationResult {
     /**
      * Signed Certificate Timestamp checks passed
      */
-    public object Valid : SctVerificationResult() {
+    public data class Valid(val sct: SignedCertificateTimestamp) : SctVerificationResult {
         /**
          * Returns a string representation of the object.
          */
@@ -37,11 +39,11 @@ public sealed class SctVerificationResult {
     /**
      * Abstract class representing Signed Certificate Timestamp checks failed
      */
-    public sealed class Invalid : SctVerificationResult() {
+    public sealed interface Invalid : SctVerificationResult {
         /**
          * Signed Certificate Timestamp checks failed as the signature could not be verified
          */
-        public object FailedVerification : Invalid() {
+        public object FailedVerification : Invalid {
             /**
              * Returns a string representation of the object.
              */
@@ -51,7 +53,7 @@ public sealed class SctVerificationResult {
         /**
          * Signed Certificate Timestamp checks failed as there was no log server we trust in the log-list.json
          */
-        public object NoTrustedLogServerFound : Invalid() {
+        public object NoTrustedLogServerFound : Invalid {
             /**
              * Returns a string representation of the object.
              */
@@ -63,7 +65,7 @@ public sealed class SctVerificationResult {
          * @property timestamp The timestamp of the SCT
          * @property now The time now
          */
-        public data class FutureTimestamp(val timestamp: Long, val now: Long) : Invalid() {
+        public data class FutureTimestamp(val timestamp: Long, val now: Long) : Invalid {
             /**
              * Returns a string representation of the object.
              */
@@ -75,7 +77,7 @@ public sealed class SctVerificationResult {
          * @property timestamp The timestamp of the SCT
          * @property logServerValidUntil The time the log server was valid till
          */
-        public data class LogServerUntrusted(val timestamp: Long, val logServerValidUntil: Long) : Invalid() {
+        public data class LogServerUntrusted(val timestamp: Long, val logServerValidUntil: Long) : Invalid {
             /**
              * Returns a string representation of the object.
              */
@@ -85,12 +87,12 @@ public sealed class SctVerificationResult {
         /**
          * Signed Certificate Timestamp checks failed for an unspecified reason
          */
-        public open class Failed : Invalid()
+        public open class Failed : Invalid
 
         /**
          * Signed Certificate Timestamp checks failed as an [exception] was detected
          */
-        public abstract class FailedWithException : Invalid() {
+        public abstract class FailedWithException : Invalid {
             /**
              * The [exception] that occurred
              */
