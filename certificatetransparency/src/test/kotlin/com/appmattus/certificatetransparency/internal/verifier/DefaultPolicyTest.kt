@@ -28,6 +28,7 @@ import com.appmattus.certificatetransparency.internal.verifier.model.SignedCerti
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.junit.experimental.runners.Enclosed
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.mockito.kotlin.mock
@@ -39,159 +40,248 @@ import java.util.TimeZone
 import java.util.UUID
 import kotlin.random.Random
 
-@RunWith(Parameterized::class)
-internal class DefaultPolicyTest(
-    @Suppress("unused") private val description: String,
-    private val start: Date,
-    private val end: Date,
-    private val oldPolicySctsRequired: Int,
-    private val newPolicySctsRequired: Int
-) {
+@RunWith(Enclosed::class)
+internal class DefaultPolicyTest {
 
-    @Test
-    fun fewerSctsThanRequiredReturnsFailureOldPolicy() {
-        // given a certificate with start and end date specified
-        val certificate: X509Certificate = mock()
-        whenever(certificate.notBefore).thenReturn(start)
-        whenever(certificate.notAfter).thenReturn(end)
+    class DistinctTest {
 
-        // and fewer SCTs than required
-        val scts = buildList {
-            // we ensure there is at least one valid SCT so the old policy is selected
-            for (i in 0 until Random.nextInt(1, oldPolicySctsRequired)) {
-                add(SctVerificationResult.Valid(oldPolicySct))
-            }
-            for (i in 0 until 10) {
-                add(SctVerificationResult.Invalid.FailedVerification)
-            }
-        }.shuffled().associateBy { UUID.randomUUID().toString() }
+        @Test
+        fun duplicateLogIdsReturnsFailureTooFewDistinctOperators() {
+            val start = date(2015, 3, 25, 11, 25, 0, 0)
+            val end = date(2016, 6, 6, 11, 25, 0, 0)
 
-        // when we execute the default policy
-        val result = DefaultPolicy().policyVerificationResult(certificate, scts) as VerificationResult.Failure.TooFewSctsTrusted
+            // given a certificate with start and end date specified
+            val certificate: X509Certificate = mock()
+            whenever(certificate.notBefore).thenReturn(start)
+            whenever(certificate.notAfter).thenReturn(end)
 
-        // then the correct number of SCTs are required
-        assertEquals(oldPolicySctsRequired, result.minSctCount)
+            // and correct number of trusted SCTs present with duplicate log ids
+            val scts = buildList {
+                repeat(3) {
+                    // ids use different byte arrays but the same content
+                    add(SctVerificationResult.Valid(newPolicySct.copy(id = LogId(byteArrayOf(1, 2, 3, 4, 5)))))
+                }
+                repeat(5) {
+                    add(SctVerificationResult.Invalid.FailedVerification)
+                }
+            }.shuffled().associateBy { UUID.randomUUID().toString() }
+
+            // when we execute the default policy
+            val result = DefaultPolicy().policyVerificationResult(certificate, scts)
+
+            // then the policy fails
+            assertTrue(result is VerificationResult.Failure.TooFewDistinctOperators)
+            assertTrue(result.toString().startsWith("Failure: Too few distinct operators, required 3, found 1 in"))
+        }
+
+        @Test
+        fun distinctLogIdsReturnsSuccessTrusted() {
+            val start = date(2015, 3, 25, 11, 25, 0, 0)
+            val end = date(2016, 6, 6, 11, 25, 0, 0)
+
+            // given a certificate with start and end date specified
+            val certificate: X509Certificate = mock()
+            whenever(certificate.notBefore).thenReturn(start)
+            whenever(certificate.notAfter).thenReturn(end)
+
+            // and correct number of trusted SCTs present with unique log ids
+            val scts = buildList {
+                repeat(3) {
+                    add(SctVerificationResult.Valid(newPolicySct))
+                }
+                repeat(5) {
+                    add(SctVerificationResult.Invalid.FailedVerification)
+                }
+            }.shuffled().associateBy { UUID.randomUUID().toString() }
+
+            // when we execute the default policy
+            val result = DefaultPolicy().policyVerificationResult(certificate, scts)
+
+            // then the policy passes
+            assertTrue(result is VerificationResult.Success.Trusted)
+        }
     }
 
-    @Test
-    fun fewerSctsThanRequiredReturnsFailureNewPolicy() {
-        // given a certificate with start and end date specified
-        val certificate: X509Certificate = mock()
-        whenever(certificate.notBefore).thenReturn(start)
-        whenever(certificate.notAfter).thenReturn(end)
+    @RunWith(Parameterized::class)
+    class ParameterisedTest(
+        @Suppress("unused") private val description: String,
+        private val start: Date,
+        private val end: Date,
+        private val oldPolicySctsRequired: Int,
+        private val newPolicySctsRequired: Int
+    ) {
 
-        // and fewer SCTs than required
-        val scts = buildList {
-            for (i in 0 until Random.nextInt(0, newPolicySctsRequired)) {
-                add(SctVerificationResult.Valid(newPolicySct))
-            }
-            for (i in 0 until 10) {
-                add(SctVerificationResult.Invalid.FailedVerification)
-            }
-        }.shuffled().associateBy { UUID.randomUUID().toString() }
+        @Test
+        fun fewerSctsThanRequiredReturnsFailureOldPolicy() {
+            // given a certificate with start and end date specified
+            val certificate: X509Certificate = mock()
+            whenever(certificate.notBefore).thenReturn(start)
+            whenever(certificate.notAfter).thenReturn(end)
 
-        // when we execute the default policy
-        val result = DefaultPolicy().policyVerificationResult(certificate, scts) as VerificationResult.Failure.TooFewSctsTrusted
+            // and fewer SCTs than required
+            val scts = buildList {
+                // we ensure there is at least one valid SCT so the old policy is selected
+                repeat(Random.nextInt(1, oldPolicySctsRequired)) {
+                    add(SctVerificationResult.Valid(oldPolicySct))
+                }
+                repeat(10) {
+                    add(SctVerificationResult.Invalid.FailedVerification)
+                }
+            }.shuffled().associateBy { UUID.randomUUID().toString() }
 
-        // then the correct number of SCTs are required
-        assertEquals(newPolicySctsRequired, result.minSctCount)
-    }
+            // when we execute the default policy
+            val result = DefaultPolicy().policyVerificationResult(certificate, scts) as VerificationResult.Failure.TooFewSctsTrusted
 
-    @Test
-    fun correctNumberOfSctsReturnsSuccessTrustedOldPolicy() {
-        // given a certificate with start and end date specified
-        val certificate: X509Certificate = mock()
-        whenever(certificate.notBefore).thenReturn(start)
-        whenever(certificate.notAfter).thenReturn(end)
+            // then the correct number of SCTs are required
+            assertEquals(oldPolicySctsRequired, result.minSctCount)
+        }
 
-        // and correct number of trusted SCTs present
-        val scts = buildList {
-            for (i in 0 until oldPolicySctsRequired) {
-                add(SctVerificationResult.Valid(oldPolicySct))
-            }
-            for (i in 0 until 10) {
-                add(SctVerificationResult.Invalid.FailedVerification)
-            }
-        }.shuffled().associateBy { UUID.randomUUID().toString() }
+        @Test
+        fun fewerSctsThanRequiredReturnsFailureNewPolicy() {
+            // given a certificate with start and end date specified
+            val certificate: X509Certificate = mock()
+            whenever(certificate.notBefore).thenReturn(start)
+            whenever(certificate.notAfter).thenReturn(end)
 
-        // when we execute the default policy
-        val result = DefaultPolicy().policyVerificationResult(certificate, scts)
+            // and fewer SCTs than required
+            val scts = buildList {
+                repeat(Random.nextInt(0, newPolicySctsRequired)) {
+                    add(SctVerificationResult.Valid(newPolicySct))
+                }
+                repeat(10) {
+                    add(SctVerificationResult.Invalid.FailedVerification)
+                }
+            }.shuffled().associateBy { UUID.randomUUID().toString() }
 
-        // then the policy passes
-        assertTrue(result is VerificationResult.Success.Trusted)
-    }
+            // when we execute the default policy
+            val result = DefaultPolicy().policyVerificationResult(certificate, scts) as VerificationResult.Failure.TooFewSctsTrusted
 
-    @Test
-    fun correctNumberOfSctsReturnsSuccessTrustedNewPolicy() {
-        // given a certificate with start and end date specified
-        val certificate: X509Certificate = mock()
-        whenever(certificate.notBefore).thenReturn(start)
-        whenever(certificate.notAfter).thenReturn(end)
+            // then the correct number of SCTs are required
+            assertEquals(newPolicySctsRequired, result.minSctCount)
+        }
 
-        // and correct number of trusted SCTs present
-        val scts = buildList {
-            for (i in 0 until newPolicySctsRequired) {
-                add(SctVerificationResult.Valid(newPolicySct))
-            }
-            for (i in 0 until 10) {
-                add(SctVerificationResult.Invalid.FailedVerification)
-            }
-        }.shuffled().associateBy { UUID.randomUUID().toString() }
+        @Test
+        fun correctNumberOfSctsReturnsSuccessTrustedOldPolicy() {
+            // given a certificate with start and end date specified
+            val certificate: X509Certificate = mock()
+            whenever(certificate.notBefore).thenReturn(start)
+            whenever(certificate.notAfter).thenReturn(end)
 
-        // when we execute the default policy
-        val result = DefaultPolicy().policyVerificationResult(certificate, scts)
+            // and correct number of trusted SCTs present
+            val scts = buildList {
+                repeat(oldPolicySctsRequired) {
+                    add(SctVerificationResult.Valid(oldPolicySct))
+                }
+                repeat(10) {
+                    add(SctVerificationResult.Invalid.FailedVerification)
+                }
+            }.shuffled().associateBy { UUID.randomUUID().toString() }
 
-        // then the policy passes
-        assertTrue(result is VerificationResult.Success.Trusted)
-    }
+            // when we execute the default policy
+            val result = DefaultPolicy().policyVerificationResult(certificate, scts)
 
-    companion object {
+            // then the policy passes
+            assertTrue(result is VerificationResult.Success.Trusted)
+        }
 
-        @Suppress("LongParameterList", "SameParameterValue")
-        private fun date(year: Int, month: Int, dayOfMonth: Int, hour: Int, minute: Int, second: Int, milliseconds: Int): Date =
-            Calendar.getInstance().apply {
-                set(Calendar.YEAR, year)
-                set(Calendar.MONTH, month - 1)
-                set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                set(Calendar.HOUR_OF_DAY, hour)
-                set(Calendar.MINUTE, minute)
-                set(Calendar.SECOND, second)
-                set(Calendar.MILLISECOND, milliseconds)
-                timeZone = TimeZone.getTimeZone("UTC")
-            }.time
+        @Test
+        fun correctNumberOfSctsReturnsSuccessTrustedNewPolicy() {
+            // given a certificate with start and end date specified
+            val certificate: X509Certificate = mock()
+            whenever(certificate.notBefore).thenReturn(start)
+            whenever(certificate.notAfter).thenReturn(end)
 
-        @JvmStatic
-        @Parameterized.Parameters(name = "{0} ({1} -> {2})")
-        fun data() = arrayOf(
-            arrayOf(
-                "Cert valid for -14 months (nonsensical), needs 2 SCTs",
-                date(2016, 6, 6, 11, 25, 0, 0),
-                date(2015, 3, 25, 11, 25, 0, 0),
-                2,
-                2
-            ),
-            arrayOf("Cert valid for 14 months, needs 2 SCTs", date(2015, 3, 25, 11, 25, 0, 0), date(2016, 6, 6, 11, 25, 0, 0), 2, 3),
-            arrayOf("Cert valid for exactly 15 months, needs 3 SCTs", date(2015, 3, 25, 11, 25, 0, 0), date(2016, 6, 25, 11, 25, 0, 0), 3, 3),
-            arrayOf("Cert valid for over 15 months, needs 3 SCTs", date(2015, 3, 25, 11, 25, 0, 0), date(2016, 6, 27, 11, 25, 0, 0), 3, 3),
-            arrayOf("Cert valid for exactly 27 months, needs 3 SCTs", date(2015, 3, 25, 11, 25, 0, 0), date(2017, 6, 25, 11, 25, 0, 0), 3, 3),
-            arrayOf("Cert valid for over 27 months, needs 4 SCTs", date(2015, 3, 25, 11, 25, 0, 0), date(2017, 6, 28, 11, 25, 0, 0), 4, 3),
-            arrayOf("Cert valid for exactly 39 months, needs 4 SCTs", date(2015, 3, 25, 11, 25, 0, 0), date(2018, 6, 25, 11, 25, 0, 0), 4, 3),
-            arrayOf("Cert valid for over 39 months, needs 5 SCTs", date(2015, 3, 25, 11, 25, 0, 0), date(2018, 6, 27, 11, 25, 0, 0), 5, 3)
-        )
+            // and correct number of trusted SCTs present
+            val scts = buildList {
+                repeat(newPolicySctsRequired) {
+                    add(SctVerificationResult.Valid(newPolicySct))
+                }
+                repeat(10) {
+                    add(SctVerificationResult.Invalid.FailedVerification)
+                }
+            }.shuffled().associateBy { UUID.randomUUID().toString() }
 
-        private val oldPolicySct = SignedCertificateTimestamp(
-            id = LogId(byteArrayOf()),
-            timestamp = 0,
-            extensions = byteArrayOf(),
-            signature = DigitallySigned(signature = byteArrayOf())
-        )
+            // when we execute the default policy
+            val result = DefaultPolicy().policyVerificationResult(certificate, scts)
 
-        private val newPolicySct = SignedCertificateTimestamp(
-            id = LogId(byteArrayOf()),
-            // 15 April 2022
-            timestamp = 1649980800000,
-            extensions = byteArrayOf(),
-            signature = DigitallySigned(signature = byteArrayOf())
-        )
+            // then the policy passes
+            assertTrue(result is VerificationResult.Success.Trusted)
+        }
+
+        companion object {
+
+            @JvmStatic
+            @Parameterized.Parameters(name = "{0} ({1} -> {2})")
+            fun data() = arrayOf(
+                arrayOf(
+                    "Cert valid for -14 months (nonsensical), needs 2 SCTs",
+                    date(2016, 6, 6, 11, 25, 0, 0),
+                    date(2015, 3, 25, 11, 25, 0, 0),
+                    2,
+                    2
+                ),
+                arrayOf("Cert valid for 14 months, needs 2 SCTs", date(2015, 3, 25, 11, 25, 0, 0), date(2016, 6, 6, 11, 25, 0, 0), 2, 3),
+                arrayOf(
+                    "Cert valid for exactly 15 months, needs 3 SCTs",
+                    date(2015, 3, 25, 11, 25, 0, 0),
+                    date(2016, 6, 25, 11, 25, 0, 0),
+                    3,
+                    3
+                ),
+                arrayOf("Cert valid for over 15 months, needs 3 SCTs", date(2015, 3, 25, 11, 25, 0, 0), date(2016, 6, 27, 11, 25, 0, 0), 3, 3),
+                arrayOf(
+                    "Cert valid for exactly 27 months, needs 3 SCTs",
+                    date(2015, 3, 25, 11, 25, 0, 0),
+                    date(2017, 6, 25, 11, 25, 0, 0),
+                    3,
+                    3
+                ),
+                arrayOf("Cert valid for over 27 months, needs 4 SCTs", date(2015, 3, 25, 11, 25, 0, 0), date(2017, 6, 28, 11, 25, 0, 0), 4, 3),
+                arrayOf(
+                    "Cert valid for exactly 39 months, needs 4 SCTs (old policy) or 3 SCTs (new policy)",
+                    date(2015, 3, 25, 11, 25, 0, 0),
+                    date(2018, 6, 25, 11, 25, 0, 0),
+                    4,
+                    3
+                ),
+                arrayOf(
+                    "Cert valid for over 39 months, needs 5 SCTs (old policy) or 3 SCTs (new policy)",
+                    date(2015, 3, 25, 11, 25, 0, 0),
+                    date(2018, 6, 27, 11, 25, 0, 0),
+                    5,
+                    3
+                )
+            )
+        }
     }
 }
+
+@Suppress("LongParameterList", "SameParameterValue")
+fun date(year: Int, month: Int, dayOfMonth: Int, hour: Int, minute: Int, second: Int, milliseconds: Int): Date =
+    Calendar.getInstance().apply {
+        set(Calendar.YEAR, year)
+        set(Calendar.MONTH, month - 1)
+        set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        set(Calendar.HOUR_OF_DAY, hour)
+        set(Calendar.MINUTE, minute)
+        set(Calendar.SECOND, second)
+        set(Calendar.MILLISECOND, milliseconds)
+        timeZone = TimeZone.getTimeZone("UTC")
+    }.time
+
+private val oldPolicySct
+    get() = SignedCertificateTimestamp(
+        id = LogId(Random.nextBytes(10)),
+        timestamp = 0,
+        extensions = byteArrayOf(),
+        signature = DigitallySigned(signature = byteArrayOf())
+    )
+
+private val newPolicySct
+    get() = SignedCertificateTimestamp(
+        id = LogId(Random.nextBytes(10)),
+        // 15 April 2022
+        timestamp = 1649980800000,
+        extensions = byteArrayOf(),
+        signature = DigitallySigned(signature = byteArrayOf())
+    )

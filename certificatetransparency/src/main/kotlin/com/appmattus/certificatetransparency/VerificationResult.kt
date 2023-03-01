@@ -117,6 +117,21 @@ public sealed interface VerificationResult {
         }
 
         /**
+         * Certificate transparency checks failed as there are not enough Signed Certificate Timestamps with distinct operators
+         * @property scts Map of logIds to [SctVerificationResult] stating which SCTs passed or failed checks
+         * @property minSctCount The number of valid SCTs required for trust to be established
+         */
+        public data class TooFewDistinctOperators(val scts: Map<String, SctVerificationResult>, val minSctCount: Int) : Failure {
+            /**
+             * Returns a string representation of the object.
+             */
+            override fun toString(): String {
+                val trustedScts = scts.values.filterIsInstance<SctVerificationResult.Valid>().distinctBy { it.sct.id }.size
+                return "Failure: Too few distinct operators, required $minSctCount, found $trustedScts in ${scts.forDisplay()}"
+            }
+        }
+
+        /**
          * Certificate transparency checks failed due to an unknown [IOException]
          * @property ioException The [IOException] that occurred
          */
