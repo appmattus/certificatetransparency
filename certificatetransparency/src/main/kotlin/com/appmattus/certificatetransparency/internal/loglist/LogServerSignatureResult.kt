@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,25 +21,25 @@ import java.security.InvalidKeyException
 import java.security.NoSuchAlgorithmException
 import java.security.SignatureException
 
-internal sealed class LogServerSignatureResult {
-    object Valid : LogServerSignatureResult() {
+internal sealed interface LogServerSignatureResult {
+    object Valid : LogServerSignatureResult {
         override fun toString() = "Valid signature"
     }
 
-    sealed class Invalid : LogServerSignatureResult() {
-        object SignatureFailed : Invalid() {
+    sealed interface Invalid : LogServerSignatureResult {
+        object SignatureFailed : Invalid {
             override fun toString() = "Invalid signature"
         }
 
-        data class SignatureNotValid(val exception: SignatureException) : Invalid() {
+        data class SignatureNotValid(val exception: SignatureException) : Invalid {
             override fun toString() = "Invalid signature (public key) with ${exception.stringStackTrace()}"
         }
 
-        data class PublicKeyNotValid(val exception: InvalidKeyException) : Invalid() {
+        data class PublicKeyNotValid(val exception: InvalidKeyException) : Invalid {
             override fun toString() = "Invalid signature (public key) with ${exception.stringStackTrace()}"
         }
 
-        data class NoSuchAlgorithm(val exception: NoSuchAlgorithmException) : Invalid() {
+        data class NoSuchAlgorithm(val exception: NoSuchAlgorithmException) : Invalid {
             override fun toString() = "Invalid signature (public key) with ${exception.stringStackTrace()}"
         }
     }

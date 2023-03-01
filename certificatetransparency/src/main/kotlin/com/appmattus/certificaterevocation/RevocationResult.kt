@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,16 +22,16 @@ import java.security.cert.X509Certificate
 /**
  * Abstract class providing the results of performing certificate revocation checks
  */
-public sealed class RevocationResult {
+public sealed interface RevocationResult {
     /**
      * Abstract class representing certificate revocation checks passed
      */
-    public sealed class Success : RevocationResult() {
+    public sealed interface Success : RevocationResult {
 
         /**
          * Certificate revocation checks passed
          */
-        public object Trusted : Success() {
+        public object Trusted : Success {
             /**
              * Returns a string representation of the object.
              */
@@ -41,7 +41,7 @@ public sealed class RevocationResult {
         /**
          * Insecure connection so no certificate to check revocation
          */
-        public object InsecureConnection : Success() {
+        public object InsecureConnection : Success {
             /**
              * Returns a string representation of the object.
              */
@@ -52,12 +52,12 @@ public sealed class RevocationResult {
     /**
      * Abstract class representing certificate revocation checks failed
      */
-    public sealed class Failure : RevocationResult() {
+    public sealed interface Failure : RevocationResult {
 
         /**
          * Certificate revocation checks failed as no certificates are present
          */
-        public object NoCertificates : Failure() {
+        public object NoCertificates : Failure {
             /**
              * Returns a string representation of the object.
              */
@@ -67,7 +67,7 @@ public sealed class RevocationResult {
         /**
          * Certificate revocation checks failed as server not trusted
          */
-        public data class CertificateRevoked(val certificate: X509Certificate) : Failure() {
+        public data class CertificateRevoked(val certificate: X509Certificate) : Failure {
             /**
              * Returns a string representation of the object.
              */
@@ -78,7 +78,7 @@ public sealed class RevocationResult {
          * Certificate revocation checks failed due to an unknown [IOException]
          * @property ioException The [IOException] that occurred
          */
-        public data class UnknownIoException(val ioException: IOException) : Failure() {
+        public data class UnknownIoException(val ioException: IOException) : Failure {
             /**
              * Returns a string representation of the object.
              */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@ package com.appmattus.certificatetransparency.loglist
 /**
  * Class representing the raw log list data
  */
-public sealed class RawLogListResult {
+public sealed interface RawLogListResult {
 
     /**
      * Class representing raw log list data loading successfully
@@ -31,7 +31,7 @@ public sealed class RawLogListResult {
     public data class Success(
         val logList: ByteArray,
         val signature: ByteArray
-    ) : RawLogListResult() {
+    ) : RawLogListResult {
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
@@ -55,5 +55,5 @@ public sealed class RawLogListResult {
     /**
      * Class representing raw log list data loading failed
      */
-    public open class Failure : RawLogListResult()
+    public open class Failure : RawLogListResult
 }

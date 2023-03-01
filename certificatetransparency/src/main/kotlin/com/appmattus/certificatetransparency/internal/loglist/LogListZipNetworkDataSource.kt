@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -84,9 +84,9 @@ internal class LogListZipNetworkDataSource(
         }
     }
 
-    private sealed class Data {
-        class Valid(val bytes: ByteArray) : Data()
-        class Invalid(val error: RawLogListResult) : Data()
+    private sealed interface Data {
+        class Valid(val bytes: ByteArray) : Data
+        class Invalid(val error: RawLogListResult) : Data
     }
 
     companion object {

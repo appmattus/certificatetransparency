@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,10 +28,10 @@ data class State(
     val message: Message? = null
 ) {
 
-    sealed class Message {
-        abstract val text: String
+    sealed interface Message {
+        val text: String
 
-        data class Success(override val text: String) : Message()
-        data class Failure(override val text: String) : Message()
+        data class Success(override val text: String) : Message
+        data class Failure(override val text: String) : Message
     }
 }
