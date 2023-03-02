@@ -126,7 +126,7 @@ public sealed interface VerificationResult {
              * Returns a string representation of the object.
              */
             override fun toString(): String {
-                val trustedScts = scts.values.filterIsInstance<SctVerificationResult.Valid>().distinctBy { it.sct.id }.size
+                val trustedScts = scts.values.filterIsInstance<SctVerificationResult.Valid>().distinctBy { it.operator }.size
                 return "Failure: Too few distinct operators, required $minSctCount, found $trustedScts in ${scts.forDisplay()}"
             }
         }
