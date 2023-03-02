@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -279,6 +279,6 @@ internal class LogSignatureVerifierTest {
      */
     private fun LogServer.Companion.fromKeyFile(pemKeyFilePath: String): LogServer {
         val logPublicKey = File(pemKeyFilePath).readPemFile()
-        return LogServer(logPublicKey)
+        return LogServer(logPublicKey, operator = "", previousOperators = emptyList())
     }
 }

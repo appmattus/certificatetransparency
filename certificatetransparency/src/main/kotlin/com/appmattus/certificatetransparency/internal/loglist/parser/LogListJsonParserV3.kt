@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +28,7 @@ import com.appmattus.certificatetransparency.internal.utils.Base64
 import com.appmattus.certificatetransparency.internal.utils.PublicKeyFactory
 import com.appmattus.certificatetransparency.loglist.LogListResult
 import com.appmattus.certificatetransparency.loglist.LogServer
+import com.appmattus.certificatetransparency.loglist.PreviousOperator
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import java.security.NoSuchAlgorithmException
@@ -47,29 +48,34 @@ internal class LogListJsonParserV3 : LogListJsonParser {
 
     @Suppress("ReturnCount")
     private fun buildLogServerList(logList: LogListV3): LogListResult {
-        return logList.operators
-            .flatMap { it.logs }
+        return logList.operators.map { operator ->
             // null, PENDING, REJECTED -> An SCT associated with this log server would be treated as untrusted
-            .filterNot { it.state == null || it.state is State.Pending || it.state is State.Rejected }
-            .map {
-                val keyBytes = Base64.decode(it.key)
+            operator.logs.filterNot { it.state == null || it.state is State.Pending || it.state is State.Rejected }
+                .map {
+                    val keyBytes = Base64.decode(it.key)
 
-                // FROZEN, RETIRED -> Validate SCT against this if it was issued before the state timestamp, otherwise SCT is untrusted
-                // QUALIFIED, USABLE -> Validate SCT against this (any timestamp okay)
-                val validUntil = if (it.state is State.Retired || it.state is State.ReadOnly) it.state.timestamp else null
+                    // FROZEN, RETIRED -> Validate SCT against this if it was issued before the state timestamp, otherwise SCT is untrusted
+                    // QUALIFIED, USABLE -> Validate SCT against this (any timestamp okay)
+                    val validUntil = if (it.state is State.Retired || it.state is State.ReadOnly) it.state.timestamp else null
 
-                val key = try {
-                    PublicKeyFactory.fromByteArray(keyBytes)
-                } catch (e: InvalidKeySpecException) {
-                    return LogServerInvalidKey(e, it.key)
-                } catch (e: NoSuchAlgorithmException) {
-                    return LogServerInvalidKey(e, it.key)
-                } catch (e: IllegalArgumentException) {
-                    return LogServerInvalidKey(e, it.key)
+                    val key = try {
+                        PublicKeyFactory.fromByteArray(keyBytes)
+                    } catch (e: InvalidKeySpecException) {
+                        return LogServerInvalidKey(e, it.key)
+                    } catch (e: NoSuchAlgorithmException) {
+                        return LogServerInvalidKey(e, it.key)
+                    } catch (e: IllegalArgumentException) {
+                        return LogServerInvalidKey(e, it.key)
+                    }
+
+                    LogServer(
+                        key = key,
+                        validUntil = validUntil,
+                        operator = operator.name,
+                        previousOperators = it.listOfPreviousOperators?.map { PreviousOperator(it.name, it.endDate) } ?: emptyList()
+                    )
                 }
-
-                LogServer(key, validUntil)
-            }.let(LogListResult::Valid)
+        }.flatten().let(LogListResult::Valid)
     }
 
     companion object {

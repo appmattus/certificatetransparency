@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,14 +20,14 @@
 
 package com.appmattus.certificatetransparency.loglist
 
-public sealed class LogListResult {
+public sealed interface LogListResult {
     /**
      * Class representing log list loading successful
      */
-    public data class Valid(val servers: List<LogServer>) : LogListResult()
+    public data class Valid(val servers: List<LogServer>) : LogListResult
 
     /**
      * Abstract class representing log list loading failed
      */
-    public open class Invalid : LogListResult()
+    public open class Invalid : LogListResult
 }

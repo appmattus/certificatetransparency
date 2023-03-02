@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,17 +27,17 @@ import java.io.IOException
 /**
  * Abstract class providing the results of performing certificate transparency checks
  */
-public sealed class VerificationResult {
+public sealed interface VerificationResult {
     /**
      * Abstract class representing certificate transparency checks passed
      */
-    public sealed class Success : VerificationResult() {
+    public sealed interface Success : VerificationResult {
 
         /**
          * Certificate transparency checks passed as [host] is not being verified
          * @property host The host certificate transparency is not enabled for
          */
-        public data class DisabledForHost(val host: String) : Success() {
+        public data class DisabledForHost(val host: String) : Success {
             /**
              * Returns a string representation of the object.
              */
@@ -48,7 +48,7 @@ public sealed class VerificationResult {
          * Certificate transparency checks passed with the provided [scts]
          * @property scts Map of logIds to [SctVerificationResult] showing the results of checking each Signed Certificate Timestamp
          */
-        public data class Trusted(val scts: Map<String, SctVerificationResult>) : Success() {
+        public data class Trusted(val scts: Map<String, SctVerificationResult>) : Success {
             /**
              * Returns a string representation of the object.
              */
@@ -56,7 +56,7 @@ public sealed class VerificationResult {
                 "Success: SCT trusted logs ${scts.forDisplay()}"
         }
 
-        public data class InsecureConnection(val host: String) : Success() {
+        public data class InsecureConnection(val host: String) : Success {
             /**
              * Returns a string representation of the object.
              */
@@ -67,12 +67,12 @@ public sealed class VerificationResult {
     /**
      * Abstract class representing certificate transparency checks failed
      */
-    public sealed class Failure : VerificationResult() {
+    public sealed interface Failure : VerificationResult {
 
         /**
          * Certificate transparency checks failed as no certificates are present
          */
-        public object NoCertificates : Failure() {
+        public object NoCertificates : Failure {
             /**
              * Returns a string representation of the object.
              */
@@ -83,7 +83,7 @@ public sealed class VerificationResult {
          * Certificate transparency checks failed as couldn't load list of [LogServer]. This can occur if there are network problems loading
          * the log-list.json or log-list.sig file along with issues with the signature
          */
-        public data class LogServersFailed(val logListResult: LogListResult.Invalid) : Failure() {
+        public data class LogServersFailed(val logListResult: LogListResult.Invalid) : Failure {
             /**
              * Returns a string representation of the object.
              */
@@ -94,7 +94,7 @@ public sealed class VerificationResult {
          * Certificate transparency checks failed as no Signed Certificate Timestamps have been found in the X.509 extensions. This can occur
          * if your server relies on providing SCTs through TLS extensions or OCSP stapling instead.
          */
-        public object NoScts : Failure() {
+        public object NoScts : Failure {
             /**
              * Returns a string representation of the object.
              */
@@ -106,7 +106,7 @@ public sealed class VerificationResult {
          * @property scts Map of logIds to [SctVerificationResult] stating which SCTs passed or failed checks
          * @property minSctCount The number of valid SCTs required for trust to be established
          */
-        public data class TooFewSctsTrusted(val scts: Map<String, SctVerificationResult>, val minSctCount: Int) : Failure() {
+        public data class TooFewSctsTrusted(val scts: Map<String, SctVerificationResult>, val minSctCount: Int) : Failure {
             /**
              * Returns a string representation of the object.
              */
@@ -117,10 +117,25 @@ public sealed class VerificationResult {
         }
 
         /**
+         * Certificate transparency checks failed as there are not enough Signed Certificate Timestamps with distinct operators
+         * @property scts Map of logIds to [SctVerificationResult] stating which SCTs passed or failed checks
+         * @property minSctCount The number of valid SCTs required for trust to be established
+         */
+        public data class TooFewDistinctOperators(val scts: Map<String, SctVerificationResult>, val minSctCount: Int) : Failure {
+            /**
+             * Returns a string representation of the object.
+             */
+            override fun toString(): String {
+                val trustedScts = scts.values.filterIsInstance<SctVerificationResult.Valid>().distinctBy { it.operator }.size
+                return "Failure: Too few distinct operators, required $minSctCount, found $trustedScts in ${scts.forDisplay()}"
+            }
+        }
+
+        /**
          * Certificate transparency checks failed due to an unknown [IOException]
          * @property ioException The [IOException] that occurred
          */
-        public data class UnknownIoException(val ioException: IOException) : Failure() {
+        public data class UnknownIoException(val ioException: IOException) : Failure {
             /**
              * Returns a string representation of the object.
              */

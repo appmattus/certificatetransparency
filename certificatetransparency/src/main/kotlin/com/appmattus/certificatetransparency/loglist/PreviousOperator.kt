@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2023 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-package com.appmattus.certificatetransparency.internal.utils
+package com.appmattus.certificatetransparency.loglist
 
-import java.security.MessageDigest
-import java.security.PublicKey
-
-internal fun PublicKey.sha256Hash(): ByteArray = MessageDigest.getInstance("SHA-256").digest(encoded)
-
-internal fun PublicKey.sha1Hash(): ByteArray = MessageDigest.getInstance("SHA-1").digest(encoded)
+public data class PreviousOperator(val name: String, val endDate: Long) {
+    public companion object
+}

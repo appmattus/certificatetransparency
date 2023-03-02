@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,6 @@
 package com.appmattus.certificatetransparency.utils
 
 import com.appmattus.certificatetransparency.datasource.DataSource
-import com.appmattus.certificatetransparency.internal.loglist.model.v3.Log
 import com.appmattus.certificatetransparency.internal.loglist.model.v3.LogListV3
 import com.appmattus.certificatetransparency.internal.utils.Base64
 import com.appmattus.certificatetransparency.internal.utils.PublicKeyFactory
@@ -39,13 +38,12 @@ internal object LogListDataSourceTestFactory {
     val logListDataSource: DataSource<LogListResult> by lazy {
         // Collection of CT logs that are trusted from https://www.gstatic.com/ct/log_list/v3/log_list.json
         val json = TestData.file(TestData.TEST_LOG_LIST_JSON).readText()
-        val trustedLogKeys = Json.decodeFromString(LogListV3.serializer(), json).operators.flatMap { it.logs.map(Log::key) }
 
-        val list = LogListResult.Valid(
-            trustedLogKeys.map { Base64.decode(it) }.map {
-                LogServer(PublicKeyFactory.fromByteArray(it))
+        val list = Json.decodeFromString(LogListV3.serializer(), json).operators.map { operator ->
+            operator.logs.map {
+                LogServer(PublicKeyFactory.fromByteArray(Base64.decode(it.key)), operator = operator.name, previousOperators = emptyList())
             }
-        )
+        }.flatten().let(LogListResult::Valid)
 
         object : DataSource<LogListResult> {
             override suspend fun get() = list
