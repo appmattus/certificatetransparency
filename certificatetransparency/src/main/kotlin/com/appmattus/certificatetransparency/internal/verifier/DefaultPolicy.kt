@@ -38,10 +38,10 @@ internal class DefaultPolicy : CTPolicy {
         leafCertificate: X509Certificate,
         sctResults: Map<String, SctVerificationResult>
     ): VerificationResult {
-        val validScts = sctResults.values.filterIsInstance<SctVerificationResult.Valid>().map { it.sct }
+        val validScts = sctResults.values.filterIsInstance<SctVerificationResult.Valid>()
 
         // By default we use the 2022 policy when there are no valid SCTs
-        val issuanceDate = validScts.minOfOrNull { it.timestamp } ?: Long.MAX_VALUE
+        val issuanceDate = validScts.minOfOrNull { it.sct.timestamp } ?: Long.MAX_VALUE
         val use2022policy = issuanceDate >= policyUpdateDate
 
         val before = leafCertificate.notBefore.toInstant().atZone(ZoneOffset.UTC)
@@ -62,7 +62,7 @@ internal class DefaultPolicy : CTPolicy {
 
         return if (validScts.size < minimumValidSignedCertificateTimestamps) {
             VerificationResult.Failure.TooFewSctsTrusted(sctResults, minimumValidSignedCertificateTimestamps)
-        } else if (validScts.distinctBy { it.id }.size < minimumValidSignedCertificateTimestamps) {
+        } else if (validScts.distinctBy { it.operator }.size < minimumValidSignedCertificateTimestamps) {
             VerificationResult.Failure.TooFewDistinctOperators(sctResults, minimumValidSignedCertificateTimestamps)
         } else {
             VerificationResult.Success.Trusted(sctResults)

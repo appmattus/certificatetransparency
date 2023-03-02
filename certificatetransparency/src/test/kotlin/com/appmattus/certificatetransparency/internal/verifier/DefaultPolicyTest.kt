@@ -55,11 +55,11 @@ internal class DefaultPolicyTest {
             whenever(certificate.notBefore).thenReturn(start)
             whenever(certificate.notAfter).thenReturn(end)
 
-            // and correct number of trusted SCTs present with duplicate log ids
+            // and correct number of trusted SCTs present with duplicate operator
             val scts = buildList {
                 repeat(3) {
-                    // ids use different byte arrays but the same content
-                    add(SctVerificationResult.Valid(newPolicySct.copy(id = LogId(byteArrayOf(1, 2, 3, 4, 5)))))
+                    // operator has the same value
+                    add(SctVerificationResult.Valid(newPolicySct, "12345"))
                 }
                 repeat(5) {
                     add(SctVerificationResult.Invalid.FailedVerification)
@@ -84,10 +84,10 @@ internal class DefaultPolicyTest {
             whenever(certificate.notBefore).thenReturn(start)
             whenever(certificate.notAfter).thenReturn(end)
 
-            // and correct number of trusted SCTs present with unique log ids
+            // and correct number of trusted SCTs present with unique operator
             val scts = buildList {
                 repeat(3) {
-                    add(SctVerificationResult.Valid(newPolicySct))
+                    add(SctVerificationResult.Valid(newPolicySct, UUID.randomUUID().toString()))
                 }
                 repeat(5) {
                     add(SctVerificationResult.Invalid.FailedVerification)
@@ -122,7 +122,7 @@ internal class DefaultPolicyTest {
             val scts = buildList {
                 // we ensure there is at least one valid SCT so the old policy is selected
                 repeat(Random.nextInt(1, oldPolicySctsRequired)) {
-                    add(SctVerificationResult.Valid(oldPolicySct))
+                    add(SctVerificationResult.Valid(oldPolicySct, UUID.randomUUID().toString()))
                 }
                 repeat(10) {
                     add(SctVerificationResult.Invalid.FailedVerification)
@@ -146,7 +146,7 @@ internal class DefaultPolicyTest {
             // and fewer SCTs than required
             val scts = buildList {
                 repeat(Random.nextInt(0, newPolicySctsRequired)) {
-                    add(SctVerificationResult.Valid(newPolicySct))
+                    add(SctVerificationResult.Valid(newPolicySct, UUID.randomUUID().toString()))
                 }
                 repeat(10) {
                     add(SctVerificationResult.Invalid.FailedVerification)
@@ -170,7 +170,7 @@ internal class DefaultPolicyTest {
             // and correct number of trusted SCTs present
             val scts = buildList {
                 repeat(oldPolicySctsRequired) {
-                    add(SctVerificationResult.Valid(oldPolicySct))
+                    add(SctVerificationResult.Valid(oldPolicySct, UUID.randomUUID().toString()))
                 }
                 repeat(10) {
                     add(SctVerificationResult.Invalid.FailedVerification)
@@ -194,7 +194,7 @@ internal class DefaultPolicyTest {
             // and correct number of trusted SCTs present
             val scts = buildList {
                 repeat(newPolicySctsRequired) {
-                    add(SctVerificationResult.Valid(newPolicySct))
+                    add(SctVerificationResult.Valid(newPolicySct, UUID.randomUUID().toString()))
                 }
                 repeat(10) {
                     add(SctVerificationResult.Invalid.FailedVerification)

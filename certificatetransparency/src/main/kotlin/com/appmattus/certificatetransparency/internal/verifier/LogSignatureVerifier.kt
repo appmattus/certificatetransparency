@@ -225,7 +225,8 @@ internal class LogSignatureVerifier(private val logServer: LogServer) : Signatur
                 update(toVerify)
             }.verify(sct.signature.signature)
 
-            if (result) SctVerificationResult.Valid(sct) else SctVerificationResult.Invalid.FailedVerification
+            val operator = logServer.operatorAt(sct.timestamp)
+            if (result) SctVerificationResult.Valid(sct, operator) else SctVerificationResult.Invalid.FailedVerification
         } catch (e: SignatureException) {
             SignatureNotValid(e)
         } catch (e: InvalidKeyException) {

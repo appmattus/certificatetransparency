@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,12 +30,23 @@ import java.security.PublicKey
  */
 public data class LogServer(
     val key: PublicKey,
-    val validUntil: Long? = null
+    val validUntil: Long? = null,
+    val operator: String,
+    val previousOperators: List<PreviousOperator>
 ) {
     /**
      * The log servers id. A SHA-256 hash of the log servers [PublicKey]
      */
     val id: ByteArray = key.sha256Hash()
+
+    public fun operatorAt(timestamp: Long): String {
+        previousOperators.sortedBy { it.endDate }.forEach {
+            if (timestamp < it.endDate) return it.name
+        }
+        // Either the log has only ever had one operator, or the timestamp is after
+        // the last operator change.
+        return operator
+    }
 
     public companion object
 }

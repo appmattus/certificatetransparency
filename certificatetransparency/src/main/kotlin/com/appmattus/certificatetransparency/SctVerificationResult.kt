@@ -29,7 +29,7 @@ public sealed interface SctVerificationResult {
     /**
      * Signed Certificate Timestamp checks passed
      */
-    public data class Valid(val sct: SignedCertificateTimestamp) : SctVerificationResult {
+    public data class Valid(val sct: SignedCertificateTimestamp, val operator: String) : SctVerificationResult {
         /**
          * Returns a string representation of the object.
          */

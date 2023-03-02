@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +24,7 @@ package com.appmattus.certificatetransparency.loglist
 
 import com.appmattus.certificatetransparency.internal.utils.Base64
 import com.appmattus.certificatetransparency.internal.utils.PublicKeyFactory
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -32,14 +33,58 @@ internal class LogServerTest {
 
     @Test
     fun testCalculatesLogIdCorrectly() {
-        val logServer = LogServer(PublicKeyFactory.fromByteArray(PUBLIC_KEY))
+        val logServer = LogServer(PublicKeyFactory.fromByteArray(PUBLIC_KEY), operator = "", previousOperators = emptyList())
         assertTrue(logServer.id.contentEquals(LOG_ID))
     }
 
     @Test
     fun testCalculatesLogIdCorrectlyRSA() {
-        val logServer = LogServer(PublicKeyFactory.fromByteArray(PUBLIC_KEY_RSA))
+        val logServer = LogServer(PublicKeyFactory.fromByteArray(PUBLIC_KEY_RSA), operator = "", previousOperators = emptyList())
         assertTrue(logServer.id.contentEquals(LOG_ID_RSA))
+    }
+
+    @Test
+    fun operatorAtReturnsCurrentOperatorWhenTimestampInFuture() {
+        val logServer = LogServer(
+            key = PublicKeyFactory.fromByteArray(PUBLIC_KEY_RSA),
+            operator = "Appmattus",
+            previousOperators = listOf(PreviousOperator("Google", 1000))
+        )
+
+        assertEquals("Appmattus", logServer.operatorAt(1200))
+    }
+
+    @Test
+    fun operatorAtReturnsCurrentOperatorWhenNoPreviousOperators() {
+        val logServer = LogServer(
+            key = PublicKeyFactory.fromByteArray(PUBLIC_KEY_RSA),
+            operator = "Appmattus",
+            previousOperators = emptyList()
+        )
+
+        assertEquals("Appmattus", logServer.operatorAt(1200))
+    }
+
+    @Test
+    fun operatorAtReturnsPreviousOperatorWhenTimestampInPast() {
+        val logServer = LogServer(
+            key = PublicKeyFactory.fromByteArray(PUBLIC_KEY_RSA),
+            operator = "Appmattus",
+            previousOperators = listOf(PreviousOperator("Google", 1000), PreviousOperator("Cloudflare", 800))
+        )
+
+        assertEquals("Google", logServer.operatorAt(900))
+    }
+
+    @Test
+    fun operatorAtReturnsPreviousOperatorWhenTimestampInPast2() {
+        val logServer = LogServer(
+            key = PublicKeyFactory.fromByteArray(PUBLIC_KEY_RSA),
+            operator = "Appmattus",
+            previousOperators = listOf(PreviousOperator("Google", 1000), PreviousOperator("Cloudflare", 800))
+        )
+
+        assertEquals("Cloudflare", logServer.operatorAt(700))
     }
 
     companion object {
