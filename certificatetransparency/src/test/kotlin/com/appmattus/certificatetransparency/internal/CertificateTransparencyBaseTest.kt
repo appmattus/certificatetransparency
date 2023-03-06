@@ -39,7 +39,6 @@ import com.appmattus.certificatetransparency.utils.TrustedSocketFactory
 import com.appmattus.certificatetransparency.utils.assertIsA
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
-import org.junit.Ignore
 import org.junit.Test
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.whenever
