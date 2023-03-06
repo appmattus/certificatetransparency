@@ -21,11 +21,9 @@ import com.appmattus.certificatetransparency.datasource.DataSource
 import com.appmattus.certificatetransparency.internal.loglist.InMemoryCache
 import com.appmattus.certificatetransparency.internal.loglist.LogListZipNetworkDataSource
 import com.appmattus.certificatetransparency.internal.loglist.parser.RawLogListToLogListResultTransformer
-import kotlinx.datetime.Instant
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.ExperimentalTime
+import java.time.Duration
+import java.time.Instant
 
-@OptIn(ExperimentalTime::class)
 internal class LogListCacheManagementDataSource constructor(
     private val inMemoryCache: InMemoryCache,
     private val diskCache: DiskCache?,
@@ -41,7 +39,7 @@ internal class LogListCacheManagementDataSource constructor(
         val memoryResult = memory?.takeIfValid(transformer)
         memoryResult?.let { logListResult ->
             // Return the memory data if it is 1 day old or less
-            if (logListResult.timestamp + ONE_DAY_IN_MILLISECONDS >= now()) {
+            if (logListResult.timestamp + ONE_DAY >= now()) {
                 return logListResult
             }
         }
@@ -53,7 +51,7 @@ internal class LogListCacheManagementDataSource constructor(
             // We have valid data on disk so set the data into the memory cache
             inMemoryCache.set(disk)
             // Return the disk data if it is 1 day old or less
-            if (logListResult.timestamp + ONE_DAY_IN_MILLISECONDS >= now()) {
+            if (logListResult.timestamp + ONE_DAY >= now()) {
                 return logListResult
             }
         }
@@ -71,12 +69,12 @@ internal class LogListCacheManagementDataSource constructor(
                 // If the network response timestamp is older than our fallback data return the fallback and note network is returning stale data
                 // Potentially network is compromised and a replay attack is occurring
                 LogListResult.Valid.StaleNetworkUsingCachedData(fallbackResult.timestamp, fallbackResult.servers, networkResult)
-            } else if (networkResult.timestamp + SEVENTY_DAYS_IN_MILLISECONDS >= now()) {
+            } else if (networkResult.timestamp + SEVENTY_DAYS >= now()) {
                 // Network data is less than 70 days old so use it and cache locally
                 inMemoryCache.set(network)
                 diskCache?.set(network)
 
-                if (networkResult.timestamp + FOURTEEN_DAYS_IN_MILLISECONDS >= now()) {
+                if (networkResult.timestamp + FOURTEEN_DAYS >= now()) {
                     // Network data is as expected (14 days old or less) and the timestamp is the same or newer than the fallback data
                     networkResult
                 } else {
@@ -92,7 +90,7 @@ internal class LogListCacheManagementDataSource constructor(
             // Unfortunately with no fallback data and no network response we don't know if CT checks are still valid or not
             // Fail hard and disallow any network connections
             networkResult
-        } else if (fallbackResult.timestamp + SEVENTY_DAYS_IN_MILLISECONDS >= now()) {
+        } else if (fallbackResult.timestamp + SEVENTY_DAYS >= now()) {
             // Fallback is 70 days old or less so use it
             fallbackResult
         } else {
@@ -114,8 +112,8 @@ internal class LogListCacheManagementDataSource constructor(
     }
 
     companion object {
-        private val ONE_DAY_IN_MILLISECONDS = 86400000.milliseconds
-        private val FOURTEEN_DAYS_IN_MILLISECONDS = 1209600000.milliseconds
-        private val SEVENTY_DAYS_IN_MILLISECONDS = 6048000000.milliseconds
+        private val ONE_DAY = Duration.ofMillis(86400000)
+        private val FOURTEEN_DAYS = Duration.ofMillis(1209600000)
+        private val SEVENTY_DAYS = Duration.ofMillis(6048000000)
     }
 }

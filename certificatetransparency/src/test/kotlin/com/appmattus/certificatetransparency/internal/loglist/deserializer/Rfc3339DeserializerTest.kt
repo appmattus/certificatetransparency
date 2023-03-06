@@ -20,7 +20,6 @@
 
 package com.appmattus.certificatetransparency.internal.loglist.deserializer
 
-import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -29,6 +28,7 @@ import org.junit.Assert.assertThrows
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import java.time.Instant
 
 @RunWith(Parameterized::class)
 internal class Rfc3339DeserializerTest {
@@ -53,7 +53,7 @@ internal class Rfc3339DeserializerTest {
         } else {
             val result = json.decodeFromString(TestObject.serializer(), "{\"timestamp\":\"$input\"}").timestamp
 
-            assertEquals(Instant.fromEpochMilliseconds(expected.toLong()), result)
+            assertEquals(Instant.ofEpochMilli(expected.toLong()), result)
         }
     }
 

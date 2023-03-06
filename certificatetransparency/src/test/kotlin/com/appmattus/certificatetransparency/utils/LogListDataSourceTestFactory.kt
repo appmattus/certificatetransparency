@@ -27,8 +27,8 @@ import com.appmattus.certificatetransparency.internal.utils.PublicKeyFactory
 import com.appmattus.certificatetransparency.loglist.LogListDataSourceFactory
 import com.appmattus.certificatetransparency.loglist.LogListResult
 import com.appmattus.certificatetransparency.loglist.LogServer
-import kotlinx.datetime.Clock
 import kotlinx.serialization.json.Json
+import java.time.Instant
 
 internal object LogListDataSourceTestFactory {
 
@@ -44,7 +44,7 @@ internal object LogListDataSourceTestFactory {
             operator.logs.map {
                 LogServer(PublicKeyFactory.fromByteArray(Base64.decode(it.key)), operator = operator.name, previousOperators = emptyList())
             }
-        }.flatten().let { LogListResult.Valid.Success(Clock.System.now(), it) }
+        }.flatten().let { LogListResult.Valid.Success(Instant.now(), it) }
 
         object : DataSource<LogListResult> {
             override suspend fun get() = list
@@ -55,7 +55,7 @@ internal object LogListDataSourceTestFactory {
 
     val emptySource: DataSource<LogListResult> by lazy {
         object : DataSource<LogListResult> {
-            override suspend fun get() = LogListResult.Valid.Success(Clock.System.now(), emptyList())
+            override suspend fun get() = LogListResult.Valid.Success(Instant.now(), emptyList())
 
             override suspend fun set(value: LogListResult) = Unit
         }

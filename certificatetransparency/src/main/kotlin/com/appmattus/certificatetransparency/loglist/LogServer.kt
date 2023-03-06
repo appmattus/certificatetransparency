@@ -21,8 +21,8 @@
 package com.appmattus.certificatetransparency.loglist
 
 import com.appmattus.certificatetransparency.internal.utils.sha256Hash
-import kotlinx.datetime.Instant
 import java.security.PublicKey
+import java.time.Instant
 
 /**
  * Representation of a log server, usually loaded from log-list.json

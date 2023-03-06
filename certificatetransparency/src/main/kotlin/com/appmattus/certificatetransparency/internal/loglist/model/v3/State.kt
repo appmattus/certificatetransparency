@@ -21,9 +21,9 @@
 package com.appmattus.certificatetransparency.internal.loglist.model.v3
 
 import com.appmattus.certificatetransparency.internal.loglist.deserializer.Rfc3339Deserializer
-import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.time.Instant
 
 /**
  * @property timestamp The time at which the log entered this state.

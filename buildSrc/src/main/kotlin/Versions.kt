@@ -29,7 +29,6 @@ object Versions {
     const val bouncyCastle = "1.70"
     const val coroutines = "1.6.2"
     const val highlightJs = "1.5.0"
-    const val mustache = "0.8.18" // Cannot update due to use of ThreadLocal which is not desugared
     const val okhttp = "4.9.3"
     const val retrofit = "2.9.0"
     const val volley = "1.2.0"
@@ -62,6 +61,5 @@ object Versions {
 
     object KotlinX {
         const val serialization = "1.3.2"
-        const val dateTime = "0.4.0"
     }
 }

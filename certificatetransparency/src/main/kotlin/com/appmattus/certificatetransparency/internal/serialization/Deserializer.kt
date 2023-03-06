@@ -25,9 +25,9 @@ import com.appmattus.certificatetransparency.internal.verifier.model.DigitallySi
 import com.appmattus.certificatetransparency.internal.verifier.model.LogId
 import com.appmattus.certificatetransparency.internal.verifier.model.SignedCertificateTimestamp
 import com.appmattus.certificatetransparency.internal.verifier.model.Version
-import kotlinx.datetime.Instant
 import java.io.IOException
 import java.io.InputStream
+import java.time.Instant
 import kotlin.math.ceil
 import kotlin.math.log2
 
@@ -50,7 +50,7 @@ internal object Deserializer {
 
         val keyId = inputStream.readFixedLength(CTConstants.KEY_ID_LENGTH)
 
-        val timestamp = Instant.fromEpochMilliseconds(inputStream.readNumber(CTConstants.TIMESTAMP_LENGTH))
+        val timestamp = Instant.ofEpochMilli(inputStream.readNumber(CTConstants.TIMESTAMP_LENGTH))
 
         val extensions = inputStream.readVariableLength(CTConstants.MAX_EXTENSIONS_LENGTH)
 

@@ -19,15 +19,12 @@
 
 package com.appmattus.certificatetransparency.internal.utils
 
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.LocalTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.atTime
-import kotlinx.datetime.toInstant
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneOffset
 import kotlin.math.pow
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.ExperimentalTime
 
 /** Regular expression for parsing RFC3339 date/times.  */
 private val Rfc3339Pattern = Regex(
@@ -56,14 +53,13 @@ private val Rfc3339Pattern = Regex(
  */
 // Magic numbers accepted as very much linked to the pattern
 @Suppress("MagicNumber")
-@OptIn(ExperimentalTime::class)
 internal fun String.toRfc3339Instant(): Instant {
     val results = Rfc3339Pattern.matchEntire(this) ?: throw NumberFormatException("Invalid RFC3339 date/time format: $this")
 
-    val localDate = LocalDate(
-        year = results.groupValues[1].toInt(), // yyyy
-        monthNumber = results.groupValues[2].toInt(), // MM
-        dayOfMonth = results.groupValues[3].toInt() // dd
+    val localDate = LocalDate.of(
+        results.groupValues[1].toInt(), // yyyy
+        results.groupValues[2].toInt(), // MM
+        results.groupValues[3].toInt() // dd
     )
     val isTimeGiven = results.groupValues[4].isNotEmpty() // 'T'HH:mm:ss.milliseconds
     val tzShiftRegexGroup = results.groupValues[9] // 'Z', or time zone shift HH:mm following '+'/'-'
@@ -74,18 +70,18 @@ internal fun String.toRfc3339Instant(): Instant {
     }
 
     val localTime = if (isTimeGiven) {
-        LocalTime(
-            hour = results.groupValues[5].toInt(), // HH
-            minute = results.groupValues[6].toInt(), // mm
-            second = results.groupValues[7].toInt(), // ss
-            nanosecond = results.groupValues[8].ifEmpty { ".000" }.substring(1).let {
+        LocalTime.of(
+            results.groupValues[5].toInt(), // HH
+            results.groupValues[6].toInt(), // mm
+            results.groupValues[7].toInt(), // ss
+            results.groupValues[8].ifEmpty { ".000" }.substring(1).let { // nanoseconds
                 // The number of digits after the dot may not be 3. Need to renormalize.
                 val fractionDigits = it.length - 3
                 (it.toDouble() / 10.0.pow(fractionDigits.toDouble())).toInt() * 1_000_000
             }
         )
     } else {
-        LocalTime(0, 0, 0)
+        LocalTime.MIN
     }
 
     val tzShift = if (isTzShiftGiven && tzShiftRegexGroup[0].uppercaseChar() != 'Z') {
@@ -98,5 +94,5 @@ internal fun String.toRfc3339Instant(): Instant {
     }
 
     // e.g. if 1 hour ahead of UTC, subtract an hour to get UTC time
-    return localDate.atTime(localTime).toInstant(TimeZone.UTC) - tzShift.minutes
+    return localDate.atTime(localTime).toInstant(ZoneOffset.UTC) - Duration.ofMinutes(tzShift.toLong())
 }

@@ -19,7 +19,6 @@ package com.appmattus.certificatetransparency.loglist
 import com.appmattus.certificatetransparency.utils.TestData
 import com.appmattus.certificatetransparency.utils.assertIsA
 import kotlinx.coroutines.runBlocking
-import kotlinx.datetime.Instant
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -28,6 +27,7 @@ import okio.Buffer
 import org.junit.Test
 import java.io.IOException
 import java.net.SocketTimeoutException
+import java.time.Instant
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -89,7 +89,7 @@ public class LogListDataSourceFactoryTest {
 
             // When we request the log list
             val dataSource =
-                LogListDataSourceFactory.createDataSource(logListService = logListService, now = { Instant.fromEpochMilliseconds(1000000) })
+                LogListDataSourceFactory.createDataSource(logListService = logListService, now = { Instant.ofEpochMilli(1000000) })
             val result = dataSource.get()
 
             // Then a valid result is returned

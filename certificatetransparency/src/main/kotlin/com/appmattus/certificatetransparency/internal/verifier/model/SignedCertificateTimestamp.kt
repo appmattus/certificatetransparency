@@ -20,7 +20,7 @@
 
 package com.appmattus.certificatetransparency.internal.verifier.model
 
-import kotlinx.datetime.Instant
+import java.time.Instant
 
 /**
  * A signed certificate timestamp. If the [sctVersion] is not [Version.V1], then a v1 client may be unable to verify the signature.

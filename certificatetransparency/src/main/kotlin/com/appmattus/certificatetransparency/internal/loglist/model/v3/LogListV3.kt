@@ -21,9 +21,9 @@
 package com.appmattus.certificatetransparency.internal.loglist.model.v3
 
 import com.appmattus.certificatetransparency.internal.loglist.deserializer.Rfc3339Deserializer
-import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.time.Instant
 
 /**
  * @property logListTimestamp The time at which this version of the log list was published.

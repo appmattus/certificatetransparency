@@ -21,7 +21,7 @@
 package com.appmattus.certificatetransparency
 
 import com.appmattus.certificatetransparency.internal.verifier.model.SignedCertificateTimestamp
-import kotlinx.datetime.Instant
+import java.time.Instant
 
 /**
  * Abstract class providing the results of verifying a Signed Certificate Timestamp

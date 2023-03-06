@@ -21,8 +21,8 @@
 package com.appmattus.certificatetransparency.loglist
 
 import com.appmattus.certificatetransparency.internal.utils.stringStackTrace
-import kotlinx.datetime.Instant
 import kotlinx.serialization.SerializationException
+import java.time.Instant
 
 public sealed interface LogListResult {
     /**

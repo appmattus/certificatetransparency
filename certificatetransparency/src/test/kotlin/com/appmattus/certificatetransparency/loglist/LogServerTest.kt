@@ -24,10 +24,10 @@ package com.appmattus.certificatetransparency.loglist
 
 import com.appmattus.certificatetransparency.internal.utils.Base64
 import com.appmattus.certificatetransparency.internal.utils.PublicKeyFactory
-import kotlinx.datetime.Instant
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.time.Instant
 
 /** Mostly for verifying the log info calculates the log ID correctly.  */
 internal class LogServerTest {
@@ -109,6 +109,6 @@ internal class LogServerTest {
 
         private val LOG_ID_RSA: ByteArray = Base64.decode("oCQsumIkVhezsKvGJ+spTJIM9H+jy/OdvSGDIX0VsgY=")
 
-        private fun Int.fromEpochMillis() = Instant.fromEpochMilliseconds(toLong())
+        private fun Int.fromEpochMillis() = Instant.ofEpochMilli(toLong())
     }
 }

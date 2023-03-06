@@ -26,10 +26,6 @@ import com.appmattus.certificatetransparency.internal.verifier.model.DigitallySi
 import com.appmattus.certificatetransparency.internal.verifier.model.LogId
 import com.appmattus.certificatetransparency.internal.verifier.model.SignedCertificateTimestamp
 import com.appmattus.certificatetransparency.utils.assertIsA
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -39,6 +35,9 @@ import org.junit.runners.Parameterized
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import java.security.cert.X509Certificate
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.Calendar
 import java.util.Date
 import java.util.UUID
@@ -278,7 +277,7 @@ fun date(year: Int, month: Int, dayOfMonth: Int, hour: Int, minute: Int, second:
 private val oldPolicySct
     get() = SignedCertificateTimestamp(
         id = LogId(Random.nextBytes(10)),
-        timestamp = LocalDateTime(2022, 1, 1, 0, 0, 0).toInstant(TimeZone.currentSystemDefault()),
+        timestamp = LocalDateTime.of(2022, 1, 1, 0, 0, 0).atZone(ZoneId.systemDefault()).toInstant(),
         extensions = byteArrayOf(),
         signature = DigitallySigned(signature = byteArrayOf())
     )
@@ -287,7 +286,7 @@ private val newPolicySct
     get() = SignedCertificateTimestamp(
         id = LogId(Random.nextBytes(10)),
         // 15 April 2022
-        timestamp = Instant.fromEpochMilliseconds(1649980800000),
+        timestamp = Instant.ofEpochMilli(1649980800000),
         extensions = byteArrayOf(),
         signature = DigitallySigned(signature = byteArrayOf())
     )

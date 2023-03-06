@@ -26,8 +26,6 @@ import com.appmattus.certificatetransparency.internal.loglist.InMemoryCache
 import com.appmattus.certificatetransparency.internal.loglist.LogListZipNetworkDataSource
 import com.appmattus.certificatetransparency.internal.loglist.await
 import com.appmattus.certificatetransparency.internal.utils.MaxSizeInterceptor
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import okhttp3.CacheControl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
@@ -35,6 +33,7 @@ import okhttp3.Request
 import java.security.KeyManagementException
 import java.security.NoSuchAlgorithmException
 import java.security.SecureRandom
+import java.time.Instant
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLContext
 import javax.net.ssl.X509TrustManager
@@ -96,7 +95,7 @@ public object LogListDataSourceFactory {
     public fun createDataSource(
         logListService: LogListService = createLogListService(),
         diskCache: DiskCache? = null,
-        now: () -> Instant = { Clock.System.now() }
+        now: () -> Instant = { Instant.now() }
     ): DataSource<LogListResult> {
 
         return LogListCacheManagementDataSource(

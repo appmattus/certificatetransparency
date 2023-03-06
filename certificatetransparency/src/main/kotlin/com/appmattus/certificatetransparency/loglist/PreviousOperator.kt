@@ -16,7 +16,7 @@
 
 package com.appmattus.certificatetransparency.loglist
 
-import kotlinx.datetime.Instant
+import java.time.Instant
 
 public data class PreviousOperator(val name: String, val endDate: Instant) {
     public companion object

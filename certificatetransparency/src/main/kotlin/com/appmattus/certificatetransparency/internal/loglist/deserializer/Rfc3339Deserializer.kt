@@ -17,12 +17,12 @@
 package com.appmattus.certificatetransparency.internal.loglist.deserializer
 
 import com.appmattus.certificatetransparency.internal.utils.toRfc3339Instant
-import kotlinx.datetime.Instant
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import java.time.Instant
 
 internal class Rfc3339Deserializer : KSerializer<Instant> {
 

@@ -27,7 +27,6 @@ import com.appmattus.certificatetransparency.loglist.RawLogListResult
 import com.appmattus.certificatetransparency.utils.TestData
 import com.appmattus.certificatetransparency.utils.assertIsA
 import kotlinx.coroutines.runBlocking
-import kotlinx.datetime.Instant
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -37,6 +36,7 @@ import java.security.KeyPair
 import java.security.KeyPairGenerator
 import java.security.PrivateKey
 import java.security.Signature
+import java.time.Instant
 import javax.net.ssl.SSLException
 
 internal class RawLogListToLogListResultTransformerTest {
@@ -187,7 +187,7 @@ internal class RawLogListToLogListResultTransformerTest {
         assertIsA<LogListResult.Valid>(result)
         val logServer = result.servers[3]
         assertNotNull(logServer.validUntil)
-        assertEquals(Instant.fromEpochMilliseconds(1550275200000), logServer.validUntil)
+        assertEquals(Instant.ofEpochMilli(1550275200000), logServer.validUntil)
     }
 
     private fun calculateSignature(privateKey: PrivateKey, data: ByteArray): ByteArray {

@@ -21,11 +21,11 @@
 package com.appmattus.certificatetransparency.internal.loglist.model.v3
 
 import com.appmattus.certificatetransparency.utils.TestData
-import kotlinx.datetime.Instant
 import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.time.Instant
 
 internal class LogListV3Test {
 
@@ -52,6 +52,6 @@ internal class LogListV3Test {
 
         val nimbusLog = cloudflare.logs.first { it.description == "Cloudflare 'Nimbus2022' Log" }
         assertEquals(86400, nimbusLog.maximumMergeDelay)
-        assertEquals(Instant.fromEpochMilliseconds(1572549720000), nimbusLog.state?.timestamp)
+        assertEquals(Instant.ofEpochMilli(1572549720000), nimbusLog.state?.timestamp)
     }
 }
