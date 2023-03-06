@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +28,7 @@ import com.appmattus.certificatetransparency.internal.verifier.model.LogId
 import com.appmattus.certificatetransparency.internal.verifier.model.SignedCertificateTimestamp
 import com.appmattus.certificatetransparency.internal.verifier.model.Version
 import com.appmattus.certificatetransparency.utils.TestData
+import kotlinx.datetime.Instant
 import org.junit.Assert.assertArrayEquals
 import org.junit.Test
 import java.io.ByteArrayOutputStream
@@ -49,7 +50,7 @@ internal class OutputStreamExtTest {
 
         val sct = SignedCertificateTimestamp(
             sctVersion = Version.V1,
-            timestamp = 1365181456089L,
+            timestamp = Instant.fromEpochMilliseconds(1365181456089L),
             id = LogId(Base64.decode(keyIdBase64)),
             signature = signature,
             extensions = ByteArray(0)
@@ -64,7 +65,7 @@ internal class OutputStreamExtTest {
         return ByteArrayOutputStream().use {
             it.writeUint(sct.sctVersion.number.toLong(), CTConstants.VERSION_LENGTH)
             it.write(sct.id.keyId)
-            it.writeUint(sct.timestamp, CTConstants.TIMESTAMP_LENGTH)
+            it.writeUint(sct.timestamp.toEpochMilliseconds(), CTConstants.TIMESTAMP_LENGTH)
             it.writeVariableLength(sct.extensions, CTConstants.MAX_EXTENSIONS_LENGTH)
             it.writeUint(sct.signature.hashAlgorithm.number.toLong(), HASH_ALG_LENGTH)
             it.writeUint(sct.signature.signatureAlgorithm.number.toLong(), SIGNATURE_ALG_LENGTH)

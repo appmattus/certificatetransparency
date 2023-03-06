@@ -21,6 +21,7 @@
 package com.appmattus.certificatetransparency
 
 import com.appmattus.certificatetransparency.internal.verifier.model.SignedCertificateTimestamp
+import kotlinx.datetime.Instant
 
 /**
  * Abstract class providing the results of verifying a Signed Certificate Timestamp
@@ -65,7 +66,7 @@ public sealed interface SctVerificationResult {
          * @property timestamp The timestamp of the SCT
          * @property now The time now
          */
-        public data class FutureTimestamp(val timestamp: Long, val now: Long) : Invalid {
+        public data class FutureTimestamp(val timestamp: Instant, val now: Instant) : Invalid {
             /**
              * Returns a string representation of the object.
              */
@@ -77,7 +78,7 @@ public sealed interface SctVerificationResult {
          * @property timestamp The timestamp of the SCT
          * @property logServerValidUntil The time the log server was valid till
          */
-        public data class LogServerUntrusted(val timestamp: Long, val logServerValidUntil: Long) : Invalid {
+        public data class LogServerUntrusted(val timestamp: Instant, val logServerValidUntil: Instant) : Invalid {
             /**
              * Returns a string representation of the object.
              */

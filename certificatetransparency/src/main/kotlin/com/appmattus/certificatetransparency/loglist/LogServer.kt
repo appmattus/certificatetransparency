@@ -21,6 +21,7 @@
 package com.appmattus.certificatetransparency.loglist
 
 import com.appmattus.certificatetransparency.internal.utils.sha256Hash
+import kotlinx.datetime.Instant
 import java.security.PublicKey
 
 /**
@@ -30,7 +31,7 @@ import java.security.PublicKey
  */
 public data class LogServer(
     val key: PublicKey,
-    val validUntil: Long? = null,
+    val validUntil: Instant? = null,
     val operator: String,
     val previousOperators: List<PreviousOperator>
 ) {
@@ -39,7 +40,7 @@ public data class LogServer(
      */
     val id: ByteArray = key.sha256Hash()
 
-    public fun operatorAt(timestamp: Long): String {
+    public fun operatorAt(timestamp: Instant): String {
         previousOperators.sortedBy { it.endDate }.forEach {
             if (timestamp < it.endDate) return it.name
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,7 @@
 package com.appmattus.certificatetransparency.internal.loglist.model.v3
 
 import com.appmattus.certificatetransparency.internal.loglist.deserializer.Rfc3339Deserializer
+import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -30,6 +31,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 internal data class TemporalInterval(
-    @Serializable(with = Rfc3339Deserializer::class) @SerialName("start_inclusive") val startInclusive: Long,
-    @Serializable(with = Rfc3339Deserializer::class) @SerialName("end_exclusive") val endExclusive: Long
+    @Serializable(with = Rfc3339Deserializer::class) @SerialName("start_inclusive") val startInclusive: Instant,
+    @Serializable(with = Rfc3339Deserializer::class) @SerialName("end_exclusive") val endExclusive: Instant
 )

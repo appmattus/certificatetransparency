@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,7 @@
 package com.appmattus.certificatetransparency.internal.loglist.model.v3
 
 import com.appmattus.certificatetransparency.internal.loglist.deserializer.Rfc3339Deserializer
+import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -29,7 +30,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 internal sealed class State {
-    abstract val timestamp: Long
+    abstract val timestamp: Instant
 
     /**
      * An SCT associated with this log server would be treated as untrusted
@@ -37,7 +38,7 @@ internal sealed class State {
     @Serializable
     @SerialName("pending")
     data class Pending(
-        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Long
+        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Instant
     ) : State()
 
     /**
@@ -46,7 +47,7 @@ internal sealed class State {
     @Serializable
     @SerialName("qualified")
     data class Qualified(
-        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Long
+        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Instant
     ) : State()
 
     /**
@@ -55,7 +56,7 @@ internal sealed class State {
     @SerialName("usable")
     @Serializable
     data class Usable(
-        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Long
+        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Instant
     ) : State()
 
     /**
@@ -65,7 +66,7 @@ internal sealed class State {
     @Serializable
     @SerialName("readonly")
     data class ReadOnly(
-        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Long,
+        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Instant,
         @SerialName("final_tree_head") val finalTreeHead: FinalTreeHead
     ) : State()
 
@@ -75,7 +76,7 @@ internal sealed class State {
     @Serializable
     @SerialName("retired")
     data class Retired(
-        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Long
+        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Instant
     ) : State()
 
     /**
@@ -84,6 +85,6 @@ internal sealed class State {
     @Serializable
     @SerialName("rejected")
     data class Rejected(
-        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Long
+        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Instant
     ) : State()
 }

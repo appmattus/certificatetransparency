@@ -45,6 +45,7 @@ import com.appmattus.certificatetransparency.internal.verifier.model.IssuerInfor
 import com.appmattus.certificatetransparency.internal.verifier.model.SignedCertificateTimestamp
 import com.appmattus.certificatetransparency.internal.verifier.model.Version
 import com.appmattus.certificatetransparency.loglist.LogServer
+import kotlinx.datetime.Clock
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.OutputStream
@@ -69,7 +70,7 @@ internal class LogSignatureVerifier(private val logServer: LogServer) : Signatur
     override fun verifySignature(sct: SignedCertificateTimestamp, chain: List<X509Certificate>): SctVerificationResult {
 
         // If the timestamp is in the future then we have to reject it
-        val now = System.currentTimeMillis()
+        val now = Clock.System.now()
         if (sct.timestamp > now) {
             return SctVerificationResult.Invalid.FutureTimestamp(sct.timestamp, now)
         }
@@ -279,7 +280,7 @@ internal class LogSignatureVerifier(private val logServer: LogServer) : Signatur
         require(sct.sctVersion == Version.V1) { "Can only serialize SCT v1 for now." }
         writeUint(sct.sctVersion.number.toLong(), VERSION_LENGTH) // ct::V1
         writeUint(0, 1) // ct::CERTIFICATE_TIMESTAMP
-        writeUint(sct.timestamp, TIMESTAMP_LENGTH) // Timestamp
+        writeUint(sct.timestamp.toEpochMilliseconds(), TIMESTAMP_LENGTH) // Timestamp
     }
 
     companion object {

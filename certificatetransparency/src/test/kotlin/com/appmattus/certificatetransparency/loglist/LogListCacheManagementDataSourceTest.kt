@@ -22,6 +22,7 @@ import com.appmattus.certificatetransparency.internal.loglist.LogListZipNetworkD
 import com.appmattus.certificatetransparency.internal.loglist.parser.RawLogListToLogListResultTransformer
 import com.appmattus.certificatetransparency.utils.assertIsA
 import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.Instant
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.kotlin.any
@@ -34,7 +35,10 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.io.IOException
 import kotlin.random.Random
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 internal class LogListCacheManagementDataSourceTest {
 
     private val memoryRawResult = mock<RawLogListResult.Success>()
@@ -58,7 +62,7 @@ internal class LogListCacheManagementDataSourceTest {
         on { transform(networkRawResult) } doReturn LogListResult.Invalid.NoLogServers
     }
 
-    private var now: Long = defaultLogListTimestamp
+    private var now: Instant = defaultLogListTimestamp
     private val dataSource = LogListCacheManagementDataSource(memoryCacheMock, diskCacheMock, networkCacheMock, logListTransformerMock) { now }
 
     @Test
@@ -68,7 +72,7 @@ internal class LogListCacheManagementDataSourceTest {
             givenNetworkResult(LogListResult.Valid.Success(defaultLogListTimestamp, emptyList()))
 
             // and the time now is 14 days (inclusive) old or less of the log list
-            now = defaultLogListTimestamp + Random.nextLong(FOURTEEN_DAYS_IN_MILLISECONDS + 1)
+            now = defaultLogListTimestamp + Random.nextLong(FOURTEEN_DAYS_IN_MILLISECONDS + 1).milliseconds
 
             // When we get data
             val result = dataSource.get()
@@ -87,7 +91,7 @@ internal class LogListCacheManagementDataSourceTest {
             // Given no data in memory or disk cache and the network returns successfully
             givenNetworkResult(LogListResult.Valid.Success(defaultLogListTimestamp, emptyList()))
             // and the time now is between 14 days (exclusive) and 70 days (inclusive) old of the log list
-            now = defaultLogListTimestamp + Random.nextLong(FOURTEEN_DAYS_IN_MILLISECONDS + 1, SEVENTY_DAYS_IN_MILLISECONDS + 1)
+            now = defaultLogListTimestamp + Random.nextLong(FOURTEEN_DAYS_IN_MILLISECONDS + 1, SEVENTY_DAYS_IN_MILLISECONDS + 1).milliseconds
 
             // When we get data
             val result = dataSource.get()
@@ -106,7 +110,7 @@ internal class LogListCacheManagementDataSourceTest {
             // Given no data in memory or disk cache and network returns successfully
             givenNetworkResult(LogListResult.Valid.Success(defaultLogListTimestamp, emptyList()))
             // and the time now is more than 70 days (exclusive) old of the log list
-            now = defaultLogListTimestamp + SEVENTY_DAYS_IN_MILLISECONDS + 1
+            now = defaultLogListTimestamp + SEVENTY_DAYS_IN_MILLISECONDS.milliseconds + 1.milliseconds
 
             // When we get data
             val result = dataSource.get()
@@ -125,7 +129,7 @@ internal class LogListCacheManagementDataSourceTest {
             // Given data in memory
             givenMemoryResult(LogListResult.Valid.Success(defaultLogListTimestamp, emptyList()))
             // and the time now is 1 day (inclusive) old or less of the log list
-            now = defaultLogListTimestamp + Random.nextLong(ONE_DAY_IN_MILLISECONDS + 1)
+            now = defaultLogListTimestamp + Random.nextLong(ONE_DAY_IN_MILLISECONDS + 1).milliseconds
 
             // When we get data
             val result = dataSource.get()
@@ -144,7 +148,7 @@ internal class LogListCacheManagementDataSourceTest {
             // Given no data in memory cache and disk cache returns successfully
             givenDiskResult(LogListResult.Valid.Success(defaultLogListTimestamp, emptyList()))
             // and the time now is 1 day (inclusive) old or less of the log list
-            now = defaultLogListTimestamp + Random.nextLong(ONE_DAY_IN_MILLISECONDS + 1)
+            now = defaultLogListTimestamp + Random.nextLong(ONE_DAY_IN_MILLISECONDS + 1).milliseconds
 
             // When we get data
             val result = dataSource.get()
@@ -162,9 +166,19 @@ internal class LogListCacheManagementDataSourceTest {
     fun `returns success when memory cache returns data older than 1 day and disk returns data 1 day old or less`() {
         runBlocking {
             // Given data in memory is older than a day
-            givenMemoryResult(LogListResult.Valid.Success(defaultLogListTimestamp - ONE_DAY_IN_MILLISECONDS - 1, emptyList()))
+            givenMemoryResult(
+                LogListResult.Valid.Success(
+                    defaultLogListTimestamp - ONE_DAY_IN_MILLISECONDS.milliseconds - 1.milliseconds,
+                    emptyList()
+                )
+            )
             // And data in disk is one day or less old
-            givenDiskResult(LogListResult.Valid.Success(defaultLogListTimestamp - Random.nextLong(ONE_DAY_IN_MILLISECONDS), emptyList()))
+            givenDiskResult(
+                LogListResult.Valid.Success(
+                    defaultLogListTimestamp - Random.nextLong(ONE_DAY_IN_MILLISECONDS).milliseconds,
+                    emptyList()
+                )
+            )
 
             // When we get data
             val result = dataSource.get()
@@ -182,10 +196,15 @@ internal class LogListCacheManagementDataSourceTest {
     fun `returns success stale network when memory data newer than network data`() {
         runBlocking {
             // Given data in memory older than one day
-            val memoryTimestamp = defaultLogListTimestamp - ONE_DAY_IN_MILLISECONDS - 1
+            val memoryTimestamp = defaultLogListTimestamp - ONE_DAY_IN_MILLISECONDS.milliseconds - 1.milliseconds
             givenMemoryResult(LogListResult.Valid.Success(memoryTimestamp, emptyList()))
             // And network data is older than memory data
-            givenNetworkResult(LogListResult.Valid.Success(memoryTimestamp - Random.nextLong(1, ONE_DAY_IN_MILLISECONDS), emptyList()))
+            givenNetworkResult(
+                LogListResult.Valid.Success(
+                    memoryTimestamp - Random.nextLong(1, ONE_DAY_IN_MILLISECONDS).milliseconds,
+                    emptyList()
+                )
+            )
 
             // When we get data
             val result = dataSource.get()
@@ -200,10 +219,20 @@ internal class LogListCacheManagementDataSourceTest {
     fun `returns success stale network when disk data newer than network data`() {
         runBlocking {
             // Given data in disk older than one day
-            val diskTimestamp = defaultLogListTimestamp - ONE_DAY_IN_MILLISECONDS - 1
-            givenDiskResult(LogListResult.Valid.Success(defaultLogListTimestamp - ONE_DAY_IN_MILLISECONDS - 1, emptyList()))
+            val diskTimestamp = defaultLogListTimestamp - ONE_DAY_IN_MILLISECONDS.milliseconds - 1.milliseconds
+            givenDiskResult(
+                LogListResult.Valid.Success(
+                    defaultLogListTimestamp - ONE_DAY_IN_MILLISECONDS.milliseconds - 1.milliseconds,
+                    emptyList()
+                )
+            )
             // And network data that is older than memory
-            givenNetworkResult(LogListResult.Valid.Success(diskTimestamp - Random.nextLong(1, ONE_DAY_IN_MILLISECONDS), emptyList()))
+            givenNetworkResult(
+                LogListResult.Valid.Success(
+                    diskTimestamp - Random.nextLong(1, ONE_DAY_IN_MILLISECONDS).milliseconds,
+                    emptyList()
+                )
+            )
 
             // When we get data
             val result = dataSource.get()
@@ -234,7 +263,8 @@ internal class LogListCacheManagementDataSourceTest {
             // Given network failure and no data in memory or disk
             givenNetworkResult(LogListResult.Invalid.LogListZipFailedLoadingWithException(IOException()))
             // And memory data is between 1 day and 70 days
-            val memoryTimestamp = defaultLogListTimestamp - Random.nextLong(ONE_DAY_IN_MILLISECONDS + 1, SEVENTY_DAYS_IN_MILLISECONDS)
+            val memoryTimestamp =
+                defaultLogListTimestamp - Random.nextLong(ONE_DAY_IN_MILLISECONDS + 1, SEVENTY_DAYS_IN_MILLISECONDS).milliseconds
             givenMemoryResult(LogListResult.Valid.Success(memoryTimestamp, emptyList()))
 
             // When we get data
@@ -252,7 +282,7 @@ internal class LogListCacheManagementDataSourceTest {
             // Given network failure and no data in memory or disk
             givenNetworkResult(LogListResult.Invalid.LogListZipFailedLoadingWithException(IOException()))
             // And memory data is older than 70 days
-            val memoryTimestamp = defaultLogListTimestamp - SEVENTY_DAYS_IN_MILLISECONDS - 1
+            val memoryTimestamp = defaultLogListTimestamp - SEVENTY_DAYS_IN_MILLISECONDS.milliseconds - 1.milliseconds
             givenMemoryResult(LogListResult.Valid.Success(memoryTimestamp, emptyList()))
 
             // When we get data
@@ -278,7 +308,7 @@ internal class LogListCacheManagementDataSourceTest {
     }
 
     companion object {
-        private const val defaultLogListTimestamp = 1663678537000L
+        private val defaultLogListTimestamp = Instant.fromEpochMilliseconds(1663678537000L)
 
         private const val ONE_DAY_IN_MILLISECONDS = 86400000L
         private const val FOURTEEN_DAYS_IN_MILLISECONDS = 1209600000L

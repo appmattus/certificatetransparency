@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,7 @@
 package com.appmattus.certificatetransparency.internal.loglist.model.v3
 
 import com.appmattus.certificatetransparency.utils.TestData
+import kotlinx.datetime.Instant
 import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -51,6 +52,6 @@ internal class LogListV3Test {
 
         val nimbusLog = cloudflare.logs.first { it.description == "Cloudflare 'Nimbus2022' Log" }
         assertEquals(86400, nimbusLog.maximumMergeDelay)
-        assertEquals(1572549720000, nimbusLog.state?.timestamp)
+        assertEquals(Instant.fromEpochMilliseconds(1572549720000), nimbusLog.state?.timestamp)
     }
 }

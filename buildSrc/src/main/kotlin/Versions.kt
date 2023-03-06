@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,5 +62,6 @@ object Versions {
 
     object KotlinX {
         const val serialization = "1.3.2"
+        const val dateTime = "0.4.0"
     }
 }

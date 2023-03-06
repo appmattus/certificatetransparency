@@ -21,6 +21,7 @@
 package com.appmattus.certificatetransparency.internal.loglist.model.v3
 
 import com.appmattus.certificatetransparency.internal.loglist.deserializer.Rfc3339Deserializer
+import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -31,7 +32,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 internal data class LogListV3(
-    @Serializable(with = Rfc3339Deserializer::class) @SerialName("log_list_timestamp") val logListTimestamp: Long,
+    @Serializable(with = Rfc3339Deserializer::class) @SerialName("log_list_timestamp") val logListTimestamp: Instant,
     @SerialName("version") val version: String,
     @SerialName("operators") val operators: List<Operator>
 )

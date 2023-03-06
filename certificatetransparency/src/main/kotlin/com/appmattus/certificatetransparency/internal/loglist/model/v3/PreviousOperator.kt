@@ -1,6 +1,7 @@
 package com.appmattus.certificatetransparency.internal.loglist.model.v3
 
 import com.appmattus.certificatetransparency.internal.loglist.deserializer.Rfc3339Deserializer
+import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -11,6 +12,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class PreviousOperator(
-    @Serializable(with = Rfc3339Deserializer::class) @SerialName("end_time") val endDate: Long,
+    @Serializable(with = Rfc3339Deserializer::class) @SerialName("end_time") val endDate: Instant,
     @SerialName("name") val name: String
 )

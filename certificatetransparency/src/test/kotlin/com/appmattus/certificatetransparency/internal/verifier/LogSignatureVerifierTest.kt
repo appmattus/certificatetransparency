@@ -57,15 +57,19 @@ import com.appmattus.certificatetransparency.utils.TestData.TEST_PRE_SCT_RSA
 import com.appmattus.certificatetransparency.utils.TestData.loadCertificates
 import com.appmattus.certificatetransparency.utils.assertIsA
 import com.appmattus.certificatetransparency.utils.readPemFile
+import kotlinx.datetime.Clock
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.ExperimentalTime
 
 /**
  * This test verifies that the data is correctly serialized for signature comparison, so signature
  * verification is actually effective.
  */
+@OptIn(ExperimentalTime::class)
 internal class LogSignatureVerifierTest {
 
     /** Returns a LogSignatureVerifier for the test log with an EC key  */
@@ -251,7 +255,7 @@ internal class LogSignatureVerifierTest {
         // given we have an SCT with a future timestamp
         val certs = loadCertificates(TEST_CERT)
         val sct = Deserializer.parseSctFromBinary(TestData.file(TEST_CERT_SCT).inputStream())
-        val futureSct = sct.copy(timestamp = System.currentTimeMillis() + 10000)
+        val futureSct = sct.copy(timestamp = Clock.System.now() + 10000.milliseconds)
 
         // when the signature is verified
         assertIsA<SctVerificationResult.Invalid.FutureTimestamp>(verifier.verifySignature(futureSct, certs))
@@ -265,7 +269,7 @@ internal class LogSignatureVerifierTest {
 
         // when we have a log server which is no longer valid
         val logInfo = LogServer.fromKeyFile(TestData.fileName(TEST_LOG_KEY))
-        val verifier = LogSignatureVerifier(logInfo.copy(validUntil = sct.timestamp - 10000))
+        val verifier = LogSignatureVerifier(logInfo.copy(validUntil = sct.timestamp - 10000.milliseconds))
 
         // then the signature is rejected
         assertIsA<SctVerificationResult.Invalid.LogServerUntrusted>(verifier.verifySignature(sct, certs))

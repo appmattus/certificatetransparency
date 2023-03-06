@@ -21,13 +21,17 @@ import com.appmattus.certificatetransparency.datasource.DataSource
 import com.appmattus.certificatetransparency.internal.loglist.InMemoryCache
 import com.appmattus.certificatetransparency.internal.loglist.LogListZipNetworkDataSource
 import com.appmattus.certificatetransparency.internal.loglist.parser.RawLogListToLogListResultTransformer
+import kotlinx.datetime.Instant
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 internal class LogListCacheManagementDataSource constructor(
     private val inMemoryCache: InMemoryCache,
     private val diskCache: DiskCache?,
     private val networkCache: LogListZipNetworkDataSource,
     private val transformer: RawLogListToLogListResultTransformer = RawLogListToLogListResultTransformer(),
-    private val now: () -> Long
+    private val now: () -> Instant
 ) : DataSource<LogListResult> {
 
     @Suppress("ReturnCount")
@@ -110,8 +114,8 @@ internal class LogListCacheManagementDataSource constructor(
     }
 
     companion object {
-        private const val ONE_DAY_IN_MILLISECONDS = 86400000
-        private const val FOURTEEN_DAYS_IN_MILLISECONDS = 1209600000
-        private const val SEVENTY_DAYS_IN_MILLISECONDS = 6048000000
+        private val ONE_DAY_IN_MILLISECONDS = 86400000.milliseconds
+        private val FOURTEEN_DAYS_IN_MILLISECONDS = 1209600000.milliseconds
+        private val SEVENTY_DAYS_IN_MILLISECONDS = 6048000000.milliseconds
     }
 }

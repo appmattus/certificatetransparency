@@ -25,6 +25,7 @@ import com.appmattus.certificatetransparency.loglist.LogListResult
 import com.appmattus.certificatetransparency.utils.TestData
 import com.appmattus.certificatetransparency.utils.assertIsA
 import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.Instant
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -83,7 +84,7 @@ internal class LogListJsonParserV3Test {
 
         val logServer = result.servers.first { it.id.contentEquals(symantecId) }
         assertNotNull(logServer.validUntil)
-        assertEquals(1588550440000, logServer.validUntil)
+        assertEquals(Instant.fromEpochMilliseconds(1588550440000), logServer.validUntil)
     }
 
     companion object {

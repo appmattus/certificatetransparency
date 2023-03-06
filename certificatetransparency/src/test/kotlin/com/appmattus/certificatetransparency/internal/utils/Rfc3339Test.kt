@@ -20,6 +20,7 @@
 
 package com.appmattus.certificatetransparency.internal.utils
 
+import kotlinx.datetime.Instant
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Test
@@ -38,10 +39,10 @@ internal class Rfc3339Test {
     fun test() {
         if (expected == "fail") {
             assertThrows(NumberFormatException::class.java) {
-                input.toRfc3339Long()
+                input.toRfc3339Instant()
             }
         } else {
-            assertEquals(expected.toLong(), input.toRfc3339Long())
+            assertEquals(Instant.fromEpochMilliseconds(expected.toLong()), input.toRfc3339Instant())
         }
     }
 

@@ -14,17 +14,20 @@
  * Derived from https://github.com/googleapis/google-http-java-client/blob/dev/google-http-client/src/main/java/com/google/api/client/util/DateTime.java
  *
  * Modified 2018 by Babylon Partners Limited
- * Modified 2021 by Appmattus Limited
+ * Modified 2021-2023 by Appmattus Limited
  */
 
 package com.appmattus.certificatetransparency.internal.utils
 
-import java.util.Calendar
-import java.util.GregorianCalendar
-import java.util.TimeZone
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atTime
+import kotlinx.datetime.toInstant
 import kotlin.math.pow
-
-private val GMT = TimeZone.getTimeZone("GMT")
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.ExperimentalTime
 
 /** Regular expression for parsing RFC3339 date/times.  */
 private val Rfc3339Pattern = Regex(
@@ -53,53 +56,47 @@ private val Rfc3339Pattern = Regex(
  */
 // Magic numbers accepted as very much linked to the pattern
 @Suppress("MagicNumber")
-internal fun String.toRfc3339Long(): Long {
+@OptIn(ExperimentalTime::class)
+internal fun String.toRfc3339Instant(): Instant {
     val results = Rfc3339Pattern.matchEntire(this) ?: throw NumberFormatException("Invalid RFC3339 date/time format: $this")
 
-    val year = results.groupValues[1].toInt() // yyyy
-    val month = results.groupValues[2].toInt() - 1 // MM
-    val day = results.groupValues[3].toInt() // dd
+    val localDate = LocalDate(
+        year = results.groupValues[1].toInt(), // yyyy
+        monthNumber = results.groupValues[2].toInt(), // MM
+        dayOfMonth = results.groupValues[3].toInt() // dd
+    )
     val isTimeGiven = results.groupValues[4].isNotEmpty() // 'T'HH:mm:ss.milliseconds
     val tzShiftRegexGroup = results.groupValues[9] // 'Z', or time zone shift HH:mm following '+'/'-'
     val isTzShiftGiven = tzShiftRegexGroup.isNotEmpty()
-    var hourOfDay = 0
-    var minute = 0
-    var second = 0
-    var milliseconds = 0
 
     if (isTzShiftGiven && !isTimeGiven) {
         throw NumberFormatException("Invalid RFC33339 date/time format, cannot specify time zone shift without specifying time: $this")
     }
 
-    if (isTimeGiven) {
-        hourOfDay = results.groupValues[5].toInt() // HH
-        minute = results.groupValues[6].toInt() // mm
-        second = results.groupValues[7].toInt() // ss
-        if (results.groupValues[8].isNotEmpty()) { // contains .milliseconds?
-            milliseconds = results.groupValues[8].substring(1).toInt() // milliseconds
-            // The number of digits after the dot may not be 3. Need to renormalize.
-            val fractionDigits = results.groupValues[8].substring(1).length - 3
-            milliseconds = (milliseconds.toDouble() / 10.0.pow(fractionDigits.toDouble())).toInt()
-        }
-    }
-    val dateTime = GregorianCalendar(GMT)
-    dateTime.set(year, month, day, hourOfDay, minute, second)
-    dateTime.set(Calendar.MILLISECOND, milliseconds)
-    var value = dateTime.timeInMillis
-
-    if (isTimeGiven && isTzShiftGiven) {
-        @Suppress("EXPERIMENTAL_API_USAGE_ERROR")
-        if (tzShiftRegexGroup[0].uppercaseChar() != 'Z') {
-            var tzShift = (
-                results.groupValues[11].toInt() * 60 + // time zone shift HH
-                    results.groupValues[12].toInt()
-                ) // time zone shift mm
-            if (results.groupValues[10][0] == '-') { // time zone shift + or -
-                tzShift = -tzShift
+    val localTime = if (isTimeGiven) {
+        LocalTime(
+            hour = results.groupValues[5].toInt(), // HH
+            minute = results.groupValues[6].toInt(), // mm
+            second = results.groupValues[7].toInt(), // ss
+            nanosecond = results.groupValues[8].ifEmpty { ".000" }.substring(1).let {
+                // The number of digits after the dot may not be 3. Need to renormalize.
+                val fractionDigits = it.length - 3
+                (it.toDouble() / 10.0.pow(fractionDigits.toDouble())).toInt() * 1_000_000
             }
-            value -= tzShift * 60000L // e.g. if 1 hour ahead of UTC, subtract an hour to get UTC time
-        }
+        )
+    } else {
+        LocalTime(0, 0, 0)
     }
 
-    return value
+    val tzShift = if (isTzShiftGiven && tzShiftRegexGroup[0].uppercaseChar() != 'Z') {
+        // time zone shift HH
+        (results.groupValues[11].toInt() * 60 + results.groupValues[12].toInt()) *
+            // time zone shift + or -
+            (if (results.groupValues[10][0] == '-') -1 else 1)
+    } else {
+        0
+    }
+
+    // e.g. if 1 hour ahead of UTC, subtract an hour to get UTC time
+    return localDate.atTime(localTime).toInstant(TimeZone.UTC) - tzShift.minutes
 }

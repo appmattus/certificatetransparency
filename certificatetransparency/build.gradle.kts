@@ -21,6 +21,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.KotlinX.dateTime}")
 
     implementation("com.squareup.okhttp3:okhttp:${Versions.okhttp}")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.KotlinX.serialization}")
