@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,8 @@
 
 package com.appmattus.certificatetransparency.datasource
 
-import com.appmattus.certificatetransparency.internal.loglist.InMemoryDataSource
+import com.appmattus.certificatetransparency.internal.loglist.InMemoryCache
+import com.appmattus.certificatetransparency.loglist.RawLogListResult
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
@@ -35,9 +36,9 @@ import java.util.concurrent.atomic.AtomicInteger
 
 internal class DataSourceReuseInflightTest {
 
-    private val cache = spy(InMemoryDataSource<Any>())
+    private val cache = spy(InMemoryCache())
 
-    private lateinit var reuseInflightCache: DataSource<Any>
+    private lateinit var reuseInflightCache: DataSource<RawLogListResult>
 
     @Before
     fun before() {
@@ -48,14 +49,14 @@ internal class DataSourceReuseInflightTest {
     @Test
     fun `single call to get returns the value`() = runBlocking {
         // given value available in first cache only
-        whenever(cache.get()).then { "value" }
+        whenever(cache.get()).then { RawLogListResult.Success(byteArrayOf(1), byteArrayOf(2)) }
 
         // when we get the value
         val result = reuseInflightCache.get()
 
         // then we return the value
         verify(cache).get()
-        assertEquals("value", result)
+        assertEquals(RawLogListResult.Success(byteArrayOf(1), byteArrayOf(2)), result)
     }
 
     @Test
@@ -127,22 +128,22 @@ internal class DataSourceReuseInflightTest {
     @Test
     fun `call set from cache`() = runBlocking {
         // given value available in first cache only
-        whenever(cache.set("value")).then { "value" }
+        whenever(cache.set(RawLogListResult.Success(byteArrayOf(1), byteArrayOf(2)))).then { }
 
         // when we get the value
-        reuseInflightCache.set("value")
+        reuseInflightCache.set(RawLogListResult.Success(byteArrayOf(1), byteArrayOf(2)))
 
         // then we return the value
-        verify(cache).set("value")
+        verify(cache).set(RawLogListResult.Success(byteArrayOf(1), byteArrayOf(2)))
     }
 
     @Test(expected = TestException::class)
     fun `propagate exception on set`() = runBlocking {
         // given value available in first cache only
-        whenever(cache.set("value")).then { throw TestException() }
+        whenever(cache.set(RawLogListResult.Success(byteArrayOf(1), byteArrayOf(2)))).then { throw TestException() }
 
         // when we get the value
-        reuseInflightCache.set("value")
+        reuseInflightCache.set(RawLogListResult.Success(byteArrayOf(1), byteArrayOf(2)))
 
         // then we throw an exception
     }

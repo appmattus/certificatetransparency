@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,6 @@ import com.appmattus.certificatetransparency.VerificationResult
 import com.appmattus.certificatetransparency.chaincleaner.CertificateChainCleaner
 import com.appmattus.certificatetransparency.chaincleaner.CertificateChainCleanerFactory
 import com.appmattus.certificatetransparency.datasource.DataSource
-import com.appmattus.certificatetransparency.internal.loglist.LogListJsonFailedLoadingWithException
 import com.appmattus.certificatetransparency.internal.serialization.CTConstants
 import com.appmattus.certificatetransparency.internal.utils.Base64
 import com.appmattus.certificatetransparency.internal.verifier.CertificateTransparencyBase
@@ -40,6 +39,7 @@ import com.appmattus.certificatetransparency.utils.TrustedSocketFactory
 import com.appmattus.certificatetransparency.utils.assertIsA
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Ignore
 import org.junit.Test
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.whenever
@@ -88,8 +88,113 @@ internal class CertificateTransparencyBaseTest {
 
         val result = ctb.verifyCertificateTransparency("www.appmattus.com", certsToCheck)
 
-        require(result is VerificationResult.Success.Trusted)
+        assertIsA<VerificationResult.Success.Trusted>(result)
         assertEquals(2, result.scts.count { it.value is SctVerificationResult.Valid })
+    }
+
+    @Test
+    fun successWhenDisabledChecks() {
+        // Given data source returns DisableChecks
+        val ctb = CertificateTransparencyBase(
+            logListDataSource = object : DataSource<LogListResult> {
+                override suspend fun get() = LogListResult.DisableChecks(0, LogListResult.Invalid.LogListJsonFailedLoading)
+                override suspend fun set(value: LogListResult) = Unit
+            }
+        )
+
+        // When we verify
+        val result = ctb.verifyCertificateTransparency("www.appmattus.com", TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN))
+
+        // Then verification is success with note about stale log list
+        assertIsA<VerificationResult.Success.DisabledStaleLogList>(result)
+    }
+
+    @Test
+    fun successStaleNetworkWhenStaleNetworkUsingCachedData() {
+        // Given data source returns StaleNetworkUsingCachedData
+        val ctb = CertificateTransparencyBase(
+            logListDataSource = object : DataSource<LogListResult> {
+                override suspend fun get() = LogListResult.Valid.StaleNetworkUsingCachedData(
+                    timestamp = (LogListDataSourceTestFactory.logListDataSource.get() as LogListResult.Valid.Success).timestamp,
+                    servers = (LogListDataSourceTestFactory.logListDataSource.get() as LogListResult.Valid.Success).servers,
+                    networkResult = LogListResult.Valid.Success(0, emptyList())
+                )
+
+                override suspend fun set(value: LogListResult) = Unit
+            }
+        )
+
+        // When we verify
+        val result = ctb.verifyCertificateTransparency("www.appmattus.com", TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN))
+
+        // Then verification is success with note about stale data
+        assertIsA<VerificationResult.Success.StaleNetwork>(result)
+        assertIsA<VerificationResult.Success>(result.originalVerificationResult)
+    }
+
+    @Test
+    fun successStaleNetworkWhenStaleNetworkUsingNetworkData() {
+        // Given data source returns StaleNetworkUsingNetworkData
+        val ctb = CertificateTransparencyBase(
+            logListDataSource = object : DataSource<LogListResult> {
+                override suspend fun get() = LogListResult.Valid.StaleNetworkUsingNetworkData(
+                    timestamp = (LogListDataSourceTestFactory.logListDataSource.get() as LogListResult.Valid.Success).timestamp,
+                    servers = (LogListDataSourceTestFactory.logListDataSource.get() as LogListResult.Valid.Success).servers
+                )
+
+                override suspend fun set(value: LogListResult) = Unit
+            }
+        )
+
+        // When we verify
+        val result = ctb.verifyCertificateTransparency("www.appmattus.com", TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN))
+
+        // Then verification is success with note about stale data
+        assertIsA<VerificationResult.Success.StaleNetwork>(result)
+        assertIsA<VerificationResult.Success>(result.originalVerificationResult)
+    }
+
+    @Test
+    fun failureWhenStaleNetworkUsingCachedDataAndNoLogServers() {
+        // Given data source returns StaleNetworkUsingCachedData but no log servers
+        val ctb = CertificateTransparencyBase(
+            logListDataSource = object : DataSource<LogListResult> {
+                override suspend fun get() = LogListResult.Valid.StaleNetworkUsingCachedData(
+                    timestamp = 0,
+                    servers = emptyList(),
+                    networkResult = LogListResult.Valid.Success(0, emptyList())
+                )
+
+                override suspend fun set(value: LogListResult) = Unit
+            }
+        )
+
+        // When we verify
+        val result = ctb.verifyCertificateTransparency("www.appmattus.com", TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN))
+
+        // Then verification is failure
+        assertIsA<VerificationResult.Failure.TooFewSctsTrusted>(result)
+    }
+
+    @Test
+    fun failureStaleNetworkWhenStaleNetworkUsingNetworkDataAndNoLogServers() {
+        // Given data source returns StaleNetworkUsingNetworkData but no log servers
+        val ctb = CertificateTransparencyBase(
+            logListDataSource = object : DataSource<LogListResult> {
+                override suspend fun get() = LogListResult.Valid.StaleNetworkUsingNetworkData(
+                    timestamp = 0,
+                    servers = emptyList(),
+                )
+
+                override suspend fun set(value: LogListResult) = Unit
+            }
+        )
+
+        // When we verify
+        val result = ctb.verifyCertificateTransparency("www.appmattus.com", TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN))
+
+        // Then verification is failure
+        assertIsA<VerificationResult.Failure.TooFewSctsTrusted>(result)
     }
 
     @Test
@@ -104,10 +209,10 @@ internal class CertificateTransparencyBaseTest {
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
 
         val result = ctb.verifyCertificateTransparency("www.appmattus.com", certsToCheck)
-        require(result is VerificationResult.Failure.LogServersFailed)
+        assertIsA<VerificationResult.Failure.LogServersFailed>(result)
 
         val logListResult = result.logListResult
-        require(logListResult is LogListJsonFailedLoadingWithException)
+        assertIsA<LogListResult.Invalid.LogListZipFailedLoadingWithException>(logListResult)
 
         assertTrue(logListResult.exception is InterruptedException)
     }

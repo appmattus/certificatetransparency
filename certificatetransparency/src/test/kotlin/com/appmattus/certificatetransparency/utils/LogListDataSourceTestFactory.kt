@@ -43,7 +43,7 @@ internal object LogListDataSourceTestFactory {
             operator.logs.map {
                 LogServer(PublicKeyFactory.fromByteArray(Base64.decode(it.key)), operator = operator.name, previousOperators = emptyList())
             }
-        }.flatten().let(LogListResult::Valid)
+        }.flatten().let { LogListResult.Valid.Success(System.currentTimeMillis(), it) }
 
         object : DataSource<LogListResult> {
             override suspend fun get() = list
@@ -54,7 +54,7 @@ internal object LogListDataSourceTestFactory {
 
     val emptySource: DataSource<LogListResult> by lazy {
         object : DataSource<LogListResult> {
-            override suspend fun get() = LogListResult.Valid(emptyList())
+            override suspend fun get() = LogListResult.Valid.Success(System.currentTimeMillis(), emptyList())
 
             override suspend fun set(value: LogListResult) = Unit
         }

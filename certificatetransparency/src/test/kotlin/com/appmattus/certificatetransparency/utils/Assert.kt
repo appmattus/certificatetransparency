@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,11 +21,21 @@
 package com.appmattus.certificatetransparency.utils
 
 import org.junit.Assert.assertTrue
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
+@OptIn(ExperimentalContracts::class)
 internal inline fun <reified T> assertIsA(result: Any?) {
+    contract {
+        returns() implies (result is T)
+    }
     assertTrue("Expected ${T::class.java.name} but actual ${if (result != null) result::class.java.name else "null"}", result is T)
 }
 
+@OptIn(ExperimentalContracts::class)
 internal inline fun <reified T> assertIsA(message: String, result: Any?) {
+    contract {
+        returns() implies (result is T)
+    }
     assertTrue(message, result is T)
 }

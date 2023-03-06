@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,24 +23,8 @@ package com.appmattus.certificatetransparency.internal.loglist
 import com.appmattus.certificatetransparency.internal.utils.stringStackTrace
 import com.appmattus.certificatetransparency.loglist.RawLogListResult
 
-internal data class RawLogListJsonFailedLoadingWithException(val exception: Exception) : RawLogListResult.Failure() {
-    override fun toString() = "log-list.json failed to load with ${exception.stringStackTrace()}"
-}
-
-internal data class RawLogListSigFailedLoadingWithException(val exception: Exception) : RawLogListResult.Failure() {
-    override fun toString() = "log-list.sig failed to load with ${exception.stringStackTrace()}"
-}
-
 internal data class RawLogListZipFailedLoadingWithException(val exception: Exception) : RawLogListResult.Failure() {
     override fun toString() = "log-list.zip failed to load with ${exception.stringStackTrace()}"
-}
-
-internal object RawLogListJsonFailedTooBig : RawLogListResult.Failure() {
-    override fun toString() = "log-list.json is too large"
-}
-
-internal object RawLogListSigFailedTooBig : RawLogListResult.Failure() {
-    override fun toString() = "log-list.sig is too large"
 }
 
 internal object RawLogListZipFailedTooBig : RawLogListResult.Failure() {

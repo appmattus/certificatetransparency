@@ -33,6 +33,11 @@ public sealed interface VerificationResult {
      */
     public sealed interface Success : VerificationResult {
 
+        public data class StaleNetwork(
+            val originalVerificationResult: Success,
+            val originalLogListResult: LogListResult
+        ) : Success
+
         /**
          * Certificate transparency checks passed as [host] is not being verified
          * @property host The host certificate transparency is not enabled for
@@ -61,6 +66,16 @@ public sealed interface VerificationResult {
              * Returns a string representation of the object.
              */
             override fun toString(): String = "Success: SCT not enabled for insecure connection to $host"
+        }
+
+        /**
+         * Certificate transparency checks are disabled because the latest log list is older than 70 days
+         */
+        public data class DisabledStaleLogList(val logListResult: LogListResult.DisableChecks) : Success {
+            /**
+             * Returns a string representation of the object.
+             */
+            override fun toString(): String = "Success: SCT checks disabled as stale log list"
         }
     }
 
