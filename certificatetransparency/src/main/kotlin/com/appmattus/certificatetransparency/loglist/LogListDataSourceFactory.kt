@@ -45,34 +45,52 @@ public object LogListDataSourceFactory {
      * Default: baseUrl = https://www.gstatic.com/ct/log_list/v3/
      */
     public fun createLogListService(
+        baseUrl: String = "...",
+        okHttpClient: OkHttpClient,
+        networkTimeoutSeconds: Long = 30,
+        trustManager: X509TrustManager? = null
+    ): LogListService = createLogListService(
+        baseUrl = baseUrl,
+        okHttpClient = { okHttpClient },
+        networkTimeoutSeconds = networkTimeoutSeconds,
+        trustManager = trustManager
+    )
+
+    /**
+     * Create a [LogListService] allowing the override of [baseUrl], [okHttpClient] and [networkTimeoutSeconds].
+     * Default: baseUrl = https://www.gstatic.com/ct/log_list/v3/
+     */
+    public fun createLogListService(
         baseUrl: String = "https://www.gstatic.com/ct/log_list/v3/",
-        okHttpClient: OkHttpClient? = null,
+        okHttpClient: (() -> OkHttpClient)? = null,
         networkTimeoutSeconds: Long = 30,
         trustManager: X509TrustManager? = null
     ): LogListService {
 
-        val client = (okHttpClient?.newBuilder() ?: OkHttpClient.Builder()).apply {
-            // If a TrustManager is provided then use it. This will be the case when using the Certificate Transparency provider
-            trustManager?.let {
-                val sslContext: SSLContext
-                try {
-                    sslContext = SSLContext.getInstance("SSL")
-                    sslContext.init(null, arrayOf(trustManager), SecureRandom())
-                } catch (expected: NoSuchAlgorithmException) {
-                    throw IllegalStateException("Unable to create an SSLContext")
-                } catch (expected: KeyManagementException) {
-                    throw IllegalStateException("Unable to create an SSLContext")
+        val client by lazy {
+            (okHttpClient?.invoke()?.newBuilder() ?: OkHttpClient.Builder()).apply {
+                // If a TrustManager is provided then use it. This will be the case when using the Certificate Transparency provider
+                trustManager?.let {
+                    val sslContext: SSLContext
+                    try {
+                        sslContext = SSLContext.getInstance("SSL")
+                        sslContext.init(null, arrayOf(trustManager), SecureRandom())
+                    } catch (expected: NoSuchAlgorithmException) {
+                        throw IllegalStateException("Unable to create an SSLContext")
+                    } catch (expected: KeyManagementException) {
+                        throw IllegalStateException("Unable to create an SSLContext")
+                    }
+
+                    sslSocketFactory(sslContext.socketFactory, trustManager)
                 }
 
-                sslSocketFactory(sslContext.socketFactory, trustManager)
-            }
-
-            addInterceptor(MaxSizeInterceptor())
-            connectTimeout(networkTimeoutSeconds, TimeUnit.SECONDS)
-            readTimeout(networkTimeoutSeconds, TimeUnit.SECONDS)
-            writeTimeout(networkTimeoutSeconds, TimeUnit.SECONDS)
-            cache(null)
-        }.build()
+                addInterceptor(MaxSizeInterceptor())
+                connectTimeout(networkTimeoutSeconds, TimeUnit.SECONDS)
+                readTimeout(networkTimeoutSeconds, TimeUnit.SECONDS)
+                writeTimeout(networkTimeoutSeconds, TimeUnit.SECONDS)
+                cache(null)
+            }.build()
+        }
 
         return object : LogListService {
             override suspend fun getLogListZip() = get("log_list.zip", maxSize = 2097152)
