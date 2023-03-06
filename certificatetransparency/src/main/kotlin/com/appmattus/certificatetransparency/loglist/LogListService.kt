@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,19 +25,6 @@ package com.appmattus.certificatetransparency.loglist
  * Typically returned from https://www.gstatic.com/ct/log_list/v3/log_list.json
  */
 public interface LogListService {
-    /**
-     * Contents of https://www.gstatic.com/ct/log_list/v3/log_list.json
-     * The list of CT Logs that are currently compliant with Chrome's CT policy (or have been and were disqualified), and are included in Chrome
-     */
-    public suspend fun getLogList(): ByteArray
-
-    /**
-     * Contents of https://www.gstatic.com/ct/log_list/v3/log_list.sig
-     * log_list.json is signed by Google. The public key to verify log_list.sig can be found at
-     * https://www.gstatic.com/ct/log_list/v3/log_list_pubkey.pem
-     */
-    public suspend fun getLogListSignature(): ByteArray
-
     /**
      * Contents of https://www.gstatic.com/ct/log_list/v3/log_list.zip
      * log_list.json and the corresponding log_list.sig can also be obtained by downloading the zip file containing both of them

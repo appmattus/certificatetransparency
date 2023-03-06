@@ -20,8 +20,6 @@
 
 package com.appmattus.certificatetransparency.internal.loglist.parser
 
-import com.appmattus.certificatetransparency.internal.loglist.LogListJsonBadFormat
-import com.appmattus.certificatetransparency.internal.loglist.LogServerInvalidKey
 import com.appmattus.certificatetransparency.internal.loglist.model.v3.LogListV3
 import com.appmattus.certificatetransparency.internal.loglist.model.v3.State
 import com.appmattus.certificatetransparency.internal.utils.Base64
@@ -40,7 +38,7 @@ internal class LogListJsonParserV3 : LogListJsonParser {
         val logList = try {
             json.decodeFromString(LogListV3.serializer(), logListJson)
         } catch (e: SerializationException) {
-            return LogListJsonBadFormat(e)
+            return LogListResult.Invalid.LogListJsonBadFormat(e)
         }
 
         return buildLogServerList(logList)
@@ -61,11 +59,11 @@ internal class LogListJsonParserV3 : LogListJsonParser {
                     val key = try {
                         PublicKeyFactory.fromByteArray(keyBytes)
                     } catch (e: InvalidKeySpecException) {
-                        return LogServerInvalidKey(e, it.key)
+                        return LogListResult.Invalid.LogServerInvalidKey(e, it.key)
                     } catch (e: NoSuchAlgorithmException) {
-                        return LogServerInvalidKey(e, it.key)
+                        return LogListResult.Invalid.LogServerInvalidKey(e, it.key)
                     } catch (e: IllegalArgumentException) {
-                        return LogServerInvalidKey(e, it.key)
+                        return LogListResult.Invalid.LogServerInvalidKey(e, it.key)
                     }
 
                     LogServer(
@@ -75,7 +73,7 @@ internal class LogListJsonParserV3 : LogListJsonParser {
                         previousOperators = it.listOfPreviousOperators?.map { PreviousOperator(it.name, it.endDate) } ?: emptyList()
                     )
                 }
-        }.flatten().let(LogListResult::Valid)
+        }.flatten().let { LogListResult.Valid.Success(logList.logListTimestamp, it) }
     }
 
     companion object {

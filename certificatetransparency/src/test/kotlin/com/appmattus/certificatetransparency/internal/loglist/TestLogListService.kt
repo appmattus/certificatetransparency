@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,6 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 
 internal interface TestLogListService : LogListService {
-    @GET("log_list.json")
-    @Headers("Cache-Control: no-cache", "Max-Size: 1048576")
-    override suspend fun getLogList(): ByteArray
-
-    @GET("log_list.sig")
-    @Headers("Cache-Control: no-cache", "Max-Size: 512")
-    override suspend fun getLogListSignature(): ByteArray
-
     @GET("log_list.zip")
     @Headers("Cache-Control: no-cache", "Max-Size: 2097152")
     override suspend fun getLogListZip(): ByteArray

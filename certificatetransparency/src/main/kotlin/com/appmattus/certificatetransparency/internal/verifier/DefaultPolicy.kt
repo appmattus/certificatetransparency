@@ -24,6 +24,7 @@ import com.appmattus.certificatetransparency.CTPolicy
 import com.appmattus.certificatetransparency.SctVerificationResult
 import com.appmattus.certificatetransparency.VerificationResult
 import java.security.cert.X509Certificate
+import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
@@ -41,7 +42,7 @@ internal class DefaultPolicy : CTPolicy {
         val validScts = sctResults.values.filterIsInstance<SctVerificationResult.Valid>()
 
         // By default we use the 2022 policy when there are no valid SCTs
-        val issuanceDate = validScts.minOfOrNull { it.sct.timestamp } ?: Long.MAX_VALUE
+        val issuanceDate = validScts.minOfOrNull { it.sct.timestamp } ?: Instant.MAX
         val use2022policy = issuanceDate >= policyUpdateDate
 
         val before = leafCertificate.notBefore.toInstant().atZone(ZoneOffset.UTC)
@@ -85,6 +86,6 @@ internal class DefaultPolicy : CTPolicy {
 
     companion object {
         // 15 April 2022
-        private const val policyUpdateDate = 1649980800000
+        private val policyUpdateDate = Instant.ofEpochMilli(1649980800000)
     }
 }

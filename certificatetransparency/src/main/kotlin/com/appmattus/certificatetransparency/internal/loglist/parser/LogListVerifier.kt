@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@
 package com.appmattus.certificatetransparency.internal.loglist.parser
 
 import com.appmattus.certificatetransparency.internal.loglist.GoogleLogListPublicKey
-import com.appmattus.certificatetransparency.internal.loglist.LogServerSignatureResult
+import com.appmattus.certificatetransparency.loglist.LogServerSignatureResult
 import java.security.InvalidKeyException
 import java.security.NoSuchAlgorithmException
 import java.security.PublicKey

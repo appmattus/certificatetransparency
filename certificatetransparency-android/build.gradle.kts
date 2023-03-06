@@ -28,6 +28,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        allWarningsAsErrors = true
+        freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
+    }
+
     sourceSets {
         getByName<AndroidSourceSet>("main").java.srcDirs("src/main/kotlin")
         getByName<AndroidSourceSet>("test").java.srcDirs("src/test/kotlin")

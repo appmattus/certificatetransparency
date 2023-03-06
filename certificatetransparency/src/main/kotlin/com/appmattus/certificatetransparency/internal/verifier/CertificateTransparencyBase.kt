@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,8 +29,6 @@ import com.appmattus.certificatetransparency.cache.DiskCache
 import com.appmattus.certificatetransparency.chaincleaner.CertificateChainCleaner
 import com.appmattus.certificatetransparency.chaincleaner.CertificateChainCleanerFactory
 import com.appmattus.certificatetransparency.datasource.DataSource
-import com.appmattus.certificatetransparency.internal.loglist.LogListJsonFailedLoadingWithException
-import com.appmattus.certificatetransparency.internal.loglist.NoLogServers
 import com.appmattus.certificatetransparency.internal.utils.Base64
 import com.appmattus.certificatetransparency.internal.utils.hasEmbeddedSct
 import com.appmattus.certificatetransparency.internal.utils.signedCertificateTimestamps
@@ -113,13 +111,14 @@ internal open class CertificateTransparencyBase(
                 logListDataSource.get()
             }
         } catch (expected: Exception) {
-            LogListJsonFailedLoadingWithException(expected)
+            LogListResult.Invalid.LogListZipFailedLoadingWithException(expected)
         }
 
         val verifiers = when (result) {
             is LogListResult.Valid -> result.servers.associateBy({ Base64.toBase64String(it.id) }) { LogSignatureVerifier(it) }
+            is LogListResult.DisableChecks -> return VerificationResult.Success.DisabledStaleLogList(result)
             is LogListResult.Invalid -> return VerificationResult.Failure.LogServersFailed(result)
-            null -> return VerificationResult.Failure.LogServersFailed(NoLogServers)
+            null -> return VerificationResult.Failure.LogServersFailed(LogListResult.Invalid.NoLogServers)
         }
 
         val leafCertificate = certificates[0]
@@ -135,7 +134,15 @@ internal open class CertificateTransparencyBase(
                     verifiers[logId]?.verifySignature(sct, certificates) ?: SctVerificationResult.Invalid.NoTrustedLogServerFound
                 }
 
-            policy.policyVerificationResult(leafCertificate, sctResults)
+            val verificationResult = policy.policyVerificationResult(leafCertificate, sctResults)
+
+            if (verificationResult is VerificationResult.Success &&
+                (result is LogListResult.Valid.StaleNetworkUsingCachedData || result is LogListResult.Valid.StaleNetworkUsingNetworkData)
+            ) {
+                VerificationResult.Success.StaleNetwork(verificationResult, result)
+            } else {
+                verificationResult
+            }
         } catch (e: IOException) {
             VerificationResult.Failure.UnknownIoException(e)
         }

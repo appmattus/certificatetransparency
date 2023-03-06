@@ -20,14 +20,71 @@
 
 package com.appmattus.certificatetransparency.loglist
 
+import com.appmattus.certificatetransparency.internal.utils.stringStackTrace
+import kotlinx.serialization.SerializationException
+import java.time.Instant
+
 public sealed interface LogListResult {
     /**
-     * Class representing log list loading successful
+     * Interface representing log list loading successful
      */
-    public data class Valid(val servers: List<LogServer>) : LogListResult
+    public sealed interface Valid : LogListResult {
+        public val timestamp: Instant
+        public val servers: List<LogServer>
+
+        public data class Success(override val timestamp: Instant, override val servers: List<LogServer>) : Valid
+
+        /**
+         * Network is returning stale data so this denotes we are returning locally cached data to reduce the chance of replay attacks
+         */
+        public data class StaleNetworkUsingCachedData(
+            override val timestamp: Instant,
+            override val servers: List<LogServer>,
+            val networkResult: Valid
+        ) : Valid
+
+        /**
+         * Network is returning stale data so this denotes there is potentially a network issue
+         */
+        public data class StaleNetworkUsingNetworkData(
+            override val timestamp: Instant,
+            override val servers: List<LogServer>
+        ) : Valid
+    }
 
     /**
-     * Abstract class representing log list loading failed
+     * Class representing log list stale data
      */
-    public open class Invalid : LogListResult
+    public data class DisableChecks(val timestamp: Instant, val networkResult: LogListResult) : LogListResult
+
+    /**
+     * Interface representing log list loading failed
+     */
+    public sealed interface Invalid : LogListResult {
+        public data class SignatureVerificationFailed(val signatureResult: LogServerSignatureResult.Invalid) : Invalid
+
+        public object NoLogServers : Invalid {
+            override fun toString(): String = "log-list.json contains no log servers"
+        }
+
+        public object LogListJsonFailedLoading : Invalid {
+            override fun toString(): String = "log-list.json failed to load"
+        }
+
+        public data class LogListZipFailedLoadingWithException(val exception: Exception) : Invalid {
+            override fun toString(): String = "log-list.zip failed to load with ${exception.stringStackTrace()}"
+        }
+
+        public data class LogListJsonBadFormat(val exception: SerializationException) : Invalid {
+            override fun toString(): String = "log-list.json badly formatted with ${exception.stringStackTrace()}"
+        }
+
+        public data class LogServerInvalidKey(val exception: Exception, val key: String) : Invalid {
+            override fun toString(): String = "Public key for log server $key cannot be used with ${exception.stringStackTrace()}"
+        }
+
+        public data class LogListStaleNetwork(val networkResult: LogListResult) : Invalid {
+            override fun toString(): String = "log-list.json from server is older than 70 days old"
+        }
+    }
 }

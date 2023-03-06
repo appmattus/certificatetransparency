@@ -25,6 +25,7 @@ import com.appmattus.certificatetransparency.VerificationResult
 import com.appmattus.certificatetransparency.internal.verifier.model.DigitallySigned
 import com.appmattus.certificatetransparency.internal.verifier.model.LogId
 import com.appmattus.certificatetransparency.internal.verifier.model.SignedCertificateTimestamp
+import com.appmattus.certificatetransparency.utils.assertIsA
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -34,9 +35,11 @@ import org.junit.runners.Parameterized
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import java.security.cert.X509Certificate
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.Calendar
 import java.util.Date
-import java.util.TimeZone
 import java.util.UUID
 import kotlin.random.Random
 
@@ -47,8 +50,8 @@ internal class DefaultPolicyTest {
 
         @Test
         fun duplicateLogIdsReturnsFailureTooFewDistinctOperators() {
-            val start = date(2015, 3, 25, 11, 25, 0, 0)
-            val end = date(2016, 6, 6, 11, 25, 0, 0)
+            val start = date(2015, 3, 25, 11, 25, 0)
+            val end = date(2016, 6, 6, 11, 25, 0)
 
             // given a certificate with start and end date specified
             val certificate: X509Certificate = mock()
@@ -70,14 +73,14 @@ internal class DefaultPolicyTest {
             val result = DefaultPolicy().policyVerificationResult(certificate, scts)
 
             // then the policy fails
-            assertTrue(result is VerificationResult.Failure.TooFewDistinctOperators)
+            assertIsA<VerificationResult.Failure.TooFewDistinctOperators>(result)
             assertTrue(result.toString().startsWith("Failure: Too few distinct operators, required 3, found 1 in"))
         }
 
         @Test
         fun distinctLogIdsReturnsSuccessTrusted() {
-            val start = date(2015, 3, 25, 11, 25, 0, 0)
-            val end = date(2016, 6, 6, 11, 25, 0, 0)
+            val start = date(2015, 3, 25, 11, 25, 0)
+            val end = date(2016, 6, 6, 11, 25, 0)
 
             // given a certificate with start and end date specified
             val certificate: X509Certificate = mock()
@@ -98,7 +101,7 @@ internal class DefaultPolicyTest {
             val result = DefaultPolicy().policyVerificationResult(certificate, scts)
 
             // then the policy passes
-            assertTrue(result is VerificationResult.Success.Trusted)
+            assertIsA<VerificationResult.Success.Trusted>(result)
         }
     }
 
@@ -130,9 +133,10 @@ internal class DefaultPolicyTest {
             }.shuffled().associateBy { UUID.randomUUID().toString() }
 
             // when we execute the default policy
-            val result = DefaultPolicy().policyVerificationResult(certificate, scts) as VerificationResult.Failure.TooFewSctsTrusted
+            val result = DefaultPolicy().policyVerificationResult(certificate, scts)
 
             // then the correct number of SCTs are required
+            assertIsA<VerificationResult.Failure.TooFewSctsTrusted>(result)
             assertEquals(oldPolicySctsRequired, result.minSctCount)
         }
 
@@ -154,9 +158,10 @@ internal class DefaultPolicyTest {
             }.shuffled().associateBy { UUID.randomUUID().toString() }
 
             // when we execute the default policy
-            val result = DefaultPolicy().policyVerificationResult(certificate, scts) as VerificationResult.Failure.TooFewSctsTrusted
+            val result = DefaultPolicy().policyVerificationResult(certificate, scts)
 
             // then the correct number of SCTs are required
+            assertIsA<VerificationResult.Failure.TooFewSctsTrusted>(result)
             assertEquals(newPolicySctsRequired, result.minSctCount)
         }
 
@@ -181,7 +186,7 @@ internal class DefaultPolicyTest {
             val result = DefaultPolicy().policyVerificationResult(certificate, scts)
 
             // then the policy passes
-            assertTrue(result is VerificationResult.Success.Trusted)
+            assertIsA<VerificationResult.Success.Trusted>(result)
         }
 
         @Test
@@ -205,7 +210,7 @@ internal class DefaultPolicyTest {
             val result = DefaultPolicy().policyVerificationResult(certificate, scts)
 
             // then the policy passes
-            assertTrue(result is VerificationResult.Success.Trusted)
+            assertIsA<VerificationResult.Success.Trusted>(result)
         }
 
         companion object {
@@ -215,39 +220,39 @@ internal class DefaultPolicyTest {
             fun data() = arrayOf(
                 arrayOf(
                     "Cert valid for -14 months (nonsensical), needs 2 SCTs",
-                    date(2016, 6, 6, 11, 25, 0, 0),
-                    date(2015, 3, 25, 11, 25, 0, 0),
+                    date(2016, 6, 6, 11, 25, 0),
+                    date(2015, 3, 25, 11, 25, 0),
                     2,
                     2
                 ),
-                arrayOf("Cert valid for 14 months, needs 2 SCTs", date(2015, 3, 25, 11, 25, 0, 0), date(2016, 6, 6, 11, 25, 0, 0), 2, 3),
+                arrayOf("Cert valid for 14 months, needs 2 SCTs", date(2015, 3, 25, 11, 25, 0), date(2016, 6, 6, 11, 25, 0), 2, 3),
                 arrayOf(
                     "Cert valid for exactly 15 months, needs 3 SCTs",
-                    date(2015, 3, 25, 11, 25, 0, 0),
-                    date(2016, 6, 25, 11, 25, 0, 0),
+                    date(2015, 3, 25, 11, 25, 0),
+                    date(2016, 6, 25, 11, 25, 0),
                     3,
                     3
                 ),
-                arrayOf("Cert valid for over 15 months, needs 3 SCTs", date(2015, 3, 25, 11, 25, 0, 0), date(2016, 6, 27, 11, 25, 0, 0), 3, 3),
+                arrayOf("Cert valid for over 15 months, needs 3 SCTs", date(2015, 3, 25, 11, 25, 0), date(2016, 6, 27, 11, 25, 0), 3, 3),
                 arrayOf(
                     "Cert valid for exactly 27 months, needs 3 SCTs",
-                    date(2015, 3, 25, 11, 25, 0, 0),
-                    date(2017, 6, 25, 11, 25, 0, 0),
+                    date(2015, 3, 25, 11, 25, 0),
+                    date(2017, 6, 25, 11, 25, 0),
                     3,
                     3
                 ),
-                arrayOf("Cert valid for over 27 months, needs 4 SCTs", date(2015, 3, 25, 11, 25, 0, 0), date(2017, 6, 28, 11, 25, 0, 0), 4, 3),
+                arrayOf("Cert valid for over 27 months, needs 4 SCTs", date(2015, 3, 25, 11, 25, 0), date(2017, 6, 28, 11, 25, 0), 4, 3),
                 arrayOf(
                     "Cert valid for exactly 39 months, needs 4 SCTs (old policy) or 3 SCTs (new policy)",
-                    date(2015, 3, 25, 11, 25, 0, 0),
-                    date(2018, 6, 25, 11, 25, 0, 0),
+                    date(2015, 3, 25, 11, 25, 0),
+                    date(2018, 6, 25, 11, 25, 0),
                     4,
                     3
                 ),
                 arrayOf(
                     "Cert valid for over 39 months, needs 5 SCTs (old policy) or 3 SCTs (new policy)",
-                    date(2015, 3, 25, 11, 25, 0, 0),
-                    date(2018, 6, 27, 11, 25, 0, 0),
+                    date(2015, 3, 25, 11, 25, 0),
+                    date(2018, 6, 27, 11, 25, 0),
                     5,
                     3
                 )
@@ -257,7 +262,7 @@ internal class DefaultPolicyTest {
 }
 
 @Suppress("LongParameterList", "SameParameterValue")
-fun date(year: Int, month: Int, dayOfMonth: Int, hour: Int, minute: Int, second: Int, milliseconds: Int): Date =
+fun date(year: Int, month: Int, dayOfMonth: Int, hour: Int, minute: Int, second: Int): Date =
     Calendar.getInstance().apply {
         set(Calendar.YEAR, year)
         set(Calendar.MONTH, month - 1)
@@ -265,14 +270,14 @@ fun date(year: Int, month: Int, dayOfMonth: Int, hour: Int, minute: Int, second:
         set(Calendar.HOUR_OF_DAY, hour)
         set(Calendar.MINUTE, minute)
         set(Calendar.SECOND, second)
-        set(Calendar.MILLISECOND, milliseconds)
-        timeZone = TimeZone.getTimeZone("UTC")
+        set(Calendar.MILLISECOND, 0)
+        timeZone = java.util.TimeZone.getTimeZone("UTC")
     }.time
 
 private val oldPolicySct
     get() = SignedCertificateTimestamp(
         id = LogId(Random.nextBytes(10)),
-        timestamp = 0,
+        timestamp = LocalDateTime.of(2022, 1, 1, 0, 0, 0).atZone(ZoneId.systemDefault()).toInstant(),
         extensions = byteArrayOf(),
         signature = DigitallySigned(signature = byteArrayOf())
     )
@@ -281,7 +286,7 @@ private val newPolicySct
     get() = SignedCertificateTimestamp(
         id = LogId(Random.nextBytes(10)),
         // 15 April 2022
-        timestamp = 1649980800000,
+        timestamp = Instant.ofEpochMilli(1649980800000),
         extensions = byteArrayOf(),
         signature = DigitallySigned(signature = byteArrayOf())
     )

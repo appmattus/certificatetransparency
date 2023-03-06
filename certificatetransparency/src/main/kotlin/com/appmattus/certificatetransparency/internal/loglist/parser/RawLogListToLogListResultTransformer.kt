@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,14 +20,9 @@
 
 package com.appmattus.certificatetransparency.internal.loglist.parser
 
-import com.appmattus.certificatetransparency.internal.loglist.LogListJsonFailedLoading
-import com.appmattus.certificatetransparency.internal.loglist.LogListJsonFailedLoadingWithException
-import com.appmattus.certificatetransparency.internal.loglist.LogListSigFailedLoadingWithException
-import com.appmattus.certificatetransparency.internal.loglist.LogServerSignatureResult
-import com.appmattus.certificatetransparency.internal.loglist.RawLogListJsonFailedLoadingWithException
-import com.appmattus.certificatetransparency.internal.loglist.RawLogListSigFailedLoadingWithException
-import com.appmattus.certificatetransparency.internal.loglist.SignatureVerificationFailed
+import com.appmattus.certificatetransparency.internal.loglist.RawLogListZipFailedLoadingWithException
 import com.appmattus.certificatetransparency.loglist.LogListResult
+import com.appmattus.certificatetransparency.loglist.LogServerSignatureResult
 import com.appmattus.certificatetransparency.loglist.RawLogListResult
 
 internal class RawLogListToLogListResultTransformer(
@@ -42,18 +37,16 @@ internal class RawLogListToLogListResultTransformer(
 
     private fun transformFailure(rawLogListResult: RawLogListResult.Failure) =
         when (rawLogListResult) {
-            is RawLogListJsonFailedLoadingWithException ->
-                LogListJsonFailedLoadingWithException(rawLogListResult.exception)
-            is RawLogListSigFailedLoadingWithException ->
-                LogListSigFailedLoadingWithException(rawLogListResult.exception)
-            else -> LogListJsonFailedLoading
+            is RawLogListZipFailedLoadingWithException ->
+                LogListResult.Invalid.LogListZipFailedLoadingWithException(rawLogListResult.exception)
+            else -> LogListResult.Invalid.LogListJsonFailedLoading
         }
 
     private fun transformSuccess(rawLogListResult: RawLogListResult.Success): LogListResult {
         val (logListJson, signature) = rawLogListResult
         return when (val signatureResult = logListVerifier.verify(logListJson, signature)) {
             is LogServerSignatureResult.Valid -> logListJsonParser.parseJson(logListJson.toString(Charsets.UTF_8))
-            is LogServerSignatureResult.Invalid -> SignatureVerificationFailed(signatureResult)
+            is LogServerSignatureResult.Invalid -> LogListResult.Invalid.SignatureVerificationFailed(signatureResult)
         }
     }
 }

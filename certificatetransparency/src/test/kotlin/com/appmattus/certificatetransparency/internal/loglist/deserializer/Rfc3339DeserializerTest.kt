@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +28,7 @@ import org.junit.Assert.assertThrows
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import java.time.Instant
 
 @RunWith(Parameterized::class)
 internal class Rfc3339DeserializerTest {
@@ -39,7 +40,9 @@ internal class Rfc3339DeserializerTest {
     lateinit var expected: String
 
     @Serializable
-    data class TestObject(@Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") val timestamp: Long)
+    data class TestObject(
+        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") val timestamp: Instant
+    )
 
     @Test
     fun test() {
@@ -50,7 +53,7 @@ internal class Rfc3339DeserializerTest {
         } else {
             val result = json.decodeFromString(TestObject.serializer(), "{\"timestamp\":\"$input\"}").timestamp
 
-            assertEquals(expected.toLong(), result)
+            assertEquals(Instant.ofEpochMilli(expected.toLong()), result)
         }
     }
 

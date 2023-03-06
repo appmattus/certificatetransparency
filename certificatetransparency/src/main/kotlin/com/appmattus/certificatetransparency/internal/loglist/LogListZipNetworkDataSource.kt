@@ -70,8 +70,6 @@ internal class LogListZipNetworkDataSource(
         }
     }
 
-    override suspend fun isValid(value: RawLogListResult?) = value is RawLogListResult.Success
-
     override suspend fun set(value: RawLogListResult) = Unit
 
     private suspend fun wrap(tooBig: RawLogListResult, lambda: suspend () -> ByteArray): Data = try {

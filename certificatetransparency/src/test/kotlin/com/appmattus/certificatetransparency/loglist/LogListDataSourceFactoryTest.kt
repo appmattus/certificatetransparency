@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package com.appmattus.certificatetransparency.loglist
 
-import com.appmattus.certificatetransparency.internal.loglist.LogListJsonFailedLoadingWithException
 import com.appmattus.certificatetransparency.utils.TestData
 import com.appmattus.certificatetransparency.utils.assertIsA
 import kotlinx.coroutines.runBlocking
@@ -28,6 +27,7 @@ import okio.Buffer
 import org.junit.Test
 import java.io.IOException
 import java.net.SocketTimeoutException
+import java.time.Instant
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -76,8 +76,8 @@ public class LogListDataSourceFactoryTest {
             val result = dataSource.get()
 
             // Then a failure is returned with a SocketTimeoutException
-            assertIsA<LogListJsonFailedLoadingWithException>(result)
-            assertIsA<SocketTimeoutException>((result as LogListJsonFailedLoadingWithException).exception)
+            assertIsA<LogListResult.Invalid.LogListZipFailedLoadingWithException>(result)
+            assertIsA<SocketTimeoutException>(result.exception)
         }
     }
 
@@ -88,7 +88,8 @@ public class LogListDataSourceFactoryTest {
             val logListService = LogListDataSourceFactory.createLogListService(baseUrl = baseUrl.toString())
 
             // When we request the log list
-            val dataSource = LogListDataSourceFactory.createDataSource(logListService = logListService)
+            val dataSource =
+                LogListDataSourceFactory.createDataSource(logListService = logListService, now = { Instant.ofEpochMilli(1000000) })
             val result = dataSource.get()
 
             // Then a valid result is returned
@@ -112,8 +113,8 @@ public class LogListDataSourceFactoryTest {
             val result = dataSource.get()
 
             // Then a failure is returned with an IOException
-            assertIsA<LogListJsonFailedLoadingWithException>(result)
-            assertIsA<IOException>((result as LogListJsonFailedLoadingWithException).exception)
+            assertIsA<LogListResult.Invalid.LogListZipFailedLoadingWithException>(result)
+            assertIsA<IOException>(result.exception)
         }
     }
 }

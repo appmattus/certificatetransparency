@@ -16,6 +16,8 @@
 
 package com.appmattus.certificatetransparency.loglist
 
-public data class PreviousOperator(val name: String, val endDate: Long) {
+import java.time.Instant
+
+public data class PreviousOperator(val name: String, val endDate: Instant) {
     public companion object
 }

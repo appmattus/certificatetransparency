@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,6 @@
 
 package com.appmattus.certificatetransparency.internal.loglist.parser
 
-import com.appmattus.certificatetransparency.internal.loglist.LogListJsonBadFormat
 import com.appmattus.certificatetransparency.internal.utils.Base64
 import com.appmattus.certificatetransparency.loglist.LogListResult
 import com.appmattus.certificatetransparency.utils.TestData
@@ -30,6 +29,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Test
+import java.time.Instant
 
 internal class LogListJsonParserV3Test {
 
@@ -41,7 +41,7 @@ internal class LogListJsonParserV3Test {
         val result = LogListJsonParserV3().parseJson(json)
 
         // then 41 items are returned
-        require(result is LogListResult.Valid)
+        assertIsA<LogListResult.Valid>(result)
         assertEquals(29, result.servers.size)
         assertEquals("KXm+8J45OSHwVnOfY6V35b5XfZxgCvj5TV0mXCVdx4Q=", Base64.toBase64String(result.servers[0].id))
     }
@@ -54,7 +54,7 @@ internal class LogListJsonParserV3Test {
         val result = LogListJsonParserV3().parseJson(jsonIncomplete)
 
         // then invalid is returned
-        assertIsA<LogListJsonBadFormat>(result)
+        assertIsA<LogListResult.Invalid.LogListJsonBadFormat>(result)
     }
 
     @Test
@@ -65,7 +65,7 @@ internal class LogListJsonParserV3Test {
         val result = LogListJsonParserV3().parseJson(json)
 
         // then validUntil is set to the the STH timestamp
-        require(result is LogListResult.Valid)
+        assertIsA<LogListResult.Valid>(result)
         val logServer = result.servers[1]
         assertNull(logServer.validUntil)
     }
@@ -78,13 +78,13 @@ internal class LogListJsonParserV3Test {
         val result = LogListJsonParserV3().parseJson(json)
 
         // then validUntil is set to the the STH timestamp
-        require(result is LogListResult.Valid)
+        assertIsA<LogListResult.Valid>(result)
 
         val symantecId = Base64.decode("h3W/51l8+IxDmV+9827/Vo1HVjb/SrVgwbTq/16ggw8=")
 
         val logServer = result.servers.first { it.id.contentEquals(symantecId) }
         assertNotNull(logServer.validUntil)
-        assertEquals(1588550440000, logServer.validUntil)
+        assertEquals(Instant.ofEpochMilli(1588550440000), logServer.validUntil)
     }
 
     companion object {

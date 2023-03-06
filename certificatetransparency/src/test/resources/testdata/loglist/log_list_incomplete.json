@@ -1,4 +1,6 @@
 {
+  "version": "1",
+  "log_list_timestamp": "2022-09-20T12:55:37Z",
   "operators": [
     {
       "name": "Google",
@@ -291,4 +293,4 @@
             "start_inclusive": "2023-01-01T00:00:00Z",
             "end_exclusive": "2024-01-01T00:00:00Z"
           }
-        
+

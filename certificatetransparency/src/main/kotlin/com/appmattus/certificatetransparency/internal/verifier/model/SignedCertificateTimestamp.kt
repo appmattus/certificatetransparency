@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,8 @@
 
 package com.appmattus.certificatetransparency.internal.verifier.model
 
+import java.time.Instant
+
 /**
  * A signed certificate timestamp. If the [sctVersion] is not [Version.V1], then a v1 client may be unable to verify the signature.
  *
@@ -35,7 +37,7 @@ package com.appmattus.certificatetransparency.internal.verifier.model
 public data class SignedCertificateTimestamp(
     val sctVersion: Version = Version.UNKNOWN_VERSION,
     val id: LogId,
-    val timestamp: Long,
+    val timestamp: Instant,
     val signature: DigitallySigned,
     val extensions: ByteArray
 ) {

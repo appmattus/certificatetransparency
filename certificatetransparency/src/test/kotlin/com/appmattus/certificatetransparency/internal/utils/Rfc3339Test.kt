@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,7 @@ import org.junit.Assert.assertThrows
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import java.time.Instant
 
 @RunWith(Parameterized::class)
 internal class Rfc3339Test {
@@ -38,10 +39,10 @@ internal class Rfc3339Test {
     fun test() {
         if (expected == "fail") {
             assertThrows(NumberFormatException::class.java) {
-                input.toRfc3339Long()
+                input.toRfc3339Instant()
             }
         } else {
-            assertEquals(expected.toLong(), input.toRfc3339Long())
+            assertEquals(Instant.ofEpochMilli(expected.toLong()), input.toRfc3339Instant())
         }
     }
 

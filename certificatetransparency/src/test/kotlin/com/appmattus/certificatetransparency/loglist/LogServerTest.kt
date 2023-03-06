@@ -27,6 +27,7 @@ import com.appmattus.certificatetransparency.internal.utils.PublicKeyFactory
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.time.Instant
 
 /** Mostly for verifying the log info calculates the log ID correctly.  */
 internal class LogServerTest {
@@ -48,10 +49,10 @@ internal class LogServerTest {
         val logServer = LogServer(
             key = PublicKeyFactory.fromByteArray(PUBLIC_KEY_RSA),
             operator = "Appmattus",
-            previousOperators = listOf(PreviousOperator("Google", 1000))
+            previousOperators = listOf(PreviousOperator("Google", 1000.fromEpochMillis()))
         )
 
-        assertEquals("Appmattus", logServer.operatorAt(1200))
+        assertEquals("Appmattus", logServer.operatorAt(1200.fromEpochMillis()))
     }
 
     @Test
@@ -62,7 +63,7 @@ internal class LogServerTest {
             previousOperators = emptyList()
         )
 
-        assertEquals("Appmattus", logServer.operatorAt(1200))
+        assertEquals("Appmattus", logServer.operatorAt(1200.fromEpochMillis()))
     }
 
     @Test
@@ -70,10 +71,10 @@ internal class LogServerTest {
         val logServer = LogServer(
             key = PublicKeyFactory.fromByteArray(PUBLIC_KEY_RSA),
             operator = "Appmattus",
-            previousOperators = listOf(PreviousOperator("Google", 1000), PreviousOperator("Cloudflare", 800))
+            previousOperators = listOf(PreviousOperator("Google", 1000.fromEpochMillis()), PreviousOperator("Cloudflare", 800.fromEpochMillis()))
         )
 
-        assertEquals("Google", logServer.operatorAt(900))
+        assertEquals("Google", logServer.operatorAt(900.fromEpochMillis()))
     }
 
     @Test
@@ -81,22 +82,22 @@ internal class LogServerTest {
         val logServer = LogServer(
             key = PublicKeyFactory.fromByteArray(PUBLIC_KEY_RSA),
             operator = "Appmattus",
-            previousOperators = listOf(PreviousOperator("Google", 1000), PreviousOperator("Cloudflare", 800))
+            previousOperators = listOf(PreviousOperator("Google", 1000.fromEpochMillis()), PreviousOperator("Cloudflare", 800.fromEpochMillis()))
         )
 
-        assertEquals("Cloudflare", logServer.operatorAt(700))
+        assertEquals("Cloudflare", logServer.operatorAt(700.fromEpochMillis()))
     }
 
     companion object {
         /** EC log key  */
-        val PUBLIC_KEY: ByteArray = Base64.decode(
+        private val PUBLIC_KEY: ByteArray = Base64.decode(
             "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEfahLEimAoz2t01p3uMziiLOl/fHTDM0YDOhBRuiBARsV4UvxG2LdNgoIGLrtCzWE0J5APC2em4JlvR8EEEFMoA=="
         )
 
-        val LOG_ID: ByteArray = Base64.decode("pLkJkLQYWBSHuxOizGdwCjw1mAT5G9+443fNDsgN3BA=")
+        private val LOG_ID: ByteArray = Base64.decode("pLkJkLQYWBSHuxOizGdwCjw1mAT5G9+443fNDsgN3BA=")
 
         /** RSA log key  */
-        val PUBLIC_KEY_RSA: ByteArray = Base64.decode(
+        private val PUBLIC_KEY_RSA: ByteArray = Base64.decode(
             "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3tyLdYQYM+K+1jGlLUTJ" +
                 "lNFTeNJM4LN5ctwAwXDhoKCFJrGAayZaXJsYtKHf+RH2Y6pqbtE4Ln/4HgXXzFQi" +
                 "BuyTed/ooAafYkDPQsrg51/DxV4WZG66WzFjbFtBPKVfSnLqmbhRlr99PEY92bDt" +
@@ -106,6 +107,8 @@ internal class LogServerTest {
                 "3wIDAQAB"
         )
 
-        val LOG_ID_RSA: ByteArray = Base64.decode("oCQsumIkVhezsKvGJ+spTJIM9H+jy/OdvSGDIX0VsgY=")
+        private val LOG_ID_RSA: ByteArray = Base64.decode("oCQsumIkVhezsKvGJ+spTJIM9H+jy/OdvSGDIX0VsgY=")
+
+        private fun Int.fromEpochMillis() = Instant.ofEpochMilli(toLong())
     }
 }

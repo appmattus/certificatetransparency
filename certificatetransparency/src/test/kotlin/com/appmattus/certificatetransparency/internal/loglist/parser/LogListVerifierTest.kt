@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,7 @@
 
 package com.appmattus.certificatetransparency.internal.loglist.parser
 
-import com.appmattus.certificatetransparency.internal.loglist.LogServerSignatureResult
+import com.appmattus.certificatetransparency.loglist.LogServerSignatureResult
 import com.appmattus.certificatetransparency.utils.TestData
 import com.appmattus.certificatetransparency.utils.assertIsA
 import kotlinx.coroutines.runBlocking
@@ -42,7 +42,7 @@ internal class LogListVerifierTest {
         val result = LogListVerifier(keyPair.public).verify(json.toByteArray(), signature)
 
         // then the signature verifies
-        require(result is LogServerSignatureResult.Valid)
+        assertIsA<LogServerSignatureResult.Valid>(result)
     }
 
     @Test

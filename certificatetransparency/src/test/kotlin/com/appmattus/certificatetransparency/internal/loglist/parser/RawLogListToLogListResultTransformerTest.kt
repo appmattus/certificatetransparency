@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,12 +20,7 @@
 
 package com.appmattus.certificatetransparency.internal.loglist.parser
 
-import com.appmattus.certificatetransparency.internal.loglist.LogListJsonBadFormat
-import com.appmattus.certificatetransparency.internal.loglist.LogListJsonFailedLoadingWithException
-import com.appmattus.certificatetransparency.internal.loglist.LogListSigFailedLoadingWithException
-import com.appmattus.certificatetransparency.internal.loglist.RawLogListJsonFailedLoadingWithException
-import com.appmattus.certificatetransparency.internal.loglist.RawLogListSigFailedLoadingWithException
-import com.appmattus.certificatetransparency.internal.loglist.SignatureVerificationFailed
+import com.appmattus.certificatetransparency.internal.loglist.RawLogListZipFailedLoadingWithException
 import com.appmattus.certificatetransparency.internal.utils.Base64
 import com.appmattus.certificatetransparency.loglist.LogListResult
 import com.appmattus.certificatetransparency.loglist.RawLogListResult
@@ -41,6 +36,7 @@ import java.security.KeyPair
 import java.security.KeyPairGenerator
 import java.security.PrivateKey
 import java.security.Signature
+import java.time.Instant
 import javax.net.ssl.SSLException
 
 internal class RawLogListToLogListResultTransformerTest {
@@ -53,7 +49,7 @@ internal class RawLogListToLogListResultTransformerTest {
         val result = RawLogListToLogListResultTransformer().transform(RawLogListResult.Success(json.toByteArray(), sig))
 
         // then 41 items are returned
-        require(result is LogListResult.Valid)
+        assertIsA<LogListResult.Valid>(result)
         assertEquals(29, result.servers.size)
         assertEquals("KXm+8J45OSHwVnOfY6V35b5XfZxgCvj5TV0mXCVdx4Q=", Base64.toBase64String(result.servers[0].id))
     }
@@ -75,7 +71,7 @@ internal class RawLogListToLogListResultTransformerTest {
         )
 
         // then invalid is returned
-        assertIsA<LogListJsonBadFormat>(result)
+        assertIsA<LogListResult.Invalid.LogListJsonBadFormat>(result)
     }
 
     @Test
@@ -91,7 +87,7 @@ internal class RawLogListToLogListResultTransformerTest {
         )
 
         // then invalid is returned
-        assertIsA<SignatureVerificationFailed>(result)
+        assertIsA<LogListResult.Invalid.SignatureVerificationFailed>(result)
     }
 
     @Test
@@ -107,33 +103,20 @@ internal class RawLogListToLogListResultTransformerTest {
         )
 
         // then invalid is returned
-        assertIsA<SignatureVerificationFailed>(result)
+        assertIsA<LogListResult.Invalid.SignatureVerificationFailed>(result)
     }
 
     @Test
-    fun `returns Invalid when log_list json not found`() = runBlocking {
+    fun `returns Invalid when log_list zip not found`() = runBlocking {
         // given we have a valid json file and signature
 
         // when we ask for data
         val result = RawLogListToLogListResultTransformer().transform(
-            RawLogListJsonFailedLoadingWithException(IOException("bogo"))
+            RawLogListZipFailedLoadingWithException(IOException("bogo"))
         )
 
         // then invalid is returned
-        assertIsA<LogListJsonFailedLoadingWithException>(result)
-    }
-
-    @Test
-    fun `returns Invalid when log_list sig not found`() = runBlocking {
-        // given we have a valid json file and signature
-
-        // when we ask for data
-        val result = RawLogListToLogListResultTransformer().transform(
-            RawLogListSigFailedLoadingWithException(IOException("bogo"))
-        )
-
-        // then invalid is returned
-        assertIsA<LogListSigFailedLoadingWithException>(result)
+        assertIsA<LogListResult.Invalid.LogListZipFailedLoadingWithException>(result)
     }
 
     @Test
@@ -142,11 +125,11 @@ internal class RawLogListToLogListResultTransformerTest {
 
         // when we ask for data
         val result = RawLogListToLogListResultTransformer().transform(
-            RawLogListJsonFailedLoadingWithException(SSLException("bogo"))
+            RawLogListZipFailedLoadingWithException(SSLException("bogo"))
         )
 
         // then invalid is returned
-        assertIsA<LogListJsonFailedLoadingWithException>(result)
+        assertIsA<LogListResult.Invalid.LogListZipFailedLoadingWithException>(result)
     }
 
     @Test
@@ -155,11 +138,11 @@ internal class RawLogListToLogListResultTransformerTest {
 
         // when we ask for data
         val result = RawLogListToLogListResultTransformer().transform(
-            RawLogListSigFailedLoadingWithException(SSLException("bogo"))
+            RawLogListZipFailedLoadingWithException(SSLException("bogo"))
         )
 
         // then invalid is returned
-        assertIsA<LogListSigFailedLoadingWithException>(result)
+        assertIsA<LogListResult.Invalid.LogListZipFailedLoadingWithException>(result)
     }
 
     @Test
@@ -179,7 +162,7 @@ internal class RawLogListToLogListResultTransformerTest {
         )
 
         // then validUntil is set to the the STH timestamp
-        require(result is LogListResult.Valid)
+        assertIsA<LogListResult.Valid>(result)
         val logServer = result.servers[0]
         assertNull(logServer.validUntil)
     }
@@ -201,10 +184,10 @@ internal class RawLogListToLogListResultTransformerTest {
         )
 
         // then validUntil is set to the timestamp
-        require(result is LogListResult.Valid)
+        assertIsA<LogListResult.Valid>(result)
         val logServer = result.servers[3]
         assertNotNull(logServer.validUntil)
-        assertEquals(1550275200000, logServer.validUntil)
+        assertEquals(Instant.ofEpochMilli(1550275200000), logServer.validUntil)
     }
 
     private fun calculateSignature(privateKey: PrivateKey, data: ByteArray): ByteArray {

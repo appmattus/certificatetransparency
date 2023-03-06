@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ object Versions {
     const val bouncyCastle = "1.70"
     const val coroutines = "1.6.2"
     const val highlightJs = "1.5.0"
-    const val mustache = "0.8.18" // Cannot update due to use of ThreadLocal which is not desugared
     const val okhttp = "4.9.3"
     const val retrofit = "2.9.0"
     const val volley = "1.2.0"
