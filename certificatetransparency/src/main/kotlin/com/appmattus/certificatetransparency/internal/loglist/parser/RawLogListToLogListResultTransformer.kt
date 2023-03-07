@@ -24,9 +24,11 @@ import com.appmattus.certificatetransparency.internal.loglist.RawLogListZipFaile
 import com.appmattus.certificatetransparency.loglist.LogListResult
 import com.appmattus.certificatetransparency.loglist.LogServerSignatureResult
 import com.appmattus.certificatetransparency.loglist.RawLogListResult
+import java.security.PublicKey
 
 internal class RawLogListToLogListResultTransformer(
-    private val logListVerifier: LogListVerifier = LogListVerifier(),
+    private val publicKey: PublicKey,
+    private val logListVerifier: LogListVerifier = LogListVerifier(publicKey),
     private val logListJsonParser: LogListJsonParser = LogListJsonParserV3()
 ) {
     fun transform(rawLogListResult: RawLogListResult) =

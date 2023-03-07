@@ -17,6 +17,7 @@
 package com.appmattus.certificatetransparency.loglist
 
 import com.appmattus.certificatetransparency.cache.DiskCache
+import com.appmattus.certificatetransparency.internal.loglist.GoogleLogListPublicKey
 import com.appmattus.certificatetransparency.internal.loglist.InMemoryCache
 import com.appmattus.certificatetransparency.internal.loglist.LogListZipNetworkDataSource
 import com.appmattus.certificatetransparency.internal.loglist.parser.RawLogListToLogListResultTransformer
@@ -61,7 +62,13 @@ internal class LogListCacheManagementDataSourceTest {
     }
 
     private var now: Instant = defaultLogListTimestamp
-    private val dataSource = LogListCacheManagementDataSource(memoryCacheMock, diskCacheMock, networkCacheMock, logListTransformerMock) { now }
+    private val dataSource = LogListCacheManagementDataSource(
+        inMemoryCache = memoryCacheMock,
+        diskCache = diskCacheMock,
+        networkCache = networkCacheMock,
+        publicKey = GoogleLogListPublicKey,
+        transformer = logListTransformerMock
+    ) { now }
 
     @Test
     fun `returns success when network returns data 14 days old or less and memory and disk cache empty`() {

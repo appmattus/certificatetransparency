@@ -20,6 +20,7 @@
 
 package com.appmattus.certificatetransparency.internal.loglist.parser
 
+import com.appmattus.certificatetransparency.internal.loglist.GoogleLogListPublicKey
 import com.appmattus.certificatetransparency.internal.loglist.RawLogListZipFailedLoadingWithException
 import com.appmattus.certificatetransparency.internal.utils.Base64
 import com.appmattus.certificatetransparency.loglist.LogListResult
@@ -46,7 +47,7 @@ internal class RawLogListToLogListResultTransformerTest {
         // given we have a valid json file and signature
 
         // when we ask for data
-        val result = RawLogListToLogListResultTransformer().transform(RawLogListResult.Success(json.toByteArray(), sig))
+        val result = RawLogListToLogListResultTransformer(GoogleLogListPublicKey).transform(RawLogListResult.Success(json.toByteArray(), sig))
 
         // then 41 items are returned
         assertIsA<LogListResult.Valid>(result)
@@ -62,7 +63,7 @@ internal class RawLogListToLogListResultTransformerTest {
 
         // when we ask for data
         val result = RawLogListToLogListResultTransformer(
-            logListVerifier = LogListVerifier(keyPair.public)
+            publicKey = keyPair.public
         ).transform(
             RawLogListResult.Success(
                 jsonIncomplete.toByteArray(),
@@ -79,7 +80,7 @@ internal class RawLogListToLogListResultTransformerTest {
         // given we have a valid json file and na invalid signature
 
         // when we ask for data
-        val result = RawLogListToLogListResultTransformer().transform(
+        val result = RawLogListToLogListResultTransformer(GoogleLogListPublicKey).transform(
             RawLogListResult.Success(
                 json.toByteArray(),
                 ByteArray(512)
@@ -95,7 +96,7 @@ internal class RawLogListToLogListResultTransformerTest {
         // given we have a valid json file and signature
 
         // when we ask for data
-        val result = RawLogListToLogListResultTransformer().transform(
+        val result = RawLogListToLogListResultTransformer(GoogleLogListPublicKey).transform(
             RawLogListResult.Success(
                 json.toByteArray(),
                 ByteArray(32)
@@ -111,7 +112,7 @@ internal class RawLogListToLogListResultTransformerTest {
         // given we have a valid json file and signature
 
         // when we ask for data
-        val result = RawLogListToLogListResultTransformer().transform(
+        val result = RawLogListToLogListResultTransformer(GoogleLogListPublicKey).transform(
             RawLogListZipFailedLoadingWithException(IOException("bogo"))
         )
 
@@ -124,7 +125,7 @@ internal class RawLogListToLogListResultTransformerTest {
         // given we have a valid signature and an exception when accessing the log list
 
         // when we ask for data
-        val result = RawLogListToLogListResultTransformer().transform(
+        val result = RawLogListToLogListResultTransformer(GoogleLogListPublicKey).transform(
             RawLogListZipFailedLoadingWithException(SSLException("bogo"))
         )
 
@@ -137,7 +138,7 @@ internal class RawLogListToLogListResultTransformerTest {
         // given we have a valid json file and an exception when accessing the signature
 
         // when we ask for data
-        val result = RawLogListToLogListResultTransformer().transform(
+        val result = RawLogListToLogListResultTransformer(GoogleLogListPublicKey).transform(
             RawLogListZipFailedLoadingWithException(SSLException("bogo"))
         )
 
@@ -153,7 +154,7 @@ internal class RawLogListToLogListResultTransformerTest {
 
         // when we ask for data
         val result = RawLogListToLogListResultTransformer(
-            logListVerifier = LogListVerifier(keyPair.public)
+            publicKey = keyPair.public
         ).transform(
             RawLogListResult.Success(
                 jsonValidUntil.toByteArray(),
@@ -175,7 +176,7 @@ internal class RawLogListToLogListResultTransformerTest {
 
         // when we ask for data
         val result = RawLogListToLogListResultTransformer(
-            logListVerifier = LogListVerifier(keyPair.public)
+            publicKey = keyPair.public
         ).transform(
             RawLogListResult.Success(
                 jsonValidUntil.toByteArray(),

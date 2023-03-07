@@ -21,6 +21,7 @@ import com.appmattus.certificatetransparency.datasource.DataSource
 import com.appmattus.certificatetransparency.internal.loglist.InMemoryCache
 import com.appmattus.certificatetransparency.internal.loglist.LogListZipNetworkDataSource
 import com.appmattus.certificatetransparency.internal.loglist.parser.RawLogListToLogListResultTransformer
+import java.security.PublicKey
 import java.time.Duration
 import java.time.Instant
 
@@ -28,7 +29,8 @@ internal class LogListCacheManagementDataSource constructor(
     private val inMemoryCache: InMemoryCache,
     private val diskCache: DiskCache?,
     private val networkCache: LogListZipNetworkDataSource,
-    private val transformer: RawLogListToLogListResultTransformer = RawLogListToLogListResultTransformer(),
+    private val publicKey: PublicKey,
+    private val transformer: RawLogListToLogListResultTransformer = RawLogListToLogListResultTransformer(publicKey),
     private val now: () -> Instant
 ) : DataSource<LogListResult> {
 
