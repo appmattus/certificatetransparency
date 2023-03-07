@@ -22,6 +22,7 @@ package com.appmattus.certificatetransparency.loglist
 
 import com.appmattus.certificatetransparency.cache.DiskCache
 import com.appmattus.certificatetransparency.datasource.DataSource
+import com.appmattus.certificatetransparency.internal.loglist.GoogleLogListPublicKey
 import com.appmattus.certificatetransparency.internal.loglist.InMemoryCache
 import com.appmattus.certificatetransparency.internal.loglist.LogListZipNetworkDataSource
 import com.appmattus.certificatetransparency.internal.loglist.await
@@ -32,6 +33,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.security.KeyManagementException
 import java.security.NoSuchAlgorithmException
+import java.security.PublicKey
 import java.security.SecureRandom
 import java.time.Instant
 import java.util.concurrent.TimeUnit
@@ -113,14 +115,13 @@ public object LogListDataSourceFactory {
     public fun createDataSource(
         logListService: LogListService = createLogListService(),
         diskCache: DiskCache? = null,
+        publicKey: PublicKey = GoogleLogListPublicKey,
         now: () -> Instant = { Instant.now() }
-    ): DataSource<LogListResult> {
-
-        return LogListCacheManagementDataSource(
-            inMemoryCache = InMemoryCache(),
-            diskCache = diskCache,
-            networkCache = LogListZipNetworkDataSource(logListService),
-            now = now
-        ).reuseInflight()
-    }
+    ): DataSource<LogListResult> = LogListCacheManagementDataSource(
+        inMemoryCache = InMemoryCache(),
+        diskCache = diskCache,
+        networkCache = LogListZipNetworkDataSource(logListService),
+        publicKey = publicKey,
+        now = now
+    ).reuseInflight()
 }

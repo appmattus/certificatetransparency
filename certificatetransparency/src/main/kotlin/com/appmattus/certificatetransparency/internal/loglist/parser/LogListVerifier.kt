@@ -20,7 +20,6 @@
 
 package com.appmattus.certificatetransparency.internal.loglist.parser
 
-import com.appmattus.certificatetransparency.internal.loglist.GoogleLogListPublicKey
 import com.appmattus.certificatetransparency.loglist.LogServerSignatureResult
 import java.security.InvalidKeyException
 import java.security.NoSuchAlgorithmException
@@ -29,7 +28,7 @@ import java.security.Signature
 import java.security.SignatureException
 
 internal class LogListVerifier(
-    private val publicKey: PublicKey = GoogleLogListPublicKey
+    private val publicKey: PublicKey
 ) {
 
     fun verify(message: ByteArray, signature: ByteArray): LogServerSignatureResult {

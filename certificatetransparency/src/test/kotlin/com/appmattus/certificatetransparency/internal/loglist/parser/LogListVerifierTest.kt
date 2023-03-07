@@ -20,6 +20,7 @@
 
 package com.appmattus.certificatetransparency.internal.loglist.parser
 
+import com.appmattus.certificatetransparency.internal.loglist.GoogleLogListPublicKey
 import com.appmattus.certificatetransparency.loglist.LogServerSignatureResult
 import com.appmattus.certificatetransparency.utils.TestData
 import com.appmattus.certificatetransparency.utils.assertIsA
@@ -51,7 +52,7 @@ internal class LogListVerifierTest {
         val signature = ByteArray(512) { it.toByte() }
 
         // when we ask for data
-        val result = LogListVerifier().verify(json.toByteArray(), signature)
+        val result = LogListVerifier(GoogleLogListPublicKey).verify(json.toByteArray(), signature)
 
         // then invalid is returned
         assertIsA<LogServerSignatureResult.Invalid.SignatureFailed>(result)
@@ -63,7 +64,7 @@ internal class LogListVerifierTest {
         val signature = ByteArray(32) { it.toByte() }
 
         // when we ask for data
-        val result = LogListVerifier().verify(json.toByteArray(), signature)
+        val result = LogListVerifier(GoogleLogListPublicKey).verify(json.toByteArray(), signature)
 
         // then invalid is returned
         assertIsA<LogServerSignatureResult.Invalid.SignatureNotValid>(result)
