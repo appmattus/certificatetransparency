@@ -25,6 +25,7 @@ import com.appmattus.certificatetransparency.datasource.DataSource
 import com.appmattus.certificatetransparency.internal.loglist.GoogleLogListPublicKey
 import com.appmattus.certificatetransparency.internal.loglist.InMemoryCache
 import com.appmattus.certificatetransparency.internal.loglist.LogListZipNetworkDataSource
+import com.appmattus.certificatetransparency.internal.loglist.ResourcesCache
 import com.appmattus.certificatetransparency.internal.loglist.await
 import com.appmattus.certificatetransparency.internal.utils.MaxSizeInterceptor
 import okhttp3.CacheControl
@@ -120,6 +121,7 @@ public object LogListDataSourceFactory {
     ): DataSource<LogListResult> = LogListCacheManagementDataSource(
         inMemoryCache = InMemoryCache(),
         diskCache = diskCache,
+        resourcesCache = ResourcesCache(),
         networkCache = LogListZipNetworkDataSource(logListService),
         publicKey = publicKey,
         now = now

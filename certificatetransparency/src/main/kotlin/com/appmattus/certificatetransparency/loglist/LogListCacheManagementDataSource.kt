@@ -20,6 +20,7 @@ import com.appmattus.certificatetransparency.cache.DiskCache
 import com.appmattus.certificatetransparency.datasource.DataSource
 import com.appmattus.certificatetransparency.internal.loglist.InMemoryCache
 import com.appmattus.certificatetransparency.internal.loglist.LogListZipNetworkDataSource
+import com.appmattus.certificatetransparency.internal.loglist.ResourcesCache
 import com.appmattus.certificatetransparency.internal.loglist.parser.RawLogListToLogListResultTransformer
 import java.security.PublicKey
 import java.time.Duration
@@ -28,6 +29,7 @@ import java.time.Instant
 internal class LogListCacheManagementDataSource constructor(
     private val inMemoryCache: InMemoryCache,
     private val diskCache: DiskCache?,
+    private val resourcesCache: ResourcesCache,
     private val networkCache: LogListZipNetworkDataSource,
     private val publicKey: PublicKey,
     private val transformer: RawLogListToLogListResultTransformer = RawLogListToLogListResultTransformer(publicKey),
@@ -46,20 +48,33 @@ internal class LogListCacheManagementDataSource constructor(
             }
         }
 
-        // No data in memory so check the disk cache if one is available
+        // No up-to-date data in memory so check the disk cache if one is available
         val disk = diskCache?.get()
         val diskResult = disk?.takeIfValid(transformer)
         diskResult?.let { logListResult ->
-            // We have valid data on disk so set the data into the memory cache
-            inMemoryCache.set(disk)
             // Return the disk data if it is 1 day old or less
             if (logListResult.timestamp + ONE_DAY >= now()) {
+                // We have valid data on disk so set the data into the memory cache
+                inMemoryCache.set(disk)
+                return logListResult
+            }
+        }
+
+        // No up-to-date data in memory or disk so check the disk cache if one is available
+        val resources = resourcesCache.get()
+        val resourcesResult = disk?.takeIfValid(transformer)
+        resourcesResult?.let { logListResult ->
+            // Return the disk data if it is 1 day old or less
+            if (logListResult.timestamp + ONE_DAY >= now()) {
+                // We have valid data on resources so set the data into the memory and disk cache
+                inMemoryCache.set(resources)
+                diskCache?.set(resources)
                 return logListResult
             }
         }
 
         // As a fallback for network failures use the latest of the on device caches (we may not even have a disk cache)
-        val fallbackResult = listOfNotNull(diskResult, memoryResult).maxByOrNull { it.timestamp }
+        val fallbackResult = listOfNotNull(diskResult, memoryResult, resourcesResult).maxByOrNull { it.timestamp }
 
         // Either there is no data cached in memory and disk or the data we have is older than 1 day old
         // Query network for more up-to-date data
