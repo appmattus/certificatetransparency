@@ -21,6 +21,7 @@ import com.appmattus.certificatetransparency.loglist.RawLogListResult
 
 internal class ResourcesCache : DataSource<RawLogListResult> {
 
+    @Suppress("ReturnCount")
     override suspend fun get(): RawLogListResult {
         with(this::class.java.classLoader) {
             val logList = getResourceAsStream("log_list.json")?.use { it.readBytes() } ?: return RawLogListResourceFailedJsonMissing

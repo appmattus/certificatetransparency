@@ -26,6 +26,7 @@ import java.security.PublicKey
 import java.time.Duration
 import java.time.Instant
 
+@Suppress("LongParameterList")
 internal class LogListCacheManagementDataSource constructor(
     private val inMemoryCache: InMemoryCache,
     private val diskCache: DiskCache?,
