@@ -48,31 +48,31 @@ android {
 dependencies {
     implementation(project(":certificatetransparency-android"))
     implementation(kotlin("stdlib-jdk8"))
-    implementation("androidx.appcompat:appcompat:${Versions.AndroidX.appCompat}")
-    implementation("com.google.android.material:material:${Versions.Google.material}")
-    implementation("com.google.android.gms:play-services-base:${Versions.Google.playServices}")
-    implementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:${Versions.AndroidX.lifecycle}")
-    implementation("androidx.lifecycle:lifecycle-common-java8:${Versions.AndroidX.lifecycle}")
-    implementation("com.pddstudio:highlightjs-android:${Versions.highlightJs}")
-    implementation("com.android.volley:volley:${Versions.volley}")
+    implementation("androidx.appcompat:appcompat:${libs.versions.androidX.appCompat.get()}")
+    implementation("com.google.android.material:material:${libs.versions.google.material.get()}")
+    implementation("com.google.android.gms:play-services-base:${libs.versions.google.playServices.get()}")
+    implementation("com.squareup.retrofit2:retrofit:${libs.versions.retrofit.get()}")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:${libs.versions.androidX.lifecycle.get()}")
+    implementation("androidx.lifecycle:lifecycle-common-java8:${libs.versions.androidX.lifecycle.get()}")
+    implementation("com.pddstudio:highlightjs-android:${libs.versions.highlightJs.get()}")
+    implementation("com.android.volley:volley:${libs.versions.volley.get()}")
     implementation("com.samskivert:jmustache:1.15")
 
-    implementation("androidx.compose.ui:ui:${Versions.AndroidX.compose}")
+    implementation("androidx.compose.ui:ui:${libs.versions.androidX.compose.get()}")
     // Tooling support (Previews, etc.)
-    implementation("androidx.compose.ui:ui-tooling:${Versions.AndroidX.compose}")
+    implementation("androidx.compose.ui:ui-tooling:${libs.versions.androidX.compose.get()}")
     // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
-    implementation("androidx.compose.foundation:foundation:${Versions.AndroidX.compose}")
+    implementation("androidx.compose.foundation:foundation:${libs.versions.androidX.compose.get()}")
     // Material Design
-    implementation("androidx.compose.material:material:${Versions.AndroidX.compose}")
+    implementation("androidx.compose.material:material:${libs.versions.androidX.compose.get()}")
     // Integration with activities
-    implementation("androidx.activity:activity-compose:${Versions.AndroidX.activityCompose}")
+    implementation("androidx.activity:activity-compose:${libs.versions.androidX.activityCompose.get()}")
     // Integration with ViewModels
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.AndroidX.lifecycleViewmodelCompose}")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${libs.versions.androidX.lifecycleViewmodelCompose.get()}")
     // Integration with observables
-    implementation("androidx.compose.runtime:runtime-livedata:${Versions.AndroidX.compose}")
+    implementation("androidx.compose.runtime:runtime-livedata:${libs.versions.androidX.compose.get()}")
     // Navigation
-    implementation("androidx.navigation:navigation-compose:${Versions.AndroidX.navigationCompose}")
+    implementation("androidx.navigation:navigation-compose:${libs.versions.androidX.navigationCompose.get()}")
 
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:${Versions.desugar}")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:${libs.versions.desugar.get()}")
 }

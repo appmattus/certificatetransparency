@@ -43,16 +43,16 @@ android {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${libs.versions.coroutines.get()}")
 
     api(project(":certificatetransparency"))
 
-    testImplementation("junit:junit:${Versions.junit4}")
-    testImplementation("org.mockito:mockito-core:${Versions.mockito}")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:${Versions.mockitoKotlin}")
+    testImplementation("junit:junit:${libs.versions.junit4.get()}")
+    testImplementation("org.mockito:mockito-core:${libs.versions.mockito.get()}")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:${libs.versions.mockitoKotlin.get()}")
 
-    testImplementation("androidx.test:core:${Versions.AndroidX.testCore}")
-    testImplementation("androidx.test:runner:${Versions.AndroidX.testRunner}")
-    testImplementation("androidx.test.ext:junit:${Versions.AndroidX.testExtJunit}")
-    testImplementation("org.robolectric:robolectric:${Versions.robolectric}")
+    testImplementation("androidx.test:core:${libs.versions.androidX.testCore.get()}")
+    testImplementation("androidx.test:runner:${libs.versions.androidX.testRunner.get()}")
+    testImplementation("androidx.test.ext:junit:${libs.versions.androidX.testExtJunit.get()}")
+    testImplementation("org.robolectric:robolectric:${libs.versions.robolectric.get()}")
 }

@@ -25,41 +25,4 @@ object Versions {
     const val gradleVersionsPlugin = "0.36.0"
     const val markdownlintGradlePlugin = "0.6.0"
     const val owaspDependencyCheckPlugin = "6.5.3"
-
-    const val bouncyCastle = "1.70"
-    const val coroutines = "1.6.2"
-    const val highlightJs = "1.5.0"
-    const val okhttp = "4.9.3"
-    const val retrofit = "2.9.0"
-    const val volley = "1.2.0"
-
-    const val equalsVerifier = "3.8.3"
-    const val junit4 = "4.13.2"
-    const val mockito = "4.3.1"
-    const val mockitoKotlin = "4.0.0"
-    const val robolectric = "4.7.3"
-
-    const val desugar = "1.1.5"
-
-    object AndroidX {
-        const val appCompat = "1.4.1"
-        const val lifecycle = "2.4.0"
-        const val compose = "1.0.5"
-        const val activityCompose = "1.4.0"
-        const val lifecycleViewmodelCompose = "2.4.0"
-        const val navigationCompose = "2.4.0"
-
-        const val testCore = "1.4.0"
-        const val testExtJunit = "1.1.3"
-        const val testRunner = "1.4.0"
-    }
-
-    object Google {
-        const val material = "1.5.0"
-        const val playServices = "18.0.1"
-    }
-
-    object KotlinX {
-        const val serialization = "1.3.2"
-    }
 }
