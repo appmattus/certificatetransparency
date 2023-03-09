@@ -4,7 +4,7 @@ import com.android.build.api.dsl.ApplicationBuildType
 
 plugins {
     id("com.android.application")
-    kotlin("android")
+    id(libs.plugins.kotlin.android.get().pluginId)
 }
 
 android {

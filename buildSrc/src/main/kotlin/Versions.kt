@@ -16,13 +16,5 @@
 
 object Versions {
 
-    const val kotlin = "1.6.21"
-
-    const val androidGradlePlugin = "7.1.0"
-    const val detektGradlePlugin = "1.20.0"
-    const val dokkaPlugin = "1.6.21"
-    const val gradleMavenPublishPlugin = "0.18.0"
     const val gradleVersionsPlugin = "0.36.0"
-    const val markdownlintGradlePlugin = "0.6.0"
-    const val owaspDependencyCheckPlugin = "6.5.3"
 }

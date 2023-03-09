@@ -7,7 +7,7 @@ plugins {
     id("com.android.lint")
     alias(libs.plugins.gradleMavenPublishPlugin)
     alias(libs.plugins.dokkaPlugin)
-    kotlin("plugin.serialization") version Versions.kotlin
+    alias(libs.plugins.kotlin.pluginSerialization)
 }
 
 apply(from = "$rootDir/gradle/scripts/jacoco.gradle.kts")

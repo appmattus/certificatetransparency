@@ -4,7 +4,7 @@ import com.android.build.api.dsl.AndroidSourceSet
 
 plugins {
     id("com.android.library")
-    kotlin("android")
+    id(libs.plugins.kotlin.android.get().pluginId)
     alias(libs.plugins.gradleMavenPublishPlugin)
     alias(libs.plugins.dokkaPlugin)
 }
