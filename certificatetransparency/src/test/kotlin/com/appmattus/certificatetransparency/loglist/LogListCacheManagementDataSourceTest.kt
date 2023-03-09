@@ -20,6 +20,7 @@ import com.appmattus.certificatetransparency.cache.DiskCache
 import com.appmattus.certificatetransparency.internal.loglist.GoogleLogListPublicKey
 import com.appmattus.certificatetransparency.internal.loglist.InMemoryCache
 import com.appmattus.certificatetransparency.internal.loglist.LogListZipNetworkDataSource
+import com.appmattus.certificatetransparency.internal.loglist.ResourcesCache
 import com.appmattus.certificatetransparency.internal.loglist.parser.RawLogListToLogListResultTransformer
 import com.appmattus.certificatetransparency.utils.assertIsA
 import kotlinx.coroutines.runBlocking
@@ -50,6 +51,11 @@ internal class LogListCacheManagementDataSourceTest {
         onBlocking { get() } doAnswer { diskRawResult }
     }
 
+    private val resourcesRawResult = mock<RawLogListResult.Success>()
+    private val resourcesCacheMock = mock<ResourcesCache> {
+        onBlocking { get() } doAnswer { resourcesRawResult }
+    }
+
     private val networkRawResult = mock<RawLogListResult.Success>()
     private val networkCacheMock = mock<LogListZipNetworkDataSource> {
         onBlocking { get() } doAnswer { networkRawResult }
@@ -58,6 +64,7 @@ internal class LogListCacheManagementDataSourceTest {
     private val logListTransformerMock = mock<RawLogListToLogListResultTransformer> {
         on { transform(memoryRawResult) } doReturn LogListResult.Invalid.NoLogServers
         on { transform(diskRawResult) } doReturn LogListResult.Invalid.NoLogServers
+        on { transform(resourcesRawResult) } doReturn LogListResult.Invalid.NoLogServers
         on { transform(networkRawResult) } doReturn LogListResult.Invalid.NoLogServers
     }
 
@@ -65,6 +72,7 @@ internal class LogListCacheManagementDataSourceTest {
     private val dataSource = LogListCacheManagementDataSource(
         inMemoryCache = memoryCacheMock,
         diskCache = diskCacheMock,
+        resourcesCache = resourcesCacheMock,
         networkCache = networkCacheMock,
         publicKey = GoogleLogListPublicKey,
         transformer = logListTransformerMock
