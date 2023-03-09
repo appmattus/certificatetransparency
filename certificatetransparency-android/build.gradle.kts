@@ -5,8 +5,8 @@ import com.android.build.api.dsl.AndroidSourceSet
 plugins {
     id("com.android.library")
     kotlin("android")
-    id("com.vanniktech.maven.publish")
-    id("org.jetbrains.dokka")
+    alias(libs.plugins.gradleMavenPublishPlugin)
+    alias(libs.plugins.dokkaPlugin)
 }
 
 apply(from = "$rootDir/gradle/scripts/jacoco-android.gradle.kts")

@@ -19,11 +19,11 @@ buildscript {
 
 plugins {
     kotlin("jvm") version Versions.kotlin apply false
-    id("org.owasp.dependencycheck") version Versions.owaspDependencyCheckPlugin
-    id("com.appmattus.markdown") version Versions.markdownlintGradlePlugin
-    id("com.vanniktech.maven.publish") version Versions.gradleMavenPublishPlugin apply false
-    id("org.jetbrains.dokka") version Versions.dokkaPlugin
-    id("io.gitlab.arturbosch.detekt") version Versions.detektGradlePlugin
+    alias(libs.plugins.owaspDependencyCheckPlugin)
+    alias(libs.plugins.markdownlintGradlePlugin)
+    alias(libs.plugins.gradleMavenPublishPlugin) apply false
+    alias(libs.plugins.dokkaPlugin)
+    alias(libs.plugins.detektGradlePlugin)
 }
 
 allprojects {

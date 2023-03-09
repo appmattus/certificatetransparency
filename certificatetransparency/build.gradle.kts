@@ -3,10 +3,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("java-library")
     id("kotlin")
-    id("org.owasp.dependencycheck")
+    alias(libs.plugins.owaspDependencyCheckPlugin)
     id("com.android.lint")
-    id("com.vanniktech.maven.publish")
-    id("org.jetbrains.dokka")
+    alias(libs.plugins.gradleMavenPublishPlugin)
+    alias(libs.plugins.dokkaPlugin)
     kotlin("plugin.serialization") version Versions.kotlin
 }
 
