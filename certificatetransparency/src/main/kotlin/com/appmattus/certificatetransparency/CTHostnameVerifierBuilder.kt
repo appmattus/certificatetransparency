@@ -55,6 +55,7 @@ public class CTHostnameVerifierBuilder(
      */
     public var failOnError: Boolean = true
         @JvmSynthetic get
+
         @JvmSynthetic set
 
     /**
@@ -63,6 +64,7 @@ public class CTHostnameVerifierBuilder(
      */
     public var logger: CTLogger? = null
         @JvmSynthetic get
+
         @JvmSynthetic set
 
     /**
@@ -71,6 +73,7 @@ public class CTHostnameVerifierBuilder(
      */
     public var policy: CTPolicy? = null
         @JvmSynthetic get
+
         @JvmSynthetic set
 
     /**
@@ -79,6 +82,7 @@ public class CTHostnameVerifierBuilder(
      */
     public var diskCache: DiskCache? = null
         @JvmSynthetic get
+
         @JvmSynthetic set
 
     /**

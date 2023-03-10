@@ -42,7 +42,11 @@ internal object LogListDataSourceTestFactory {
 
         val list = Json.decodeFromString(LogListV3.serializer(), json).operators.map { operator ->
             operator.logs.map {
-                LogServer(PublicKeyFactory.fromByteArray(Base64.decode(it.key)), operator = operator.name, previousOperators = emptyList())
+                LogServer(
+                    PublicKeyFactory.fromByteArray(Base64.decode(it.key)),
+                    operator = operator.name,
+                    previousOperators = emptyList()
+                )
             }
         }.flatten().let { LogListResult.Valid.Success(Instant.now(), it) }
 

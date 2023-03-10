@@ -84,7 +84,12 @@ internal fun Certificate.issuerInformationFromPreCertificate(preCertificate: Cer
     val issuerExtensions = parsedIssuerCert.tbsCertificate.extensions
     val x509authorityKeyIdentifier = issuerExtensions?.values?.firstOrNull { it.objectIdentifier == X509_AUTHORITY_KEY_IDENTIFIER }
 
-    return IssuerInformation(parsedIssuerCert.tbsCertificate.issuer, preCertificate.keyHash(), x509authorityKeyIdentifier, true)
+    return IssuerInformation(
+        parsedIssuerCert.tbsCertificate.issuer,
+        preCertificate.keyHash(),
+        x509authorityKeyIdentifier,
+        true
+    )
 }
 
 private fun Certificate.keyHash() = publicKey.sha256Hash()

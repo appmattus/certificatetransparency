@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,7 +95,10 @@ internal class CertificateTransparencyTrustManagerIntegrationTest {
 
     @Test
     fun invalidAllowedWhenFailsAllowed() {
-        val client = OkHttpClient.Builder().sslSocketFactory(trustManagerAllowFails.createSocketFactory(), trustManagerAllowFails).build()
+        val client = OkHttpClient.Builder().sslSocketFactory(
+            trustManagerAllowFails.createSocketFactory(),
+            trustManagerAllowFails
+        ).build()
 
         val request = Request.Builder()
             .url("https://$invalidSctDomain/")

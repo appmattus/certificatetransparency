@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,12 +36,17 @@ import com.appmattus.certificatetransparency.sampleapp.R
 @Composable
 fun RemovableItem(title: String, onRemoveClick: () -> Unit, modifier: Modifier = Modifier) {
     Row(
-        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier.fillMaxWidth()
     ) {
         Text(title, style = MaterialTheme.typography.body1)
         TextButton(onClick = onRemoveClick, modifier = Modifier.padding(start = 8.dp)) {
-            Icon(painter = painterResource(id = R.drawable.close), contentDescription = null, Modifier.padding(end = 8.dp))
+            Icon(
+                painter = painterResource(id = R.drawable.close),
+                contentDescription = null,
+                Modifier.padding(end = 8.dp)
+            )
             Text(text = stringResource(R.string.remove))
         }
     }

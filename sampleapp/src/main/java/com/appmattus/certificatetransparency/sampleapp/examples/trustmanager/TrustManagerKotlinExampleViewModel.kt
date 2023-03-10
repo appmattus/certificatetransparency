@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.appmattus.certificatetransparency.sampleapp.examples.trustmanager
 
+import android.annotation.SuppressLint
 import android.app.Application
 import com.appmattus.certificatetransparency.CTLogger
 import com.appmattus.certificatetransparency.cache.AndroidDiskCache
@@ -45,13 +46,14 @@ class TrustManagerKotlinExampleViewModel(application: Application) : BaseExample
 
     // A normal client would create this ahead of time and share it between network requests
     // We create it dynamically as we allow the user to set the hosts for certificate transparency
+    // Lint is complaining about forEach incorrectly
+    @SuppressLint("NewApi")
     private fun createOkHttpClient(
         includeCommonNames: Set<String>,
         excludeCommonNames: Set<String>,
         isFailOnError: Boolean,
         defaultLogger: CTLogger
     ): OkHttpClient {
-
         val trustManager = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()).apply {
             init(null as KeyStore?)
         }.trustManagers.first { it is X509TrustManager } as X509TrustManager

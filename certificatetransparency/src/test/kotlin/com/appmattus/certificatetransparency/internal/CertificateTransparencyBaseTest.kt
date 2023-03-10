@@ -60,7 +60,9 @@ internal class CertificateTransparencyBaseTest {
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ATTACK_CHAIN)
 
-        assertIsA<VerificationResult.Failure.NoScts>(ctb.verifyCertificateTransparency("www.appmattus.com", certsToCheck))
+        assertIsA<VerificationResult.Failure.NoScts>(
+            ctb.verifyCertificateTransparency("www.appmattus.com", certsToCheck)
+        )
     }
 
     @Test
@@ -75,7 +77,9 @@ internal class CertificateTransparencyBaseTest {
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ATTACK_CHAIN)
 
-        assertIsA<VerificationResult.Success.DisabledForHost>(ctb.verifyCertificateTransparency("www.appmattus.com", certsToCheck))
+        assertIsA<VerificationResult.Success.DisabledForHost>(
+            ctb.verifyCertificateTransparency("www.appmattus.com", certsToCheck)
+        )
     }
 
     @Test
@@ -97,14 +101,20 @@ internal class CertificateTransparencyBaseTest {
         // Given data source returns DisableChecks
         val ctb = CertificateTransparencyBase(
             logListDataSource = object : DataSource<LogListResult> {
-                override suspend fun get() = LogListResult.DisableChecks(Instant.now(), LogListResult.Invalid.LogListJsonFailedLoading)
+                override suspend fun get() = LogListResult.DisableChecks(
+                    Instant.now(),
+                    LogListResult.Invalid.LogListJsonFailedLoading
+                )
 
                 override suspend fun set(value: LogListResult) = Unit
             }
         )
 
         // When we verify
-        val result = ctb.verifyCertificateTransparency("www.appmattus.com", TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN))
+        val result = ctb.verifyCertificateTransparency(
+            "www.appmattus.com",
+            TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
+        )
 
         // Then verification is success with note about stale log list
         assertIsA<VerificationResult.Success.DisabledStaleLogList>(result)
@@ -126,7 +136,10 @@ internal class CertificateTransparencyBaseTest {
         )
 
         // When we verify
-        val result = ctb.verifyCertificateTransparency("www.appmattus.com", TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN))
+        val result = ctb.verifyCertificateTransparency(
+            "www.appmattus.com",
+            TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
+        )
 
         // Then verification is success with note about stale data
         assertIsA<VerificationResult.Success.StaleNetwork>(result)
@@ -148,7 +161,10 @@ internal class CertificateTransparencyBaseTest {
         )
 
         // When we verify
-        val result = ctb.verifyCertificateTransparency("www.appmattus.com", TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN))
+        val result = ctb.verifyCertificateTransparency(
+            "www.appmattus.com",
+            TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
+        )
 
         // Then verification is success with note about stale data
         assertIsA<VerificationResult.Success.StaleNetwork>(result)
@@ -171,7 +187,10 @@ internal class CertificateTransparencyBaseTest {
         )
 
         // When we verify
-        val result = ctb.verifyCertificateTransparency("www.appmattus.com", TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN))
+        val result = ctb.verifyCertificateTransparency(
+            "www.appmattus.com",
+            TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
+        )
 
         // Then verification is failure
         assertIsA<VerificationResult.Failure.TooFewSctsTrusted>(result)
@@ -192,7 +211,10 @@ internal class CertificateTransparencyBaseTest {
         )
 
         // When we verify
-        val result = ctb.verifyCertificateTransparency("www.appmattus.com", TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN))
+        val result = ctb.verifyCertificateTransparency(
+            "www.appmattus.com",
+            TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
+        )
 
         // Then verification is failure
         assertIsA<VerificationResult.Failure.TooFewSctsTrusted>(result)
@@ -239,7 +261,9 @@ internal class CertificateTransparencyBaseTest {
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
 
-        assertIsA<VerificationResult.Failure.TooFewSctsTrusted>(ctb.verifyCertificateTransparency("www.appmattus.com", certsToCheck))
+        assertIsA<VerificationResult.Failure.TooFewSctsTrusted>(
+            ctb.verifyCertificateTransparency("www.appmattus.com", certsToCheck)
+        )
     }
 
     @Test
@@ -251,7 +275,9 @@ internal class CertificateTransparencyBaseTest {
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
 
-        assertIsA<VerificationResult.Failure.LogServersFailed>(ctb.verifyCertificateTransparency("www.appmattus.com", certsToCheck))
+        assertIsA<VerificationResult.Failure.LogServersFailed>(
+            ctb.verifyCertificateTransparency("www.appmattus.com", certsToCheck)
+        )
     }
 
     @Test
@@ -267,7 +293,9 @@ internal class CertificateTransparencyBaseTest {
 
         val filtered = listOf(certWithSingleSct, *certsToCheck.drop(1).toTypedArray())
 
-        assertIsA<VerificationResult.Failure.TooFewSctsTrusted>(ctb.verifyCertificateTransparency("www.appmattus.com", filtered))
+        assertIsA<VerificationResult.Failure.TooFewSctsTrusted>(
+            ctb.verifyCertificateTransparency("www.appmattus.com", filtered)
+        )
     }
 
     @Test
@@ -277,7 +305,9 @@ internal class CertificateTransparencyBaseTest {
             logListDataSource = LogListDataSourceTestFactory.nullSource
         )
 
-        assertIsA<VerificationResult.Failure.NoCertificates>(ctb.verifyCertificateTransparency("www.appmattus.com", emptyList()))
+        assertIsA<VerificationResult.Failure.NoCertificates>(
+            ctb.verifyCertificateTransparency("www.appmattus.com", emptyList())
+        )
     }
 
     @Test
@@ -289,7 +319,9 @@ internal class CertificateTransparencyBaseTest {
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
 
-        assertIsA<VerificationResult.Success.Trusted>(ctb.verifyCertificateTransparency("allowed.random.com", certsToCheck))
+        assertIsA<VerificationResult.Success.Trusted>(
+            ctb.verifyCertificateTransparency("allowed.random.com", certsToCheck)
+        )
     }
 
     @Test
@@ -302,7 +334,9 @@ internal class CertificateTransparencyBaseTest {
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
 
-        assertIsA<VerificationResult.Success.Trusted>(ctb.verifyCertificateTransparency("allowed.random.com", certsToCheck))
+        assertIsA<VerificationResult.Success.Trusted>(
+            ctb.verifyCertificateTransparency("allowed.random.com", certsToCheck)
+        )
     }
 
     @Test
@@ -314,7 +348,9 @@ internal class CertificateTransparencyBaseTest {
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
 
-        assertIsA<VerificationResult.Failure.NoCertificates>(ctb.verifyCertificateTransparency("allowed.random.com", certsToCheck))
+        assertIsA<VerificationResult.Failure.NoCertificates>(
+            ctb.verifyCertificateTransparency("allowed.random.com", certsToCheck)
+        )
     }
 
     class EmptyCertificateChainCleanerFactory : CertificateChainCleanerFactory {
@@ -342,7 +378,9 @@ internal class CertificateTransparencyBaseTest {
     private fun singleSctOnly(cert: X509Certificate) = spy(cert).apply {
         whenever(getExtensionValue(CTConstants.SCT_CERTIFICATE_OID)).thenAnswer {
             @Suppress("MaxLineLength")
-            Base64.decode("BHwEegB4AHYAu9nfvB+KcbWTlCOXqpJ7RzhXlQqrUugakJZkNo4e0YUAAAFj7ztQ3wAABAMARzBFAiEA53gntK6Dnr6ROwYGBjqjt5dS4tWM6Zw/TtxIxOvobW8CIF3n4XjIX7/w66gThQD47iF7YmxelwgUQgPzEWNlHQiu")
+            Base64.decode(
+                "BHwEegB4AHYAu9nfvB+KcbWTlCOXqpJ7RzhXlQqrUugakJZkNo4e0YUAAAFj7ztQ3wAABAMARzBFAiEA53gntK6Dnr6ROwYGBjqjt5dS4tWM6Zw/TtxIxOvobW8CIF3n4XjIX7/w66gThQD47iF7YmxelwgUQgPzEWNlHQiu"
+            )
         }
     }
 
@@ -365,7 +403,9 @@ internal class CertificateTransparencyBaseTest {
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
 
-        assertIsA<VerificationResult.Success.Trusted>(ctb.verifyCertificateTransparency("enabled.appmattus.com", certsToCheck))
+        assertIsA<VerificationResult.Success.Trusted>(
+            ctb.verifyCertificateTransparency("enabled.appmattus.com", certsToCheck)
+        )
     }
 
     @Test
@@ -377,7 +417,9 @@ internal class CertificateTransparencyBaseTest {
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
 
-        assertIsA<VerificationResult.Success.DisabledForHost>(ctb.verifyCertificateTransparency("appmattus.com", certsToCheck))
+        assertIsA<VerificationResult.Success.DisabledForHost>(
+            ctb.verifyCertificateTransparency("appmattus.com", certsToCheck)
+        )
     }
 
     @Test
@@ -389,7 +431,9 @@ internal class CertificateTransparencyBaseTest {
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
 
-        assertIsA<VerificationResult.Success.DisabledForHost>(ctb.verifyCertificateTransparency("disabled.appmattus.com", certsToCheck))
+        assertIsA<VerificationResult.Success.DisabledForHost>(
+            ctb.verifyCertificateTransparency("disabled.appmattus.com", certsToCheck)
+        )
     }
 
     @Test
@@ -401,7 +445,9 @@ internal class CertificateTransparencyBaseTest {
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
 
-        assertIsA<VerificationResult.Success.DisabledForHost>(ctb.verifyCertificateTransparency("disabled.appmattus.com", certsToCheck))
+        assertIsA<VerificationResult.Success.DisabledForHost>(
+            ctb.verifyCertificateTransparency("disabled.appmattus.com", certsToCheck)
+        )
     }
 
     @Test
@@ -426,7 +472,9 @@ internal class CertificateTransparencyBaseTest {
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
 
-        assertIsA<VerificationResult.Success.Trusted>(ctb.verifyCertificateTransparency("enabled.appmattus.com", certsToCheck))
+        assertIsA<VerificationResult.Success.Trusted>(
+            ctb.verifyCertificateTransparency("enabled.appmattus.com", certsToCheck)
+        )
     }
 
     @Test
@@ -439,7 +487,9 @@ internal class CertificateTransparencyBaseTest {
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
 
-        assertIsA<VerificationResult.Success.DisabledForHost>(ctb.verifyCertificateTransparency("disabled.appmattus.com", certsToCheck))
+        assertIsA<VerificationResult.Success.DisabledForHost>(
+            ctb.verifyCertificateTransparency("disabled.appmattus.com", certsToCheck)
+        )
     }
 
     @Test
@@ -452,7 +502,9 @@ internal class CertificateTransparencyBaseTest {
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
 
-        assertIsA<VerificationResult.Success.Trusted>(ctb.verifyCertificateTransparency("enabled.appmattus.com", certsToCheck))
+        assertIsA<VerificationResult.Success.Trusted>(
+            ctb.verifyCertificateTransparency("enabled.appmattus.com", certsToCheck)
+        )
     }
 
     @Test
@@ -465,7 +517,9 @@ internal class CertificateTransparencyBaseTest {
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
 
-        assertIsA<VerificationResult.Success.DisabledForHost>(ctb.verifyCertificateTransparency("disabled.appmattus.com", certsToCheck))
+        assertIsA<VerificationResult.Success.DisabledForHost>(
+            ctb.verifyCertificateTransparency("disabled.appmattus.com", certsToCheck)
+        )
     }
 
     @Test
@@ -478,7 +532,9 @@ internal class CertificateTransparencyBaseTest {
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
 
-        assertIsA<VerificationResult.Success.Trusted>(ctb.verifyCertificateTransparency("enabled.appmattus.com", certsToCheck))
+        assertIsA<VerificationResult.Success.Trusted>(
+            ctb.verifyCertificateTransparency("enabled.appmattus.com", certsToCheck)
+        )
     }
 
     @Test
@@ -491,7 +547,9 @@ internal class CertificateTransparencyBaseTest {
 
         val certsToCheck = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
 
-        assertIsA<VerificationResult.Success.DisabledForHost>(ctb.verifyCertificateTransparency("appmattus.com", certsToCheck))
+        assertIsA<VerificationResult.Success.DisabledForHost>(
+            ctb.verifyCertificateTransparency("appmattus.com", certsToCheck)
+        )
     }
 
     @Test(expected = IllegalArgumentException::class)

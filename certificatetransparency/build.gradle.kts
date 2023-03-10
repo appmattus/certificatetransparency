@@ -3,11 +3,11 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("java-library")
     id("kotlin")
-    id("org.owasp.dependencycheck")
+    alias(libs.plugins.owaspDependencyCheckPlugin)
     id("com.android.lint")
-    id("com.vanniktech.maven.publish")
-    id("org.jetbrains.dokka")
-    kotlin("plugin.serialization") version Versions.kotlin
+    alias(libs.plugins.gradleMavenPublishPlugin)
+    alias(libs.plugins.dokkaPlugin)
+    alias(libs.plugins.kotlin.pluginSerialization)
 }
 
 apply(from = "$rootDir/gradle/scripts/jacoco.gradle.kts")
@@ -20,29 +20,30 @@ java {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${libs.versions.coroutines.get()}")
 
-    implementation("com.squareup.okhttp3:okhttp:${Versions.okhttp}")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.KotlinX.serialization}")
-    testImplementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
-    testImplementation("com.squareup.retrofit2:retrofit-mock:${Versions.retrofit}")
-    testImplementation("com.squareup.okhttp3:mockwebserver:${Versions.okhttp}")
+    implementation("com.squareup.okhttp3:okhttp:${libs.versions.okhttp.get()}")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${libs.versions.kotlinX.serialization.get()}")
+    testImplementation("com.squareup.retrofit2:retrofit:${libs.versions.retrofit.get()}")
+    testImplementation("com.squareup.retrofit2:retrofit-mock:${libs.versions.retrofit.get()}")
+    testImplementation("com.squareup.okhttp3:mockwebserver:${libs.versions.okhttp.get()}")
 
-    testImplementation("org.bouncycastle:bcpkix-jdk15to18:${Versions.bouncyCastle}")
-    testImplementation("org.bouncycastle:bcprov-jdk15to18:${Versions.bouncyCastle}")
-    testImplementation("org.bouncycastle:bctls-jdk15to18:${Versions.bouncyCastle}")
+    testImplementation("org.bouncycastle:bcpkix-jdk15to18:${libs.versions.bouncyCastle.get()}")
+    testImplementation("org.bouncycastle:bcprov-jdk15to18:${libs.versions.bouncyCastle.get()}")
+    testImplementation("org.bouncycastle:bctls-jdk15to18:${libs.versions.bouncyCastle.get()}")
     // Adding bcutil directly as it's used through bcprov-jdk15to18 but not directly added
-    testImplementation("org.bouncycastle:bcutil-jdk15to18:${Versions.bouncyCastle}")
+    testImplementation("org.bouncycastle:bcutil-jdk15to18:${libs.versions.bouncyCastle.get()}")
 
-    testImplementation("junit:junit:${Versions.junit4}")
-    testImplementation("org.mockito:mockito-core:${Versions.mockito}")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:${Versions.mockitoKotlin}")
+    testImplementation("junit:junit:${libs.versions.junit4.get()}")
+    testImplementation("org.mockito:mockito-core:${libs.versions.mockito.get()}")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:${libs.versions.mockitoKotlin.get()}")
 
-    testImplementation("nl.jqno.equalsverifier:equalsverifier:${Versions.equalsVerifier}")
+    testImplementation("nl.jqno.equalsverifier:equalsverifier:${libs.versions.equalsVerifier.get()}")
 }
 
 tasks.withType(KotlinCompile::class.java).all {
     kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
         allWarningsAsErrors = true
         freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
@@ -55,7 +56,12 @@ dependencyCheck {
 
     analyzers.assemblyEnabled = false
 
-    skipConfigurations = listOf("lintClassPath", "jacocoAgent", "jacocoAnt", "kotlinCompilerClasspath", "kotlinCompilerPluginClasspath")
+    skipConfigurations = listOf(
+        "lintClassPath", "jacocoAgent", "jacocoAnt", "kotlinCompilerClasspath", "kotlinCompilerPluginClasspath",
+        "dokkaJavadocPlugin", "dokkaGfmPartialPlugin", "dokkaHtmlPartialPlugin", "dokkaJekyllPartialPlugin", "dokkaJavadocPartialPlugin",
+        "dokkaHtmlPlugin", "dokkaGfmPlugin", "dokkaJekyllPlugin", "dokkaGfmRuntime", "dokkaGfmPartialRuntime", "dokkaHtmlRuntime",
+        "dokkaJekyllRuntime", "dokkaHtmlPartialRuntime", "dokkaJavadocRuntime", "dokkaJekyllPartialRuntime", "dokkaJavadocPartialRuntime"
+    )
 }
 
 lint {

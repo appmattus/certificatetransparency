@@ -21,10 +21,10 @@
 package com.appmattus.certificatetransparency.sampleapp.examples
 
 data class State(
-    val includeHosts: Set<String>,
-    val excludeHosts: Set<String>,
-    val failOnError: Boolean,
-    val sampleCode: String,
+    val includeHosts: Set<String> = setOf(),
+    val excludeHosts: Set<String> = setOf(),
+    val failOnError: Boolean = true,
+    val sampleCode: String = "",
     val message: Message? = null
 ) {
 

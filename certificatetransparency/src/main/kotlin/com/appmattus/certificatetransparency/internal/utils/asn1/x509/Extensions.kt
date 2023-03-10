@@ -27,7 +27,13 @@ internal class Extensions private constructor(
     override val encoded: ByteBuffer,
 ) : ASN1Object {
 
-    val values: List<Extension> by lazy { (encoded.toAsn1() as ASN1Sequence).values.map { Extension.create(it as ASN1Sequence) } }
+    val values: List<Extension> by lazy {
+        (encoded.toAsn1() as ASN1Sequence).values.map {
+            Extension.create(
+                it as ASN1Sequence
+            )
+        }
+    }
 
     override fun toString(): String {
         val values = values

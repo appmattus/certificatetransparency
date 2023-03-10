@@ -69,7 +69,6 @@ internal class CertificateRevocationInterceptorIntegrationTest {
 
     @Test(expected = SSLPeerUnverifiedException::class)
     fun certificateRejectedWhenRulePresentForCert() {
-
         val client = trustAllOkHttpClient { addNetworkInterceptor(revocationInterceptor) }
 
         val request = Request.Builder()

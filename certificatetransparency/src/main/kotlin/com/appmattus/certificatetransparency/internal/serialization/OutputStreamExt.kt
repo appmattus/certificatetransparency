@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,6 +44,7 @@ internal fun OutputStream.writeUint(value: Long, numBytes: Int) {
     while (numBytesRemaining > 0) {
         // MSB first.
         val shiftBy = (numBytesRemaining - 1) * BITS_IN_BYTE
+
         @Suppress("MagicNumber")
         val mask = 0xff.toLong() shl shiftBy
         write((value and mask shr shiftBy).toByte().toInt())

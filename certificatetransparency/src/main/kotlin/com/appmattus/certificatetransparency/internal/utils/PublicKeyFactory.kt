@@ -42,8 +42,10 @@ internal object PublicKeyFactory {
         // Equivalent of val pemContent = PemReader(StringReader(keyText)).readPemObject().content
         val start = keyText.indexOf(publicKeyStart)
         val end = keyText.indexOf(publicKeyEnd)
-        if (start < 0 || end < 0) throw IllegalArgumentException("Missing public key entry in PEM file")
-        val pemContent = Base64.decode(keyText.substring(start + publicKeyStart.length, end).replace("\\s+".toRegex(), ""))
+        require(start >= 0 && end >= 0) { "Missing public key entry in PEM file" }
+        val pemContent = Base64.decode(
+            keyText.substring(start + publicKeyStart.length, end).replace("\\s+".toRegex(), "")
+        )
 
         return fromByteArray(pemContent)
     }

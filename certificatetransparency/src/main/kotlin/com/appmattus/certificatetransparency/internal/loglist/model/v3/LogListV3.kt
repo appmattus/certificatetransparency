@@ -32,7 +32,9 @@ import java.time.Instant
  */
 @Serializable
 internal data class LogListV3(
-    @Serializable(with = Rfc3339Deserializer::class) @SerialName("log_list_timestamp") val logListTimestamp: Instant,
+    @Serializable(with = Rfc3339Deserializer::class)
+    @SerialName("log_list_timestamp")
+    val logListTimestamp: Instant,
     @SerialName("version") val version: String,
     @SerialName("operators") val operators: List<Operator>
 )

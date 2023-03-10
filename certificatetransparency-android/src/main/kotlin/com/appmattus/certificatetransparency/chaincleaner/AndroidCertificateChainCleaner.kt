@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,6 +33,8 @@ internal class AndroidCertificateChainCleaner(
     }
 
     class Factory : CertificateChainCleanerFactory {
-        override fun get(trustManager: X509TrustManager) = AndroidCertificateChainCleaner(X509TrustManagerExtensions(trustManager))
+        override fun get(trustManager: X509TrustManager) = AndroidCertificateChainCleaner(
+            X509TrustManagerExtensions(trustManager)
+        )
     }
 }

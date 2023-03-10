@@ -13,17 +13,17 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:${Versions.androidGradlePlugin}")
+        classpath("com.android.tools.build:gradle:${libs.versions.androidGradlePlugin.get()}")
     }
 }
 
 plugins {
-    kotlin("jvm") version Versions.kotlin apply false
-    id("org.owasp.dependencycheck") version Versions.owaspDependencyCheckPlugin
-    id("com.appmattus.markdown") version Versions.markdownlintGradlePlugin
-    id("com.vanniktech.maven.publish") version Versions.gradleMavenPublishPlugin apply false
-    id("org.jetbrains.dokka") version Versions.dokkaPlugin
-    id("io.gitlab.arturbosch.detekt") version Versions.detektGradlePlugin
+    alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.owaspDependencyCheckPlugin)
+    alias(libs.plugins.markdownlintGradlePlugin)
+    alias(libs.plugins.gradleMavenPublishPlugin) apply false
+    alias(libs.plugins.dokkaPlugin)
+    alias(libs.plugins.detektGradlePlugin)
 }
 
 allprojects {
@@ -85,7 +85,7 @@ markdownlint {
 }
 
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${Versions.detektGradlePlugin}")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${libs.versions.detektGradlePlugin.get()}")
 }
 
 tasks.withType<Detekt> {

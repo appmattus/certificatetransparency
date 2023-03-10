@@ -225,7 +225,13 @@ internal class DefaultPolicyTest {
                     2,
                     2
                 ),
-                arrayOf("Cert valid for 14 months, needs 2 SCTs", date(2015, 3, 25, 11, 25, 0), date(2016, 6, 6, 11, 25, 0), 2, 3),
+                arrayOf(
+                    "Cert valid for 14 months, needs 2 SCTs",
+                    date(2015, 3, 25, 11, 25, 0),
+                    date(2016, 6, 6, 11, 25, 0),
+                    2,
+                    3
+                ),
                 arrayOf(
                     "Cert valid for exactly 15 months, needs 3 SCTs",
                     date(2015, 3, 25, 11, 25, 0),
@@ -233,7 +239,13 @@ internal class DefaultPolicyTest {
                     3,
                     3
                 ),
-                arrayOf("Cert valid for over 15 months, needs 3 SCTs", date(2015, 3, 25, 11, 25, 0), date(2016, 6, 27, 11, 25, 0), 3, 3),
+                arrayOf(
+                    "Cert valid for over 15 months, needs 3 SCTs",
+                    date(2015, 3, 25, 11, 25, 0),
+                    date(2016, 6, 27, 11, 25, 0),
+                    3,
+                    3
+                ),
                 arrayOf(
                     "Cert valid for exactly 27 months, needs 3 SCTs",
                     date(2015, 3, 25, 11, 25, 0),
@@ -241,7 +253,13 @@ internal class DefaultPolicyTest {
                     3,
                     3
                 ),
-                arrayOf("Cert valid for over 27 months, needs 4 SCTs", date(2015, 3, 25, 11, 25, 0), date(2017, 6, 28, 11, 25, 0), 4, 3),
+                arrayOf(
+                    "Cert valid for over 27 months, needs 4 SCTs",
+                    date(2015, 3, 25, 11, 25, 0),
+                    date(2017, 6, 28, 11, 25, 0),
+                    4,
+                    3
+                ),
                 arrayOf(
                     "Cert valid for exactly 39 months, needs 4 SCTs (old policy) or 3 SCTs (new policy)",
                     date(2015, 3, 25, 11, 25, 0),

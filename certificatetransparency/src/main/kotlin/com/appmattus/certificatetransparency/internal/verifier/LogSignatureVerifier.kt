@@ -68,7 +68,6 @@ internal class LogSignatureVerifier(private val logServer: LogServer) : Signatur
 
     @Suppress("ReturnCount", "ComplexMethod")
     override fun verifySignature(sct: SignedCertificateTimestamp, chain: List<X509Certificate>): SctVerificationResult {
-
         // If the timestamp is in the future then we have to reject it
         val now = Instant.now()
         if (sct.timestamp > now) {
@@ -155,7 +154,11 @@ internal class LogSignatureVerifier(private val logServer: LogServer) : Signatur
     ): SctVerificationResult {
         return try {
             val preCertificateTBS = createTbsForVerification(certificate, issuerInfo)
-            val toVerify = serializeSignedSctDataForPreCertificate(preCertificateTBS.bytes.toList().toByteArray(), issuerInfo.keyHash, sct)
+            val toVerify = serializeSignedSctDataForPreCertificate(
+                preCertificateTBS.bytes.toList().toByteArray(),
+                issuerInfo.keyHash,
+                sct
+            )
             verifySctSignatureOverBytes(sct, toVerify)
         } catch (e: IOException) {
             CertificateEncodingFailed(e)

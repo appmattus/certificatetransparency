@@ -30,15 +30,15 @@ internal data class BasicByteBuffer(
     }
 
     override fun copyOfRange(fromIndex: Int, toIndex: Int): ByteArray {
-        if (toIndex > size) throw IndexOutOfBoundsException("toIndex: $toIndex, size: $size")
-        if (toIndex - fromIndex < 0) throw IllegalArgumentException("$fromIndex > $toIndex")
+        require(toIndex <= size) { "toIndex: $toIndex, size: $size" }
+        require(toIndex - fromIndex >= 0) { "$fromIndex > $toIndex" }
 
         return byteBuffer.copyOfRange(fromIndex + startIndex, toIndex + startIndex)
     }
 
     override fun range(fromIndex: Int, toIndex: Int): ByteBuffer {
-        if (toIndex > size) throw IndexOutOfBoundsException("toIndex: $toIndex, size: $size")
-        if (toIndex - fromIndex < 0) throw IllegalArgumentException("$fromIndex > $toIndex")
+        require(toIndex <= size) { "toIndex: $toIndex, size: $size" }
+        require(toIndex - fromIndex >= 0) { "$fromIndex > $toIndex" }
 
         return BasicByteBuffer(byteBuffer, fromIndex + startIndex, toIndex + startIndex)
     }

@@ -48,6 +48,7 @@ public class CTTrustManagerBuilder(
      */
     public var failOnError: Boolean = true
         @JvmSynthetic get
+
         @JvmSynthetic set
 
     /**
@@ -56,6 +57,7 @@ public class CTTrustManagerBuilder(
      */
     public var logger: CTLogger? = null
         @JvmSynthetic get
+
         @JvmSynthetic set
 
     /**
@@ -64,6 +66,7 @@ public class CTTrustManagerBuilder(
      */
     public var policy: CTPolicy? = null
         @JvmSynthetic get
+
         @JvmSynthetic set
 
     /**
@@ -72,6 +75,7 @@ public class CTTrustManagerBuilder(
      */
     public var diskCache: DiskCache? = null
         @JvmSynthetic get
+
         @JvmSynthetic set
 
     /**

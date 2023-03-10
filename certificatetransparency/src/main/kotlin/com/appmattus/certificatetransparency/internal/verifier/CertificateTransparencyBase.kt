@@ -66,7 +66,9 @@ internal open class CertificateTransparencyBase(
     }
 
     private val cleaner: CertificateChainCleaner by lazy {
-        val localTrustManager = trustManager ?: TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()).apply {
+        val localTrustManager = trustManager ?: TrustManagerFactory.getInstance(
+            TrustManagerFactory.getDefaultAlgorithm()
+        ).apply {
             init(null as KeyStore?)
         }.trustManagers.first { it is X509TrustManager } as X509TrustManager
 
@@ -105,7 +107,6 @@ internal open class CertificateTransparencyBase(
      */
     @Suppress("ReturnCount")
     private fun hasValidSignedCertificateTimestamp(certificates: List<X509Certificate>): VerificationResult {
-
         val result = try {
             runBlocking {
                 logListDataSource.get()
@@ -115,7 +116,11 @@ internal open class CertificateTransparencyBase(
         }
 
         val verifiers = when (result) {
-            is LogListResult.Valid -> result.servers.associateBy({ Base64.toBase64String(it.id) }) { LogSignatureVerifier(it) }
+            is LogListResult.Valid -> result.servers.associateBy({ Base64.toBase64String(it.id) }) {
+                LogSignatureVerifier(
+                    it
+                )
+            }
             is LogListResult.DisableChecks -> return VerificationResult.Success.DisabledStaleLogList(result)
             is LogListResult.Invalid -> return VerificationResult.Failure.LogServersFailed(result)
             null -> return VerificationResult.Failure.LogServersFailed(LogListResult.Invalid.NoLogServers)
@@ -148,5 +153,9 @@ internal open class CertificateTransparencyBase(
         }
     }
 
-    private fun enabledForCertificateTransparency(host: String) = !excludeHosts.any { it.matches(host) } || includeHosts.any { it.matches(host) }
+    private fun enabledForCertificateTransparency(host: String) = !excludeHosts.any { it.matches(host) } || includeHosts.any {
+        it.matches(
+            host
+        )
+    }
 }

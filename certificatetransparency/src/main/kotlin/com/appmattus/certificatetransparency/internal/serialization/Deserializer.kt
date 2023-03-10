@@ -80,7 +80,9 @@ internal object Deserializer {
 
         val signatureAlgorithmByte = inputStream.readNumber(1 /* single byte */).toInt()
         val signatureAlgorithm = DigitallySigned.SignatureAlgorithm.forNumber(signatureAlgorithmByte)
-            ?: throw SerializationException("Unknown signature algorithm: ${signatureAlgorithmByte.toString(HEX_RADIX)}")
+            ?: throw SerializationException(
+                "Unknown signature algorithm: ${signatureAlgorithmByte.toString(HEX_RADIX)}"
+            )
 
         val signature = inputStream.readVariableLength(CTConstants.MAX_SIGNATURE_LENGTH)
 

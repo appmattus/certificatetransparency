@@ -47,7 +47,9 @@ internal class RawLogListToLogListResultTransformerTest {
         // given we have a valid json file and signature
 
         // when we ask for data
-        val result = RawLogListToLogListResultTransformer(GoogleLogListPublicKey).transform(RawLogListResult.Success(json.toByteArray(), sig))
+        val result = RawLogListToLogListResultTransformer(GoogleLogListPublicKey).transform(
+            RawLogListResult.Success(json.toByteArray(), sig)
+        )
 
         // then 41 items are returned
         assertIsA<LogListResult.Valid>(result)

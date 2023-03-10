@@ -180,22 +180,32 @@ internal class LogSignatureVerifierTest {
     fun signatureOnPreCertificateSignedByPreCertificateSigningCertVerifies() {
         // Flow:
         // test-embedded-with-preca-pre-cert.pem -> ca-pre-cert.pem -> ca-cert.pem
-        val certsChain = listOf(TEST_PRE_CERT_SIGNED_BY_PRECA_CERT, PRE_CERT_SIGNING_CERT, ROOT_CA_CERT).flatMap(::loadCertificates)
+        val certsChain = listOf(TEST_PRE_CERT_SIGNED_BY_PRECA_CERT, PRE_CERT_SIGNING_CERT, ROOT_CA_CERT).flatMap(
+            ::loadCertificates
+        )
 
         val sct = Deserializer.parseSctFromBinary(TestData.file(TEST_PRE_CERT_PRECA_SCT).inputStream())
 
-        assertIsA<SctVerificationResult.Valid>("Expected PreCertificate to verify OK", verifier.verifySignature(sct, certsChain))
+        assertIsA<SctVerificationResult.Valid>(
+            "Expected PreCertificate to verify OK",
+            verifier.verifySignature(sct, certsChain)
+        )
     }
 
     @Test
     fun signatureOnPreCertificateSignedByIntermediateVerifies() {
         // Flow:
         // test-embedded-with-intermediate-pre-cert.pem -> intermediate-cert.pem -> ca-cert.pem
-        val certsChain = listOf(TEST_PRE_CERT_SIGNED_BY_INTERMEDIATE, INTERMEDIATE_CA_CERT, ROOT_CA_CERT).flatMap(::loadCertificates)
+        val certsChain = listOf(TEST_PRE_CERT_SIGNED_BY_INTERMEDIATE, INTERMEDIATE_CA_CERT, ROOT_CA_CERT).flatMap(
+            ::loadCertificates
+        )
 
         val sct = Deserializer.parseSctFromBinary(TestData.file(TEST_PRE_CERT_SIGNED_BY_INTERMEDIATE_SCT).inputStream())
 
-        assertIsA<SctVerificationResult.Valid>("Expected PreCertificate to verify OK", verifier.verifySignature(sct, certsChain))
+        assertIsA<SctVerificationResult.Valid>(
+            "Expected PreCertificate to verify OK",
+            verifier.verifySignature(sct, certsChain)
+        )
     }
 
     @Test
@@ -203,12 +213,22 @@ internal class LogSignatureVerifierTest {
         // Flow:
         // test-embedded-with-intermediate-preca-pre-cert.pem -> intermediate-pre-cert.pem
         //   -> intermediate-cert.pem -> ca-cert.pem
-        val certsChain = listOf(TEST_PRE_CERT_SIGNED_BY_PRECA_INTERMEDIATE, PRE_CERT_SIGNING_BY_INTERMEDIATE, INTERMEDIATE_CA_CERT, ROOT_CA_CERT)
+        val certsChain = listOf(
+            TEST_PRE_CERT_SIGNED_BY_PRECA_INTERMEDIATE,
+            PRE_CERT_SIGNING_BY_INTERMEDIATE,
+            INTERMEDIATE_CA_CERT,
+            ROOT_CA_CERT
+        )
             .flatMap(::loadCertificates)
 
-        val sct = Deserializer.parseSctFromBinary(TestData.file(TEST_PRE_CERT_SIGNED_BY_PRECA_INTERMEDIATE_SCT).inputStream())
+        val sct = Deserializer.parseSctFromBinary(
+            TestData.file(TEST_PRE_CERT_SIGNED_BY_PRECA_INTERMEDIATE_SCT).inputStream()
+        )
 
-        assertIsA<SctVerificationResult.Valid>("Expected PreCertificate to verify OK", verifier.verifySignature(sct, certsChain))
+        assertIsA<SctVerificationResult.Valid>(
+            "Expected PreCertificate to verify OK",
+            verifier.verifySignature(sct, certsChain)
+        )
     }
 
     @Test
@@ -244,7 +264,10 @@ internal class LogSignatureVerifierTest {
                 "Expected signature to verify OK",
                 verifier.verifySCTOverPreCertificate(sct, leafcert, issuerCert.issuerInformation())
             )
-            assertIsA<SctVerificationResult.Valid>("Expected PreCertificate to verify OK", verifier.verifySignature(sct, certsChain))
+            assertIsA<SctVerificationResult.Valid>(
+                "Expected PreCertificate to verify OK",
+                verifier.verifySignature(sct, certsChain)
+            )
         }
     }
 

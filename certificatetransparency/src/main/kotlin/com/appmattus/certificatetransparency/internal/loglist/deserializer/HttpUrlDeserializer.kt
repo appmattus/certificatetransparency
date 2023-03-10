@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,5 +30,5 @@ internal class HttpUrlDeserializer : KSerializer<HttpUrl> {
 
     override fun deserialize(decoder: Decoder) = decoder.decodeString().toHttpUrl()
 
-    override fun serialize(encoder: Encoder, value: HttpUrl) = throw IllegalStateException("Serialization not supported")
+    override fun serialize(encoder: Encoder, value: HttpUrl) = error("Serialization not supported")
 }

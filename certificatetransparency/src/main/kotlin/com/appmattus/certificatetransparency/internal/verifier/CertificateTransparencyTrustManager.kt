@@ -55,7 +55,12 @@ internal class CertificateTransparencyTrustManager(
 ) {
 
     private val checkServerTrustedMethod: Method? = try {
-        delegate::class.java.getDeclaredMethod("checkServerTrusted", Array<X509Certificate>::class.java, String::class.java, String::class.java)
+        delegate::class.java.getDeclaredMethod(
+            "checkServerTrusted",
+            Array<X509Certificate>::class.java,
+            String::class.java,
+            String::class.java
+        )
     } catch (ignored: NoSuchMethodException) {
         null
     }
@@ -66,7 +71,10 @@ internal class CertificateTransparencyTrustManager(
         null
     }
 
-    override fun checkClientTrusted(chain: Array<out X509Certificate>, authType: String) = delegate.checkClientTrusted(chain, authType)
+    override fun checkClientTrusted(chain: Array<out X509Certificate>, authType: String) = delegate.checkClientTrusted(
+        chain,
+        authType
+    )
 
     override fun checkServerTrusted(chain: Array<out X509Certificate>, authType: String) {
         delegate.checkServerTrusted(chain, authType)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,6 @@ import androidx.compose.material.TextField
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -55,15 +54,17 @@ import com.appmattus.certificatetransparency.sampleapp.item.text.HeaderTextItem
 import com.appmattus.certificatetransparency.sampleapp.item.text.SubHeaderTextItem
 import com.pddstudio.highlightjs.models.Language
 import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
+@Suppress("LongMethod")
 fun ExampleScreen(viewModel: BaseExampleViewModel) {
-    val state = viewModel.liveData.observeAsState().value
+    val state = viewModel.collectAsState().value
 
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
 
-    state?.message?.let {
+    state.message?.let {
         scope.launch {
             val color = if (it is State.Message.Success) R.color.colorSuccess else R.color.colorFailure
 
@@ -87,15 +88,22 @@ fun ExampleScreen(viewModel: BaseExampleViewModel) {
         scaffoldState = scaffoldState,
         snackbarHost = { snackbarHostState ->
             SnackbarHost(snackbarHostState) {
-                Snackbar(backgroundColor = colorResource(it.actionLabel!!.toInt()), modifier = Modifier.padding(8.dp)) { Text(it.message) }
+                Snackbar(backgroundColor = colorResource(it.actionLabel!!.toInt()), modifier = Modifier.padding(8.dp)) {
+                    Text(
+                        it.message
+                    )
+                }
             }
         }
-    ) {
-        LazyColumn(modifier = Modifier.fillMaxHeight()) {
+    ) { padding ->
+        LazyColumn(modifier = Modifier.padding(padding).fillMaxHeight()) {
             item { Spacer(modifier = Modifier.height(8.dp)) }
 
             item {
-                HeaderTextItem(title = viewModel.title, modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+                HeaderTextItem(
+                    title = viewModel.title,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
             }
 
             configurationSection(

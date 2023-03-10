@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -60,8 +60,9 @@ internal class CertificateTransparencyInterceptor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val host = chain.request().url.host
-        val connection = chain.connection()
-            ?: throw IllegalStateException("No connection found. Verify interceptor is added using addNetworkInterceptor")
+        val connection = chain.connection() ?: error(
+            "No connection found. Verify interceptor is added using addNetworkInterceptor"
+        )
 
         val certs = connection.handshake()?.peerCertificates ?: emptyList()
 

@@ -34,7 +34,12 @@ internal interface ASN1Object {
             encoded.size <= 0xffff ->
                 byteArrayOf(0x82.toByte(), (encoded.size shr 8).toByte(), encoded.size.toByte())
             encoded.size <= 0xffffff ->
-                byteArrayOf(0x83.toByte(), (encoded.size shr 16).toByte(), (encoded.size shr 8).toByte(), encoded.size.toByte())
+                byteArrayOf(
+                    0x83.toByte(),
+                    (encoded.size shr 16).toByte(),
+                    (encoded.size shr 8).toByte(),
+                    encoded.size.toByte()
+                )
             else -> throw IllegalArgumentException("Length too long")
         }
 

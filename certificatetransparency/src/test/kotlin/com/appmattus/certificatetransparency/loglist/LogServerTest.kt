@@ -34,13 +34,21 @@ internal class LogServerTest {
 
     @Test
     fun testCalculatesLogIdCorrectly() {
-        val logServer = LogServer(PublicKeyFactory.fromByteArray(PUBLIC_KEY), operator = "", previousOperators = emptyList())
+        val logServer = LogServer(
+            PublicKeyFactory.fromByteArray(PUBLIC_KEY),
+            operator = "",
+            previousOperators = emptyList()
+        )
         assertTrue(logServer.id.contentEquals(LOG_ID))
     }
 
     @Test
     fun testCalculatesLogIdCorrectlyRSA() {
-        val logServer = LogServer(PublicKeyFactory.fromByteArray(PUBLIC_KEY_RSA), operator = "", previousOperators = emptyList())
+        val logServer = LogServer(
+            PublicKeyFactory.fromByteArray(PUBLIC_KEY_RSA),
+            operator = "",
+            previousOperators = emptyList()
+        )
         assertTrue(logServer.id.contentEquals(LOG_ID_RSA))
     }
 
@@ -71,7 +79,10 @@ internal class LogServerTest {
         val logServer = LogServer(
             key = PublicKeyFactory.fromByteArray(PUBLIC_KEY_RSA),
             operator = "Appmattus",
-            previousOperators = listOf(PreviousOperator("Google", 1000.fromEpochMillis()), PreviousOperator("Cloudflare", 800.fromEpochMillis()))
+            previousOperators = listOf(
+                PreviousOperator("Google", 1000.fromEpochMillis()),
+                PreviousOperator("Cloudflare", 800.fromEpochMillis())
+            )
         )
 
         assertEquals("Google", logServer.operatorAt(900.fromEpochMillis()))
@@ -82,7 +93,10 @@ internal class LogServerTest {
         val logServer = LogServer(
             key = PublicKeyFactory.fromByteArray(PUBLIC_KEY_RSA),
             operator = "Appmattus",
-            previousOperators = listOf(PreviousOperator("Google", 1000.fromEpochMillis()), PreviousOperator("Cloudflare", 800.fromEpochMillis()))
+            previousOperators = listOf(
+                PreviousOperator("Google", 1000.fromEpochMillis()),
+                PreviousOperator("Cloudflare", 800.fromEpochMillis())
+            )
         )
 
         assertEquals("Cloudflare", logServer.operatorAt(700.fromEpochMillis()))

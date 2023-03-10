@@ -44,7 +44,9 @@ internal data class ASN1Sequence(
     override fun toString(): String {
         @Suppress("MagicNumber")
         val name = if (tag == 0x30) "SEQUENCE" else "SET"
-        return "$name (${values.size} elem)" + values.joinToString(prefix = "\n", separator = "\n") { it.toString() }.prependIndent("  ")
+        return "$name (${values.size} elem)" + values.joinToString(prefix = "\n", separator = "\n") { it.toString() }.prependIndent(
+            "  "
+        )
     }
 
     companion object {

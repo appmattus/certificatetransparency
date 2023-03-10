@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -60,14 +60,18 @@ internal class CertificateRevocationBaseTest {
             crlSet = setOf(CrlItem(certsToCheck[0].issuerX500Principal, listOf(certsToCheck[0].serialNumber)))
         )
 
-        assertIsA<RevocationResult.Failure.CertificateRevoked>(ctb.verifyCertificateRevocation("www.github.com", certsToCheck))
+        assertIsA<RevocationResult.Failure.CertificateRevoked>(
+            ctb.verifyCertificateRevocation("www.github.com", certsToCheck)
+        )
     }
 
     @Test
     fun noCertificatesDisallowed() {
         val ctb = CertificateRevocationBase()
 
-        assertIsA<RevocationResult.Failure.NoCertificates>(ctb.verifyCertificateRevocation("www.github.com", emptyList()))
+        assertIsA<RevocationResult.Failure.NoCertificates>(
+            ctb.verifyCertificateRevocation("www.github.com", emptyList())
+        )
     }
 
     @Test
@@ -78,7 +82,9 @@ internal class CertificateRevocationBaseTest {
             crlSet = setOf(CrlItem(certsToCheck[1].issuerX500Principal, listOf(certsToCheck[1].serialNumber)))
         )
 
-        assertIsA<RevocationResult.Failure.CertificateRevoked>(ctb.verifyCertificateRevocation("www.github.com", certsToCheck))
+        assertIsA<RevocationResult.Failure.CertificateRevoked>(
+            ctb.verifyCertificateRevocation("www.github.com", certsToCheck)
+        )
     }
 
     @Test
@@ -90,7 +96,9 @@ internal class CertificateRevocationBaseTest {
             certificateChainCleanerFactory = EmptyCertificateChainCleanerFactory()
         )
 
-        assertIsA<RevocationResult.Failure.NoCertificates>(ctb.verifyCertificateRevocation("www.github.com", certsToCheck))
+        assertIsA<RevocationResult.Failure.NoCertificates>(
+            ctb.verifyCertificateRevocation("www.github.com", certsToCheck)
+        )
     }
 
     class EmptyCertificateChainCleanerFactory : CertificateChainCleanerFactory {

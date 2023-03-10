@@ -30,5 +30,5 @@ internal class Rfc3339Deserializer : KSerializer<Instant> {
 
     override fun deserialize(decoder: Decoder) = decoder.decodeString().toRfc3339Instant()
 
-    override fun serialize(encoder: Encoder, value: Instant) = throw IllegalStateException("Serialization not supported")
+    override fun serialize(encoder: Encoder, value: Instant) = error("Serialization not supported")
 }

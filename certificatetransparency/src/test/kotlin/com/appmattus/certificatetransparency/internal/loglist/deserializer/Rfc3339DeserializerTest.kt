@@ -41,7 +41,9 @@ internal class Rfc3339DeserializerTest {
 
     @Serializable
     data class TestObject(
-        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") val timestamp: Instant
+        @Serializable(with = Rfc3339Deserializer::class)
+        @SerialName("timestamp")
+        val timestamp: Instant
     )
 
     @Test

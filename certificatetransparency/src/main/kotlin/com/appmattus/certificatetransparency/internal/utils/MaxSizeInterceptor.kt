@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,7 +40,10 @@ internal class MaxSizeInterceptor : Interceptor {
 
         return request.headers(HEADER).firstOrNull()?.toLongOrNull()?.let { maxSize ->
             response.newBuilder().body(
-                LimitedSizeInputStream(body.byteStream(), maxSize).source().buffer().asResponseBody(body.contentType(), body.contentLength())
+                LimitedSizeInputStream(body.byteStream(), maxSize).source().buffer().asResponseBody(
+                    body.contentType(),
+                    body.contentLength()
+                )
             ).build()
         } ?: response
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,6 +45,7 @@ public class CRInterceptorBuilder {
      */
     public var failOnError: Boolean = true
         @JvmSynthetic get
+
         @JvmSynthetic set
 
     /**
@@ -53,6 +54,7 @@ public class CRInterceptorBuilder {
      */
     public var logger: CRLogger? = null
         @JvmSynthetic get
+
         @JvmSynthetic set
 
     /**
