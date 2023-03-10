@@ -38,9 +38,10 @@ fun MainScreen(navController: NavController) {
 
     Scaffold(
         scaffoldState = scaffoldState
-    ) {
+    ) { padding ->
         LazyColumn(
             modifier = Modifier
+                .padding(padding)
                 .padding(vertical = 8.dp)
                 .fillMaxHeight()
         ) {

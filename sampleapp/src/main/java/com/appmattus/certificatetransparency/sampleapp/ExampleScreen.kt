@@ -90,8 +90,8 @@ fun ExampleScreen(viewModel: BaseExampleViewModel) {
                 Snackbar(backgroundColor = colorResource(it.actionLabel!!.toInt()), modifier = Modifier.padding(8.dp)) { Text(it.message) }
             }
         }
-    ) {
-        LazyColumn(modifier = Modifier.fillMaxHeight()) {
+    ) { padding ->
+        LazyColumn(modifier = Modifier.padding(padding).fillMaxHeight()) {
             item { Spacer(modifier = Modifier.height(8.dp)) }
 
             item {

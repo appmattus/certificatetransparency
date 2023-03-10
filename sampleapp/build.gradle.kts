@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    compileSdk = 32
+    compileSdk = 33
     defaultConfig {
         applicationId = "com.appmattus.certificatetransparency.sampleapp"
         minSdk = 21
-        targetSdk = 32
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
         proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
@@ -34,7 +34,7 @@ android {
         allWarningsAsErrors = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.2.0-beta01"
+        kotlinCompilerExtensionVersion = libs.versions.androidX.compose.compiler.get()
     }
     packagingOptions {
         resources.excludes.add("META-INF/DEPENDENCIES")
@@ -56,13 +56,13 @@ dependencies {
     implementation("com.android.volley:volley:${libs.versions.volley.get()}")
     implementation("com.samskivert:jmustache:1.15")
 
-    implementation("androidx.compose.ui:ui:${libs.versions.androidX.compose.get()}")
+    implementation("androidx.compose.ui:ui:${libs.versions.androidX.compose.ui.get()}")
     // Tooling support (Previews, etc.)
-    implementation("androidx.compose.ui:ui-tooling:${libs.versions.androidX.compose.get()}")
+    implementation("androidx.compose.ui:ui-tooling:${libs.versions.androidX.compose.ui.get()}")
     // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
-    implementation("androidx.compose.foundation:foundation:${libs.versions.androidX.compose.get()}")
+    implementation("androidx.compose.foundation:foundation:${libs.versions.androidX.compose.foundation.get()}")
     // Material Design
-    implementation("androidx.compose.material:material:${libs.versions.androidX.compose.get()}")
+    implementation("androidx.compose.material:material:${libs.versions.androidX.compose.material.get()}")
     // Integration with activities
     implementation("androidx.activity:activity-compose:${libs.versions.androidX.activityCompose.get()}")
     // Integration with ViewModels
