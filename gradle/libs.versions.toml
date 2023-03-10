@@ -38,7 +38,7 @@ equalsVerifier = "3.14"
 junit4 = "4.13.2"
 mockito = "5.2.0"
 mockitoKotlin = "4.1.0"
-robolectric = "4.7.3"
+robolectric = "4.9.2"
 
 desugar = "1.1.5"
 
