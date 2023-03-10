@@ -18,7 +18,7 @@
 
 kotlin = "1.6.21"
 
-androidGradlePlugin = "7.1.0"
+androidGradlePlugin = "7.4.2"
 detektGradlePlugin = "1.20.0"
 dokkaPlugin = "1.6.21"
 gradleMavenPublishPlugin = "0.18.0"

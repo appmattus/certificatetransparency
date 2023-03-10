@@ -15,4 +15,9 @@
   -->
 <lint>
     <issue id="GradleDependency" severity="ignore" />
+    <issue id="TrulyRandom">
+        <!-- Our supported minimum SDK is 19, lint complains because this is a Java library so has no minimum SDK defined -->
+        <!-- Read https://android-developers.blogspot.com/2013/08/some-securerandom-thoughts.html for more info -->
+        <ignore regexp="LogListDataSourceFactory.kt" />
+    </issue>
 </lint>

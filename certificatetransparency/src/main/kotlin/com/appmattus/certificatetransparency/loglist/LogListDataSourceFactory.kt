@@ -77,6 +77,8 @@ public object LogListDataSourceFactory {
                     val sslContext: SSLContext
                     try {
                         sslContext = SSLContext.getInstance("SSL")
+                        // Our supported minimum SDK is 19, lint complains because this is a Java library so has no minimum SDK defined
+                        // Read https://android-developers.blogspot.com/2013/08/some-securerandom-thoughts.html for more info
                         sslContext.init(null, arrayOf(trustManager), SecureRandom())
                     } catch (expected: NoSuchAlgorithmException) {
                         throw IllegalStateException("Unable to create an SSLContext")
