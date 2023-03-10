@@ -20,6 +20,7 @@
 
 package com.appmattus.certificatetransparency.sampleapp.examples.okhttp
 
+import android.annotation.SuppressLint
 import android.app.Application
 import com.appmattus.certificatetransparency.CTLogger
 import com.appmattus.certificatetransparency.cache.AndroidDiskCache
@@ -43,6 +44,8 @@ class OkHttpKotlinExampleViewModel(application: Application) : BaseExampleViewMo
 
     // A normal client would create this ahead of time and share it between network requests
     // We create it dynamically as we allow the user to set the hosts for certificate transparency
+    // Lint is complaining about forEach incorrectly
+    @SuppressLint("NewApi")
     private fun createOkHttpClient(
         includeHosts: Set<String>,
         excludeHosts: Set<String>,

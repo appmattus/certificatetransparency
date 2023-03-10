@@ -20,6 +20,7 @@
 
 package com.appmattus.certificatetransparency.sampleapp.examples.volley
 
+import android.annotation.SuppressLint
 import android.app.Application
 import com.android.volley.Request
 import com.android.volley.RequestQueue
@@ -35,6 +36,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
+// Lint is complaining about forEach incorrectly
+@SuppressLint("NewApi")
 class VolleyKotlinExampleViewModel(application: Application) : BaseExampleViewModel(application) {
     override val sampleCodeTemplate
         get() = "volley-kotlin.txt"

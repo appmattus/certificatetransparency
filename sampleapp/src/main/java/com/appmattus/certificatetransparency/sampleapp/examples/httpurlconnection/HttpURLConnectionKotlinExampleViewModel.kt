@@ -20,6 +20,7 @@
 
 package com.appmattus.certificatetransparency.sampleapp.examples.httpurlconnection
 
+import android.annotation.SuppressLint
 import android.app.Application
 import com.appmattus.certificatetransparency.CTLogger
 import com.appmattus.certificatetransparency.cache.AndroidDiskCache
@@ -39,6 +40,8 @@ class HttpURLConnectionKotlinExampleViewModel(application: Application) : BaseEx
     override val title
         get() = getApplication<Application>().getString(R.string.httpurlconnection_kotlin_example)
 
+    // Lint is complaining about forEach incorrectly
+    @SuppressLint("NewApi")
     private fun HttpURLConnection.enableCertificateTransparencyChecks(
         includeHosts: Set<String>,
         excludeHosts: Set<String>,
