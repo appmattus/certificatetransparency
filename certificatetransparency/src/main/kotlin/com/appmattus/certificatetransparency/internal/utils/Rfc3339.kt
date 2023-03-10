@@ -54,7 +54,9 @@ private val Rfc3339Pattern = Regex(
 // Magic numbers accepted as very much linked to the pattern
 @Suppress("MagicNumber")
 internal fun String.toRfc3339Instant(): Instant {
-    val results = Rfc3339Pattern.matchEntire(this) ?: throw NumberFormatException("Invalid RFC3339 date/time format: $this")
+    val results = Rfc3339Pattern.matchEntire(this) ?: throw NumberFormatException(
+        "Invalid RFC3339 date/time format: $this"
+    )
 
     val localDate = LocalDate.of(
         results.groupValues[1].toInt(), // yyyy
@@ -66,7 +68,9 @@ internal fun String.toRfc3339Instant(): Instant {
     val isTzShiftGiven = tzShiftRegexGroup.isNotEmpty()
 
     if (isTzShiftGiven && !isTimeGiven) {
-        throw NumberFormatException("Invalid RFC33339 date/time format, cannot specify time zone shift without specifying time: $this")
+        throw NumberFormatException(
+            "Invalid RFC33339 date/time format, cannot specify time zone shift without specifying time: $this"
+        )
     }
 
     val localTime = if (isTimeGiven) {

@@ -36,7 +36,9 @@ public interface CertificateChainCleaner {
     public companion object {
         private val androidCertificateChainCleanerFactory by lazy {
             try {
-                Class.forName("com.appmattus.certificatetransparency.chaincleaner.AndroidCertificateChainCleaner\$Factory")
+                Class.forName(
+                    "com.appmattus.certificatetransparency.chaincleaner.AndroidCertificateChainCleaner\$Factory"
+                )
                     .getDeclaredConstructor().newInstance() as CertificateChainCleanerFactory
             } catch (ignored: Exception) {
                 null
@@ -44,7 +46,9 @@ public interface CertificateChainCleaner {
         }
 
         public fun get(trustManager: X509TrustManager): CertificateChainCleaner {
-            return androidCertificateChainCleanerFactory?.get(trustManager) ?: BasicCertificateChainCleaner(trustManager)
+            return androidCertificateChainCleanerFactory?.get(trustManager) ?: BasicCertificateChainCleaner(
+                trustManager
+            )
         }
     }
 }

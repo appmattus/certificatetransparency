@@ -29,6 +29,10 @@ internal class ASN1PrintableStringTeletex private constructor(
     override fun toString(): String = "PRINTABLE STRING $value"
 
     companion object {
-        fun create(tag: Int, totalLength: Int, encoded: ByteBuffer) = ASN1PrintableStringTeletex(tag, totalLength, encoded)
+        fun create(tag: Int, totalLength: Int, encoded: ByteBuffer) = ASN1PrintableStringTeletex(
+            tag = tag,
+            totalLength = totalLength,
+            encoded = encoded
+        )
     }
 }

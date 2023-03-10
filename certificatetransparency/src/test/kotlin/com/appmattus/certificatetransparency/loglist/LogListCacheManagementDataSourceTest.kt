@@ -105,7 +105,9 @@ internal class LogListCacheManagementDataSourceTest {
             givenNetworkResult(LogListResult.Valid.Success(defaultLogListTimestamp, emptyList()))
             // and the time now is between 14 days (exclusive) and 70 days (inclusive) old of the log list
             now =
-                defaultLogListTimestamp + Duration.ofMillis(Random.nextLong(FOURTEEN_DAYS_IN_MILLISECONDS + 1, SEVENTY_DAYS_IN_MILLISECONDS + 1))
+                defaultLogListTimestamp + Duration.ofMillis(
+                Random.nextLong(FOURTEEN_DAYS_IN_MILLISECONDS + 1, SEVENTY_DAYS_IN_MILLISECONDS + 1)
+            )
 
             // When we get data
             val result = dataSource.get()
@@ -278,7 +280,9 @@ internal class LogListCacheManagementDataSourceTest {
             givenNetworkResult(LogListResult.Invalid.LogListZipFailedLoadingWithException(IOException()))
             // And memory data is between 1 day and 70 days
             val memoryTimestamp =
-                defaultLogListTimestamp - Duration.ofMillis(Random.nextLong(ONE_DAY_IN_MILLISECONDS + 1, SEVENTY_DAYS_IN_MILLISECONDS))
+                defaultLogListTimestamp - Duration.ofMillis(
+                    Random.nextLong(ONE_DAY_IN_MILLISECONDS + 1, SEVENTY_DAYS_IN_MILLISECONDS)
+                )
             givenMemoryResult(LogListResult.Valid.Success(memoryTimestamp, emptyList()))
 
             // When we get data

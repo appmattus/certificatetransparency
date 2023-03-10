@@ -48,6 +48,7 @@ public class CRHostnameVerifierBuilder(
      */
     public var failOnError: Boolean = true
         @JvmSynthetic get
+
         @JvmSynthetic set
 
     /**
@@ -56,6 +57,7 @@ public class CRHostnameVerifierBuilder(
      */
     public var logger: CRLogger? = null
         @JvmSynthetic get
+
         @JvmSynthetic set
 
     /**

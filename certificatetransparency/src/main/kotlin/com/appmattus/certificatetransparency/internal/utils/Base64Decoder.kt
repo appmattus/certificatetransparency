@@ -47,8 +47,14 @@ package com.appmattus.certificatetransparency.internal.utils
  * @see Base64Encoder
  */
 @Suppress(
-    "MagicNumber", "ThrowsCount", "LoopWithTooManyJumpStatements", "LongMethod", "ComplexMethod", "NestedBlockDepth",
-    "ComplexCondition"
+    "MagicNumber",
+    "ThrowsCount",
+    "LoopWithTooManyJumpStatements",
+    "LongMethod",
+    "ComplexMethod",
+    "NestedBlockDepth",
+    "ComplexCondition",
+    "UseRequire"
 )
 internal class Base64Decoder {
     /**

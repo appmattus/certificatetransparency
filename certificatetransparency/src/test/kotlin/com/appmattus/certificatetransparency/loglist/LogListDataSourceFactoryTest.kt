@@ -69,7 +69,10 @@ public class LogListDataSourceFactoryTest {
         runBlocking {
             // Given the log list service times out
             configuration = { setBodyDelay(5, TimeUnit.SECONDS) }
-            val logListService = LogListDataSourceFactory.createLogListService(baseUrl = baseUrl.toString(), networkTimeoutSeconds = 1)
+            val logListService = LogListDataSourceFactory.createLogListService(
+                baseUrl = baseUrl.toString(),
+                networkTimeoutSeconds = 1
+            )
 
             // When we request the log list
             val dataSource = LogListDataSourceFactory.createDataSource(logListService = logListService)
@@ -89,7 +92,10 @@ public class LogListDataSourceFactoryTest {
 
             // When we request the log list
             val dataSource =
-                LogListDataSourceFactory.createDataSource(logListService = logListService, now = { Instant.ofEpochMilli(1000000) })
+                LogListDataSourceFactory.createDataSource(
+                    logListService = logListService,
+                    now = { Instant.ofEpochMilli(1000000) }
+                )
             val result = dataSource.get()
 
             // Then a valid result is returned
@@ -106,7 +112,10 @@ public class LogListDataSourceFactoryTest {
                 setBody(Buffer())
             }
 
-            val logListService = LogListDataSourceFactory.createLogListService(baseUrl = baseUrl.toString(), networkTimeoutSeconds = 1)
+            val logListService = LogListDataSourceFactory.createLogListService(
+                baseUrl = baseUrl.toString(),
+                networkTimeoutSeconds = 1
+            )
 
             // When we request the log list
             val dataSource = LogListDataSourceFactory.createDataSource(logListService = logListService)

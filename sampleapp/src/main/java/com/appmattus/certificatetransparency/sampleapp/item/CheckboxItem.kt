@@ -40,7 +40,8 @@ fun CheckboxItem(
     onCheckedChange: (Boolean) -> Unit = {}
 ) {
     Row(
-        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier.clickable { onCheckedChange(!checked) }
     ) {
         Checkbox(checked = checked, onCheckedChange = null)

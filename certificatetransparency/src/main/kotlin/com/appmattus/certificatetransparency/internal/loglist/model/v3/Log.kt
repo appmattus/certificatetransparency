@@ -50,11 +50,15 @@ internal data class Log(
     @SerialName("log_id") val logId: String,
     @SerialName("mmd") val maximumMergeDelay: Int,
     @SerialName("previous_operators") val listOfPreviousOperators: List<PreviousOperator>? = null,
-    @SerialName("url") @Serializable(with = HttpUrlDeserializer::class) val url: HttpUrl,
+    @SerialName("url")
+    @Serializable(with = HttpUrlDeserializer::class)
+    val url: HttpUrl,
     @SerialName("dns") val dns: Hostname? = null,
     @SerialName("temporal_interval") val temporalInterval: TemporalInterval? = null,
     @SerialName("log_type") val logType: LogType? = null,
-    @SerialName("state") @Serializable(with = StateDeserializer::class) val state: State? = null
+    @SerialName("state")
+    @Serializable(with = StateDeserializer::class)
+    val state: State? = null
 ) {
     init {
         require(description == null || description.isNotEmpty())

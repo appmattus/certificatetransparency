@@ -95,7 +95,10 @@ internal class CertificateTransparencyTrustManagerIntegrationTest {
 
     @Test
     fun invalidAllowedWhenFailsAllowed() {
-        val client = OkHttpClient.Builder().sslSocketFactory(trustManagerAllowFails.createSocketFactory(), trustManagerAllowFails).build()
+        val client = OkHttpClient.Builder().sslSocketFactory(
+            trustManagerAllowFails.createSocketFactory(),
+            trustManagerAllowFails
+        ).build()
 
         val request = Request.Builder()
             .url("https://$invalidSctDomain/")

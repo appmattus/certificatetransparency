@@ -45,6 +45,7 @@ public class CRInterceptorBuilder {
      */
     public var failOnError: Boolean = true
         @JvmSynthetic get
+
         @JvmSynthetic set
 
     /**
@@ -53,6 +54,7 @@ public class CRInterceptorBuilder {
      */
     public var logger: CRLogger? = null
         @JvmSynthetic get
+
         @JvmSynthetic set
 
     /**

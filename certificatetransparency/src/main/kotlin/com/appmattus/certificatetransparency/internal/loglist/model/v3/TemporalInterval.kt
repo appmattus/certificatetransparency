@@ -31,6 +31,10 @@ import java.time.Instant
  */
 @Serializable
 internal data class TemporalInterval(
-    @Serializable(with = Rfc3339Deserializer::class) @SerialName("start_inclusive") val startInclusive: Instant,
-    @Serializable(with = Rfc3339Deserializer::class) @SerialName("end_exclusive") val endExclusive: Instant
+    @Serializable(with = Rfc3339Deserializer::class)
+    @SerialName("start_inclusive")
+    val startInclusive: Instant,
+    @Serializable(with = Rfc3339Deserializer::class)
+    @SerialName("end_exclusive")
+    val endExclusive: Instant
 )

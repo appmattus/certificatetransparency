@@ -52,6 +52,7 @@ public class CTInterceptorBuilder {
      */
     public var failOnError: Boolean = true
         @JvmSynthetic get
+
         @JvmSynthetic set
 
     /**
@@ -60,6 +61,7 @@ public class CTInterceptorBuilder {
      */
     public var logger: CTLogger? = null
         @JvmSynthetic get
+
         @JvmSynthetic set
 
     /**
@@ -68,6 +70,7 @@ public class CTInterceptorBuilder {
      */
     public var policy: CTPolicy? = null
         @JvmSynthetic get
+
         @JvmSynthetic set
 
     /**
@@ -76,6 +79,7 @@ public class CTInterceptorBuilder {
      */
     public var diskCache: DiskCache? = null
         @JvmSynthetic get
+
         @JvmSynthetic set
 
     /**

@@ -34,23 +34,36 @@ import org.junit.Test
 internal class StateDeserializerTest {
 
     @Serializable
-    internal data class TestObject(@Serializable(with = StateDeserializer::class) @SerialName("state") val state: State)
+    internal data class TestObject(
+        @Serializable(with = StateDeserializer::class)
+        @SerialName("state")
+        val state: State
+    )
 
     @Test
     fun pending() {
-        val result = json.decodeFromString(TestObject.serializer(), "{\"state\":{\"pending\":{\"timestamp\":\"2019-06-04T00:00:00Z\"}}}")
+        val result = json.decodeFromString(
+            TestObject.serializer(),
+            "{\"state\":{\"pending\":{\"timestamp\":\"2019-06-04T00:00:00Z\"}}}"
+        )
         assertIsA<State.Pending>(result.state)
     }
 
     @Test
     fun qualified() {
-        val result = json.decodeFromString(TestObject.serializer(), "{\"state\":{\"qualified\":{\"timestamp\":\"2019-06-04T00:00:00Z\"}}}")
+        val result = json.decodeFromString(
+            TestObject.serializer(),
+            "{\"state\":{\"qualified\":{\"timestamp\":\"2019-06-04T00:00:00Z\"}}}"
+        )
         assertIsA<State.Qualified>(result.state)
     }
 
     @Test
     fun usable() {
-        val result = json.decodeFromString(TestObject.serializer(), "{\"state\":{\"usable\":{\"timestamp\":\"2019-06-04T00:00:00Z\"}}}")
+        val result = json.decodeFromString(
+            TestObject.serializer(),
+            "{\"state\":{\"usable\":{\"timestamp\":\"2019-06-04T00:00:00Z\"}}}"
+        )
         assertIsA<State.Usable>(result.state)
     }
 
@@ -66,13 +79,19 @@ internal class StateDeserializerTest {
 
     @Test
     fun retired() {
-        val result = json.decodeFromString(TestObject.serializer(), "{\"state\":{\"retired\":{\"timestamp\":\"2019-06-04T00:00:00Z\"}}}")
+        val result = json.decodeFromString(
+            TestObject.serializer(),
+            "{\"state\":{\"retired\":{\"timestamp\":\"2019-06-04T00:00:00Z\"}}}"
+        )
         assertIsA<State.Retired>(result.state)
     }
 
     @Test
     fun rejected() {
-        val result = json.decodeFromString(TestObject.serializer(), "{\"state\":{\"rejected\":{\"timestamp\":\"2019-06-04T00:00:00Z\"}}}")
+        val result = json.decodeFromString(
+            TestObject.serializer(),
+            "{\"state\":{\"rejected\":{\"timestamp\":\"2019-06-04T00:00:00Z\"}}}"
+        )
         assertIsA<State.Rejected>(result.state)
     }
 

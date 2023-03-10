@@ -29,5 +29,5 @@ internal class HostnameDeserializer : KSerializer<Hostname> {
 
     override fun deserialize(decoder: Decoder) = Hostname(decoder.decodeString())
 
-    override fun serialize(encoder: Encoder, value: Hostname) = throw IllegalStateException("Serialization not supported")
+    override fun serialize(encoder: Encoder, value: Hostname) = error("Serialization not supported")
 }

@@ -38,7 +38,9 @@ internal sealed class State {
     @Serializable
     @SerialName("pending")
     data class Pending(
-        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Instant
+        @Serializable(with = Rfc3339Deserializer::class)
+        @SerialName("timestamp")
+        override val timestamp: Instant
     ) : State()
 
     /**
@@ -47,7 +49,9 @@ internal sealed class State {
     @Serializable
     @SerialName("qualified")
     data class Qualified(
-        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Instant
+        @Serializable(with = Rfc3339Deserializer::class)
+        @SerialName("timestamp")
+        override val timestamp: Instant
     ) : State()
 
     /**
@@ -56,7 +60,9 @@ internal sealed class State {
     @SerialName("usable")
     @Serializable
     data class Usable(
-        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Instant
+        @Serializable(with = Rfc3339Deserializer::class)
+        @SerialName("timestamp")
+        override val timestamp: Instant
     ) : State()
 
     /**
@@ -66,7 +72,9 @@ internal sealed class State {
     @Serializable
     @SerialName("readonly")
     data class ReadOnly(
-        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Instant,
+        @Serializable(with = Rfc3339Deserializer::class)
+        @SerialName("timestamp")
+        override val timestamp: Instant,
         @SerialName("final_tree_head") val finalTreeHead: FinalTreeHead
     ) : State()
 
@@ -76,7 +84,9 @@ internal sealed class State {
     @Serializable
     @SerialName("retired")
     data class Retired(
-        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Instant
+        @Serializable(with = Rfc3339Deserializer::class)
+        @SerialName("timestamp")
+        override val timestamp: Instant
     ) : State()
 
     /**
@@ -85,6 +95,8 @@ internal sealed class State {
     @Serializable
     @SerialName("rejected")
     data class Rejected(
-        @Serializable(with = Rfc3339Deserializer::class) @SerialName("timestamp") override val timestamp: Instant
+        @Serializable(with = Rfc3339Deserializer::class)
+        @SerialName("timestamp")
+        override val timestamp: Instant
     ) : State()
 }

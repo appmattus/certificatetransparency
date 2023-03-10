@@ -99,7 +99,10 @@ class Base64Test {
         @Test
         fun encodeDecodeSmall() {
             val input = TestData.file("/testdata/base64/small").readBytes()
-            val expected = TestData.file("/testdata/base64/small.64").readBytes().toString(Charset.forName("US-ASCII")).replace("\n", "")
+            val expected = TestData.file("/testdata/base64/small.64").readBytes().toString(Charset.forName("US-ASCII")).replace(
+                "\n",
+                ""
+            )
 
             val enc = Base64.toBase64String(input)
             assertEquals(expected, enc)
@@ -111,7 +114,10 @@ class Base64Test {
         @Test
         fun encodeDecodeMedium() {
             val input = TestData.file("/testdata/base64/medium").readBytes()
-            val expected = TestData.file("/testdata/base64/medium.64").readBytes().toString(Charset.forName("US-ASCII")).replace("\n", "")
+            val expected = TestData.file("/testdata/base64/medium.64").readBytes().toString(Charset.forName("US-ASCII")).replace(
+                "\n",
+                ""
+            )
 
             val enc = Base64.toBase64String(input)
             assertEquals(expected, enc)

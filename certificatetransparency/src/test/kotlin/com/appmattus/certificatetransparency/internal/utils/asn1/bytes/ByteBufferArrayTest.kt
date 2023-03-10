@@ -45,7 +45,10 @@ class ByteBufferArrayTest {
 
     @Test
     fun allRange() {
-        assertEquals("0102030405060708090a0b0c0d0e0f", byteBuffer.range(0, byteBuffer.size).toList().toByteArray().toHexString())
+        assertEquals(
+            "0102030405060708090a0b0c0d0e0f",
+            byteBuffer.range(0, byteBuffer.size).toList().toByteArray().toHexString()
+        )
         assertEquals("0102030405060708090a0b0c0d0e0f", byteBuffer.copyOfRange(0, byteBuffer.size).toHexString())
     }
 

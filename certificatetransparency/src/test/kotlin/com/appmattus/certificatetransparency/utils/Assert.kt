@@ -29,7 +29,10 @@ internal inline fun <reified T> assertIsA(result: Any?) {
     contract {
         returns() implies (result is T)
     }
-    assertTrue("Expected ${T::class.java.name} but actual ${if (result != null) result::class.java.name else "null"}", result is T)
+    assertTrue(
+        "Expected ${T::class.java.name} but actual ${if (result != null) result::class.java.name else "null"}",
+        result is T
+    )
 }
 
 @OptIn(ExperimentalContracts::class)

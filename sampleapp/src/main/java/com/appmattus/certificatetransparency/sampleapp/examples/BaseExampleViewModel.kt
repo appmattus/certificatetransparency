@@ -115,7 +115,6 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
 
     private val defaultLogger = object : CTLogger {
         override fun log(host: String, result: VerificationResult) = intent {
-
             val message = when (result) {
                 is VerificationResult.Success -> State.Message.Success(result.toString())
                 is VerificationResult.Failure -> State.Message.Failure(result.toString())

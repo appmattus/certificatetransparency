@@ -36,7 +36,9 @@ internal open class CertificateRevocationBase(
     trustManager: X509TrustManager? = null
 ) {
     private val cleaner: CertificateChainCleaner by lazy {
-        val localTrustManager = trustManager ?: TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()).apply {
+        val localTrustManager = trustManager ?: TrustManagerFactory.getInstance(
+            TrustManagerFactory.getDefaultAlgorithm()
+        ).apply {
             init(null as KeyStore?)
         }.trustManagers.first { it is X509TrustManager } as X509TrustManager
 
@@ -67,7 +69,9 @@ internal open class CertificateRevocationBase(
         return try {
             certificates.forEach { certificate ->
                 val isRevoked = crlSet.any { pin ->
-                    pin.issuerDistinguishedName == certificate.issuerX500Principal && pin.serialNumbers.contains(certificate.serialNumber)
+                    pin.issuerDistinguishedName == certificate.issuerX500Principal && pin.serialNumbers.contains(
+                        certificate.serialNumber
+                    )
                 }
 
                 if (isRevoked) {

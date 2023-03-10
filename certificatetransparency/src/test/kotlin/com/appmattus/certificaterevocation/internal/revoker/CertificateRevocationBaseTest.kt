@@ -60,14 +60,18 @@ internal class CertificateRevocationBaseTest {
             crlSet = setOf(CrlItem(certsToCheck[0].issuerX500Principal, listOf(certsToCheck[0].serialNumber)))
         )
 
-        assertIsA<RevocationResult.Failure.CertificateRevoked>(ctb.verifyCertificateRevocation("www.github.com", certsToCheck))
+        assertIsA<RevocationResult.Failure.CertificateRevoked>(
+            ctb.verifyCertificateRevocation("www.github.com", certsToCheck)
+        )
     }
 
     @Test
     fun noCertificatesDisallowed() {
         val ctb = CertificateRevocationBase()
 
-        assertIsA<RevocationResult.Failure.NoCertificates>(ctb.verifyCertificateRevocation("www.github.com", emptyList()))
+        assertIsA<RevocationResult.Failure.NoCertificates>(
+            ctb.verifyCertificateRevocation("www.github.com", emptyList())
+        )
     }
 
     @Test
@@ -78,7 +82,9 @@ internal class CertificateRevocationBaseTest {
             crlSet = setOf(CrlItem(certsToCheck[1].issuerX500Principal, listOf(certsToCheck[1].serialNumber)))
         )
 
-        assertIsA<RevocationResult.Failure.CertificateRevoked>(ctb.verifyCertificateRevocation("www.github.com", certsToCheck))
+        assertIsA<RevocationResult.Failure.CertificateRevoked>(
+            ctb.verifyCertificateRevocation("www.github.com", certsToCheck)
+        )
     }
 
     @Test
@@ -90,7 +96,9 @@ internal class CertificateRevocationBaseTest {
             certificateChainCleanerFactory = EmptyCertificateChainCleanerFactory()
         )
 
-        assertIsA<RevocationResult.Failure.NoCertificates>(ctb.verifyCertificateRevocation("www.github.com", certsToCheck))
+        assertIsA<RevocationResult.Failure.NoCertificates>(
+            ctb.verifyCertificateRevocation("www.github.com", certsToCheck)
+        )
     }
 
     class EmptyCertificateChainCleanerFactory : CertificateChainCleanerFactory {

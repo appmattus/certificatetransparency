@@ -40,7 +40,10 @@ internal class MaxSizeInterceptor : Interceptor {
 
         return request.headers(HEADER).firstOrNull()?.toLongOrNull()?.let { maxSize ->
             response.newBuilder().body(
-                LimitedSizeInputStream(body.byteStream(), maxSize).source().buffer().asResponseBody(body.contentType(), body.contentLength())
+                LimitedSizeInputStream(body.byteStream(), maxSize).source().buffer().asResponseBody(
+                    body.contentType(),
+                    body.contentLength()
+                )
             ).build()
         } ?: response
     }

@@ -57,6 +57,7 @@ import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
+@Suppress("LongMethod")
 fun ExampleScreen(viewModel: BaseExampleViewModel) {
     val state = viewModel.collectAsState().value
 
@@ -87,7 +88,11 @@ fun ExampleScreen(viewModel: BaseExampleViewModel) {
         scaffoldState = scaffoldState,
         snackbarHost = { snackbarHostState ->
             SnackbarHost(snackbarHostState) {
-                Snackbar(backgroundColor = colorResource(it.actionLabel!!.toInt()), modifier = Modifier.padding(8.dp)) { Text(it.message) }
+                Snackbar(backgroundColor = colorResource(it.actionLabel!!.toInt()), modifier = Modifier.padding(8.dp)) {
+                    Text(
+                        it.message
+                    )
+                }
             }
         }
     ) { padding ->
@@ -95,7 +100,10 @@ fun ExampleScreen(viewModel: BaseExampleViewModel) {
             item { Spacer(modifier = Modifier.height(8.dp)) }
 
             item {
-                HeaderTextItem(title = viewModel.title, modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+                HeaderTextItem(
+                    title = viewModel.title,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
             }
 
             configurationSection(

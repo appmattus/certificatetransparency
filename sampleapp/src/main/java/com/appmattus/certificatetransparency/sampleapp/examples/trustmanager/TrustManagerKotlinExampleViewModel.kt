@@ -54,7 +54,6 @@ class TrustManagerKotlinExampleViewModel(application: Application) : BaseExample
         isFailOnError: Boolean,
         defaultLogger: CTLogger
     ): OkHttpClient {
-
         val trustManager = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()).apply {
             init(null as KeyStore?)
         }.trustManagers.first { it is X509TrustManager } as X509TrustManager

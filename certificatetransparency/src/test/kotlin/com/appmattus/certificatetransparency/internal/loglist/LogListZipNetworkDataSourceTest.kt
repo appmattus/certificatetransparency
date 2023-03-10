@@ -46,12 +46,13 @@ internal class LogListZipNetworkDataSourceTest {
 
     private val client: OkHttpClient =
         OkHttpClient.Builder().addInterceptor(MaxSizeInterceptor()).addInterceptor(mockInterceptor).build()
-    private val retrofit = Retrofit.Builder().client(client).baseUrl("http://ctlog/").addConverterFactory(ByteArrayConverterFactory()).build()
+    private val retrofit = Retrofit.Builder().client(client).baseUrl("http://ctlog/").addConverterFactory(
+        ByteArrayConverterFactory()
+    ).build()
     private val logListService: LogListService = retrofit.create(TestLogListService::class.java)
 
     private fun expectInterceptorHttpNotFound(url: String) {
         whenever(mockInterceptor.intercept(argThat { request().url.toString() == url })).then {
-
             val chain = it.arguments[0] as Interceptor.Chain
 
             Response.Builder()
@@ -75,7 +76,6 @@ internal class LogListZipNetworkDataSourceTest {
         @Suppress("SameParameterValue") byteResponse: ByteArray
     ) {
         whenever(mockInterceptor.intercept(argThat { request().url.toString() == url })).then {
-
             val chain = it.arguments[0] as Interceptor.Chain
 
             Response.Builder()

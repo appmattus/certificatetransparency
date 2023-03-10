@@ -33,6 +33,8 @@ internal class AndroidCertificateChainCleaner(
     }
 
     class Factory : CertificateChainCleanerFactory {
-        override fun get(trustManager: X509TrustManager) = AndroidCertificateChainCleaner(X509TrustManagerExtensions(trustManager))
+        override fun get(trustManager: X509TrustManager) = AndroidCertificateChainCleaner(
+            X509TrustManagerExtensions(trustManager)
+        )
     }
 }

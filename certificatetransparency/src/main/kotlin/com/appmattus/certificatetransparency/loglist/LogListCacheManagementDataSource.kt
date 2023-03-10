@@ -86,7 +86,11 @@ internal class LogListCacheManagementDataSource constructor(
             if (fallbackResult != null && networkResult.timestamp < fallbackResult.timestamp) {
                 // If the network response timestamp is older than our fallback data return the fallback and note network is returning stale data
                 // Potentially network is compromised and a replay attack is occurring
-                LogListResult.Valid.StaleNetworkUsingCachedData(fallbackResult.timestamp, fallbackResult.servers, networkResult)
+                LogListResult.Valid.StaleNetworkUsingCachedData(
+                    fallbackResult.timestamp,
+                    fallbackResult.servers,
+                    networkResult
+                )
             } else if (networkResult.timestamp + SEVENTY_DAYS >= now()) {
                 // Network data is less than 70 days old so use it and cache locally
                 inMemoryCache.set(network)

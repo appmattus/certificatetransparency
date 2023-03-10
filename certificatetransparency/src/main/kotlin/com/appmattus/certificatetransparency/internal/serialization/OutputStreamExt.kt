@@ -44,6 +44,7 @@ internal fun OutputStream.writeUint(value: Long, numBytes: Int) {
     while (numBytesRemaining > 0) {
         // MSB first.
         val shiftBy = (numBytesRemaining - 1) * BITS_IN_BYTE
+
         @Suppress("MagicNumber")
         val mask = 0xff.toLong() shl shiftBy
         write((value and mask shr shiftBy).toByte().toInt())

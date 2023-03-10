@@ -69,7 +69,6 @@ public object LogListDataSourceFactory {
         networkTimeoutSeconds: Long = 30,
         trustManager: X509TrustManager? = null
     ): LogListService {
-
         val client by lazy {
             (okHttpClient?.invoke()?.newBuilder() ?: OkHttpClient.Builder()).apply {
                 // If a TrustManager is provided then use it. This will be the case when using the Certificate Transparency provider
@@ -81,9 +80,9 @@ public object LogListDataSourceFactory {
                         // Read https://android-developers.blogspot.com/2013/08/some-securerandom-thoughts.html for more info
                         sslContext.init(null, arrayOf(trustManager), SecureRandom())
                     } catch (expected: NoSuchAlgorithmException) {
-                        throw IllegalStateException("Unable to create an SSLContext")
+                        error("Unable to create an SSLContext")
                     } catch (expected: KeyManagementException) {
-                        throw IllegalStateException("Unable to create an SSLContext")
+                        error("Unable to create an SSLContext")
                     }
 
                     sslSocketFactory(sslContext.socketFactory, trustManager)
@@ -119,7 +118,10 @@ public object LogListDataSourceFactory {
         logListService: LogListService = createLogListService(),
         diskCache: DiskCache? = null,
         publicKey: PublicKey = GoogleLogListPublicKey,
-        now: () -> Instant = { Instant.now() }
+        now: () -> Instant = {
+            @Suppress("NewApi")
+            Instant.now()
+        }
     ): DataSource<LogListResult> = LogListCacheManagementDataSource(
         inMemoryCache = InMemoryCache(),
         diskCache = diskCache,

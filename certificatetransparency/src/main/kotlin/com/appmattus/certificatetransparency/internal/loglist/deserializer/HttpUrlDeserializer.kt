@@ -30,5 +30,5 @@ internal class HttpUrlDeserializer : KSerializer<HttpUrl> {
 
     override fun deserialize(decoder: Decoder) = decoder.decodeString().toHttpUrl()
 
-    override fun serialize(encoder: Encoder, value: HttpUrl) = throw IllegalStateException("Serialization not supported")
+    override fun serialize(encoder: Encoder, value: HttpUrl) = error("Serialization not supported")
 }

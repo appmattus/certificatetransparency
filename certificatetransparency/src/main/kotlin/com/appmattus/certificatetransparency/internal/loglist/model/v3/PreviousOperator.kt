@@ -28,6 +28,8 @@ import java.time.Instant
 
 @Serializable
 internal data class PreviousOperator(
-    @Serializable(with = Rfc3339Deserializer::class) @SerialName("end_time") val endDate: Instant,
+    @Serializable(with = Rfc3339Deserializer::class)
+    @SerialName("end_time")
+    val endDate: Instant,
     @SerialName("name") val name: String
 )
