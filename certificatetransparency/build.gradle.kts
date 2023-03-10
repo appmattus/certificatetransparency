@@ -55,7 +55,12 @@ dependencyCheck {
 
     analyzers.assemblyEnabled = false
 
-    skipConfigurations = listOf("lintClassPath", "jacocoAgent", "jacocoAnt", "kotlinCompilerClasspath", "kotlinCompilerPluginClasspath")
+    skipConfigurations = listOf(
+        "lintClassPath", "jacocoAgent", "jacocoAnt", "kotlinCompilerClasspath", "kotlinCompilerPluginClasspath",
+        "dokkaJavadocPlugin", "dokkaGfmPartialPlugin", "dokkaHtmlPartialPlugin", "dokkaJekyllPartialPlugin", "dokkaJavadocPartialPlugin",
+        "dokkaHtmlPlugin", "dokkaGfmPlugin", "dokkaJekyllPlugin", "dokkaGfmRuntime", "dokkaGfmPartialRuntime", "dokkaHtmlRuntime",
+        "dokkaJekyllRuntime", "dokkaHtmlPartialRuntime", "dokkaJavadocRuntime", "dokkaJekyllPartialRuntime", "dokkaJavadocPartialRuntime"
+    )
 }
 
 lint {
