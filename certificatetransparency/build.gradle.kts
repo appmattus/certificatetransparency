@@ -43,6 +43,7 @@ dependencies {
 
 tasks.withType(KotlinCompile::class.java).all {
     kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
         allWarningsAsErrors = true
         freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
