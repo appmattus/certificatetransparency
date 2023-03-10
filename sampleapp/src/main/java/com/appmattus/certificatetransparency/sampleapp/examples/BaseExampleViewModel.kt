@@ -22,76 +22,74 @@ package com.appmattus.certificatetransparency.sampleapp.examples
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.appmattus.certificatetransparency.CTLogger
 import com.appmattus.certificatetransparency.VerificationResult
 import com.samskivert.mustache.Mustache
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import org.orbitmvi.orbit.Container
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.container
+import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
+import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.reduce
 import javax.net.ssl.SSLPeerUnverifiedException
 
 @Suppress("TooManyFunctions")
-abstract class BaseExampleViewModel(application: Application) : AndroidViewModel(application) {
+abstract class BaseExampleViewModel(application: Application) : AndroidViewModel(application), ContainerHost<State, Unit> {
 
     abstract val sampleCodeTemplate: String
 
     abstract val title: String
 
-    private var state = State(
-        includeHosts = setOf(),
-        excludeHosts = setOf(),
-        failOnError = true,
-        sampleCode = "",
-        message = null
-    )
-
-    private val _liveData = MutableLiveData<State>()
-
-    init {
-        updateSourceCode()
-        _liveData.postValue(state)
+    override val container: Container<State, Unit> = viewModelScope.container(State()) {
+        intent {
+            updateSourceCode()
+        }
     }
 
-    val liveData: LiveData<State>
-        get() = _liveData
-
-    fun includeHost(title: String) {
-        state = if (isValidHost(title)) {
-            state.copy(includeHosts = state.includeHosts.toMutableSet().apply { add(title) }.toSet())
-        } else {
-            state.copy(message = State.Message.Failure("Invalid host"))
+    fun includeHost(title: String) = intent {
+        reduce {
+            if (isValidHost(title)) {
+                state.copy(includeHosts = state.includeHosts.toMutableSet().apply { add(title) }.toSet())
+            } else {
+                state.copy(message = State.Message.Failure("Invalid host"))
+            }
         }
 
         updateSourceCode()
-        _liveData.postValue(state)
     }
 
-    fun excludeHost(title: String) {
-        state = if (isValidHost(title)) {
-            state.copy(excludeHosts = state.excludeHosts.toMutableSet().apply { add(title) }.toSet())
-        } else {
-            state.copy(message = State.Message.Failure("Invalid host"))
+    fun excludeHost(title: String) = intent {
+        reduce {
+            if (isValidHost(title)) {
+                state.copy(excludeHosts = state.excludeHosts.toMutableSet().apply { add(title) }.toSet())
+            } else {
+                state.copy(message = State.Message.Failure("Invalid host"))
+            }
         }
 
         updateSourceCode()
-        _liveData.postValue(state)
     }
 
-    fun removeIncludeHost(title: String) {
-        state = state.copy(includeHosts = state.includeHosts.toMutableSet().apply { remove(title) }.toSet())
+    fun removeIncludeHost(title: String) = intent {
+        reduce {
+            state.copy(includeHosts = state.includeHosts.toMutableSet().apply { remove(title) }.toSet())
+        }
         updateSourceCode()
-        _liveData.postValue(state)
     }
 
-    fun removeExcludeHost(title: String) {
-        state = state.copy(excludeHosts = state.excludeHosts.toMutableSet().apply { remove(title) }.toSet())
+    fun removeExcludeHost(title: String) = intent {
+        reduce {
+            state.copy(excludeHosts = state.excludeHosts.toMutableSet().apply { remove(title) }.toSet())
+        }
         updateSourceCode()
-        _liveData.postValue(state)
     }
 
-    fun dismissMessage() {
-        state = state.copy(message = null)
-        _liveData.postValue(state)
+    fun dismissMessage() = intent {
+        reduce {
+            state.copy(message = null)
+        }
     }
 
     private fun generateSourceCode(includeHosts: Set<String>, excludeHosts: Set<String>, failOnError: Boolean): String {
@@ -101,33 +99,39 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
         return Mustache.compiler().compile(template).execute(scopes)
     }
 
-    private fun updateSourceCode() {
+    private suspend fun SimpleSyntax<State, Unit>.updateSourceCode() {
         val source = generateSourceCode(state.includeHosts, state.excludeHosts, state.failOnError)
-        state = state.copy(sampleCode = source)
+        reduce {
+            state.copy(sampleCode = source)
+        }
     }
 
-    fun setFailOnError(failOnError: Boolean) {
-        state = state.copy(failOnError = failOnError)
+    fun setFailOnError(failOnError: Boolean) = intent {
+        reduce {
+            state.copy(failOnError = failOnError)
+        }
         updateSourceCode()
-        _liveData.postValue(state)
     }
 
     private val defaultLogger = object : CTLogger {
-        override fun log(host: String, result: VerificationResult) {
+        override fun log(host: String, result: VerificationResult) = intent {
+
             val message = when (result) {
                 is VerificationResult.Success -> State.Message.Success(result.toString())
                 is VerificationResult.Failure -> State.Message.Failure(result.toString())
             }
 
-            state = state.copy(message = message)
-            _liveData.postValue(state)
+            reduce {
+                state.copy(message = message)
+            }
         }
     }
 
-    fun sendException(e: Throwable?) {
+    fun sendException(e: Throwable?) = intent {
         if (e?.message != "Certificate transparency failed" && e?.cause !is SSLPeerUnverifiedException) {
-            state = state.copy(message = State.Message.Failure(e?.message ?: e.toString()))
-            _liveData.postValue(state)
+            reduce {
+                state.copy(message = State.Message.Failure(e?.message ?: e.toString()))
+            }
         }
     }
 
@@ -139,7 +143,7 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
         defaultLogger: CTLogger
     )
 
-    fun openConnection(connectionHost: String) {
+    fun openConnection(connectionHost: String) = intent {
         try {
             openConnection(connectionHost, state.includeHosts, state.excludeHosts, state.failOnError, defaultLogger)
         } catch (expected: Exception) {

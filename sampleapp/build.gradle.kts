@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    compileSdk = 31
+    compileSdk = 32
     defaultConfig {
         applicationId = "com.appmattus.certificatetransparency.sampleapp"
         minSdk = 21
-        targetSdk = 31
+        targetSdk = 32
         versionCode = 1
         versionName = "1.0"
         proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
@@ -52,8 +52,6 @@ dependencies {
     implementation("com.google.android.material:material:${libs.versions.google.material.get()}")
     implementation("com.google.android.gms:play-services-base:${libs.versions.google.playServices.get()}")
     implementation("com.squareup.retrofit2:retrofit:${libs.versions.retrofit.get()}")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:${libs.versions.androidX.lifecycle.get()}")
-    implementation("androidx.lifecycle:lifecycle-common-java8:${libs.versions.androidX.lifecycle.get()}")
     implementation("com.pddstudio:highlightjs-android:${libs.versions.highlightJs.get()}")
     implementation("com.android.volley:volley:${libs.versions.volley.get()}")
     implementation("com.samskivert:jmustache:1.15")
@@ -70,9 +68,11 @@ dependencies {
     // Integration with ViewModels
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${libs.versions.androidX.lifecycleViewmodelCompose.get()}")
     // Integration with observables
-    implementation("androidx.compose.runtime:runtime-livedata:${libs.versions.androidX.compose.get()}")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${libs.versions.androidX.lifecycle.get()}")
     // Navigation
     implementation("androidx.navigation:navigation-compose:${libs.versions.androidX.navigationCompose.get()}")
+    // MVVM+
+    implementation("org.orbit-mvi:orbit-compose:${libs.versions.orbit.get()}")
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:${libs.versions.desugar.get()}")
 }

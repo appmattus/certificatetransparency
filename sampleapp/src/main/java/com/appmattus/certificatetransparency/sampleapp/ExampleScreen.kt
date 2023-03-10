@@ -36,7 +36,6 @@ import androidx.compose.material.TextField
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -55,15 +54,16 @@ import com.appmattus.certificatetransparency.sampleapp.item.text.HeaderTextItem
 import com.appmattus.certificatetransparency.sampleapp.item.text.SubHeaderTextItem
 import com.pddstudio.highlightjs.models.Language
 import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun ExampleScreen(viewModel: BaseExampleViewModel) {
-    val state = viewModel.liveData.observeAsState().value
+    val state = viewModel.collectAsState().value
 
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
 
-    state?.message?.let {
+    state.message?.let {
         scope.launch {
             val color = if (it is State.Message.Success) R.color.colorSuccess else R.color.colorFailure
 
