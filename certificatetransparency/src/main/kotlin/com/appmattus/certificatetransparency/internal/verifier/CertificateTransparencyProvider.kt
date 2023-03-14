@@ -32,7 +32,14 @@ internal class CertificateTransparencyProvider(
     class CertificateTransparencyService(
         private val provider: Provider,
         private val init: CTTrustManagerBuilder.() -> Unit
-    ) : Service(provider, "TrustManagerFactory", "PKIX", provider::class.java.name, listOf("Alg.Alias.TrustManagerFactory.X509"), null) {
+    ) : Service(
+        provider,
+        "TrustManagerFactory",
+        "PKIX",
+        provider::class.java.name,
+        listOf("Alg.Alias.TrustManagerFactory.X509"),
+        null
+    ) {
 
         override fun newInstance(constructorParameter: Any?): Any {
             return CertificateTransparencyTrustManagerFactory(provider.name, init)

@@ -44,7 +44,10 @@ internal class CertificateTransparencyProviderIntegrationTest {
 
         private val results = mutableListOf<String>()
 
-        private fun installProvider(providerName: String = DefaultProviderName, init: CTTrustManagerBuilder.() -> Unit = {}) {
+        private fun installProvider(
+            providerName: String = DefaultProviderName,
+            init: CTTrustManagerBuilder.() -> Unit = {}
+        ) {
             installCertificateTransparencyProvider(providerName) {
                 logListDataSource {
                     LogListDataSourceTestFactory.realLogListDataSource
@@ -60,7 +63,10 @@ internal class CertificateTransparencyProviderIntegrationTest {
             }
         }
 
-        private fun installProviderAllowFails(providerName: String = DefaultProviderName, init: CTTrustManagerBuilder.() -> Unit = {}) {
+        private fun installProviderAllowFails(
+            providerName: String = DefaultProviderName,
+            init: CTTrustManagerBuilder.() -> Unit = {}
+        ) {
             installCertificateTransparencyProvider(providerName) {
                 logListDataSource {
                     LogListDataSourceTestFactory.realLogListDataSource
