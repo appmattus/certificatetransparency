@@ -22,7 +22,7 @@ import java.security.Provider
 // Provider constructor deprecated on Java 9
 @Suppress("DEPRECATION")
 internal class CertificateTransparencyProvider(
-    providerName: String = DefaultProviderName,
+    providerName: String = DEFAULT_PROVIDER_NAME,
     init: CTTrustManagerBuilder.() -> Unit
 ) : Provider(providerName, 1.0, "") {
     init {
@@ -47,4 +47,4 @@ internal class CertificateTransparencyProvider(
     }
 }
 
-internal const val DefaultProviderName = "CertificateTransparencyProvider"
+internal const val DEFAULT_PROVIDER_NAME = "CertificateTransparencyProvider"

@@ -17,7 +17,7 @@
 package com.appmattus.certificatetransparency
 
 import com.appmattus.certificatetransparency.internal.verifier.CertificateTransparencyProvider
-import com.appmattus.certificatetransparency.internal.verifier.DefaultProviderName
+import com.appmattus.certificatetransparency.internal.verifier.DEFAULT_PROVIDER_NAME
 import java.security.Security
 
 /**
@@ -26,7 +26,7 @@ import java.security.Security
  */
 @JvmSynthetic
 public fun installCertificateTransparencyProvider(
-    providerName: String = DefaultProviderName,
+    providerName: String = DEFAULT_PROVIDER_NAME,
     init: CTTrustManagerBuilder.() -> Unit = {}
 ) {
     require(Security.getProvider(providerName) == null) { "Cannot register duplicate Security Provider with the name $providerName" }
@@ -37,6 +37,6 @@ public fun installCertificateTransparencyProvider(
 }
 
 @JvmSynthetic
-public fun removeCertificateTransparencyProvider(providerName: String = DefaultProviderName) {
+public fun removeCertificateTransparencyProvider(providerName: String = DEFAULT_PROVIDER_NAME) {
     Security.removeProvider(providerName)
 }

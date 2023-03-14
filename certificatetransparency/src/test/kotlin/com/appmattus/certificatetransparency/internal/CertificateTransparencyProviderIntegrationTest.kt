@@ -25,7 +25,7 @@ import com.appmattus.certificatetransparency.CTTrustManagerBuilder
 import com.appmattus.certificatetransparency.VerificationResult
 import com.appmattus.certificatetransparency.installCertificateTransparencyProvider
 import com.appmattus.certificatetransparency.internal.verifier.CertificateTransparencyProvider
-import com.appmattus.certificatetransparency.internal.verifier.DefaultProviderName
+import com.appmattus.certificatetransparency.internal.verifier.DEFAULT_PROVIDER_NAME
 import com.appmattus.certificatetransparency.removeCertificateTransparencyProvider
 import com.appmattus.certificatetransparency.utils.LogListDataSourceTestFactory
 import okhttp3.OkHttpClient
@@ -45,7 +45,7 @@ internal class CertificateTransparencyProviderIntegrationTest {
         private val results = mutableListOf<String>()
 
         private fun installProvider(
-            providerName: String = DefaultProviderName,
+            providerName: String = DEFAULT_PROVIDER_NAME,
             init: CTTrustManagerBuilder.() -> Unit = {}
         ) {
             installCertificateTransparencyProvider(providerName) {
@@ -64,7 +64,7 @@ internal class CertificateTransparencyProviderIntegrationTest {
         }
 
         private fun installProviderAllowFails(
-            providerName: String = DefaultProviderName,
+            providerName: String = DEFAULT_PROVIDER_NAME,
             init: CTTrustManagerBuilder.() -> Unit = {}
         ) {
             installCertificateTransparencyProvider(providerName) {
