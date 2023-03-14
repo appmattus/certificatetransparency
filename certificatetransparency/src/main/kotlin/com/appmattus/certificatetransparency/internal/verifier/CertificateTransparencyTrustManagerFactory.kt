@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Appmattus Limited
+ * Copyright 2022-2023 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,37 +16,48 @@
 
 package com.appmattus.certificatetransparency.internal.verifier
 
+import com.appmattus.certificatetransparency.CTTrustManagerBuilder
 import com.appmattus.certificatetransparency.certificateTransparencyTrustManager
 import java.security.KeyStore
+import java.security.Security
 import javax.net.ssl.ManagerFactoryParameters
 import javax.net.ssl.TrustManager
+import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.TrustManagerFactorySpi
 import javax.net.ssl.X509TrustManager
 
-internal class CertificateTransparencyTrustManagerFactory : TrustManagerFactorySpi() {
-    private var cachedTrustManager: Array<TrustManager>? = null
+internal class CertificateTransparencyTrustManagerFactory(
+    private val providerName: String,
+    private val init: CTTrustManagerBuilder.() -> Unit
+) : TrustManagerFactorySpi() {
+
+    private val delegateTrustManagerFactory: TrustManagerFactory by lazy {
+        val defaultAlgorithm = TrustManagerFactory.getDefaultAlgorithm()
+
+        val allProviders = Security.getProviders("TrustManagerFactory.$defaultAlgorithm").toList()
+
+        val providerName = allProviders[allProviders.indexOfFirst { it.name == providerName } + 1].name
+
+        TrustManagerFactory.getInstance(defaultAlgorithm, providerName)
+    }
+
+    private val cachedTrustManager: Array<TrustManager>? by lazy {
+        delegateTrustManagerFactory.trustManagers?.map { trustManager ->
+            if (trustManager is X509TrustManager) {
+                certificateTransparencyTrustManager(trustManager, init)
+            } else {
+                trustManager
+            }
+        }?.toTypedArray()
+    }
 
     override fun engineInit(ks: KeyStore?) {
-        CertificateTransparencyTrustManagerFactoryState.delegate?.init(ks)
+        delegateTrustManagerFactory.init(ks)
     }
 
     override fun engineInit(spec: ManagerFactoryParameters?) {
-        CertificateTransparencyTrustManagerFactoryState.delegate?.init(spec)
+        delegateTrustManagerFactory.init(spec)
     }
 
-    override fun engineGetTrustManagers(): Array<TrustManager> {
-        if (cachedTrustManager == null) {
-            with(CertificateTransparencyTrustManagerFactoryState) {
-                cachedTrustManager = delegate?.trustManagers?.map { trustManager ->
-                    if (trustManager is X509TrustManager) {
-                        certificateTransparencyTrustManager(trustManager, init)
-                    } else {
-                        trustManager
-                    }
-                }?.toTypedArray()
-            }
-        }
-
-        return cachedTrustManager ?: emptyArray()
-    }
+    override fun engineGetTrustManagers(): Array<TrustManager> = cachedTrustManager ?: emptyArray()
 }

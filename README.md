@@ -76,7 +76,8 @@ class SampleApplication : Application() {
 ```
 
 Take a look at the [advanced configuration](docs/advanced-configuration.md) for
-documentation on all the available options.
+documentation on all the available options and [Using Certificate Transparency in SDKs](docs/using-certificate-transparency-in-sdks.md)
+for guidance on usage in SDKs especially when using the Java Security Provider.
 
 > :warning: Using the Java Security Provider may not work on all JVMs so if you
 > are not on Android you are recommended to use one of the alternatives

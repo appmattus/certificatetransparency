@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Appmattus Limited
+ * Copyright 2022-2023 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,8 @@
 package com.appmattus.certificatetransparency
 
 import com.appmattus.certificatetransparency.internal.verifier.CertificateTransparencyProvider
-import com.appmattus.certificatetransparency.internal.verifier.CertificateTransparencyTrustManagerFactoryState
+import com.appmattus.certificatetransparency.internal.verifier.DefaultProviderName
 import java.security.Security
-import javax.net.ssl.TrustManagerFactory
 
 /**
  * DSL to install a Java security provider that enables certificate transparency checks
@@ -27,23 +26,17 @@ import javax.net.ssl.TrustManagerFactory
  */
 @JvmSynthetic
 public fun installCertificateTransparencyProvider(
+    providerName: String = DefaultProviderName,
     init: CTTrustManagerBuilder.() -> Unit = {}
 ) {
-    with(CertificateTransparencyTrustManagerFactoryState) {
-        delegate = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
-        this.init = init
-    }
+    require(Security.getProvider(providerName) == null) { "Cannot register duplicate Security Provider with the name $providerName" }
 
-    val provider = CertificateTransparencyProvider()
+    val provider = CertificateTransparencyProvider(providerName, init)
+
     Security.insertProviderAt(provider, 1)
 }
 
 @JvmSynthetic
-public fun removeCertificateTransparencyProvider() {
-    Security.removeProvider("CertificateTransparencyProvider")
-
-    with(CertificateTransparencyTrustManagerFactoryState) {
-        delegate = null
-        init = {}
-    }
+public fun removeCertificateTransparencyProvider(providerName: String = DefaultProviderName) {
+    Security.removeProvider(providerName)
 }
