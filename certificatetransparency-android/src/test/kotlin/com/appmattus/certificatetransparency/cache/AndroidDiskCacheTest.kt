@@ -137,7 +137,9 @@ class AndroidDiskCacheTest {
 
                     val bytes = Random.nextBytes(Random.nextInt(4098, 40960))
 
-                    AndroidDiskCache(ApplicationProvider.getApplicationContext()).set(RawLogListResult.Success(bytes, bytes))
+                    AndroidDiskCache(ApplicationProvider.getApplicationContext()).set(
+                        RawLogListResult.Success(bytes, bytes)
+                    )
                 }
             }
             val gets = List(listSize) {
