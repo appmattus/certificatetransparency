@@ -27,6 +27,7 @@ import com.appmattus.certificatetransparency.internal.loglist.InMemoryCache
 import com.appmattus.certificatetransparency.internal.loglist.LogListZipNetworkDataSource
 import com.appmattus.certificatetransparency.internal.loglist.ResourcesCache
 import com.appmattus.certificatetransparency.internal.loglist.await
+import com.appmattus.certificatetransparency.internal.loglist.defaultTrustManager
 import com.appmattus.certificatetransparency.internal.utils.MaxSizeInterceptor
 import okhttp3.CacheControl
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -72,21 +73,22 @@ public object LogListDataSourceFactory {
         val client by lazy {
             (okHttpClient?.invoke()?.newBuilder() ?: OkHttpClient.Builder()).apply {
                 // If a TrustManager is provided then use it. This will be the case when using the Certificate Transparency provider
-                trustManager?.let {
-                    val sslContext: SSLContext
-                    try {
-                        sslContext = SSLContext.getInstance("SSL")
-                        // Our supported minimum SDK is 19, lint complains because this is a Java library so has no minimum SDK defined
-                        // Read https://android-developers.blogspot.com/2013/08/some-securerandom-thoughts.html for more info
-                        sslContext.init(null, arrayOf(trustManager), SecureRandom())
-                    } catch (expected: NoSuchAlgorithmException) {
-                        error("Unable to create an SSLContext")
-                    } catch (expected: KeyManagementException) {
-                        error("Unable to create an SSLContext")
-                    }
+                // Otherwise we lookup the system default trust manager that our library does not provide and use that
+                // This ensures our call to get the log list does not loop or block itself
+                val selectedTrustManager = trustManager ?: defaultTrustManager()
 
-                    sslSocketFactory(sslContext.socketFactory, trustManager)
+                val sslContext: SSLContext
+                try {
+                    sslContext = SSLContext.getInstance("SSL")
+                    // Our supported minimum SDK is 19, lint complains because this is a Java library so has no minimum SDK defined
+                    // Read https://android-developers.blogspot.com/2013/08/some-securerandom-thoughts.html for more info
+                    sslContext.init(null, arrayOf(selectedTrustManager), SecureRandom())
+                } catch (expected: NoSuchAlgorithmException) {
+                    error("Unable to create an SSLContext")
+                } catch (expected: KeyManagementException) {
+                    error("Unable to create an SSLContext")
                 }
+                sslSocketFactory(sslContext.socketFactory, selectedTrustManager)
 
                 addInterceptor(MaxSizeInterceptor())
                 connectTimeout(networkTimeoutSeconds, TimeUnit.SECONDS)

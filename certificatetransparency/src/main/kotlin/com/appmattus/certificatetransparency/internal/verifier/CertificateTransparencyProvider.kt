@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Appmattus Limited
+ * Copyright 2022-2023 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,35 @@
 
 package com.appmattus.certificatetransparency.internal.verifier
 
+import com.appmattus.certificatetransparency.CTTrustManagerBuilder
 import java.security.Provider
 
 // Provider constructor deprecated on Java 9
 @Suppress("DEPRECATION")
-internal class CertificateTransparencyProvider : Provider("CertificateTransparencyProvider", 1.0, "") {
+internal class CertificateTransparencyProvider(
+    providerName: String = DEFAULT_PROVIDER_NAME,
+    init: CTTrustManagerBuilder.() -> Unit
+) : Provider(providerName, 1.0, "") {
     init {
-        put("TrustManagerFactory.PKIX", CertificateTransparencyTrustManagerFactory::class.java.name)
-        put("Alg.Alias.TrustManagerFactory.X509", "PKIX")
+        putService(CertificateTransparencyService(this, init))
+    }
+
+    class CertificateTransparencyService(
+        private val provider: Provider,
+        private val init: CTTrustManagerBuilder.() -> Unit
+    ) : Service(
+        provider,
+        "TrustManagerFactory",
+        "PKIX",
+        provider::class.java.name,
+        listOf("Alg.Alias.TrustManagerFactory.X509"),
+        null
+    ) {
+
+        override fun newInstance(constructorParameter: Any?): Any {
+            return CertificateTransparencyTrustManagerFactory(provider.name, init)
+        }
     }
 }
+
+internal const val DEFAULT_PROVIDER_NAME = "CertificateTransparencyProvider"

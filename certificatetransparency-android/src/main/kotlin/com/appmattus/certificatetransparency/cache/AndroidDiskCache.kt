@@ -18,6 +18,8 @@ package com.appmattus.certificatetransparency.cache
 
 import android.content.Context
 import com.appmattus.certificatetransparency.loglist.RawLogListResult
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.io.File
 import java.io.IOException
 
@@ -31,27 +33,31 @@ public class AndroidDiskCache(context: Context) : DiskCache {
     private val cacheDirPath = "${context.cacheDir.path}/certificate-transparency-android"
 
     override suspend fun get(): RawLogListResult? {
-        return try {
-            val jsonFile = File(cacheDirPath, LOG_LIST_FILE)
-            val sigFile = File(cacheDirPath, SIG_FILE)
-            val logList = jsonFile.readBytes()
-            val signature = sigFile.readBytes()
+        mutex.withLock {
+            return try {
+                val jsonFile = File(cacheDirPath, LOG_LIST_FILE)
+                val sigFile = File(cacheDirPath, SIG_FILE)
+                val logList = jsonFile.readBytes()
+                val signature = sigFile.readBytes()
 
-            RawLogListResult.Success(logList, signature)
-        } catch (ignored: IOException) {
-            null
+                RawLogListResult.Success(logList, signature)
+            } catch (ignored: IOException) {
+                null
+            }
         }
     }
 
     override suspend fun set(value: RawLogListResult) {
-        if (value is RawLogListResult.Success) {
-            try {
-                File(cacheDirPath).mkdirs()
+        mutex.withLock {
+            if (value is RawLogListResult.Success) {
+                try {
+                    File(cacheDirPath).mkdirs()
 
-                File(cacheDirPath, LOG_LIST_FILE).writeBytes(value.logList)
-                File(cacheDirPath, SIG_FILE).writeBytes(value.signature)
-            } catch (ignored: IOException) {
-                // non fatal
+                    File(cacheDirPath, LOG_LIST_FILE).writeBytes(value.logList)
+                    File(cacheDirPath, SIG_FILE).writeBytes(value.signature)
+                } catch (ignored: IOException) {
+                    // non fatal
+                }
             }
         }
     }
@@ -59,5 +65,10 @@ public class AndroidDiskCache(context: Context) : DiskCache {
     public companion object {
         private const val LOG_LIST_FILE = "loglist.json"
         private const val SIG_FILE = "loglist.sig"
+
+        /**
+         * Ensure only one instance of AndroidDiskCache can read/write at a time
+         */
+        private val mutex = Mutex()
     }
 }

@@ -20,6 +20,10 @@ import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.appmattus.certificatetransparency.loglist.RawLogListResult
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertNull
@@ -115,6 +119,40 @@ class AndroidDiskCacheTest {
 
             // then the written result matches the original
             assertNull(result)
+        }
+    }
+
+    // Replicates using the cache from multiple threads, without the mutex in AndroidDiskCache this test would usually fail (but not everytime)
+    @Test
+    fun readingAndWritingOnDifferentThreadsCausesNoDataIntegrityIssues() {
+        runBlocking {
+            // Given initial data in the cache
+            diskCache.set(RawLogListResult.Success(byteArrayOf(-1), byteArrayOf(-1)))
+
+            val listSize = 100
+            val sets = List(listSize) {
+                // When we write to the cache at random times (on different threads)
+                async(Dispatchers.IO) {
+                    delay(Random.nextLong(100))
+
+                    val bytes = Random.nextBytes(Random.nextInt(4098, 40960))
+
+                    AndroidDiskCache(ApplicationProvider.getApplicationContext()).set(
+                        RawLogListResult.Success(bytes, bytes)
+                    )
+                }
+            }
+            val gets = List(listSize) {
+                // Then the log list and signature are in sync when reading
+                async(Dispatchers.IO) {
+                    delay(Random.nextLong(100))
+                    val result = AndroidDiskCache(ApplicationProvider.getApplicationContext()).get()
+                    assertIsA<RawLogListResult.Success>(result)
+                    assertTrue(result.logList.contentEquals(result.signature))
+                }
+            }
+
+            (sets + gets).awaitAll()
         }
     }
 
