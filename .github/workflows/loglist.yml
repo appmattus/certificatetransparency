@@ -1,8 +1,8 @@
 name: Update Log List
 on:
     schedule:
-        # every day at 23:30
-        -   cron: '0 30 23 ? * * *'
+        # every day at 23:42
+        -   cron: '42 23 * * *'
 jobs:
     resources:
         name: Update log_list.json and log_list.sig
