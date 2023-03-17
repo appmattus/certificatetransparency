@@ -74,3 +74,5 @@ tasks.named("check") {
     finalizedBy(rootProject.tasks.named("detekt"))
 }
 tasks.getByName("check").dependsOn(rootProject.tasks.getByName("markdownlint"))
+
+tasks.register<UpdateLogListTask>("updateLogList")

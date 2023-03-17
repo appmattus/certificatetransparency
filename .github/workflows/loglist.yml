@@ -1,0 +1,23 @@
+name: Update Log List
+on:
+    schedule:
+        # every day at 23:30
+        -   cron: '0 30 23 ? * * *'
+jobs:
+    resources:
+        name: Update log_list.json and log_list.sig
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v1
+
+            -   name: Fetch latest log list
+                run: ./gradlew updateLogList
+
+            -   name: Push log list
+                uses: test-room-7/action-update-file@v1
+                with:
+                    file-path: |
+                        certificatetransparency/src/main/resources/log_list.json
+                        certificatetransparency/src/main/resources/log_list.sig
+                    commit-msg: Auto update log_list.json and log_list.sig
+                    github-token: ${{ secrets.AUTO_UPDATE_GITHUB_TOKEN }}
