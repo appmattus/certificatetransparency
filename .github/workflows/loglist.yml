@@ -1,11 +1,11 @@
 name: Update Log List
 on:
     schedule:
-        # every day at 23:55
-        -   cron: '55 23 * * *'
+        # every day at 2:00 am
+        -   cron: '0 2 * * *'
 jobs:
     resources:
-        name: Update log_list.json and log_list.sig
+        name: Update log list
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v1
