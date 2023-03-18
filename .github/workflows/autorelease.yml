@@ -1,4 +1,4 @@
-name: Auto-release
+name: Auto release
 
 on:
     push:
@@ -12,6 +12,8 @@ on:
 
 jobs:
     generate:
+        name: Auto release
+        runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v3
                 with:
