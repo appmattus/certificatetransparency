@@ -1,4 +1,15 @@
 name: Auto-release
+
+on:
+    push:
+        branches:
+            - main
+        tags:
+            - '*'
+    pull_request:
+        branches:
+            - main
+
 jobs:
     generate:
         steps:
