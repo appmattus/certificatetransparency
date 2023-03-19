@@ -1,15 +1,15 @@
 name: Update Log List
 on:
     schedule:
-        # every day at 2:00 pm
-        -   cron: '0 14 * * *'
+        # every day at 11:15 pm
+        -   cron: '15 23 * * *'
 jobs:
     resources:
         name: Update log list
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@v2
-            -   uses: actions/setup-java@v2
+            -   uses: actions/checkout@v3
+            -   uses: actions/setup-java@v3
                 with:
                     distribution: 'zulu'
                     java-version: '11'
@@ -18,10 +18,7 @@ jobs:
                 run: ./gradlew updateLogList
 
             -   name: Push log list
-                uses: test-room-7/action-update-file@v1
+                uses: stefanzweifel/git-auto-commit-action@v4
                 with:
-                    file-path: |
-                        certificatetransparency/src/main/resources/log_list.json
-                        certificatetransparency/src/main/resources/log_list.sig
-                    commit-msg: Auto update log_list.json and log_list.sig
-                    github-token: ${{ secrets.AUTO_UPDATE_GITHUB_TOKEN }}
+                    commit_message: Auto update log_list.json and log_list.sig
+                    file_pattern: 'certificatetransparency/src/main/resources/*'
