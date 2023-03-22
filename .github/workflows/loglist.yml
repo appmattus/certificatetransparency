@@ -1,21 +1,18 @@
 name: Update Log List
 on:
     schedule:
-        # every day at 0:00 am
-        -   cron: '0 0 * * *'
+        # every day at 2:00 pm
+        -   cron: '0 14 * * *'
 
 jobs:
     resources:
         name: Update log list
         runs-on: ubuntu-latest
 
-        permissions:
-            # Give the default GITHUB_TOKEN write permission to commit and push the
-            # added or changed files to the repository.
-            contents: write
-
         steps:
             -   uses: actions/checkout@v3
+                with:
+                    token: ${{ secrets.AUTO_UPDATE_GITHUB_TOKEN }}
             -   uses: actions/setup-java@v3
                 with:
                     distribution: 'zulu'
