@@ -21,12 +21,15 @@ jobs:
             -   name: 'Get Previous tag'
                 id: previoustag
                 uses: "WyriHaximus/github-action-get-previous-tag@v1"
-                #with:
-                #    fallback: 1.0.0 # Optional fallback tag to use when no tag can be found
+
             -   name: 'Get next minor version'
                 id: semvers
                 uses: "WyriHaximus/github-action-next-semvers@v1"
                 with:
                     version: ${{ steps.previoustag.outputs.tag }}
-            -   name: 'log'
-                run: echo "::debug::Next tag ${{ steps.semvers.outputs.patch }}"
+
+            -   name: 'Create tag and release'
+                uses: ncipollo/release-action@v1
+                with:
+                    tag: ${{ steps.semvers.outputs.patch }}
+                    commit: "main"
