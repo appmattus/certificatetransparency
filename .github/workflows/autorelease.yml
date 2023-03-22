@@ -1,0 +1,33 @@
+name: Auto release
+on:
+    schedule:
+        # every Wednesday at 3:00 pm
+        -   cron: '35 15 * * 3'
+
+jobs:
+    generate:
+        name: Auto release
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v3
+                with:
+                    fetch-depth: 0 # Required due to the way Git works, without it this action won't be able to find any or the correct tags
+
+            -   name: 'Get last tag'
+                id: lasttag
+                uses: "WyriHaximus/github-action-get-previous-tag@v1"
+
+            -   name: 'Get next version'
+                id: semvers
+                uses: "WyriHaximus/github-action-next-semvers@v1"
+                with:
+                    version: ${{ steps.lasttag.outputs.tag }}
+
+            -   name: 'Create tag and release'
+                uses: ncipollo/release-action@v1
+                with:
+                    tag: ${{ steps.semvers.outputs.patch }}
+                    commit: "main"
+                    token: ${{ secrets.AUTO_UPDATE_GITHUB_TOKEN }}
+                    name: ${{ format('v{0}', steps.semvers.outputs.patch) }}
+                    body: "Automatic release updating embedded log_list.json and log_list.sig"
