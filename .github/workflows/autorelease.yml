@@ -34,5 +34,5 @@ jobs:
                     tag: ${{ steps.semvers.outputs.patch }}
                     commit: "main"
                     token: ${{ secrets.AUTO_UPDATE_GITHUB_TOKEN }}
-                    name: ${{ format("v{0}", steps.semvers.outputs.patch) }}
+                    name: ${{ format('v{0}', steps.semvers.outputs.patch) }}
                     body: "Automatic release updating embedded log_list.json and log_list.sig"
