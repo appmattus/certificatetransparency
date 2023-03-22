@@ -1,14 +1,8 @@
 name: Auto release
-
 on:
-    push:
-        branches:
-            - main
-        tags:
-            - '*'
-    pull_request:
-        branches:
-            - main
+    schedule:
+        # every Wednesday at 3:00 pm
+        -   cron: '0 15 * * 3'
 
 jobs:
     generate:
@@ -18,15 +12,16 @@ jobs:
             -   uses: actions/checkout@v3
                 with:
                     fetch-depth: 0 # Required due to the way Git works, without it this action won't be able to find any or the correct tags
-            -   name: 'Get Previous tag'
-                id: previoustag
+
+            -   name: 'Get last tag'
+                id: lasttag
                 uses: "WyriHaximus/github-action-get-previous-tag@v1"
 
-            -   name: 'Get next minor version'
+            -   name: 'Get next version'
                 id: semvers
                 uses: "WyriHaximus/github-action-next-semvers@v1"
                 with:
-                    version: ${{ steps.previoustag.outputs.tag }}
+                    version: ${{ steps.lasttag.outputs.tag }}
 
             -   name: 'Create tag and release'
                 uses: ncipollo/release-action@v1
