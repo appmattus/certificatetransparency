@@ -2,7 +2,7 @@ name: Auto release
 on:
     schedule:
         # every Wednesday at 3:00 pm
-        -   cron: '35 15 * * 3'
+        -   cron: '0 15 * * 3'
 
 jobs:
     generate:

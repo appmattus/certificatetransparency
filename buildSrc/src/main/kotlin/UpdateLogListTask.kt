@@ -17,7 +17,7 @@
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import java.io.File
-import java.net.URL
+import java.net.URI
 import java.security.KeyFactory
 import java.security.PublicKey
 import java.security.Signature
@@ -47,7 +47,7 @@ abstract class UpdateLogListTask : DefaultTask() {
             mkdirs()
         }
 
-        val connection = URL(url).openConnection().apply {
+        val connection = URI(url).toURL().openConnection().apply {
             connect()
         }
 
