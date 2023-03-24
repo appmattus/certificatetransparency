@@ -16,6 +16,7 @@
 
 package com.appmattus.certificatetransparency.loglist
 
+import com.appmattus.certificatetransparency.internal.loglist.ResourcesCache
 import com.appmattus.certificatetransparency.utils.TestData
 import com.appmattus.certificatetransparency.utils.assertIsA
 import kotlinx.coroutines.runBlocking
@@ -25,6 +26,9 @@ import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
 import okio.Buffer
 import org.junit.Test
+import org.mockito.Mockito.mockConstruction
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.whenever
 import java.io.IOException
 import java.net.SocketTimeoutException
 import java.time.Instant
@@ -64,23 +68,31 @@ public class LogListDataSourceFactoryTest {
 
     private var configuration: MockResponse.() -> Unit = {}
 
+    // Because of the resources cache this exception will usually never occur
+    // To test we mock the resources cache so it fails
     @Test
     public fun timeoutReturnsException() {
         runBlocking {
-            // Given the log list service times out
-            configuration = { setBodyDelay(5, TimeUnit.SECONDS) }
-            val logListService = LogListDataSourceFactory.createLogListService(
-                baseUrl = baseUrl.toString(),
-                networkTimeoutSeconds = 1
-            )
+            mockConstruction(ResourcesCache::class.java).use { mockConstruction ->
 
-            // When we request the log list
-            val dataSource = LogListDataSourceFactory.createDataSource(logListService = logListService)
-            val result = dataSource.get()
+                // Given the log list service times out
+                configuration = { setBodyDelay(5, TimeUnit.SECONDS) }
+                val logListService = LogListDataSourceFactory.createLogListService(
+                    baseUrl = baseUrl.toString(),
+                    networkTimeoutSeconds = 1
+                )
+                val dataSource = LogListDataSourceFactory.createDataSource(logListService = logListService)
+                // And the resources cache has no data
+                val mockResources = mockConstruction.constructed()[0]
+                whenever(mockResources.get()) doReturn ResourcesCache.RawLogListResourceFailedJsonMissing
 
-            // Then a failure is returned with a SocketTimeoutException
-            assertIsA<LogListResult.Invalid.LogListZipFailedLoadingWithException>(result)
-            assertIsA<SocketTimeoutException>(result.exception)
+                // When we request the log list
+                val result = dataSource.get()
+
+                // Then a failure is returned with a SocketTimeoutException
+                assertIsA<LogListResult.Invalid.LogListZipFailedLoadingWithException>(result)
+                assertIsA<SocketTimeoutException>(result.exception)
+            }
         }
     }
 
@@ -103,27 +115,33 @@ public class LogListDataSourceFactoryTest {
         }
     }
 
+    // Because of the resources cache this exception will usually never occur
+    // To test we mock the resources cache so it fails
     @Test
     public fun serverErrorReturnsException() {
         runBlocking {
-            // Given the log list service times out
-            configuration = {
-                setResponseCode(500)
-                setBody(Buffer())
+            mockConstruction(ResourcesCache::class.java).use { mockConstruction ->
+                // Given the log list service times out
+                configuration = {
+                    setResponseCode(500)
+                    setBody(Buffer())
+                }
+                val logListService = LogListDataSourceFactory.createLogListService(
+                    baseUrl = baseUrl.toString(),
+                    networkTimeoutSeconds = 1
+                )
+                val dataSource = LogListDataSourceFactory.createDataSource(logListService = logListService)
+                // And the resources cache has no data
+                val mockResources = mockConstruction.constructed()[0]
+                whenever(mockResources.get()) doReturn ResourcesCache.RawLogListResourceFailedJsonMissing
+
+                // When we request the log list
+                val result = dataSource.get()
+
+                // Then a failure is returned with an IOException
+                assertIsA<LogListResult.Invalid.LogListZipFailedLoadingWithException>(result)
+                assertIsA<IOException>(result.exception)
             }
-
-            val logListService = LogListDataSourceFactory.createLogListService(
-                baseUrl = baseUrl.toString(),
-                networkTimeoutSeconds = 1
-            )
-
-            // When we request the log list
-            val dataSource = LogListDataSourceFactory.createDataSource(logListService = logListService)
-            val result = dataSource.get()
-
-            // Then a failure is returned with an IOException
-            assertIsA<LogListResult.Invalid.LogListZipFailedLoadingWithException>(result)
-            assertIsA<IOException>(result.exception)
         }
     }
 }

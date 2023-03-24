@@ -61,11 +61,11 @@ internal class LogListCacheManagementDataSource constructor(
             }
         }
 
-        // No up-to-date data in memory or disk so check the disk cache if one is available
+        // No up-to-date data in memory or disk so check the resources cache and return that if applicable
         val resources = resourcesCache.get()
-        val resourcesResult = disk?.takeIfValid(transformer)
+        val resourcesResult = resources.takeIfValid(transformer)
         resourcesResult?.let { logListResult ->
-            // Return the disk data if it is 1 day old or less
+            // Return the resources data if it is 1 day old or less
             if (logListResult.timestamp + ONE_DAY >= now()) {
                 // We have valid data on resources so set the data into the memory and disk cache
                 inMemoryCache.set(resources)

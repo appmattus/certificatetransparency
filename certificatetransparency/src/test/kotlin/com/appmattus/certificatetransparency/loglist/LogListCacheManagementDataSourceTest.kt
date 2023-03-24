@@ -179,6 +179,28 @@ internal class LogListCacheManagementDataSourceTest {
     }
 
     @Test
+    fun `returns success when memory and disk cache empty and resources returns data 1 day old or less`() {
+        runBlocking {
+            // Given no data in memory cache and disk cache returns successfully
+            givenResourcesResult(LogListResult.Valid.Success(defaultLogListTimestamp, emptyList()))
+            // and the time now is 1 day (inclusive) old or less of the log list
+            now = defaultLogListTimestamp + Duration.ofMillis(Random.nextLong(ONE_DAY_IN_MILLISECONDS + 1))
+
+            // When we get data
+            val result = dataSource.get()
+
+            // The the resource data is returned
+            assertIsA<LogListResult.Valid.Success>(result)
+            // And stored in memory cache
+            verify(memoryCacheMock, times(1)).set(any())
+            // And stored in disk cache
+            verify(diskCacheMock, times(1)).set(any())
+            // And network is not called
+            verify(networkCacheMock, never()).get()
+        }
+    }
+
+    @Test
     fun `returns success when memory cache returns data older than 1 day and disk returns data 1 day old or less`() {
         runBlocking {
             // Given data in memory is older than a day
@@ -323,6 +345,10 @@ internal class LogListCacheManagementDataSourceTest {
 
     private fun givenDiskResult(result: LogListResult) {
         whenever(logListTransformerMock.transform(diskRawResult)) doReturn result
+    }
+
+    private fun givenResourcesResult(result: LogListResult) {
+        whenever(logListTransformerMock.transform(resourcesRawResult)) doReturn result
     }
 
     companion object {
