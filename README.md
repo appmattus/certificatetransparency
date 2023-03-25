@@ -2,7 +2,7 @@
 
 [![CI status](https://github.com/appmattus/certificatetransparency/workflows/CI/badge.svg)](https://github.com/appmattus/certificatetransparency/actions)
 [![codecov](https://codecov.io/gh/appmattus/certificatetransparency/branch/main/graph/badge.svg)](https://codecov.io/gh/appmattus/certificatetransparency)
-[![Maven Central](https://img.shields.io/maven-central/v/com.appmattus.certificatetransparency/certificatetransparency)](https://search.maven.org/search?q=g:com.appmattus.certificatetransparency)
+[![Maven Central](https://img.shields.io/maven-central/v/com.appmattus.certificatetransparency/certificatetransparency)](https://central.sonatype.com/search?q=g:com.appmattus.certificatetransparency)
 
 To protect our apps from man-in-the-middle attacks one of the first things that
 usually springs to mind is certificate pinning. However, the issues of
@@ -26,7 +26,7 @@ we have missed please reach out so we can keep this up to date.
 
 ## Getting started
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.appmattus.certificatetransparency/certificatetransparency)](https://search.maven.org/search?q=g:com.appmattus.certificatetransparency)
+[![Maven Central](https://img.shields.io/maven-central/v/com.appmattus.certificatetransparency/certificatetransparency)](https://central.sonatype.com/search?q=g:com.appmattus.certificatetransparency)
 
 For Android modules include the `android` dependency in your build.gradle file
 which ensures the necessary ProGuard rules are present:
@@ -61,6 +61,9 @@ class SampleApplication : Application() {
         installCertificateTransparencyProvider {
             // Setup a logger
             logger = BasicAndroidCTLogger(BuildConfig.DEBUG)
+
+            // Setup disk cache
+            diskCache = AndroidDiskCache(applicationContext)
 
             // Exclude any subdomain but not "appmattus.com" with no subdomain
             -"*.appmattus.com"
