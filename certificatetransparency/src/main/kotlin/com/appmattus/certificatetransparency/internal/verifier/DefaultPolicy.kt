@@ -63,8 +63,8 @@ internal class DefaultPolicy : CTPolicy {
 
         return if (validScts.size < minimumValidSignedCertificateTimestamps) {
             VerificationResult.Failure.TooFewSctsTrusted(sctResults, minimumValidSignedCertificateTimestamps)
-        } else if (validScts.distinctBy { it.operator }.size < minimumValidSignedCertificateTimestamps) {
-            VerificationResult.Failure.TooFewDistinctOperators(sctResults, minimumValidSignedCertificateTimestamps)
+        } else if (validScts.distinctBy { it.operator }.size < 2) {
+            VerificationResult.Failure.TooFewDistinctOperators(sctResults, 2)
         } else {
             VerificationResult.Success.Trusted(sctResults)
         }
