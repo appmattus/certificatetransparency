@@ -74,7 +74,7 @@ internal class DefaultPolicyTest {
 
             // then the policy fails
             assertIsA<VerificationResult.Failure.TooFewDistinctOperators>(result)
-            assertTrue(result.toString().startsWith("Failure: Too few distinct operators, required 3, found 1 in"))
+            assertTrue(result.toString().startsWith("Failure: Too few distinct operators, required 2, found 1 in"))
         }
 
         @Test
