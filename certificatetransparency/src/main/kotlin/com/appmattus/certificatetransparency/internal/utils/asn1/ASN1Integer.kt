@@ -18,14 +18,24 @@ package com.appmattus.certificatetransparency.internal.utils.asn1
 
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
 import java.math.BigInteger
+import java.util.logging.Logger
 
 internal class ASN1Integer private constructor(
     override val tag: Int,
     override val encoded: ByteBuffer
 ) : ASN1Object {
 
+    private val logger = Logger.getLogger("ASN1")
+
     val value: BigInteger by lazy {
-        BigInteger(encoded.toList().toByteArray())
+        try {
+            if (encoded[0] == 0x00.toByte() || encoded[0] == 0xff.toByte()) {
+                logger.warning("Needlessly long format")
+            }
+            BigInteger(encoded.toList().toByteArray())
+        } catch (expected: ArrayIndexOutOfBoundsException) {
+            throw IllegalStateException("End of input reached before message was fully decoded", expected)
+        }
     }
 
     override fun toString(): String = "INTEGER $value"
