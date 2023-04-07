@@ -17,19 +17,34 @@
 package com.appmattus.certificatetransparency.internal.utils.asn1
 
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
+import java.util.logging.Logger
 
 internal class ASN1Boolean private constructor(
     override val tag: Int,
     override val encoded: ByteBuffer
 ) : ASN1Object {
 
-    val value: Boolean by lazy { encoded[0] != 0x00.toByte() }
+    private val logger = Logger.getLogger("ASN1")
+
+    init {
+        assert(encoded.size >= 1)
+        if (encoded.size > 1) {
+            logger.warning("Needlessly long format. BOOLEAN value encoded in more then 1 octet")
+        }
+    }
+
+    val value: Boolean by lazy {
+        try {
+            encoded.any { it != 0x00.toByte() }
+        } catch (expected: ArrayIndexOutOfBoundsException) {
+            throw IllegalStateException("End of input reached before message was fully decoded", expected)
+        }
+    }
 
     override fun toString(): String = "BOOLEAN $value"
 
     companion object {
         fun create(tag: Int, encoded: ByteBuffer): ASN1Boolean {
-            assert(encoded.size == 1)
             return ASN1Boolean(tag, encoded)
         }
     }

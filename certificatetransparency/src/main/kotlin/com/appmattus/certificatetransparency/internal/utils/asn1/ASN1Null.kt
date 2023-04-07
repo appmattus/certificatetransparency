@@ -17,6 +17,7 @@
 package com.appmattus.certificatetransparency.internal.utils.asn1
 
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
+import java.util.logging.Logger
 
 internal class ASN1Null private constructor(
     override val tag: Int,
@@ -24,11 +25,28 @@ internal class ASN1Null private constructor(
     override val encoded: ByteBuffer
 ) : ASN1Object {
 
-    override fun toString(): String = "NULL"
+    private val logger = Logger.getLogger("ASN1")
+
+    init {
+        assert(encoded.size >= 0)
+        if (encoded.size > 0) {
+            logger.warning("Non-zero length of value block for NULL type")
+        }
+    }
+
+    val value: Unit by lazy {
+        try {
+            @Suppress("UNUSED_EXPRESSION")
+            encoded.forEach { it }
+        } catch (expected: ArrayIndexOutOfBoundsException) {
+            throw IllegalStateException("End of input reached before message was fully decoded", expected)
+        }
+    }
+
+    override fun toString(): String = "NULL".also { value }
 
     companion object {
         fun create(tag: Int, totalLength: Int, encoded: ByteBuffer): ASN1Null {
-            assert(encoded.size == 0)
             return ASN1Null(tag, totalLength, encoded)
         }
     }
