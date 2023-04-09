@@ -52,4 +52,11 @@ abstract class ASN1BaseTest {
     fun assertWarnings(expectedMessage: String) {
         assertEquals(expectedMessage, logMessages.last())
     }
+
+    fun assertWarnings(vararg expectedMessage: String) {
+        assertEquals(expectedMessage.size, logMessages.size)
+        expectedMessage.forEachIndexed { index, expected ->
+            assertEquals(expected, logMessages[index])
+        }
+    }
 }

@@ -18,6 +18,7 @@ package com.appmattus.certificatetransparency.internal.utils.asn1
 
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
 import java.math.BigInteger
+import java.util.logging.Logger
 
 internal class ASN1ObjectIdentifier private constructor(
     override val tag: Int,
@@ -25,8 +26,14 @@ internal class ASN1ObjectIdentifier private constructor(
     override val encoded: ByteBuffer
 ) : ASN1Object {
 
+    private val logger = Logger.getLogger("ASN1")
+
     val value: String by lazy {
-        encoded.toObjectIdentifierString()
+        try {
+            encoded.toObjectIdentifierString()
+        } catch (expected: ArrayIndexOutOfBoundsException) {
+            throw IllegalStateException("End of input reached before message was fully decoded", expected)
+        }
     }
 
     @Suppress("MagicNumber", "NestedBlockDepth")
@@ -35,6 +42,8 @@ internal class ASN1ObjectIdentifier private constructor(
         var value: Long = 0
         var bigValue: BigInteger? = null
         var first = true
+
+        checkSidEncoding(0)
 
         for (i in 0 until size) {
             val b: Int = this[i].toInt() and 0xff
@@ -56,6 +65,8 @@ internal class ASN1ObjectIdentifier private constructor(
                     objId.append('.')
                     objId.append(value)
                     value = 0
+
+                    checkSidEncoding(i + 1)
                 } else {
                     value = value shl 7
                 }
@@ -74,6 +85,8 @@ internal class ASN1ObjectIdentifier private constructor(
                     objId.append(bigValue)
                     bigValue = null
                     value = 0
+
+                    checkSidEncoding(i + 1)
                 } else {
                     bigValue = bigValue.shiftLeft(7)
                 }
@@ -81,6 +94,12 @@ internal class ASN1ObjectIdentifier private constructor(
         }
 
         return objId.toString()
+    }
+
+    private fun ByteBuffer.checkSidEncoding(i: Int) {
+        if (i + 1 < size && this[i].toInt() and 0xff == 0x80 && this[i + 1].toInt() and 0xff == 0x80) {
+            logger.warning("Needlessly long format of SID encoding")
+        }
     }
 
     override fun toString(): String = "OBJECT IDENTIFIER $value"
