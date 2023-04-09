@@ -35,7 +35,10 @@ internal fun ByteBuffer.header(): ASN1Header {
 
     var length = this[1].toInt() and 0xff
     var offset = 2
-    if (length >= 0x7f) {
+    if (length == 0x80) {
+        // indefinite length
+        length = this.size - offset
+    } else if (length > 0x80) {
         val numLengthBytes = length and 0x7f
         length = 0
         repeat(numLengthBytes) { index ->
