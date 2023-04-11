@@ -17,11 +17,12 @@
 package com.appmattus.certificatetransparency.internal.utils.asn1
 
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
 import java.math.BigInteger
 import java.util.logging.Logger
 
 internal class ASN1ObjectIdentifier private constructor(
-    override val tag: Int,
+    override val tag: ASN1HeaderTag,
     override val totalLength: Int,
     override val encoded: ByteBuffer
 ) : ASN1Object {
@@ -107,6 +108,6 @@ internal class ASN1ObjectIdentifier private constructor(
     companion object {
         private const val LONG_LIMIT = (Long.MAX_VALUE shr 7) - 0x7f
 
-        fun create(tag: Int, totalLength: Int, encoded: ByteBuffer) = ASN1ObjectIdentifier(tag, totalLength, encoded)
+        fun create(tag: ASN1HeaderTag, totalLength: Int, encoded: ByteBuffer) = ASN1ObjectIdentifier(tag, totalLength, encoded)
     }
 }

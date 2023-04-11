@@ -20,11 +20,14 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Integer
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Object
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Sequence
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.TagClass
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.TagForm
 
 @Suppress("MagicNumber")
 internal class TbsCertificate private constructor(private val sequence: ASN1Sequence) : ASN1Object {
 
-    override val tag: Int = sequence.tag
+    override val tag: ASN1HeaderTag = sequence.tag
     override val encoded: ByteBuffer = sequence.encoded
 
     private val versionOffset = if (sequence.values[0] is Version) 1 else 0
@@ -58,14 +61,22 @@ internal class TbsCertificate private constructor(private val sequence: ASN1Sequ
 
     // UniqueIdentifier 0xa1 (optional)
     val issuerUniqueIdentifier: ASN1Object?
-        get() = sequence.values.firstOrNull { it.tag == 0xa1 }
+        get() = sequence.values.firstOrNull {
+            it.tag.tagClass == TagClass.ContextSpecific && it.tag.tagForm == TagForm.Constructed && it.tag.tagNumber == 1.toBigInteger()
+        }
 
     // UniqueIdentifier 0xa2 (optional)
     val subjectUniqueIdentifier: ASN1Object?
-        get() = sequence.values.firstOrNull { it.tag == 0xa2 }
+        get() = sequence.values.firstOrNull {
+            it.tag.tagClass == TagClass.ContextSpecific && it.tag.tagForm == TagForm.Constructed && it.tag.tagNumber == 2.toBigInteger()
+        }
 
     // Extensions 0xa3 (optional)
-    val extensions: Extensions? by lazy { sequence.values.firstOrNull { it.tag == 0xa3 } as? Extensions }
+    val extensions: Extensions? by lazy {
+        sequence.values.firstOrNull {
+            it.tag.tagClass == TagClass.ContextSpecific && it.tag.tagForm == TagForm.Constructed && it.tag.tagNumber == 3.toBigInteger()
+        } as? Extensions
+    }
 
     override fun toString(): String {
         return "TbsCertificate" +
@@ -93,7 +104,12 @@ internal class TbsCertificate private constructor(private val sequence: ASN1Sequ
             extensions?.let { add(it) }
         }
 
-        return create(ASN1Sequence.create(0x30, values))
+        return create(
+            ASN1Sequence.create(
+                tag = ASN1HeaderTag(TagClass.Universal, TagForm.Constructed, 0x10, 1),
+                values = values
+            )
+        )
     }
 
     companion object {

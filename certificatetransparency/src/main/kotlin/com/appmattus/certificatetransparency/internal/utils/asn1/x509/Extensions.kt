@@ -20,10 +20,13 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Object
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Sequence
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.joinToByteBuffer
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.TagClass
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.TagForm
 import com.appmattus.certificatetransparency.internal.utils.asn1.toAsn1
 
 internal class Extensions private constructor(
-    override val tag: Int,
+    override val tag: ASN1HeaderTag,
     override val encoded: ByteBuffer,
 ) : ASN1Object {
 
@@ -41,12 +44,15 @@ internal class Extensions private constructor(
     }
 
     companion object {
-        fun create(tag: Int, encoded: ByteBuffer) = Extensions(tag, encoded)
+        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer) = Extensions(tag, encoded)
 
         @Suppress("MagicNumber")
         fun create(extensions: List<Extension>): Extensions {
             val encoded = extensions.map { it.bytes }.joinToByteBuffer()
-            return Extensions(0xa3, ASN1Sequence(0x30, encoded).bytes)
+            return Extensions(
+                tag = ASN1HeaderTag(TagClass.ContextSpecific, TagForm.Constructed, 0x03, 1),
+                encoded = ASN1Sequence(ASN1HeaderTag(TagClass.Universal, TagForm.Constructed, 0x10, 1), encoded).bytes
+            )
         }
     }
 }

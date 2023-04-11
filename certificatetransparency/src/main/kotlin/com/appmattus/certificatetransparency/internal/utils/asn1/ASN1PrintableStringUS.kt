@@ -17,9 +17,10 @@
 package com.appmattus.certificatetransparency.internal.utils.asn1
 
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
 
 internal class ASN1PrintableStringUS private constructor(
-    override val tag: Int,
+    override val tag: ASN1HeaderTag,
     override val totalLength: Int,
     override val encoded: ByteBuffer,
 ) : ASN1Object {
@@ -29,6 +30,6 @@ internal class ASN1PrintableStringUS private constructor(
     override fun toString(): String = "PRINTABLE STRING $value"
 
     companion object {
-        fun create(tag: Int, totalLength: Int, encoded: ByteBuffer) = ASN1PrintableStringUS(tag, totalLength, encoded)
+        fun create(tag: ASN1HeaderTag, totalLength: Int, encoded: ByteBuffer) = ASN1PrintableStringUS(tag, totalLength, encoded)
     }
 }

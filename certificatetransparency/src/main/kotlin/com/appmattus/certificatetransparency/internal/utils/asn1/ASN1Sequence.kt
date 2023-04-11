@@ -18,9 +18,10 @@ package com.appmattus.certificatetransparency.internal.utils.asn1
 
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.joinToByteBuffer
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
 
 internal data class ASN1Sequence(
-    override val tag: Int,
+    override val tag: ASN1HeaderTag,
     override val encoded: ByteBuffer,
 ) : ASN1Object {
 
@@ -43,16 +44,14 @@ internal data class ASN1Sequence(
 
     override fun toString(): String {
         @Suppress("MagicNumber")
-        val name = if (tag == 0x30) "SEQUENCE" else "SET"
-        return "$name (${values.size} elem)" + values.joinToString(prefix = "\n", separator = "\n") { it.toString() }.prependIndent(
-            "  "
-        )
+        val name = if (tag.isTagNumber(0x10)) "SEQUENCE" else "SET"
+        return "$name (${values.size} elem)" + values.joinToString(prefix = "\n", separator = "\n") { it.toString() }.prependIndent("  ")
     }
 
     companion object {
-        fun create(tag: Int, encoded: ByteBuffer) = ASN1Sequence(tag, encoded)
+        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer) = ASN1Sequence(tag, encoded)
 
-        fun create(tag: Int, values: List<ASN1Object>): ASN1Sequence {
+        fun create(tag: ASN1HeaderTag, values: List<ASN1Object>): ASN1Sequence {
             val encoded = values.map {
                 it.bytes
             }.joinToByteBuffer()

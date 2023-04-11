@@ -17,10 +17,11 @@
 package com.appmattus.certificatetransparency.internal.utils.asn1
 
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
 import java.util.logging.Logger
 
 internal class ASN1Null private constructor(
-    override val tag: Int,
+    override val tag: ASN1HeaderTag,
     override val totalLength: Int,
     override val encoded: ByteBuffer
 ) : ASN1Object {
@@ -46,7 +47,7 @@ internal class ASN1Null private constructor(
     override fun toString(): String = "NULL".also { value }
 
     companion object {
-        fun create(tag: Int, totalLength: Int, encoded: ByteBuffer): ASN1Null {
+        fun create(tag: ASN1HeaderTag, totalLength: Int, encoded: ByteBuffer): ASN1Null {
             return ASN1Null(tag, totalLength, encoded)
         }
     }

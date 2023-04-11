@@ -19,9 +19,12 @@ package com.appmattus.certificatetransparency.internal.utils.asn1
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBufferArray
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.toByteBuffer
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.TagClass
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.TagForm
 
 internal interface ASN1Object {
-    val tag: Int
+    val tag: ASN1HeaderTag
     val encoded: ByteBuffer
 
     @Suppress("MagicNumber")
@@ -43,9 +46,36 @@ internal interface ASN1Object {
             else -> throw IllegalArgumentException("Length too long")
         }
 
+    private val tagBytes: ByteArray
+        get() {
+            val tagClass = when (tag.tagClass) {
+                TagClass.Universal -> 0x00
+                TagClass.Application -> 0x40
+                TagClass.ContextSpecific -> 0x80
+                TagClass.Private -> 0xC0
+            }
+
+            val tagForm = when (tag.tagForm) {
+                TagForm.Primitive -> 0x00
+                TagForm.Constructed -> 0x20
+            }
+
+            return if (tag.tagNumber <= 30.toBigInteger()) {
+                val firstByte = tagClass + tagForm + tag.tagNumber.toInt()
+                byteArrayOf(firstByte.toByte())
+            } else if (tag.tagNumber <= 127.toBigInteger()) {
+                val firstByte = tagClass + tagForm + 0x1f
+                byteArrayOf(firstByte.toByte(), tag.tagNumber.toByte())
+            } else {
+                // tag > 127
+                // TODO Support writing out large tag numbers
+                throw IllegalStateException("UNSUPPORTED")
+            }
+        }
+
     val totalLength: Int
-        get() = encoded.size + lengthBytes.size + 1
+        get() = encoded.size + lengthBytes.size + tagBytes.size
 
     val bytes: ByteBuffer
-        get() = ByteBufferArray(listOf(byteArrayOf(tag.toByte()).toByteBuffer(), lengthBytes.toByteBuffer(), encoded))
+        get() = ByteBufferArray(listOf(tagBytes.toByteBuffer(), lengthBytes.toByteBuffer(), encoded))
 }

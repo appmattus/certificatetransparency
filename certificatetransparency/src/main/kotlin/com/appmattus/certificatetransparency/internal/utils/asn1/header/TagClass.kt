@@ -14,20 +14,8 @@
  * limitations under the License.
  */
 
-package com.appmattus.certificatetransparency.internal.utils.asn1
+package com.appmattus.certificatetransparency.internal.utils.asn1.header
 
-import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
-import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
-
-internal data class ASN1BitString(
-    override val tag: ASN1HeaderTag,
-    override val totalLength: Int,
-    override val encoded: ByteBuffer,
-) : ASN1Object {
-
-    override fun toString(): String = "BIT STRING"
-
-    companion object {
-        fun create(tag: ASN1HeaderTag, totalLength: Int, encoded: ByteBuffer) = ASN1BitString(tag, totalLength, encoded)
-    }
+internal enum class TagClass {
+    Universal, Application, ContextSpecific, Private
 }

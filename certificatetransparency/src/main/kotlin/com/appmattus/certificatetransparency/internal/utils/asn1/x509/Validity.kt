@@ -20,6 +20,7 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Object
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Sequence
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Time
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -30,7 +31,7 @@ internal class Validity private constructor(private val sequence: ASN1Sequence) 
 
     val notValidAfter: ASN1Time by lazy { sequence.values[1] as ASN1Time }
 
-    override val tag: Int
+    override val tag: ASN1HeaderTag
         get() = sequence.tag
 
     override val encoded: ByteBuffer

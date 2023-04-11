@@ -17,11 +17,12 @@
 package com.appmattus.certificatetransparency.internal.utils.asn1
 
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
 import java.math.BigInteger
 import java.util.logging.Logger
 
 internal class ASN1Integer private constructor(
-    override val tag: Int,
+    override val tag: ASN1HeaderTag,
     override val encoded: ByteBuffer
 ) : ASN1Object {
 
@@ -41,6 +42,6 @@ internal class ASN1Integer private constructor(
     override fun toString(): String = "INTEGER $value"
 
     companion object {
-        fun create(tag: Int, encoded: ByteBuffer) = ASN1Integer(tag, encoded)
+        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer) = ASN1Integer(tag, encoded)
     }
 }
