@@ -19,10 +19,11 @@ package com.appmattus.certificatetransparency.internal.utils.asn1.x509
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Integer
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Object
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
 import com.appmattus.certificatetransparency.internal.utils.asn1.toAsn1
 
 internal class Version private constructor(
-    override val tag: Int,
+    override val tag: ASN1HeaderTag,
     override val encoded: ByteBuffer,
 ) : ASN1Object {
 
@@ -31,6 +32,6 @@ internal class Version private constructor(
     override fun toString(): String = "Version $value"
 
     companion object {
-        fun create(tag: Int, encoded: ByteBuffer) = Version(tag, encoded)
+        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer) = Version(tag, encoded)
     }
 }
