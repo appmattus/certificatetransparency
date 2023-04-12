@@ -25,7 +25,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-internal class Validity private constructor(private val sequence: ASN1Sequence) : ASN1Object {
+internal class Validity private constructor(private val sequence: ASN1Sequence) : ASN1Object() {
 
     val notValidBefore: ASN1Time by lazy { sequence.values[0] as ASN1Time }
 

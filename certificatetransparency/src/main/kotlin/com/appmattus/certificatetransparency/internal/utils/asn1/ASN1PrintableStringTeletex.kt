@@ -21,19 +21,14 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1Head
 
 internal class ASN1PrintableStringTeletex private constructor(
     override val tag: ASN1HeaderTag,
-    override val totalLength: Int,
     override val encoded: ByteBuffer,
-) : ASN1Object {
+) : ASN1Object() {
 
     val value: String by lazy { String(encoded.copyOfRange(0, encoded.size), Charsets.ISO_8859_1) }
 
     override fun toString(): String = "PRINTABLE STRING $value"
 
     companion object {
-        fun create(tag: ASN1HeaderTag, totalLength: Int, encoded: ByteBuffer) = ASN1PrintableStringTeletex(
-            tag = tag,
-            totalLength = totalLength,
-            encoded = encoded
-        )
+        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer) = ASN1PrintableStringTeletex(tag, encoded)
     }
 }

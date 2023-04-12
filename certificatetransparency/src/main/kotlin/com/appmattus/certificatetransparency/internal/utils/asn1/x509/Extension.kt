@@ -25,7 +25,7 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1Head
 
 internal class Extension private constructor(
     private val sequence: ASN1Sequence
-) : ASN1Object {
+) : ASN1Object() {
     override val tag: ASN1HeaderTag = sequence.tag
     override val encoded: ByteBuffer = sequence.encoded
 

@@ -22,9 +22,8 @@ import java.util.logging.Logger
 
 internal class ASN1Null private constructor(
     override val tag: ASN1HeaderTag,
-    override val totalLength: Int,
     override val encoded: ByteBuffer
-) : ASN1Object {
+) : ASN1Object() {
 
     private val logger = Logger.getLogger("ASN1")
 
@@ -47,8 +46,8 @@ internal class ASN1Null private constructor(
     override fun toString(): String = "NULL".also { value }
 
     companion object {
-        fun create(tag: ASN1HeaderTag, totalLength: Int, encoded: ByteBuffer): ASN1Null {
-            return ASN1Null(tag, totalLength, encoded)
+        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer): ASN1Null {
+            return ASN1Null(tag, encoded)
         }
     }
 }

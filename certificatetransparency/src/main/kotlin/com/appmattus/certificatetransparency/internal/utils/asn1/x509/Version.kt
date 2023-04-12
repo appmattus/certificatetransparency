@@ -25,7 +25,7 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.toAsn1
 internal class Version private constructor(
     override val tag: ASN1HeaderTag,
     override val encoded: ByteBuffer,
-) : ASN1Object {
+) : ASN1Object() {
 
     val value: Int by lazy { (encoded.toAsn1() as ASN1Integer).value.toInt() + 1 }
 

@@ -74,7 +74,7 @@ class ASN1ObjectTest {
         assertEquals("a0820100", obj.bytes.range(0, 4).toHexString())
     }
 
-    private fun createASN1Object(length: Int) = object : ASN1Object {
+    private fun createASN1Object(length: Int) = object : ASN1Object() {
         override val tag: ASN1HeaderTag
             get() = ASN1HeaderTag(TagClass.ContextSpecific, TagForm.Constructed, 0x00, 1)
 

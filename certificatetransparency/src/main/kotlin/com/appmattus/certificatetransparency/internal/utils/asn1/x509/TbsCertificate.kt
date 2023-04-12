@@ -25,7 +25,7 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.header.TagClass
 import com.appmattus.certificatetransparency.internal.utils.asn1.header.TagForm
 
 @Suppress("MagicNumber")
-internal class TbsCertificate private constructor(private val sequence: ASN1Sequence) : ASN1Object {
+internal class TbsCertificate private constructor(private val sequence: ASN1Sequence) : ASN1Object() {
 
     override val tag: ASN1HeaderTag = sequence.tag
     override val encoded: ByteBuffer = sequence.encoded

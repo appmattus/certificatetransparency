@@ -25,9 +25,8 @@ import java.time.format.DateTimeFormatter
 
 internal class ASN1Time private constructor(
     override val tag: ASN1HeaderTag,
-    override val totalLength: Int,
     override val encoded: ByteBuffer
-) : ASN1Object {
+) : ASN1Object() {
 
     val value: Instant by lazy {
         @Suppress("MagicNumber")
@@ -42,6 +41,6 @@ internal class ASN1Time private constructor(
     override fun toString(): String = "TIME $value"
 
     companion object {
-        fun create(tag: ASN1HeaderTag, totalLength: Int, encoded: ByteBuffer) = ASN1Time(tag, totalLength, encoded)
+        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer) = ASN1Time(tag, encoded)
     }
 }

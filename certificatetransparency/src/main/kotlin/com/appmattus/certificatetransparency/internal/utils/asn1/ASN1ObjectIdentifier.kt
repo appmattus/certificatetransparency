@@ -23,9 +23,8 @@ import java.util.logging.Logger
 
 internal class ASN1ObjectIdentifier private constructor(
     override val tag: ASN1HeaderTag,
-    override val totalLength: Int,
     override val encoded: ByteBuffer
-) : ASN1Object {
+) : ASN1Object() {
 
     private val logger = Logger.getLogger("ASN1")
 
@@ -108,6 +107,6 @@ internal class ASN1ObjectIdentifier private constructor(
     companion object {
         private const val LONG_LIMIT = (Long.MAX_VALUE shr 7) - 0x7f
 
-        fun create(tag: ASN1HeaderTag, totalLength: Int, encoded: ByteBuffer) = ASN1ObjectIdentifier(tag, totalLength, encoded)
+        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer) = ASN1ObjectIdentifier(tag, encoded)
     }
 }

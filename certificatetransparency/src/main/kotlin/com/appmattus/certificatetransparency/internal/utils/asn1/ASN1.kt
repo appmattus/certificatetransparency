@@ -77,21 +77,20 @@ internal fun ByteBuffer.toAsn1(): ASN1Object {
     val encoded = this.range(header.headerLength, header.totalLength)
 
     val tag = header.tag
-    val totalLength = header.totalLength
 
     return when {
         tag.isUniversal(0x01) -> ASN1Boolean.create(tag, encoded)
         tag.isUniversal(0x02) -> ASN1Integer.create(tag, encoded)
-        tag.isUniversal(0x03) -> ASN1BitString.create(tag, totalLength, encoded)
-        tag.isUniversal(0x05) -> ASN1Null.create(tag, totalLength, encoded)
-        tag.isUniversal(0x06) -> ASN1ObjectIdentifier.create(tag, totalLength, encoded)
-        tag.isUniversal(0x0c) -> ASN1PrintableStringUS.create(tag, totalLength, encoded)
+        tag.isUniversal(0x03) -> ASN1BitString.create(tag, encoded)
+        tag.isUniversal(0x05) -> ASN1Null.create(tag, encoded)
+        tag.isUniversal(0x06) -> ASN1ObjectIdentifier.create(tag, encoded)
+        tag.isUniversal(0x0c) -> ASN1PrintableStringUS.create(tag, encoded)
         tag.isUniversal(0x10) || tag.isUniversal(0x11) -> ASN1Sequence.create(tag, encoded)
-        tag.isUniversal(0x13) -> ASN1PrintableStringTeletex.create(tag, totalLength, encoded)
-        tag.isUniversal(0x17) -> ASN1Time.create(tag, totalLength, encoded)
+        tag.isUniversal(0x13) -> ASN1PrintableStringTeletex.create(tag, encoded)
+        tag.isUniversal(0x17) -> ASN1Time.create(tag, encoded)
         tag.isContextSpecific(0x00) -> Version.create(tag, encoded)
         tag.isContextSpecific(0x03) -> Extensions.create(tag, encoded)
-        else -> ASN1Unspecified.create(tag, totalLength, encoded)
+        else -> ASN1Unspecified.create(tag, encoded)
     }
 }
 

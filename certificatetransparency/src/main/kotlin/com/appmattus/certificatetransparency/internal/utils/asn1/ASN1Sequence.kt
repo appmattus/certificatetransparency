@@ -23,7 +23,7 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1Head
 internal data class ASN1Sequence(
     override val tag: ASN1HeaderTag,
     override val encoded: ByteBuffer,
-) : ASN1Object {
+) : ASN1Object() {
 
     val values: List<ASN1Object> by lazy {
         // Treating SETS the same as sequence

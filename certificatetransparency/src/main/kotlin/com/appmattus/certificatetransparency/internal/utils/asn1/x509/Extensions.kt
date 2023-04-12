@@ -28,7 +28,7 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.toAsn1
 internal class Extensions private constructor(
     override val tag: ASN1HeaderTag,
     override val encoded: ByteBuffer,
-) : ASN1Object {
+) : ASN1Object() {
 
     val values: List<Extension> by lazy {
         (encoded.toAsn1() as ASN1Sequence).values.map {

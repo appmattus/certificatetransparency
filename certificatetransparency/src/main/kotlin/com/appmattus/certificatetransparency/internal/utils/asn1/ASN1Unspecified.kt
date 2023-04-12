@@ -21,13 +21,12 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1Head
 
 internal data class ASN1Unspecified(
     override val tag: ASN1HeaderTag,
-    override val totalLength: Int,
     override val encoded: ByteBuffer,
-) : ASN1Object {
+) : ASN1Object() {
 
     override fun toString(): String = "UNSPECIFIED(${tag.tagNumber}) 0x${encoded.toHexString()}"
 
     companion object {
-        fun create(tag: ASN1HeaderTag, totalLength: Int, encoded: ByteBuffer) = ASN1Unspecified(tag, totalLength, encoded)
+        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer) = ASN1Unspecified(tag, encoded)
     }
 }

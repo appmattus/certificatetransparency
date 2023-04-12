@@ -24,7 +24,7 @@ import java.util.logging.Logger
 internal class ASN1Integer private constructor(
     override val tag: ASN1HeaderTag,
     override val encoded: ByteBuffer
-) : ASN1Object {
+) : ASN1Object() {
 
     private val logger = Logger.getLogger("ASN1")
 
