@@ -25,7 +25,7 @@ internal data class ASN1Unspecified(
     override val encoded: ByteBuffer,
 ) : ASN1Object {
 
-    override fun toString(): String = "UNSPECIFIED(${tag.tagNumber.toByteArray().toHexString()}) 0x${encoded.toHexString()}"
+    override fun toString(): String = "UNSPECIFIED(${tag.tagNumber}) 0x${encoded.toHexString()}"
 
     companion object {
         fun create(tag: ASN1HeaderTag, totalLength: Int, encoded: ByteBuffer) = ASN1Unspecified(tag, totalLength, encoded)

@@ -30,7 +30,11 @@ internal data class ASN1HeaderTag(
     private val longTagNumber: Long? = if (tagNumber < Long.MAX_VALUE.toBigInteger()) tagNumber.toLong() else null
 
     internal fun isTagNumber(tagNumber: Int): Boolean {
-        return (longTagNumber != null && this.longTagNumber == tagNumber.toLong()) || (this.tagNumber == tagNumber.toBigInteger())
+        return longTagNumber != null && this.longTagNumber == tagNumber.toLong()
+    }
+
+    internal fun isTagNumber(tagNumber: BigInteger): Boolean {
+        return this.tagNumber == tagNumber
     }
 
     fun isUniversal(tagNumber: Int): Boolean {
@@ -41,4 +45,43 @@ internal data class ASN1HeaderTag(
         return this.tagClass == TagClass.ContextSpecific && isTagNumber(tagNumber) &&
             (((isConstructed && this.tagForm == TagForm.Constructed) || (!isConstructed && this.tagForm == TagForm.Primitive)))
     }
+
+    val tagBytes: ByteArray
+        get() {
+            val tagClassByte = when (tagClass) {
+                TagClass.Universal -> 0x00
+                TagClass.Application -> 0x40
+                TagClass.ContextSpecific -> 0x80
+                TagClass.Private -> 0xC0
+            }
+
+            val tagFormByte = when (tagForm) {
+                TagForm.Primitive -> 0x00
+                TagForm.Constructed -> 0x20
+            }
+
+            return if (longTagNumber != null && longTagNumber <= 30) {
+                val firstByte = tagClassByte + tagFormByte + longTagNumber
+                byteArrayOf(firstByte.toByte())
+            } else if (longTagNumber != null && longTagNumber <= 127) {
+                val firstByte = tagClassByte + tagFormByte + 0x1f
+                byteArrayOf(firstByte.toByte(), longTagNumber.toByte())
+            } else {
+                // tag > 127
+                val firstByte = tagClassByte + tagFormByte + 0x1f
+
+                var value = tagNumber
+
+                val bytes = mutableListOf<Byte>()
+
+                var isFirst = true
+                while (value != BigInteger.ZERO) {
+                    bytes.add(((value.toInt() and 0x7f) + (if (isFirst) 0 else 0x80)).toByte())
+                    value = value shr 7
+                    isFirst = false
+                }
+                bytes.add(firstByte.toByte())
+                bytes.reversed().toByteArray()
+            }
+        }
 }

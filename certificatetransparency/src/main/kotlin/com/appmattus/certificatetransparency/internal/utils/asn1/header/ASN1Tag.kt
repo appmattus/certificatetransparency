@@ -50,30 +50,22 @@ internal fun ByteBuffer.tag(): ASN1HeaderTag {
         )
     } else {
         // Tag number bigger or equal to 31
-        var tagNumber = this[0].toLong() and 0x1FL
+        var tagNumber = 0L
         var bigTagNumber: BigInteger? = null
         var i = 1
 
-        while (this[i].toInt() and 0x80 != 0) {
+        do {
+            if (i >= size) {
+                throw IllegalStateException("End of input reached before message was fully decoded")
+            }
+
             if (tagNumber < LONG_LIMIT) {
                 tagNumber = (tagNumber shl 7) + (this[i].toLong() and 0x7FL)
             } else {
                 if (bigTagNumber == null) bigTagNumber = tagNumber.toBigInteger()
                 bigTagNumber = (bigTagNumber shl 7) + (this[i].toLong() and 0x7F).toBigInteger()
             }
-            i++
-
-            if (i >= size) {
-                throw IllegalStateException("End of input reached before message was fully decoded")
-            }
-        }
-
-        if (tagNumber < LONG_LIMIT) {
-            tagNumber = (tagNumber shl 7) + (this[i].toLong() and 0x7FL)
-        } else {
-            if (bigTagNumber == null) bigTagNumber = tagNumber.toBigInteger()
-            bigTagNumber = (bigTagNumber shl 7) + (this[i].toLong() and 0x7F).toBigInteger()
-        }
+        } while (this[i++].toInt() and 0x80 != 0)
 
         if (tagClass == TagClass.Universal && form == TagForm.Constructed) {
             when (tagNumber) {
@@ -96,7 +88,7 @@ internal fun ByteBuffer.tag(): ASN1HeaderTag {
             tagClass = tagClass,
             tagForm = form,
             tagNumber = bigTagNumber ?: tagNumber.toBigInteger(),
-            blockLength = i + 1
+            blockLength = i
         )
     }
 }
