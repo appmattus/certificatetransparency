@@ -96,6 +96,7 @@ internal class ASN1ObjectIdentifier private constructor(
         return objId.toString()
     }
 
+    @Suppress("MagicNumber")
     private fun ByteBuffer.checkSidEncoding(i: Int) {
         if (i + 1 < size && this[i].toInt() and 0xff == 0x80 && this[i + 1].toInt() and 0xff == 0x80) {
             logger.warning("Needlessly long format of SID encoding")

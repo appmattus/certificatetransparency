@@ -19,11 +19,11 @@ package com.appmattus.certificatetransparency.internal.utils.asn1
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.toByteBuffer
 import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.length
 import com.appmattus.certificatetransparency.internal.utils.asn1.header.tag
 import com.appmattus.certificatetransparency.internal.utils.asn1.x509.Extensions
 import com.appmattus.certificatetransparency.internal.utils.asn1.x509.Version
 import okio.ByteString.Companion.toByteString
-import java.util.logging.Logger
 
 internal fun ByteArray.toAsn1(): ASN1Object = toByteBuffer().toAsn1()
 
@@ -36,38 +36,9 @@ internal data class ASN1Header(val tag: ASN1HeaderTag, val headerLength: Int, va
 internal fun ByteBuffer.header(): ASN1Header {
     val tag = tag()
 
-    var offset = tag.blockLength
-    if (offset >= size) throw IllegalStateException("No length block encoded")
-    var length = this[offset].toInt() and 0xff
-    offset++
-    if (length == 0xff) throw IllegalStateException("Length block 0xFF is reserved by standard")
+    val headerLength = length(tag)
 
-    if (length == 0x80) {
-        // indefinite length
-        // TODO Not currently verified/supported
-        length = size - offset
-    } else if ((length and 0x80) == 0x80) {
-        // longFormUsed
-        val numLengthBytes = length and 0x7f
-
-        // TODO Support large length with BigInteger
-        if (numLengthBytes > 8) throw IllegalStateException("Too big integer")
-
-        if (numLengthBytes + 2 > size) throw IllegalStateException("End of input reached before message was fully decoded")
-
-        if (this[offset].toInt() and 0xff == 0x0) Logger.getLogger("ASN1").warning("Needlessly long encoded length")
-
-        length = 0
-        repeat(numLengthBytes) { index ->
-            length = length shl 8
-            length += this[offset + index].toInt() and 0xff
-        }
-        offset += numLengthBytes
-
-        if (length <= 127) Logger.getLogger("ASN1").warning("Unnecessary usage of long length form")
-    }
-
-    return ASN1Header(tag, offset, length)
+    return ASN1Header(tag, headerLength.offset, headerLength.length)
 }
 
 @Suppress("MagicNumber")
@@ -92,6 +63,18 @@ internal fun ByteBuffer.toAsn1(): ASN1Object {
         tag.isContextSpecific(0x03) -> Extensions.create(tag, encoded)
         else -> ASN1Unspecified.create(tag, encoded)
     }
+}
+
+@Suppress("MagicNumber")
+internal fun ByteArray.readNestedOctets(count: Int): ByteArray {
+    var bytes: ByteBuffer = this.toByteBuffer()
+    repeat(count) {
+        val asn = bytes.toAsn1()
+        if (!asn.tag.isUniversal(0x04)) error("Not an octet string")
+        bytes = asn.encoded
+    }
+
+    return bytes.copyOfRange(0, bytes.size)
 }
 
 internal fun ByteArray.toHexString(): String = toByteString().hex()

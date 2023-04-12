@@ -21,22 +21,19 @@ import java.math.BigInteger
 
 private const val LONG_LIMIT = (Long.MAX_VALUE shr 7) - 0x7fL
 
-@Suppress("MagicNumber")
+@Suppress("MagicNumber", "CyclomaticComplexMethod", "NestedBlockDepth")
 internal fun ByteBuffer.tag(): ASN1HeaderTag {
-    if (size == 0) throw IllegalStateException("Zero buffer length")
+    if (size == 0) error("Zero buffer length")
 
     val tagClass = when (this[0].toInt() and 0xC0) {
         0x00 -> TagClass.Universal
         0x40 -> TagClass.Application
         0x80 -> TagClass.ContextSpecific
         0xC0 -> TagClass.Private
-        else -> throw IllegalStateException("Unknown tag class")
+        else -> error("Unknown tag class")
     }
 
-    val form = when ((this[0].toInt() and 0x20) == 0x20) {
-        true -> TagForm.Constructed
-        false -> TagForm.Primitive
-    }
+    val form: TagForm = if ((this[0].toInt() and 0x20) == 0x20) TagForm.Constructed else TagForm.Primitive
 
     // Find tag number
     val tagNumberMask = this[0].toInt() and 0x1F
@@ -46,7 +43,7 @@ internal fun ByteBuffer.tag(): ASN1HeaderTag {
             tagClass = tagClass,
             tagForm = form,
             tagNumber = tagNumberMask.toBigInteger(),
-            blockLength = 1
+            readLength = 1
         )
     } else {
         // Tag number bigger or equal to 31
@@ -56,7 +53,7 @@ internal fun ByteBuffer.tag(): ASN1HeaderTag {
 
         do {
             if (i >= size) {
-                throw IllegalStateException("End of input reached before message was fully decoded")
+                error("End of input reached before message was fully decoded")
             }
 
             if (tagNumber < LONG_LIMIT) {
@@ -80,7 +77,7 @@ internal fun ByteBuffer.tag(): ASN1HeaderTag {
                 24L,
                 31L,
                 33L,
-                34L -> throw IllegalStateException("Constructed encoding used for primitive type")
+                34L -> error("Constructed encoding used for primitive type")
             }
         }
 
@@ -88,7 +85,7 @@ internal fun ByteBuffer.tag(): ASN1HeaderTag {
             tagClass = tagClass,
             tagForm = form,
             tagNumber = bigTagNumber ?: tagNumber.toBigInteger(),
-            blockLength = i
+            readLength = i
         )
     }
 }

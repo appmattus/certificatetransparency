@@ -22,7 +22,8 @@ internal data class ASN1HeaderTag(
     val tagClass: TagClass,
     val tagForm: TagForm,
     val tagNumber: BigInteger,
-    val blockLength: Int
+    /** Number of bytes read for the tag. This may be more than we would write out if the original value was poorly coded */
+    val readLength: Int
 ) {
     constructor(tagClass: TagClass, tagForm: TagForm, tagNumber: Int, blockLength: Int) :
         this(tagClass, tagForm, tagNumber.toBigInteger(), blockLength)
@@ -46,6 +47,7 @@ internal data class ASN1HeaderTag(
             (((isConstructed && this.tagForm == TagForm.Constructed) || (!isConstructed && this.tagForm == TagForm.Primitive)))
     }
 
+    @Suppress("MagicNumber")
     val tagBytes: ByteArray
         get() {
             val tagClassByte = when (tagClass) {

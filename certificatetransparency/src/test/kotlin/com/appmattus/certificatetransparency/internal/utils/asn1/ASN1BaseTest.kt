@@ -23,6 +23,7 @@ import java.util.logging.Handler
 import java.util.logging.LogRecord
 import java.util.logging.Logger
 
+@Suppress("UnnecessaryAbstractClass")
 abstract class ASN1BaseTest {
 
     private val logMessages = mutableListOf<String>()

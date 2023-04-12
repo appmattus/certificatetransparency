@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +24,7 @@ package com.appmattus.certificatetransparency.internal.utils
 
 import com.appmattus.certificatetransparency.internal.serialization.CTConstants
 import com.appmattus.certificatetransparency.internal.serialization.Deserializer
+import com.appmattus.certificatetransparency.internal.utils.asn1.readNestedOctets
 import com.appmattus.certificatetransparency.internal.verifier.model.SignedCertificateTimestamp
 import java.io.IOException
 import java.security.cert.X509Certificate

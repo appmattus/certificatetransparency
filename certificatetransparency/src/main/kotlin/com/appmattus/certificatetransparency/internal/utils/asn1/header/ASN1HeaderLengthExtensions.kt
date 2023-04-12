@@ -1,0 +1,57 @@
+/*
+ * Copyright 2023 Appmattus Limited
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.appmattus.certificatetransparency.internal.utils.asn1.header
+
+import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
+import java.util.logging.Logger
+
+@Suppress("MagicNumber")
+internal fun ByteBuffer.length(tag: ASN1HeaderTag): ASN1HeaderLength {
+    var offset = tag.readLength
+
+    if (offset >= size) error("No length block encoded")
+    var length = this[offset].toInt() and 0xff
+    offset++
+    if (length == 0xff) error("Length block 0xFF is reserved by standard")
+
+    if (length == 0x80) {
+        // indefinite length
+        // TODO Not currently verified/supported
+        length = size - offset
+    } else if ((length and 0x80) == 0x80) {
+        // longFormUsed
+        val numLengthBytes = length and 0x7f
+
+        // We don't support values larger than an Int as we cannot store such large data in a ByteArray
+        if (numLengthBytes > 8) error("Too big integer")
+
+        if (numLengthBytes + 1 > size) error("End of input reached before message was fully decoded")
+
+        if (this[offset].toInt() and 0xff == 0x0) Logger.getLogger("ASN1").warning("Needlessly long encoded length")
+
+        length = 0
+        repeat(numLengthBytes) { index ->
+            length = length shl 8
+            length += this[offset + index].toInt() and 0xff
+        }
+        offset += numLengthBytes
+
+        if (length <= 127) Logger.getLogger("ASN1").warning("Unnecessary usage of long length form")
+    }
+
+    return ASN1HeaderLength(length, offset)
+}
