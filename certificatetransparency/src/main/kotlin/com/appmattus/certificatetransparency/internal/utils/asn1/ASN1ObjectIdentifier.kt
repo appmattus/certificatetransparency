@@ -17,16 +17,21 @@
 package com.appmattus.certificatetransparency.internal.utils.asn1
 
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
 import java.math.BigInteger
 
 internal class ASN1ObjectIdentifier private constructor(
-    override val tag: Int,
-    override val totalLength: Int,
-    override val encoded: ByteBuffer
-) : ASN1Object {
+    override val tag: ASN1HeaderTag,
+    override val encoded: ByteBuffer,
+    override val logger: ASN1Logger
+) : ASN1Object() {
 
     val value: String by lazy {
-        encoded.toObjectIdentifierString()
+        try {
+            encoded.toObjectIdentifierString()
+        } catch (expected: ArrayIndexOutOfBoundsException) {
+            throw IllegalStateException("End of input reached before message was fully decoded", expected)
+        }
     }
 
     @Suppress("MagicNumber", "NestedBlockDepth")
@@ -35,6 +40,8 @@ internal class ASN1ObjectIdentifier private constructor(
         var value: Long = 0
         var bigValue: BigInteger? = null
         var first = true
+
+        checkSidEncoding(0)
 
         for (i in 0 until size) {
             val b: Int = this[i].toInt() and 0xff
@@ -56,6 +63,8 @@ internal class ASN1ObjectIdentifier private constructor(
                     objId.append('.')
                     objId.append(value)
                     value = 0
+
+                    checkSidEncoding(i + 1)
                 } else {
                     value = value shl 7
                 }
@@ -74,6 +83,8 @@ internal class ASN1ObjectIdentifier private constructor(
                     objId.append(bigValue)
                     bigValue = null
                     value = 0
+
+                    checkSidEncoding(i + 1)
                 } else {
                     bigValue = bigValue.shiftLeft(7)
                 }
@@ -83,11 +94,18 @@ internal class ASN1ObjectIdentifier private constructor(
         return objId.toString()
     }
 
+    @Suppress("MagicNumber")
+    private fun ByteBuffer.checkSidEncoding(i: Int) {
+        if (i + 1 < size && this[i].toInt() and 0xff == 0x80 && this[i + 1].toInt() and 0xff == 0x80) {
+            logger.warning("ASN1ObjectIdentifier", "Needlessly long format of SID encoding")
+        }
+    }
+
     override fun toString(): String = "OBJECT IDENTIFIER $value"
 
     companion object {
         private const val LONG_LIMIT = (Long.MAX_VALUE shr 7) - 0x7f
 
-        fun create(tag: Int, totalLength: Int, encoded: ByteBuffer) = ASN1ObjectIdentifier(tag, totalLength, encoded)
+        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer, logger: ASN1Logger) = ASN1ObjectIdentifier(tag, encoded, logger)
     }
 }

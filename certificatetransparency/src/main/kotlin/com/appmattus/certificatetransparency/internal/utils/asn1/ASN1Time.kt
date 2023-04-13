@@ -17,16 +17,17 @@
 package com.appmattus.certificatetransparency.internal.utils.asn1
 
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 internal class ASN1Time private constructor(
-    override val tag: Int,
-    override val totalLength: Int,
-    override val encoded: ByteBuffer
-) : ASN1Object {
+    override val tag: ASN1HeaderTag,
+    override val encoded: ByteBuffer,
+    override val logger: ASN1Logger
+) : ASN1Object() {
 
     val value: Instant by lazy {
         @Suppress("MagicNumber")
@@ -41,6 +42,6 @@ internal class ASN1Time private constructor(
     override fun toString(): String = "TIME $value"
 
     companion object {
-        fun create(tag: Int, totalLength: Int, encoded: ByteBuffer) = ASN1Time(tag, totalLength, encoded)
+        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer, logger: ASN1Logger) = ASN1Time(tag, encoded, logger)
     }
 }

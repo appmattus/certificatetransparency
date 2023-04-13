@@ -14,15 +14,71 @@
  * limitations under the License.
  */
 
-package com.appmattus.certificatetransparency.internal.utils
+package com.appmattus.certificatetransparency.internal.utils.asn1
 
+import com.appmattus.certificatetransparency.internal.utils.asn1.x509.Certificate
+import com.appmattus.certificatetransparency.utils.TestData
 import okio.ByteString.Companion.decodeHex
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.io.IOException
 
-class ASN1KtTest {
+internal class ASN1KtTest : ASN1BaseTest() {
+
+    /**
+     * In an earlier implementation this test would fail when reading the extensions because of
+     * the header code being incorrect. The test is here to prove the the fix works.
+     */
+    @Test
+    fun testBloomberg() {
+        val cert = TestData.loadCertificates("/testdata/bloomberg.pem")[0]
+        Certificate.create(cert.encoded).toString()
+    }
+
+    // The library passes the tag number to a BigInteger so has no issues with large tag numbers
+    @Test
+    fun `tc1 COMMON Too big tag number`() {
+        val asn1 = TestData.file("/testdata/asn1/tc1.ber").readBytes().toAsn1(logger)
+        assertEquals("UNSPECIFIED(1180591620717411303423) 0x40", asn1.toString())
+    }
+
+    @Test
+    fun `tc2 COMMON Never-ending tag number (non-finished encoding of tag number)`() {
+        val throwable = assertThrows(Exception::class.java) {
+            val asn1 = TestData.file("/testdata/asn1/tc2.ber").readBytes().toAsn1(logger)
+            asn1.toString()
+        }
+
+        assertEquals("End of input reached before message was fully decoded", throwable.message)
+    }
+
+    @Test
+    fun `tc3 COMMON Absence of standard length block`() {
+        val throwable = assertThrows(Exception::class.java) {
+            val asn1 = TestData.file("/testdata/asn1/tc3.ber").readBytes().toAsn1(logger)
+            asn1.toString()
+        }
+
+        assertEquals("No length block encoded", throwable.message)
+    }
+
+    @Test
+    fun `tc4 COMMON 0xFF value as standard length block`() {
+        val throwable = assertThrows(Exception::class.java) {
+            val asn1 = TestData.file("/testdata/asn1/tc4.ber").readBytes().toAsn1(logger)
+            asn1.toString()
+        }
+
+        assertEquals("Length block 0xFF is reserved by standard", throwable.message)
+    }
+
+    @Test
+    fun `tc5 COMMON Unnecessary usage of long length form (length value is less then 127, but long form of length encoding is used)`() {
+        val asn1 = TestData.file("/testdata/asn1/tc5.ber").readBytes().toAsn1(logger)
+        asn1.toString()
+        assertWarnings("Unnecessary usage of long length form")
+    }
 
     @Test
     fun readOctet() {
@@ -35,7 +91,7 @@ class ASN1KtTest {
         assertTrue(octet1Expected.contentEquals(result))
     }
 
-    @Test(expected = IOException::class)
+    @Test(expected = IllegalStateException::class)
     fun readOctetFails() {
         // Given the input does not start with octet marker (0x04)
         val input = byteArrayOf(0x00, 0x00)
@@ -55,66 +111,6 @@ class ASN1KtTest {
 
         // Then the result matches the expected output
         assertTrue(octet2Expected.contentEquals(result))
-    }
-
-    @Test
-    fun readLength00() {
-        // Given a byte stream representing an octet length
-        val input = byteArrayOf(0x00).inputStream()
-
-        // When we call readLength
-        val result = input.readLength()
-
-        // Then the result matches the expected output
-        assertEquals(0, result)
-    }
-
-    @Test
-    fun readLength02() {
-        // Given a byte stream representing an octet length
-        val input = byteArrayOf(0x02).inputStream()
-
-        // When we call readLength
-        val result = input.readLength()
-
-        // Then the result matches the expected output
-        assertEquals(2, result)
-    }
-
-    @Test
-    fun readLength7f() {
-        // Given a byte stream representing an octet length
-        val input = byteArrayOf(0x7f).inputStream()
-
-        // When we call readLength
-        val result = input.readLength()
-
-        // Then the result matches the expected output
-        assertEquals(127, result)
-    }
-
-    @Test
-    fun readLength8180() {
-        // Given a byte stream representing an octet length
-        val input = byteArrayOf(0x81.toByte(), 0x80.toByte()).inputStream()
-
-        // When we call readLength
-        val result = input.readLength()
-
-        // Then the result matches the expected output
-        assertEquals(128, result)
-    }
-
-    @Test
-    fun readLength820101() {
-        // Given a byte stream representing an octet length
-        val input = byteArrayOf(0x82.toByte(), 0x01, 0x01).inputStream()
-
-        // When we call readLength
-        val result = input.readLength()
-
-        // Then the result matches the expected output
-        assertEquals(257, result)
     }
 
     companion object {
