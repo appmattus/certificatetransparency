@@ -39,14 +39,14 @@ internal class ASN1KtTest : ASN1BaseTest() {
     // The library passes the tag number to a BigInteger so has no issues with large tag numbers
     @Test
     fun `tc1 COMMON Too big tag number`() {
-        val asn1 = TestData.file("/testdata/asn1/tc1.ber").readBytes().toAsn1()
+        val asn1 = TestData.file("/testdata/asn1/tc1.ber").readBytes().toAsn1(logger)
         assertEquals("UNSPECIFIED(1180591620717411303423) 0x40", asn1.toString())
     }
 
     @Test
     fun `tc2 COMMON Never-ending tag number (non-finished encoding of tag number)`() {
         val throwable = assertThrows(Exception::class.java) {
-            val asn1 = TestData.file("/testdata/asn1/tc2.ber").readBytes().toAsn1()
+            val asn1 = TestData.file("/testdata/asn1/tc2.ber").readBytes().toAsn1(logger)
             asn1.toString()
         }
 
@@ -56,7 +56,7 @@ internal class ASN1KtTest : ASN1BaseTest() {
     @Test
     fun `tc3 COMMON Absence of standard length block`() {
         val throwable = assertThrows(Exception::class.java) {
-            val asn1 = TestData.file("/testdata/asn1/tc3.ber").readBytes().toAsn1()
+            val asn1 = TestData.file("/testdata/asn1/tc3.ber").readBytes().toAsn1(logger)
             asn1.toString()
         }
 
@@ -66,7 +66,7 @@ internal class ASN1KtTest : ASN1BaseTest() {
     @Test
     fun `tc4 COMMON 0xFF value as standard length block`() {
         val throwable = assertThrows(Exception::class.java) {
-            val asn1 = TestData.file("/testdata/asn1/tc4.ber").readBytes().toAsn1()
+            val asn1 = TestData.file("/testdata/asn1/tc4.ber").readBytes().toAsn1(logger)
             asn1.toString()
         }
 
@@ -75,7 +75,7 @@ internal class ASN1KtTest : ASN1BaseTest() {
 
     @Test
     fun `tc5 COMMON Unnecessary usage of long length form (length value is less then 127, but long form of length encoding is used)`() {
-        val asn1 = TestData.file("/testdata/asn1/tc5.ber").readBytes().toAsn1()
+        val asn1 = TestData.file("/testdata/asn1/tc5.ber").readBytes().toAsn1(logger)
         asn1.toString()
         assertWarnings("Unnecessary usage of long length form")
     }

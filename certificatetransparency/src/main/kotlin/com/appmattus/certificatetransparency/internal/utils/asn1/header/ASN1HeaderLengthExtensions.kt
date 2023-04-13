@@ -16,11 +16,11 @@
 
 package com.appmattus.certificatetransparency.internal.utils.asn1.header
 
+import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Logger
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
-import java.util.logging.Logger
 
 @Suppress("MagicNumber")
-internal fun ByteBuffer.length(tag: ASN1HeaderTag): ASN1HeaderLength {
+internal fun ByteBuffer.length(tag: ASN1HeaderTag, logger: ASN1Logger): ASN1HeaderLength {
     var offset = tag.readLength
 
     if (offset >= size) error("No length block encoded")
@@ -41,7 +41,7 @@ internal fun ByteBuffer.length(tag: ASN1HeaderTag): ASN1HeaderLength {
 
         if (numLengthBytes + 1 > size) error("End of input reached before message was fully decoded")
 
-        if (this[offset].toInt() and 0xff == 0x0) Logger.getLogger("ASN1").warning("Needlessly long encoded length")
+        if (this[offset].toInt() and 0xff == 0x0) logger.warning("ASN1HeaderLength", "Needlessly long encoded length")
 
         length = 0
         repeat(numLengthBytes) { index ->
@@ -50,7 +50,7 @@ internal fun ByteBuffer.length(tag: ASN1HeaderTag): ASN1HeaderLength {
         }
         offset += numLengthBytes
 
-        if (length <= 127) Logger.getLogger("ASN1").warning("Unnecessary usage of long length form")
+        if (length <= 127) logger.warning("ASN1HeaderLength", "Unnecessary usage of long length form")
     }
 
     return ASN1HeaderLength(length, offset)

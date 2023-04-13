@@ -16,8 +16,10 @@
 
 package com.appmattus.certificatetransparency.internal.utils.asn1.x509
 
+import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Logger
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Object
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Sequence
+import com.appmattus.certificatetransparency.internal.utils.asn1.EmptyLogger
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.joinToByteBuffer
 import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
@@ -28,10 +30,11 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.toAsn1
 internal class Extensions private constructor(
     override val tag: ASN1HeaderTag,
     override val encoded: ByteBuffer,
+    override val logger: ASN1Logger
 ) : ASN1Object() {
 
     val values: List<Extension> by lazy {
-        (encoded.toAsn1() as ASN1Sequence).values.map {
+        (encoded.toAsn1(logger) as ASN1Sequence).values.map {
             Extension.create(
                 it as ASN1Sequence
             )
@@ -44,14 +47,15 @@ internal class Extensions private constructor(
     }
 
     companion object {
-        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer) = Extensions(tag, encoded)
+        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer, logger: ASN1Logger) = Extensions(tag, encoded, logger)
 
         @Suppress("MagicNumber")
-        fun create(extensions: List<Extension>): Extensions {
+        fun create(extensions: List<Extension>, logger: ASN1Logger = EmptyLogger): Extensions {
             val encoded = extensions.map { it.bytes }.joinToByteBuffer()
             return Extensions(
                 tag = ASN1HeaderTag(TagClass.ContextSpecific, TagForm.Constructed, 0x03, 1),
-                encoded = ASN1Sequence(ASN1HeaderTag(TagClass.Universal, TagForm.Constructed, 0x10, 1), encoded).bytes
+                encoded = ASN1Sequence(ASN1HeaderTag(TagClass.Universal, TagForm.Constructed, 0x10, 1), encoded, logger).bytes,
+                logger = logger
             )
         }
     }

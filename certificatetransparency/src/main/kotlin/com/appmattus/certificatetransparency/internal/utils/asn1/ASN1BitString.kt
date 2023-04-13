@@ -22,11 +22,12 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1Head
 internal data class ASN1BitString(
     override val tag: ASN1HeaderTag,
     override val encoded: ByteBuffer,
+    override val logger: ASN1Logger
 ) : ASN1Object() {
 
     override fun toString(): String = "BIT STRING"
 
     companion object {
-        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer) = ASN1BitString(tag, encoded)
+        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer, logger: ASN1Logger) = ASN1BitString(tag, encoded, logger)
     }
 }

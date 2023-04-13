@@ -25,7 +25,7 @@ class ASN1NullTest : ASN1BaseTest() {
 
     @Test
     fun `tc30 NULL Using of value block with length more than 0 octet`() {
-        val asn1 = TestData.file("/testdata/asn1/tc30.ber").readBytes().toAsn1()
+        val asn1 = TestData.file("/testdata/asn1/tc30.ber").readBytes().toAsn1(logger)
         assertEquals("NULL", asn1.toString())
         assertWarnings("Non-zero length of value block for NULL type")
     }
@@ -33,7 +33,7 @@ class ASN1NullTest : ASN1BaseTest() {
     @Test
     fun `tc31 NULL Unfinished encoding of value block (+ using of value block with length more than 0 octet)`() {
         val throwable = Assert.assertThrows(Exception::class.java) {
-            val asn1 = TestData.file("/testdata/asn1/tc31.ber").readBytes().toAsn1()
+            val asn1 = TestData.file("/testdata/asn1/tc31.ber").readBytes().toAsn1(logger)
             asn1.toString()
         }
 
@@ -42,7 +42,7 @@ class ASN1NullTest : ASN1BaseTest() {
 
     @Test
     fun `tc32 NULL Right NULL encoding`() {
-        val asn1 = TestData.file("/testdata/asn1/tc32.ber").readBytes().toAsn1()
+        val asn1 = TestData.file("/testdata/asn1/tc32.ber").readBytes().toAsn1(logger)
         assertEquals("NULL", asn1.toString())
         assertNoWarnings()
     }

@@ -80,5 +80,7 @@ class ASN1ObjectTest {
 
         override val encoded: ByteBuffer
             get() = ByteArray(length).toByteBuffer()
+
+        override val logger: ASN1Logger = EmptyLogger
     }
 }

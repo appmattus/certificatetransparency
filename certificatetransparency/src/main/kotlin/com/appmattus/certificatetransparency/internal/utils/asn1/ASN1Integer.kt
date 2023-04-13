@@ -19,19 +19,17 @@ package com.appmattus.certificatetransparency.internal.utils.asn1
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
 import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
 import java.math.BigInteger
-import java.util.logging.Logger
 
 internal class ASN1Integer private constructor(
     override val tag: ASN1HeaderTag,
-    override val encoded: ByteBuffer
+    override val encoded: ByteBuffer,
+    override val logger: ASN1Logger
 ) : ASN1Object() {
-
-    private val logger = Logger.getLogger("ASN1")
 
     val value: BigInteger by lazy {
         try {
             if (encoded[0] == 0x00.toByte() || encoded[0] == 0xff.toByte()) {
-                logger.warning("Needlessly long format")
+                logger.warning("ASN1Integer", "Needlessly long format")
             }
             BigInteger(encoded.toList().toByteArray())
         } catch (expected: ArrayIndexOutOfBoundsException) {
@@ -42,6 +40,6 @@ internal class ASN1Integer private constructor(
     override fun toString(): String = "INTEGER $value"
 
     companion object {
-        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer) = ASN1Integer(tag, encoded)
+        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer, logger: ASN1Logger) = ASN1Integer(tag, encoded, logger)
     }
 }

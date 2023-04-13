@@ -17,6 +17,7 @@
 package com.appmattus.certificatetransparency.internal.utils.asn1.x509
 
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Integer
+import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Logger
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Object
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
 import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
@@ -33,6 +34,9 @@ internal class CertificateSerialNumber private constructor(private val integer: 
 
     override val encoded: ByteBuffer
         get() = integer.encoded
+
+    override val logger: ASN1Logger
+        get() = integer.logger
 
     val serialNumber: BigInteger by lazy { integer.value }
 

@@ -25,7 +25,7 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.x509.Extensions
 import com.appmattus.certificatetransparency.internal.utils.asn1.x509.Version
 import okio.ByteString.Companion.toByteString
 
-internal fun ByteArray.toAsn1(): ASN1Object = toByteBuffer().toAsn1()
+internal fun ByteArray.toAsn1(logger: ASN1Logger = EmptyLogger): ASN1Object = toByteBuffer().toAsn1(logger)
 
 internal data class ASN1Header(val tag: ASN1HeaderTag, val headerLength: Int, val dataLength: Int) {
     val totalLength: Int
@@ -33,43 +33,43 @@ internal data class ASN1Header(val tag: ASN1HeaderTag, val headerLength: Int, va
 }
 
 @Suppress("MagicNumber")
-internal fun ByteBuffer.header(): ASN1Header {
+internal fun ByteBuffer.header(logger: ASN1Logger): ASN1Header {
     val tag = tag()
 
-    val headerLength = length(tag)
+    val headerLength = length(tag, logger)
 
     return ASN1Header(tag, headerLength.offset, headerLength.length)
 }
 
 @Suppress("MagicNumber")
-internal fun ByteBuffer.toAsn1(): ASN1Object {
-    val header = header()
+internal fun ByteBuffer.toAsn1(logger: ASN1Logger = EmptyLogger): ASN1Object {
+    val header = header(logger)
 
     val encoded = this.range(header.headerLength, header.totalLength)
 
     val tag = header.tag
 
     return when {
-        tag.isUniversal(0x01) -> ASN1Boolean.create(tag, encoded)
-        tag.isUniversal(0x02) -> ASN1Integer.create(tag, encoded)
-        tag.isUniversal(0x03) -> ASN1BitString.create(tag, encoded)
-        tag.isUniversal(0x05) -> ASN1Null.create(tag, encoded)
-        tag.isUniversal(0x06) -> ASN1ObjectIdentifier.create(tag, encoded)
-        tag.isUniversal(0x0c) -> ASN1PrintableStringUS.create(tag, encoded)
-        tag.isUniversal(0x10) || tag.isUniversal(0x11) -> ASN1Sequence.create(tag, encoded)
-        tag.isUniversal(0x13) -> ASN1PrintableStringTeletex.create(tag, encoded)
-        tag.isUniversal(0x17) -> ASN1Time.create(tag, encoded)
-        tag.isContextSpecific(0x00) -> Version.create(tag, encoded)
-        tag.isContextSpecific(0x03) -> Extensions.create(tag, encoded)
-        else -> ASN1Unspecified.create(tag, encoded)
+        tag.isUniversal(0x01) -> ASN1Boolean.create(tag, encoded, logger)
+        tag.isUniversal(0x02) -> ASN1Integer.create(tag, encoded, logger)
+        tag.isUniversal(0x03) -> ASN1BitString.create(tag, encoded, logger)
+        tag.isUniversal(0x05) -> ASN1Null.create(tag, encoded, logger)
+        tag.isUniversal(0x06) -> ASN1ObjectIdentifier.create(tag, encoded, logger)
+        tag.isUniversal(0x0c) -> ASN1PrintableStringUS.create(tag, encoded, logger)
+        tag.isUniversal(0x10) || tag.isUniversal(0x11) -> ASN1Sequence.create(tag, encoded, logger)
+        tag.isUniversal(0x13) -> ASN1PrintableStringTeletex.create(tag, encoded, logger)
+        tag.isUniversal(0x17) -> ASN1Time.create(tag, encoded, logger)
+        tag.isContextSpecific(0x00) -> Version.create(tag, encoded, logger)
+        tag.isContextSpecific(0x03) -> Extensions.create(tag, encoded, logger)
+        else -> ASN1Unspecified.create(tag, encoded, logger)
     }
 }
 
 @Suppress("MagicNumber")
-internal fun ByteArray.readNestedOctets(count: Int): ByteArray {
+internal fun ByteArray.readNestedOctets(count: Int, logger: ASN1Logger = EmptyLogger): ByteArray {
     var bytes: ByteBuffer = this.toByteBuffer()
     repeat(count) {
-        val asn = bytes.toAsn1()
+        val asn = bytes.toAsn1(logger)
         if (!asn.tag.isUniversal(0x04)) error("Not an octet string")
         bytes = asn.encoded
     }

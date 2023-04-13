@@ -18,19 +18,17 @@ package com.appmattus.certificatetransparency.internal.utils.asn1
 
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
 import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
-import java.util.logging.Logger
 
 internal class ASN1Null private constructor(
     override val tag: ASN1HeaderTag,
-    override val encoded: ByteBuffer
+    override val encoded: ByteBuffer,
+    override val logger: ASN1Logger
 ) : ASN1Object() {
-
-    private val logger = Logger.getLogger("ASN1")
 
     init {
         assert(encoded.size >= 0)
         if (encoded.size > 0) {
-            logger.warning("Non-zero length of value block for NULL type")
+            logger.warning("ASN1Null", "Non-zero length of value block for NULL type")
         }
     }
 
@@ -46,8 +44,6 @@ internal class ASN1Null private constructor(
     override fun toString(): String = "NULL".also { value }
 
     companion object {
-        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer): ASN1Null {
-            return ASN1Null(tag, encoded)
-        }
+        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer, logger: ASN1Logger) = ASN1Null(tag, encoded, logger)
     }
 }

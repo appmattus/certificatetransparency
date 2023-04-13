@@ -16,6 +16,7 @@
 
 package com.appmattus.certificatetransparency.internal.utils.asn1.x509
 
+import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Logger
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Object
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Sequence
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Time
@@ -36,6 +37,9 @@ internal class Validity private constructor(private val sequence: ASN1Sequence) 
 
     override val encoded: ByteBuffer
         get() = sequence.encoded
+
+    override val logger: ASN1Logger
+        get() = sequence.logger
 
     override fun toString(): String =
         "Not Valid Before ${

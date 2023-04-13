@@ -24,6 +24,7 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1Head
 internal abstract class ASN1Object {
     abstract val tag: ASN1HeaderTag
     abstract val encoded: ByteBuffer
+    abstract val logger: ASN1Logger
 
     @Suppress("MagicNumber")
     private val lengthBytes: ByteArray by lazy {

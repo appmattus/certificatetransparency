@@ -19,14 +19,12 @@ package com.appmattus.certificatetransparency.internal.utils.asn1
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
 import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
 import java.math.BigInteger
-import java.util.logging.Logger
 
 internal class ASN1ObjectIdentifier private constructor(
     override val tag: ASN1HeaderTag,
-    override val encoded: ByteBuffer
+    override val encoded: ByteBuffer,
+    override val logger: ASN1Logger
 ) : ASN1Object() {
-
-    private val logger = Logger.getLogger("ASN1")
 
     val value: String by lazy {
         try {
@@ -99,7 +97,7 @@ internal class ASN1ObjectIdentifier private constructor(
     @Suppress("MagicNumber")
     private fun ByteBuffer.checkSidEncoding(i: Int) {
         if (i + 1 < size && this[i].toInt() and 0xff == 0x80 && this[i + 1].toInt() and 0xff == 0x80) {
-            logger.warning("Needlessly long format of SID encoding")
+            logger.warning("ASN1ObjectIdentifier", "Needlessly long format of SID encoding")
         }
     }
 
@@ -108,6 +106,6 @@ internal class ASN1ObjectIdentifier private constructor(
     companion object {
         private const val LONG_LIMIT = (Long.MAX_VALUE shr 7) - 0x7f
 
-        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer) = ASN1ObjectIdentifier(tag, encoded)
+        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer, logger: ASN1Logger) = ASN1ObjectIdentifier(tag, encoded, logger)
     }
 }

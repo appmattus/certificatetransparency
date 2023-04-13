@@ -22,6 +22,7 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1Head
 internal class ASN1PrintableStringUS private constructor(
     override val tag: ASN1HeaderTag,
     override val encoded: ByteBuffer,
+    override val logger: ASN1Logger
 ) : ASN1Object() {
 
     val value: String by lazy { String(encoded.copyOfRange(0, encoded.size), Charsets.US_ASCII) }
@@ -29,6 +30,6 @@ internal class ASN1PrintableStringUS private constructor(
     override fun toString(): String = "PRINTABLE STRING $value"
 
     companion object {
-        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer) = ASN1PrintableStringUS(tag, encoded)
+        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer, logger: ASN1Logger) = ASN1PrintableStringUS(tag, encoded, logger)
     }
 }

@@ -16,34 +16,16 @@
 
 package com.appmattus.certificatetransparency.internal.utils.asn1
 
-import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Before
-import java.util.logging.Handler
-import java.util.logging.LogRecord
-import java.util.logging.Logger
 
 @Suppress("UnnecessaryAbstractClass")
 abstract class ASN1BaseTest {
 
     private val logMessages = mutableListOf<String>()
-    private val handler = object : Handler() {
-        override fun publish(record: LogRecord) {
-            logMessages.add(record.message)
+    internal val logger = object : ASN1Logger {
+        override fun warning(name: String, message: String) {
+            logMessages.add(message)
         }
-
-        override fun flush() = Unit
-        override fun close() = Unit
-    }
-
-    @Before
-    fun setUp() {
-        Logger.getLogger("ASN1").addHandler(handler)
-    }
-
-    @After
-    fun tearDown() {
-        Logger.getLogger("ASN1").removeHandler(handler)
     }
 
     fun assertNoWarnings() {

@@ -25,14 +25,14 @@ class ASN1BooleanTest : ASN1BaseTest() {
 
     @Test
     fun `tc25 BOOLEAN Length of value block is more than 1 + encoding of FALSE value`() {
-        val asn1 = TestData.file("/testdata/asn1/tc25.ber").readBytes().toAsn1()
+        val asn1 = TestData.file("/testdata/asn1/tc25.ber").readBytes().toAsn1(logger)
         assertEquals("BOOLEAN false", asn1.toString())
         assertWarnings("Needlessly long format. BOOLEAN value encoded in more then 1 octet")
     }
 
     @Test
     fun `tc26 BOOLEAN Length of value block is more than 1 + encoding of TRUE value`() {
-        val asn1 = TestData.file("/testdata/asn1/tc26.ber").readBytes().toAsn1()
+        val asn1 = TestData.file("/testdata/asn1/tc26.ber").readBytes().toAsn1(logger)
         assertEquals("BOOLEAN true", asn1.toString())
         assertWarnings("Needlessly long format. BOOLEAN value encoded in more then 1 octet")
     }
@@ -40,7 +40,7 @@ class ASN1BooleanTest : ASN1BaseTest() {
     @Test
     fun `tc27 BOOLEAN Absence of value block`() {
         val throwable = Assert.assertThrows(Exception::class.java) {
-            val asn1 = TestData.file("/testdata/asn1/tc27.ber").readBytes().toAsn1()
+            val asn1 = TestData.file("/testdata/asn1/tc27.ber").readBytes().toAsn1(logger)
             asn1.toString()
         }
 
@@ -49,14 +49,14 @@ class ASN1BooleanTest : ASN1BaseTest() {
 
     @Test
     fun `tc28 BOOLEAN Right encoding for TRUE value`() {
-        val asn1 = TestData.file("/testdata/asn1/tc28.ber").readBytes().toAsn1()
+        val asn1 = TestData.file("/testdata/asn1/tc28.ber").readBytes().toAsn1(logger)
         assertEquals("BOOLEAN true", asn1.toString())
         assertNoWarnings()
     }
 
     @Test
     fun `tc29 BOOLEAN Right encoding for FALSE value`() {
-        val asn1 = TestData.file("/testdata/asn1/tc29.ber").readBytes().toAsn1()
+        val asn1 = TestData.file("/testdata/asn1/tc29.ber").readBytes().toAsn1(logger)
         assertEquals("BOOLEAN false", asn1.toString())
         assertNoWarnings()
     }

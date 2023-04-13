@@ -23,6 +23,7 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1Head
 internal data class ASN1Sequence(
     override val tag: ASN1HeaderTag,
     override val encoded: ByteBuffer,
+    override val logger: ASN1Logger
 ) : ASN1Object() {
 
     val values: List<ASN1Object> by lazy {
@@ -31,11 +32,11 @@ internal data class ASN1Sequence(
         var subOffset = 0
         while (subOffset < encoded.size) {
             val remaining = encoded.range(subOffset, encoded.size)
-            val header = remaining.header()
+            val header = remaining.header(logger)
 
             val range = remaining.range(0, header.totalLength)
 
-            val subObject = range.toAsn1()
+            val subObject = range.toAsn1(logger)
             subObjects.add(subObject)
             subOffset += header.totalLength
         }
@@ -49,13 +50,13 @@ internal data class ASN1Sequence(
     }
 
     companion object {
-        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer) = ASN1Sequence(tag, encoded)
+        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer, logger: ASN1Logger) = ASN1Sequence(tag, encoded, logger)
 
-        fun create(tag: ASN1HeaderTag, values: List<ASN1Object>): ASN1Sequence {
+        fun create(tag: ASN1HeaderTag, values: List<ASN1Object>, logger: ASN1Logger): ASN1Sequence {
             val encoded = values.map {
                 it.bytes
             }.joinToByteBuffer()
-            return ASN1Sequence(tag, encoded)
+            return ASN1Sequence(tag, encoded, logger)
         }
     }
 }

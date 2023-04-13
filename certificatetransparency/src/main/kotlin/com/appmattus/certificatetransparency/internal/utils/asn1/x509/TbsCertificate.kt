@@ -17,6 +17,7 @@
 package com.appmattus.certificatetransparency.internal.utils.asn1.x509
 
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Integer
+import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Logger
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Object
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Sequence
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
@@ -29,6 +30,7 @@ internal class TbsCertificate private constructor(private val sequence: ASN1Sequ
 
     override val tag: ASN1HeaderTag = sequence.tag
     override val encoded: ByteBuffer = sequence.encoded
+    override val logger: ASN1Logger = sequence.logger
 
     private val versionOffset = if (sequence.values[0] is Version) 1 else 0
 
@@ -107,7 +109,8 @@ internal class TbsCertificate private constructor(private val sequence: ASN1Sequ
         return create(
             ASN1Sequence.create(
                 tag = ASN1HeaderTag(TagClass.Universal, TagForm.Constructed, 0x10, 1),
-                values = values
+                values = values,
+                logger = logger
             )
         )
     }
