@@ -30,10 +30,11 @@ internal fun ByteBuffer.length(tag: ASN1HeaderTag, logger: ASN1Logger): ASN1Head
 
     if (length == 0x80) {
         // indefinite length
-        // TODO Not currently verified/supported
-        length = size - offset
+        // X509 certificates are encoded with ASN.1 DER which does not allow indefinite-length encodings
+        error("Indefinite length encoding not supported")
+        // length = size - offset
     } else if ((length and 0x80) == 0x80) {
-        // longFormUsed
+        // long form used
         val numLengthBytes = length and 0x7f
 
         // We don't support values larger than an Int as we cannot store such large data in a ByteArray
