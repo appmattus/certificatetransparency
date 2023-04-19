@@ -21,9 +21,14 @@ android {
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
 
         consumerProguardFiles("consumer-proguard-rules.pro")
+        
+        // Required when setting minSdkVersion to 20 or lower (from guide of setting up API desugaring)
+        multiDexEnabled = true
     }
 
     compileOptions {
+        // Flag to enable support for the new language APIs by D8 API desugaring
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -47,6 +52,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${libs.versions.coroutines.get()}")
 
     api(project(":certificatetransparency"))
+    
+    //https://github.com/google/desugar_jdk_libs/blob/master/CHANGELOG.md#version-123-2023-03-29
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.3")
 
     testImplementation("junit:junit:${libs.versions.junit4.get()}")
     testImplementation("org.mockito:mockito-core:${libs.versions.mockito.get()}")
