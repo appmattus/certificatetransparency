@@ -35,6 +35,9 @@ which ensures the necessary ProGuard rules are present:
 implementation("com.appmattus.certificatetransparency:certificatetransparency-android:<latest-version>")
 ```
 
+> :warning: The library uses Java 8+ language features and requires [Desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring)
+> to be enabled to run on Android 7 (API 25) or less.
+
 For Java library modules include the dependency as follows:
 
 ```kotlin
