@@ -53,4 +53,15 @@ internal class CertificateTransparencyTrustManagerTest {
 
         assertEquals("No commonName found in certificate subjectDN", exception.message)
     }
+
+    @Test
+    fun noSubjectThrowsException() {
+        val certs = TestData.loadCertificates(TestData.TEST_NO_SUBJECT)
+
+        val exception = assertThrows(CertificateException::class.java) {
+            trustManager.checkServerTrusted(certs.toTypedArray(), "AUTH")
+        }
+
+        assertEquals("No commonName found in certificate subjectDN", exception.message)
+    }
 }

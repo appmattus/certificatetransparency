@@ -77,6 +77,7 @@ internal object TestData {
     const val TEST_ROOT_CERTS = DATA_ROOT + "test-root-certs"
     const val TEST_GITHUB_CHAIN = DATA_ROOT + "github-chain.pem"
     const val TEST_NO_COMMON_NAME = DATA_ROOT + "no-common-name.pem"
+    const val TEST_NO_SUBJECT = DATA_ROOT + "no-subject.pem"
 
     const val TEST_LOG_LIST_JSON = DATA_ROOT + "loglist/log_list.json"
     const val TEST_LOG_LIST_JSON_TOO_BIG = DATA_ROOT + "loglist/log_list_too_big.json"
