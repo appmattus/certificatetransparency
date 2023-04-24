@@ -19,14 +19,16 @@ package com.appmattus.certificatetransparency.internal.utils.asn1
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBufferArray
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.toByteBuffer
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
 
-internal interface ASN1Object {
-    val tag: Int
-    val encoded: ByteBuffer
+internal abstract class ASN1Object {
+    abstract val tag: ASN1HeaderTag
+    abstract val encoded: ByteBuffer
+    abstract val logger: ASN1Logger
 
     @Suppress("MagicNumber")
-    private val lengthBytes: ByteArray
-        get() = when {
+    private val lengthBytes: ByteArray by lazy {
+        when {
             encoded.size < 128 ->
                 byteArrayOf(encoded.size.toByte())
             encoded.size <= 0xff ->
@@ -42,10 +44,17 @@ internal interface ASN1Object {
                 )
             else -> throw IllegalArgumentException("Length too long")
         }
+    }
 
-    val totalLength: Int
-        get() = encoded.size + lengthBytes.size + 1
+    private val tagBytes: ByteArray by lazy {
+        tag.tagBytes
+    }
 
-    val bytes: ByteBuffer
-        get() = ByteBufferArray(listOf(byteArrayOf(tag.toByte()).toByteBuffer(), lengthBytes.toByteBuffer(), encoded))
+    open val totalLength: Int by lazy {
+        encoded.size + lengthBytes.size + tagBytes.size
+    }
+
+    val bytes: ByteBuffer by lazy {
+        ByteBufferArray(listOf(tagBytes.toByteBuffer(), lengthBytes.toByteBuffer(), encoded))
+    }
 }

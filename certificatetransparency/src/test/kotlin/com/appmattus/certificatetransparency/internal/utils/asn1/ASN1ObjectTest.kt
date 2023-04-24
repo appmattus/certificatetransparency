@@ -2,6 +2,9 @@ package com.appmattus.certificatetransparency.internal.utils.asn1
 
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.toByteBuffer
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.TagClass
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.TagForm
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -71,11 +74,13 @@ class ASN1ObjectTest {
         assertEquals("a0820100", obj.bytes.range(0, 4).toHexString())
     }
 
-    private fun createASN1Object(length: Int) = object : ASN1Object {
-        override val tag: Int
-            get() = 0xa0
+    private fun createASN1Object(length: Int) = object : ASN1Object() {
+        override val tag: ASN1HeaderTag
+            get() = ASN1HeaderTag(TagClass.ContextSpecific, TagForm.Constructed, 0x00, 1)
 
         override val encoded: ByteBuffer
             get() = ByteArray(length).toByteBuffer()
+
+        override val logger: ASN1Logger = EmptyLogger
     }
 }

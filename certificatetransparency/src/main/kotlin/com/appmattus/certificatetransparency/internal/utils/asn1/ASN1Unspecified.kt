@@ -17,16 +17,17 @@
 package com.appmattus.certificatetransparency.internal.utils.asn1
 
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
 
 internal data class ASN1Unspecified(
-    override val tag: Int,
-    override val totalLength: Int,
+    override val tag: ASN1HeaderTag,
     override val encoded: ByteBuffer,
-) : ASN1Object {
+    override val logger: ASN1Logger
+) : ASN1Object() {
 
-    override fun toString(): String = "UNSPECIFIED 0x${byteArrayOf(tag.toByte()).toHexString()}"
+    override fun toString(): String = "UNSPECIFIED(${tag.tagNumber}) 0x${encoded.toHexString()}"
 
     companion object {
-        fun create(tag: Int, totalLength: Int, encoded: ByteBuffer) = ASN1Unspecified(tag, totalLength, encoded)
+        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer, logger: ASN1Logger) = ASN1Unspecified(tag, encoded, logger)
     }
 }

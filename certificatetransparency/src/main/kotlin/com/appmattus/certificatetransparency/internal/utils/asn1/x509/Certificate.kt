@@ -17,8 +17,10 @@
 package com.appmattus.certificatetransparency.internal.utils.asn1.x509
 
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1BitString
+import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Logger
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Object
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Sequence
+import com.appmattus.certificatetransparency.internal.utils.asn1.EmptyLogger
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.toByteBuffer
 import com.appmattus.certificatetransparency.internal.utils.asn1.toAsn1
 
@@ -50,6 +52,6 @@ internal class Certificate private constructor(private val sequence: ASN1Sequenc
     }
 
     companion object {
-        fun create(byteArray: ByteArray) = Certificate(byteArray.toByteBuffer().toAsn1() as ASN1Sequence)
+        fun create(byteArray: ByteArray, logger: ASN1Logger = EmptyLogger) = Certificate(byteArray.toByteBuffer().toAsn1(logger) as ASN1Sequence)
     }
 }

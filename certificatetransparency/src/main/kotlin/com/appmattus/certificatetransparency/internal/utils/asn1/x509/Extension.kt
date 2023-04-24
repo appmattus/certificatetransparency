@@ -17,16 +17,19 @@
 package com.appmattus.certificatetransparency.internal.utils.asn1.x509
 
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Boolean
+import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Logger
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Object
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1ObjectIdentifier
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Sequence
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
+import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
 
 internal class Extension private constructor(
     private val sequence: ASN1Sequence
-) : ASN1Object {
-    override val tag: Int = sequence.tag
+) : ASN1Object() {
+    override val tag: ASN1HeaderTag = sequence.tag
     override val encoded: ByteBuffer = sequence.encoded
+    override val logger: ASN1Logger = sequence.logger
 
     private val criticalOffset = if (sequence.values[1] is ASN1Boolean) 1 else 0
 

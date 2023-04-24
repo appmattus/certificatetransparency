@@ -37,8 +37,8 @@ dependencies {
     testImplementation("junit:junit:${libs.versions.junit4.get()}")
     testImplementation("org.mockito:mockito-core:${libs.versions.mockito.get()}")
     testImplementation("org.mockito.kotlin:mockito-kotlin:${libs.versions.mockitoKotlin.get()}")
-
     testImplementation("nl.jqno.equalsverifier:equalsverifier:${libs.versions.equalsVerifier.get()}")
+    testImplementation("io.github.classgraph:classgraph:4.8.157")
 }
 
 tasks.withType(KotlinCompile::class.java).all {

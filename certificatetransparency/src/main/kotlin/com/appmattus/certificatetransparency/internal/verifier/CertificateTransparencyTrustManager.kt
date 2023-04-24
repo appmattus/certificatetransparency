@@ -22,13 +22,14 @@ import com.appmattus.certificatetransparency.VerificationResult
 import com.appmattus.certificatetransparency.cache.DiskCache
 import com.appmattus.certificatetransparency.chaincleaner.CertificateChainCleanerFactory
 import com.appmattus.certificatetransparency.datasource.DataSource
+import com.appmattus.certificatetransparency.internal.utils.asn1.query.query
+import com.appmattus.certificatetransparency.internal.utils.asn1.toAsn1
 import com.appmattus.certificatetransparency.internal.verifier.model.Host
 import com.appmattus.certificatetransparency.loglist.LogListResult
 import com.appmattus.certificatetransparency.loglist.LogListService
 import java.lang.reflect.Method
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
-import javax.naming.ldap.LdapName
 import javax.net.ssl.X509TrustManager
 
 @Suppress("LongParameterList", "CustomX509TrustManager")
@@ -81,7 +82,9 @@ internal class CertificateTransparencyTrustManager(
 
         val leafCertificate = chain.first()
 
-        val commonName = LdapName(leafCertificate.subjectX500Principal.name).rdns.first { it.type.equals("CN", true) }?.value.toString()
+        val commonName = leafCertificate.subjectX500Principal.encoded.toAsn1().query {
+            seq().firstOrNull { it.seq().first().seq().first().oid() == "2.5.4.3" }?.seq()?.first()?.seq()?.get(1)?.string()
+        } ?: throw CertificateException("No commonName found in certificate subjectDN")
 
         val result = verifyCertificateTransparency(commonName, chain.toList())
 
@@ -93,7 +96,7 @@ internal class CertificateTransparencyTrustManager(
     }
 
     // Called through reflection by X509TrustManagerExtensions on Android
-    @Suppress("unused", "UNUSED_PARAMETER")
+    @Suppress("unused")
     fun checkServerTrusted(chain: Array<out X509Certificate>, authType: String, host: String): List<X509Certificate> {
         @Suppress("UNCHECKED_CAST")
         val certs = checkServerTrustedMethod!!.invoke(delegate, chain, authType, host) as List<X509Certificate>
