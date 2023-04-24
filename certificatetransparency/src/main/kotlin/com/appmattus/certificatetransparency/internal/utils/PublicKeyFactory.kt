@@ -65,6 +65,8 @@ internal object PublicKeyFactory {
         return when (val oid = keyBytes.toAsn1().query { seq().first().seq().first().oid() }) {
             "1.2.840.113549.1.1.1" -> "RSA"
             "1.2.840.10045.2.1" -> "EC"
+            "1.2.840.10040.4.1" -> "DSA"
+            "1.2.840.113549.1.3.1" -> "DH"
             else -> throw IllegalArgumentException("Unsupported key type $oid")
         }
     }

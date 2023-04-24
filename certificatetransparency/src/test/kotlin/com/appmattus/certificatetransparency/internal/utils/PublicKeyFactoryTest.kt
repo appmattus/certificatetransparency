@@ -16,8 +16,10 @@
 
 package com.appmattus.certificatetransparency.internal.utils
 
+import com.appmattus.certificatetransparency.utils.TestData
 import okio.ByteString.Companion.decodeHex
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 import org.junit.Test
 
 class PublicKeyFactoryTest {
@@ -39,5 +41,42 @@ class PublicKeyFactoryTest {
                 "0df9d9d5a98bb0879d2579d41a506008f509063926e440c2bac3c2"
         val bytes = input.decodeHex().toByteArray()
         assertEquals("EC", PublicKeyFactory.determineKeyAlgorithm(bytes))
+    }
+
+    @Test
+    fun fromPemStringEC() {
+        val pem = TestData.file(TestData.TEST_PUBLIC_KEY_EC).readText()
+        val key = PublicKeyFactory.fromPemString(pem)
+        assertEquals("EC", key.algorithm)
+    }
+
+    @Test
+    fun fromPemStringRSA() {
+        val pem = TestData.file(TestData.TEST_PUBLIC_KEY_RSA).readText()
+        val key = PublicKeyFactory.fromPemString(pem)
+        assertEquals("RSA", key.algorithm)
+    }
+
+    @Test
+    fun fromPemStringDSA() {
+        val pem = TestData.file(TestData.TEST_PUBLIC_KEY_DSA).readText()
+        val key = PublicKeyFactory.fromPemString(pem)
+        assertEquals("DSA", key.algorithm)
+    }
+
+    @Test
+    fun fromPemStringEd25519Unsupported() {
+        val pem = TestData.file(TestData.TEST_PUBLIC_KEY_ED25519).readText()
+        val exception = assertThrows(IllegalArgumentException::class.java) {
+            PublicKeyFactory.fromPemString(pem)
+        }
+        assertEquals("Unsupported key type 1.3.101.112", exception.message)
+    }
+
+    @Test
+    fun fromPemStringDH() {
+        val pem = TestData.file(TestData.TEST_PUBLIC_KEY_DH).readText()
+        val key = PublicKeyFactory.fromPemString(pem)
+        assertEquals("DH", key.algorithm)
     }
 }

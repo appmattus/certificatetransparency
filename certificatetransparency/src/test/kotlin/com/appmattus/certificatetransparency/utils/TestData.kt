@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -107,6 +107,13 @@ internal object TestData {
     const val ELEVEN_CERTS_ROOT_CERT = DATA_ROOT + "chaincleaner/eleven-certs-root-cert.pem"
 
     const val SELF_SIGNED_ROOT_CERT = DATA_ROOT + "chaincleaner/self-signed-root-cert.pem"
+
+    // Public log key
+    const val TEST_PUBLIC_KEY_EC = DATA_ROOT + "ec-public-key.pem"
+    const val TEST_PUBLIC_KEY_RSA = DATA_ROOT + "rsa-public-key.pem"
+    const val TEST_PUBLIC_KEY_DSA = DATA_ROOT + "dsa-public-key.pem"
+    const val TEST_PUBLIC_KEY_ED25519 = DATA_ROOT + "ed25519-public-key.pem"
+    const val TEST_PUBLIC_KEY_DH = DATA_ROOT + "dh-public-key.pem"
 
     fun loadCertificates(filename: String): List<X509Certificate> {
         val file = File(TestData::class.java.getResource(filename)!!.file)
