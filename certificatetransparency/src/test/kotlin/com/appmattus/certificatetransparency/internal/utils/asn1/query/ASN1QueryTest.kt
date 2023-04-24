@@ -24,6 +24,31 @@ import org.junit.Test
 
 class ASN1QueryTest {
 
+    @Test(expected = IllegalStateException::class)
+    fun queryNotAStringThrowsException() {
+        certsToCheck.first().query {
+            string()
+        }
+    }
+
+    @Test
+    fun queryPrintableStringTeletex() {
+        val result = byteArrayOf(0x13, 0x06, 0x50, 0x61, 0x72, 0x6B, 0x65, 0x72).toAsn1().query {
+            string()
+        }
+
+        assertEquals("Parker", result)
+    }
+
+    @Test
+    fun queryPrintableStringUS() {
+        val result = byteArrayOf(0x0C, 0x08, 0x61, 0x62, 0x63, 0x64, 0x6C, 0x6D, 0x79, 0x7A).toAsn1().query {
+            string()
+        }
+
+        assertEquals("abcdlmyz", result)
+    }
+
     @Test
     fun queryFirstOrNullFalse() {
         val result = certsToCheck.first().query {

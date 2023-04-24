@@ -76,6 +76,7 @@ internal object TestData {
     const val TEST_PRE_CERT_SIGNED_BY_PRECA_INTERMEDIATE_SCT = DATA_ROOT + "test-embedded-with-intermediate-preca-pre-cert.proof"
     const val TEST_ROOT_CERTS = DATA_ROOT + "test-root-certs"
     const val TEST_GITHUB_CHAIN = DATA_ROOT + "github-chain.pem"
+    const val TEST_NO_COMMON_NAME = DATA_ROOT + "no-common-name.pem"
 
     const val TEST_LOG_LIST_JSON = DATA_ROOT + "loglist/log_list.json"
     const val TEST_LOG_LIST_JSON_TOO_BIG = DATA_ROOT + "loglist/log_list_too_big.json"
