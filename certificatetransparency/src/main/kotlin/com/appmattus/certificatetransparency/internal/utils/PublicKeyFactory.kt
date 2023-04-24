@@ -62,7 +62,7 @@ internal object PublicKeyFactory {
             X9ObjectIdentifiers.id_ecPublicKey -> "EC"
             else -> throw IllegalArgumentException("Unsupported key type $oid")
         }*/
-        return when (val oid = keyBytes.toAsn1().query { seq(0).seq(0).oid() }) {
+        return when (val oid = keyBytes.toAsn1().query { seq().first().seq().first().oid() }) {
             "1.2.840.113549.1.1.1" -> "RSA"
             "1.2.840.10045.2.1" -> "EC"
             else -> throw IllegalArgumentException("Unsupported key type $oid")

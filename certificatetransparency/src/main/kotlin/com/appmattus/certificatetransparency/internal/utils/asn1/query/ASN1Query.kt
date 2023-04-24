@@ -23,14 +23,8 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1PrintableSt
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Sequence
 
 internal data class ASN1Query(private val obj: ASN1Object) {
-    fun seq(index: Int): ASN1Query {
-        return ASN1Query((obj as ASN1Sequence).values[index])
-    }
-
-    fun seqFirstOrNull(query: ASN1Query.() -> Boolean): ASN1Query? {
-        return (obj as ASN1Sequence).values.firstOrNull {
-            query(ASN1Query(it))
-        }?.let { ASN1Query(it) }
+    fun seq(): List<ASN1Query> {
+        return (obj as ASN1Sequence).values.map(::ASN1Query)
     }
 
     fun oid(): String {

@@ -83,7 +83,7 @@ internal class CertificateTransparencyTrustManager(
         val leafCertificate = chain.first()
 
         val commonName = leafCertificate.subjectX500Principal.encoded.toAsn1().query {
-            seqFirstOrNull { seq(0).seq(0).oid() == "2.5.4.3" }?.seq(0)?.seq(1)?.string()
+            seq().firstOrNull { it.seq().first().seq().first().oid() == "2.5.4.3" }?.seq()?.first()?.seq()?.get(1)?.string()
         } ?: throw CertificateException("No commonName found in certificate subjectDN")
 
         val result = verifyCertificateTransparency(commonName, chain.toList())
