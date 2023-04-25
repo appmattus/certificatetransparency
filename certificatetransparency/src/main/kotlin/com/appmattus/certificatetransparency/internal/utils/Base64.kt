@@ -16,14 +16,9 @@
 
 package com.appmattus.certificatetransparency.internal.utils
 
-import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
-
 internal object Base64 {
 
-    @OptIn(ExperimentalEncodingApi::class)
-    fun decode(data: String): ByteArray = Base64.Default.Mime.decode(data.encodeToByteArray())
+    fun decode(data: String): ByteArray = Base64Decoder().decode(data.encodeToByteArray())
 
-    @OptIn(ExperimentalEncodingApi::class)
-    fun toBase64String(data: ByteArray): String = Base64.Default.Mime.encode(data).replace("[\\s\\r\\n]+".toRegex(),"")
+    fun toBase64String(data: ByteArray): String = Base64Encoder().encode(data).decodeToString()
 }
