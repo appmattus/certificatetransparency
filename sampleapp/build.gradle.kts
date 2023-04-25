@@ -8,6 +8,8 @@ plugins {
 }
 
 android {
+    namespace = "com.appmattus.certificatetransparency.sampleapp"
+
     compileSdk = 33
     defaultConfig {
         applicationId = "com.appmattus.certificatetransparency.sampleapp"
