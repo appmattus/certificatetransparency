@@ -16,7 +16,7 @@ jobs:
             -   uses: actions/setup-java@v3
                 with:
                     distribution: 'zulu'
-                    java-version: '11'
+                    java-version: '17'
 
             -   name: Fetch latest log list
                 run: ./gradlew updateLogList

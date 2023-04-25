@@ -21,6 +21,7 @@
 package com.appmattus.certificatetransparency.sampleapp.examples
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.appmattus.certificatetransparency.CTLogger
@@ -119,6 +120,8 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
                 is VerificationResult.Success -> State.Message.Success(result.toString())
                 is VerificationResult.Failure -> State.Message.Failure(result.toString())
             }
+
+            Log.d("CT", "$host -> $result")
 
             reduce {
                 state.copy(message = message)
