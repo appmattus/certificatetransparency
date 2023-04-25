@@ -12,11 +12,10 @@ plugins {
 apply(from = "$rootDir/gradle/scripts/jacoco-android.gradle.kts")
 
 android {
-    compileSdk = 31
+    compileSdk = 33
 
     defaultConfig {
         minSdk = 19
-        targetSdk = 31
 
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
 

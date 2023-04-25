@@ -28,7 +28,6 @@ val Project.libs: LibrariesForLibs
 buildscript {
     repositories {
         google()
-        jcenter()
         maven(url = "https://plugins.gradle.org/m2/")
     }
     dependencies {
@@ -39,7 +38,7 @@ buildscript {
 apply<VersionsPlugin>()
 
 fun isNonStable(version: String): Boolean {
-    val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.toUpperCase().contains(it) }
+    val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.uppercase().contains(it) }
     val regex = "^[0-9,.v-]+(-r)?$".toRegex()
     return !stableKeyword && !regex.matches(version)
 }
