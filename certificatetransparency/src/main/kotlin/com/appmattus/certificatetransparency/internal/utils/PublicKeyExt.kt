@@ -20,5 +20,3 @@ import java.security.MessageDigest
 import java.security.PublicKey
 
 internal fun PublicKey.sha256Hash(): ByteArray = MessageDigest.getInstance("SHA-256").digest(encoded)
-
-internal fun PublicKey.sha1Hash(): ByteArray = MessageDigest.getInstance("SHA-1").digest(encoded)

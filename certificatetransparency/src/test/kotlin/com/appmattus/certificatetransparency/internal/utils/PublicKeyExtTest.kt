@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2023 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,18 +37,5 @@ internal class PublicKeyExtTest {
         // then the result matches openssl generated using:
         // openssl x509 -in test-cert.pem -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha256 -binary | openssl enc -base64
         assertEquals("Ojz4hdfbFTowDio/KDGC4/pN9dy/EBfIAsnO2yDbKiE=", hash)
-    }
-
-    @Test
-    fun sha1Hash() {
-        // given a certificate
-        val certificate = TestData.loadCertificates(TestData.TEST_CERT)[0]
-
-        // when we hash the public key using SHA1
-        val hash = Base64.toBase64String(certificate.publicKey.sha1Hash())
-
-        // then the result matches openssl generated using:
-        // openssl x509 -in test-cert.pem -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst -sha1 -binary | openssl enc -base64
-        assertEquals("3VE6e2DtM3cCmvh1ScSFnSENktA=", hash)
     }
 }
