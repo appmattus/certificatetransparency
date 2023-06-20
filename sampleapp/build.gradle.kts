@@ -38,7 +38,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.androidX.compose.compiler.get()
     }
-    packagingOptions {
+    packaging {
         resources.excludes.add("META-INF/DEPENDENCIES")
         resources.excludes.add("META-INF/atomicfu.kotlin_module")
     }

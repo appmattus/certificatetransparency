@@ -6,6 +6,7 @@ import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinAndroidPluginWrapper
 import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
+import java.net.URI
 
 buildscript {
     repositories {
@@ -19,7 +20,6 @@ buildscript {
 
 plugins {
     alias(libs.plugins.kotlin.jvm) apply false
-    alias(libs.plugins.owaspDependencyCheckPlugin)
     alias(libs.plugins.markdownlintGradlePlugin)
     alias(libs.plugins.gradleMavenPublishPlugin) apply false
     alias(libs.plugins.dokkaPlugin)
@@ -46,7 +46,7 @@ subprojects {
 
                     sourceLink {
                         localDirectory.set(rootDir)
-                        remoteUrl.set(java.net.URL("https://github.com/appmattus/certificatetransparency/blob/main"))
+                        remoteUrl.set(URI("https://github.com/appmattus/certificatetransparency/blob/main").toURL())
                         remoteLineSuffix.set("#L")
                     }
                 }
