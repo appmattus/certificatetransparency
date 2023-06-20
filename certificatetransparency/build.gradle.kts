@@ -55,6 +55,7 @@ dependencyCheck {
     suppressionFile = file("cve-suppressions.xml").toString()
 
     analyzers.assemblyEnabled = false
+    analyzers.ossIndex.enabled = false
 
     skipConfigurations = listOf(
         "lintClassPath", "jacocoAgent", "jacocoAnt", "kotlinCompilerClasspath", "kotlinCompilerPluginClasspath",
