@@ -14,7 +14,16 @@
  * limitations under the License.
  */
 
+import org.gradle.accessors.dm.LibrariesForLibs
+
+val Project.libs: LibrariesForLibs
+    get() = this.extensions.getByType()
+
 apply<JacocoPlugin>()
+
+configure<JacocoPluginExtension> {
+    toolVersion = libs.versions.jacoco.get()
+}
 
 val jacocoTask = tasks.withType<JacocoReport> {
     reports {
