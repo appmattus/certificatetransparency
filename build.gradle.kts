@@ -1,11 +1,12 @@
 import com.appmattus.markdown.rules.LineLengthRule
 import com.appmattus.markdown.rules.ProperNamesRule
-import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.dokka.gradle.DokkaPlugin
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinAndroidPluginWrapper
+import org.jetbrains.kotlin.gradle.plugin.KotlinBasePlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.net.URI
 
 buildscript {
@@ -69,6 +70,18 @@ subprojects {
             }
         }
     }
+
+    tasks.withType<KotlinCompile>().all {
+        kotlinOptions {
+            allWarningsAsErrors = true
+        }
+    }
+
+    plugins.withType<KotlinBasePlugin> {
+        configure<KotlinProjectExtension> {
+            jvmToolchain(libs.versions.java.get().toInt())
+        }
+    }
 }
 
 tasks.register<Delete>("clean") {
@@ -86,10 +99,6 @@ markdownlint {
 
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${libs.versions.detektGradlePlugin.get()}")
-}
-
-tasks.withType<Detekt> {
-    jvmTarget = "1.8"
 }
 
 detekt {

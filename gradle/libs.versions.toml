@@ -16,51 +16,54 @@
 
 [versions]
 
-kotlin = "1.8.20"
+java = "11"
+kotlin = "1.9.0"
 
-androidGradlePlugin = "8.0.0"
+androidGradlePlugin = "8.1.2"
 detektGradlePlugin = "1.22.0"
-dokkaPlugin = "1.8.10"
+dokkaPlugin = "1.8.20"
 gradleMavenPublishPlugin = "0.25.2"
 gradleVersionsPlugin = "0.36.0"
 markdownlintGradlePlugin = "0.6.0"
-owaspDependencyCheckPlugin = "8.2.1"
+owaspDependencyCheckPlugin = "8.3.1"
 
-coroutines = "1.6.4"
+coroutines = "1.7.3"
 highlightJs = "1.5.0"
 okhttp = "4.11.0"
+okio = "3.6.0"
 retrofit = "2.9.0"
-volley = "1.2.0"
-orbit = "4.6.1"
+volley = "1.2.1"
+orbit = "6.0.0"
 
 jacoco = "0.8.10"
-bouncyCastle = "1.73"
-equalsVerifier = "3.14.1"
+bouncyCastle = "1.76"
+equalsVerifier = "3.15"
 junit4 = "4.13.2"
-mockito = "5.3.1"
-mockitoKotlin = "4.1.0"
-robolectric = "4.10"
+mockito = "5.5.0"
+mockitoKotlin = "5.1.0"
+robolectric = "4.10.3"
+classgraph = "4.8.161"
 
 desugar = "1.1.5"
 
 androidX-appCompat = "1.6.1"
 androidX-lifecycle = "2.4.0"
-androidX-compose-ui = "1.4.2"
-androidX-compose-foundation = "1.4.2"
-androidX-compose-material = "1.4.2"
-androidX-compose-compiler = "1.4.6"
-androidX-activityCompose = "1.7.1"
+androidX-compose-ui = "1.4.3"
+androidX-compose-foundation = "1.4.3"
+androidX-compose-material = "1.4.3"
+androidX-compose-compiler = "1.5.1"
+androidX-activityCompose = "1.7.2"
 androidX-lifecycleViewmodelCompose = "2.6.1"
-androidX-navigationCompose = "2.5.3"
+androidX-navigationCompose = "2.6.0"
 
 androidX-testCore = "1.5.0"
 androidX-testExtJunit = "1.1.5"
 androidX-testRunner = "1.5.2"
 
-google-material = "1.8.0"
+google-material = "1.9.0"
 google-playServices = "18.2.0"
 
-kotlinX-serialization = "1.5.0"
+kotlinX-serialization = "1.5.1"
 
 
 [plugins]
