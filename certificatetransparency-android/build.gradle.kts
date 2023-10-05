@@ -14,7 +14,7 @@ apply(from = "$rootDir/gradle/scripts/jacoco-android.gradle.kts")
 android {
     namespace = "com.appmattus.certificatetransparency"
 
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 19
@@ -24,14 +24,7 @@ android {
         consumerProguardFiles("consumer-proguard-rules.pro")
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-        allWarningsAsErrors = true
         freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
 

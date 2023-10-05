@@ -104,8 +104,7 @@ internal class LogListCacheManagementDataSourceTest {
             // Given no data in memory or disk cache and the network returns successfully
             givenNetworkResult(LogListResult.Valid.Success(defaultLogListTimestamp, emptyList()))
             // and the time now is between 14 days (exclusive) and 70 days (inclusive) old of the log list
-            now =
-                defaultLogListTimestamp + Duration.ofMillis(
+            now = defaultLogListTimestamp + Duration.ofMillis(
                 Random.nextLong(FOURTEEN_DAYS_IN_MILLISECONDS + 1, SEVENTY_DAYS_IN_MILLISECONDS + 1)
             )
 

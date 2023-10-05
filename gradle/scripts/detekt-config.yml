@@ -6,12 +6,20 @@ formatting:
         maxLineLength: 145 # increased from 120
     ContextReceiverMapping:
         maxLineLength: 145 # increased from 120
+    FunctionReturnTypeSpacing:
+        maxLineLength: 145 # increased from 120
     FunctionSignature:
         maxLineLength: 145 # increased from 120
     MaximumLineLength:
         active: false
         maxLineLength: 145 # increased from 120
     ParameterListWrapping:
+        maxLineLength: 145 # increased from 120
+    ParameterWrapping:
+        maxLineLength: 145 # increased from 120
+    PropertyWrapping:
+        maxLineLength: 145 # increased from 120
+    Wrapping:
         maxLineLength: 145 # increased from 120
 
 style:

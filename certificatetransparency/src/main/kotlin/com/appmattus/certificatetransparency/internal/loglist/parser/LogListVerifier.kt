@@ -34,9 +34,9 @@ internal class LogListVerifier(
     fun verify(message: ByteArray, signature: ByteArray): LogServerSignatureResult {
         return try {
             if (Signature.getInstance("SHA256withRSA").apply {
-                initVerify(publicKey)
-                update(message)
-            }.verify(signature)
+                    initVerify(publicKey)
+                    update(message)
+                }.verify(signature)
             ) {
                 LogServerSignatureResult.Valid
             } else {

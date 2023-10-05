@@ -43,7 +43,7 @@ internal object Deserializer {
      * @throws IOException
      */
     fun parseSctFromBinary(inputStream: InputStream): SignedCertificateTimestamp {
-        val version = Version.forNumber(inputStream.readNumber(1 /* single byte */).toInt())
+        val version = Version.forNumber(inputStream.readNumber(1).toInt())
         if (version != Version.V1) {
             throw SerializationException("Unknown version: $version")
         }
@@ -74,11 +74,11 @@ internal object Deserializer {
      * @throws IOException
      */
     private fun parseDigitallySignedFromBinary(inputStream: InputStream): DigitallySigned {
-        val hashAlgorithmByte = inputStream.readNumber(1 /* single byte */).toInt()
+        val hashAlgorithmByte = inputStream.readNumber(1).toInt()
         val hashAlgorithm = DigitallySigned.HashAlgorithm.forNumber(hashAlgorithmByte)
             ?: throw SerializationException("Unknown hash algorithm: ${hashAlgorithmByte.toString(HEX_RADIX)}")
 
-        val signatureAlgorithmByte = inputStream.readNumber(1 /* single byte */).toInt()
+        val signatureAlgorithmByte = inputStream.readNumber(1).toInt()
         val signatureAlgorithm = DigitallySigned.SignatureAlgorithm.forNumber(signatureAlgorithmByte)
             ?: throw SerializationException(
                 "Unknown signature algorithm: ${signatureAlgorithmByte.toString(HEX_RADIX)}"

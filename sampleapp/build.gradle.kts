@@ -10,11 +10,11 @@ plugins {
 android {
     namespace = "com.appmattus.certificatetransparency.sampleapp"
 
-    compileSdk = 33
+    compileSdk = 34
     defaultConfig {
         applicationId = "com.appmattus.certificatetransparency.sampleapp"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
         proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
@@ -27,13 +27,6 @@ android {
     }
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
-
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-        allWarningsAsErrors = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.androidX.compose.compiler.get()
