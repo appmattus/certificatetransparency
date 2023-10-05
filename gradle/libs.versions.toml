@@ -20,7 +20,7 @@ java = "11"
 kotlin = "1.9.10"
 
 androidGradlePlugin = "8.1.2"
-detektGradlePlugin = "1.22.0"
+detektGradlePlugin = "1.23.1"
 dokkaPlugin = "1.8.20"
 gradleMavenPublishPlugin = "0.25.2"
 gradleVersionsPlugin = "0.36.0"
