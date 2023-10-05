@@ -25,7 +25,7 @@ dokkaPlugin = "1.9.0"
 gradleMavenPublishPlugin = "0.25.3"
 gradleVersionsPlugin = "0.36.0"
 markdownlintGradlePlugin = "0.6.0"
-owaspDependencyCheckPlugin = "8.3.1"
+owaspDependencyCheckPlugin = "8.4.0"
 
 coroutines = "1.7.3"
 highlightJs = "1.5.0"
