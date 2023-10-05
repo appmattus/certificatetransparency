@@ -17,7 +17,7 @@
 [versions]
 
 java = "11"
-kotlin = "1.9.0"
+kotlin = "1.9.10"
 
 androidGradlePlugin = "8.1.2"
 detektGradlePlugin = "1.22.0"
@@ -37,24 +37,24 @@ orbit = "6.0.0"
 
 jacoco = "0.8.10"
 bouncyCastle = "1.76"
-equalsVerifier = "3.15"
+equalsVerifier = "3.15.2"
 junit4 = "4.13.2"
 mockito = "5.5.0"
 mockitoKotlin = "5.1.0"
 robolectric = "4.10.3"
-classgraph = "4.8.161"
+classgraph = "4.8.162"
 
 desugar = "1.1.5"
 
 androidX-appCompat = "1.6.1"
-androidX-lifecycle = "2.4.0"
-androidX-compose-ui = "1.4.3"
+androidX-lifecycle = "2.6.2"
+androidX-compose-ui = "1.5.3"
 androidX-compose-foundation = "1.4.3"
-androidX-compose-material = "1.4.3"
-androidX-compose-compiler = "1.5.1"
-androidX-activityCompose = "1.7.2"
+androidX-compose-material = "1.5.3"
+androidX-compose-compiler = "1.5.3"
+androidX-activityCompose = "1.8.0"
 androidX-lifecycleViewmodelCompose = "2.6.1"
-androidX-navigationCompose = "2.6.0"
+androidX-navigationCompose = "2.7.4"
 
 androidX-testCore = "1.5.0"
 androidX-testExtJunit = "1.1.5"
@@ -63,7 +63,7 @@ androidX-testRunner = "1.5.2"
 google-material = "1.9.0"
 google-playServices = "18.2.0"
 
-kotlinX-serialization = "1.5.1"
+kotlinX-serialization = "1.6.0"
 
 
 [plugins]
