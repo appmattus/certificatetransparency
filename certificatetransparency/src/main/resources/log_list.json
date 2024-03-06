@@ -1,6 +1,6 @@
 {
-  "version": "32.20",
-  "log_list_timestamp": "2024-03-04T12:55:08Z",
+  "version": "33.1",
+  "log_list_timestamp": "2024-03-05T12:55:04Z",
   "operators": [
     {
       "name": "Google",
@@ -301,18 +301,6 @@
           "temporal_interval": {
             "start_inclusive": "2025-07-01T00:00:00Z",
             "end_exclusive": "2026-01-01T00:00:00Z"
-          }
-        },
-        {
-          "description": "Sectigo 'Mammoth' CT log",
-          "log_id": "b1N2rDHwMRnYmQCkURX/dxUcEdkCwQApBo2yCJo32RM=",
-          "key": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE7+R9dC4VFbbpuyOL+yy14ceAmEf7QGlo/EmtYU6DRzwat43f/3swtLr/L8ugFOOt1YU/RFmMjGCL17ixv66MZw==",
-          "url": "https://mammoth.ct.comodo.com/",
-          "mmd": 86400,
-          "state": {
-            "retired": {
-              "timestamp": "2023-01-15T00:00:00Z"
-            }
           }
         },
         {
