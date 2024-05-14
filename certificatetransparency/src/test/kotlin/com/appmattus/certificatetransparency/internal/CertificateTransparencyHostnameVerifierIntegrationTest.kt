@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,7 @@ import com.appmattus.certificatetransparency.utils.LogListDataSourceTestFactory
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.internal.tls.OkHostnameVerifier
+import okhttp3.tls.HandshakeCertificates
 import org.junit.Test
 import javax.net.ssl.SSLPeerUnverifiedException
 
@@ -33,16 +34,24 @@ internal class CertificateTransparencyHostnameVerifierIntegrationTest {
     companion object {
         private const val invalidSctDomain = "no-sct.badssl.com"
 
-        val hostnameVerifier = certificateTransparencyHostnameVerifier(OkHostnameVerifier) {
+        private val hostnameVerifier = certificateTransparencyHostnameVerifier(OkHostnameVerifier) {
             logListDataSource {
                 LogListDataSourceTestFactory.realLogListDataSource
             }
         }
+
+        private val clientCertificates: HandshakeCertificates = HandshakeCertificates.Builder()
+            .addInsecureHost(invalidSctDomain)
+            .addPlatformTrustedCertificates()
+            .build()
     }
 
     @Test
     fun appmattusAllowed() {
-        val client = OkHttpClient.Builder().hostnameVerifier(hostnameVerifier).build()
+        val client = OkHttpClient.Builder()
+            .sslSocketFactory(clientCertificates.sslSocketFactory(), clientCertificates.trustManager)
+            .hostnameVerifier(hostnameVerifier)
+            .build()
 
         val request = Request.Builder()
             .url("https://www.appmattus.com")
@@ -53,7 +62,10 @@ internal class CertificateTransparencyHostnameVerifierIntegrationTest {
 
     @Test(expected = SSLPeerUnverifiedException::class)
     fun invalidDisallowedWithException() {
-        val client = OkHttpClient.Builder().hostnameVerifier(hostnameVerifier).build()
+        val client = OkHttpClient.Builder()
+            .sslSocketFactory(clientCertificates.sslSocketFactory(), clientCertificates.trustManager)
+            .hostnameVerifier(hostnameVerifier)
+            .build()
 
         val request = Request.Builder()
             .url("https://$invalidSctDomain/")
@@ -64,15 +76,18 @@ internal class CertificateTransparencyHostnameVerifierIntegrationTest {
 
     @Test
     fun invalidAllowedWhenSctNotChecked() {
-        val client = OkHttpClient.Builder().hostnameVerifier(
-            certificateTransparencyHostnameVerifier(OkHostnameVerifier) {
-                -invalidSctDomain
+        val client = OkHttpClient.Builder()
+            .sslSocketFactory(clientCertificates.sslSocketFactory(), clientCertificates.trustManager)
+            .hostnameVerifier(
+                certificateTransparencyHostnameVerifier(OkHostnameVerifier) {
+                    -invalidSctDomain
 
-                logListDataSource {
-                    LogListDataSourceTestFactory.realLogListDataSource
+                    logListDataSource {
+                        LogListDataSourceTestFactory.realLogListDataSource
+                    }
                 }
-            }
-        ).build()
+            )
+            .build()
 
         val request = Request.Builder()
             .url("https://$invalidSctDomain/")

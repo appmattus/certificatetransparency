@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,8 +28,10 @@ import com.appmattus.certificatetransparency.internal.verifier.CertificateTransp
 import com.appmattus.certificatetransparency.internal.verifier.DEFAULT_PROVIDER_NAME
 import com.appmattus.certificatetransparency.removeCertificateTransparencyProvider
 import com.appmattus.certificatetransparency.utils.LogListDataSourceTestFactory
+import com.appmattus.certificatetransparency.utils.TestData
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.tls.HandshakeCertificates
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -38,52 +40,6 @@ import java.security.Security
 import javax.net.ssl.SSLHandshakeException
 
 internal class CertificateTransparencyProviderIntegrationTest {
-
-    companion object {
-        private const val invalidSctDomain = "no-sct.badssl.com"
-
-        private val results = mutableListOf<String>()
-
-        private fun installProvider(
-            providerName: String = DEFAULT_PROVIDER_NAME,
-            init: CTTrustManagerBuilder.() -> Unit = {}
-        ) {
-            installCertificateTransparencyProvider(providerName) {
-                logListDataSource {
-                    LogListDataSourceTestFactory.realLogListDataSource
-                }
-                logger = object : CTLogger {
-                    override fun log(host: String, result: VerificationResult) {
-                        println("$providerName $host $result")
-                        results += "$providerName $host ${result::class.java.simpleName}"
-                    }
-                }
-
-                init()
-            }
-        }
-
-        private fun installProviderAllowFails(
-            providerName: String = DEFAULT_PROVIDER_NAME,
-            init: CTTrustManagerBuilder.() -> Unit = {}
-        ) {
-            installCertificateTransparencyProvider(providerName) {
-                logListDataSource {
-                    LogListDataSourceTestFactory.realLogListDataSource
-                }
-                logger = object : CTLogger {
-                    override fun log(host: String, result: VerificationResult) {
-                        println("$providerName $host $result")
-                        results += "$providerName $host ${result::class.java.simpleName}"
-                    }
-                }
-
-                failOnError = false
-
-                init()
-            }
-        }
-    }
 
     @After
     fun removeProvider() {
@@ -131,6 +87,15 @@ internal class CertificateTransparencyProviderIntegrationTest {
         // Simulate client and server installing CT checks
         installProvider("SDK")
         installProvider("Client") { -invalidSctDomain }
+
+        makeConnection("https://$invalidSctDomain/")
+    }
+
+    @Test(expected = SSLHandshakeException::class)
+    fun invalidDisallowedWithTwoProvidersInstalledClientIgnoringDomainOrdering() {
+        // Simulate client and server installing CT checks
+        installProvider("Client") { -invalidSctDomain }
+        installProvider("SDK")
 
         makeConnection("https://$invalidSctDomain/")
     }
@@ -247,12 +212,70 @@ internal class CertificateTransparencyProviderIntegrationTest {
     }
 
     private fun makeConnection(url: String) {
-        val client = OkHttpClient.Builder().build()
+        // Not ideal but we have to hard code the no-sct.badssl.com certificates otherwise we have issues with it loading
+        val clientCertificates: HandshakeCertificates = HandshakeCertificates.Builder()
+            .addPlatformTrustedCertificates()
+            .also { builder ->
+                TestData.loadCertificates(TestData.NOSCT_BADSSL_COM_CERT).forEach {
+                    builder.addTrustedCertificate(it)
+                }
+            }
+            .build()
+
+        val client = OkHttpClient.Builder()
+            .sslSocketFactory(clientCertificates.sslSocketFactory(), clientCertificates.trustManager)
+            .build()
 
         val request = Request.Builder()
             .url(url)
             .build()
 
         client.newCall(request).execute()
+    }
+
+    companion object {
+        private const val invalidSctDomain = "no-sct.badssl.com"
+
+        private val results = mutableListOf<String>()
+
+        private fun installProvider(
+            providerName: String = DEFAULT_PROVIDER_NAME,
+            init: CTTrustManagerBuilder.() -> Unit = {}
+        ) {
+            installCertificateTransparencyProvider(providerName) {
+                logListDataSource {
+                    LogListDataSourceTestFactory.realLogListDataSource
+                }
+                logger = object : CTLogger {
+                    override fun log(host: String, result: VerificationResult) {
+                        println("$providerName $host $result")
+                        results += "$providerName $host ${result::class.java.simpleName}"
+                    }
+                }
+
+                init()
+            }
+        }
+
+        private fun installProviderAllowFails(
+            providerName: String = DEFAULT_PROVIDER_NAME,
+            init: CTTrustManagerBuilder.() -> Unit = {}
+        ) {
+            installCertificateTransparencyProvider(providerName) {
+                logListDataSource {
+                    LogListDataSourceTestFactory.realLogListDataSource
+                }
+                logger = object : CTLogger {
+                    override fun log(host: String, result: VerificationResult) {
+                        println("$providerName $host $result")
+                        results += "$providerName $host ${result::class.java.simpleName}"
+                    }
+                }
+
+                failOnError = false
+
+                init()
+            }
+        }
     }
 }

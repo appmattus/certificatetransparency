@@ -1,5 +1,5 @@
 #
-# Copyright 2023 Appmattus Limited
+# Copyright 2023-2024 Appmattus Limited
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ owaspDependencyCheckPlugin = "8.4.0"
 
 coroutines = "1.7.3"
 highlightJs = "1.5.0"
-okhttp = "4.11.0"
+okhttp = "4.12.0"
 okio = "3.6.0"
 retrofit = "2.9.0"
 volley = "1.2.1"

@@ -22,6 +22,7 @@ dependencies {
     testImplementation("com.squareup.retrofit2:retrofit:${libs.versions.retrofit.get()}")
     testImplementation("com.squareup.retrofit2:retrofit-mock:${libs.versions.retrofit.get()}")
     testImplementation("com.squareup.okhttp3:mockwebserver:${libs.versions.okhttp.get()}")
+    testImplementation("com.squareup.okhttp3:okhttp-tls:${libs.versions.okhttp.get()}")
 
     testImplementation("org.bouncycastle:bcpkix-jdk15to18:${libs.versions.bouncyCastle.get()}")
     testImplementation("org.bouncycastle:bcprov-jdk15to18:${libs.versions.bouncyCastle.get()}")
