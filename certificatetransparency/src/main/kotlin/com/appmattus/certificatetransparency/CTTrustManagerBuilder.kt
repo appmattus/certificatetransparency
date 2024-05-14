@@ -221,21 +221,12 @@ public class CTTrustManagerBuilder(
         forEach { excludeCommonName(it) }
     }
 
-    private fun useExtendedTrustManager(): Boolean {
-        return try {
-            Class.forName("javax.net.ssl.X509ExtendedTrustManager", false, javaClass.getClassLoader())
-            true
-        } catch (ignored: Exception) {
-            false
-        }
-    }
-
     /**
      * Build the [HostnameVerifier]
      */
     @Suppress("NewApi")
     public fun build(): X509TrustManager =
-        if (useExtendedTrustManager()) {
+        if (hasExtendedTrustManager) {
             CertificateTransparencyTrustManagerExtended(
                 delegate,
                 includeCommonNames.toSet(),
@@ -262,4 +253,15 @@ public class CTTrustManagerBuilder(
                 logger
             )
         }
+
+    public companion object {
+        private val hasExtendedTrustManager by lazy {
+            try {
+                Class.forName("javax.net.ssl.X509ExtendedTrustManager", false, this::class.java.getClassLoader())
+                true
+            } catch (ignored: Exception) {
+                false
+            }
+        }
+    }
 }
