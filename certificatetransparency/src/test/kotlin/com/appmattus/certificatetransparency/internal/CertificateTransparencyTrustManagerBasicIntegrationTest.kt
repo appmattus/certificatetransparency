@@ -102,7 +102,6 @@ internal class CertificateTransparencyTrustManagerBasicIntegrationTest {
 
     @Test
     fun invalidAllowedWhenFailsAllowed() {
-
         val client = OkHttpClient.Builder().sslSocketFactory(
             clientCertificates.sslSocketFactory(),
             trustManagerAllowFails
