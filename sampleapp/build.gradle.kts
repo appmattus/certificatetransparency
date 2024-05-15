@@ -42,6 +42,9 @@ android {
 
 dependencies {
     implementation(project(":certificatetransparency-android"))
+
+    implementation(platform(libs.androidx.compose.bom))
+
     implementation(kotlin("stdlib-jdk8"))
     implementation("androidx.appcompat:appcompat:${libs.versions.androidX.appCompat.get()}")
     implementation("com.google.android.material:material:${libs.versions.google.material.get()}")
@@ -49,15 +52,15 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:${libs.versions.retrofit.get()}")
     implementation("com.pddstudio:highlightjs-android:${libs.versions.highlightJs.get()}")
     implementation("com.android.volley:volley:${libs.versions.volley.get()}")
-    implementation("com.samskivert:jmustache:1.15")
+    implementation(libs.jmustache)
 
-    implementation("androidx.compose.ui:ui:${libs.versions.androidX.compose.ui.get()}")
+    implementation(libs.androidx.compose.ui)
     // Tooling support (Previews, etc.)
-    implementation("androidx.compose.ui:ui-tooling:${libs.versions.androidX.compose.ui.get()}")
+    implementation(libs.androidx.compose.ui.tooling)
     // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
-    implementation("androidx.compose.foundation:foundation:${libs.versions.androidX.compose.foundation.get()}")
+    implementation(libs.androidx.compose.foundation)
     // Material Design
-    implementation("androidx.compose.material:material:${libs.versions.androidX.compose.material.get()}")
+    implementation(libs.androidx.compose.material)
     // Integration with activities
     implementation("androidx.activity:activity-compose:${libs.versions.androidX.activityCompose.get()}")
     // Integration with ViewModels
