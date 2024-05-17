@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +24,7 @@ import com.appmattus.certificatetransparency.certificateTransparencyInterceptor
 import com.appmattus.certificatetransparency.utils.LogListDataSourceTestFactory
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.tls.HandshakeCertificates
 import org.junit.Test
 import javax.net.ssl.SSLPeerUnverifiedException
 
@@ -32,24 +33,32 @@ internal class CertificateTransparencyInterceptorIntegrationTest {
     companion object {
         private const val invalidSctDomain = "no-sct.badssl.com"
 
-        val networkInterceptor = certificateTransparencyInterceptor {
+        private val networkInterceptor = certificateTransparencyInterceptor {
             logListDataSource {
                 LogListDataSourceTestFactory.realLogListDataSource
             }
         }
 
-        val networkInterceptorAllowFails = certificateTransparencyInterceptor {
+        private val networkInterceptorAllowFails = certificateTransparencyInterceptor {
             logListDataSource {
                 LogListDataSourceTestFactory.realLogListDataSource
             }
 
             failOnError = false
         }
+
+        private val clientCertificates: HandshakeCertificates = HandshakeCertificates.Builder()
+            .addInsecureHost(invalidSctDomain)
+            .addPlatformTrustedCertificates()
+            .build()
     }
 
     @Test
     fun appmattusAllowed() {
-        val client = OkHttpClient.Builder().addNetworkInterceptor(networkInterceptor).build()
+        val client = OkHttpClient.Builder()
+            .sslSocketFactory(clientCertificates.sslSocketFactory(), clientCertificates.trustManager)
+            .addNetworkInterceptor(networkInterceptor)
+            .build()
 
         val request = Request.Builder()
             .url("https://www.appmattus.com")
@@ -60,7 +69,10 @@ internal class CertificateTransparencyInterceptorIntegrationTest {
 
     @Test
     fun insecureConnectionAllowed() {
-        val client = OkHttpClient.Builder().addNetworkInterceptor(networkInterceptor).build()
+        val client = OkHttpClient.Builder()
+            .sslSocketFactory(clientCertificates.sslSocketFactory(), clientCertificates.trustManager)
+            .addNetworkInterceptor(networkInterceptor)
+            .build()
 
         val request = Request.Builder()
             .url("http://www.appmattus.com")
@@ -71,7 +83,10 @@ internal class CertificateTransparencyInterceptorIntegrationTest {
 
     @Test(expected = SSLPeerUnverifiedException::class)
     fun invalidDisallowedWithException() {
-        val client = OkHttpClient.Builder().addNetworkInterceptor(networkInterceptor).build()
+        val client = OkHttpClient.Builder()
+            .sslSocketFactory(clientCertificates.sslSocketFactory(), clientCertificates.trustManager)
+            .addNetworkInterceptor(networkInterceptor)
+            .build()
 
         val request = Request.Builder()
             .url("https://$invalidSctDomain/")
@@ -82,7 +97,10 @@ internal class CertificateTransparencyInterceptorIntegrationTest {
 
     @Test
     fun invalidAllowedWhenFailsAllowed() {
-        val client = OkHttpClient.Builder().addNetworkInterceptor(networkInterceptorAllowFails).build()
+        val client = OkHttpClient.Builder()
+            .sslSocketFactory(clientCertificates.sslSocketFactory(), clientCertificates.trustManager)
+            .addNetworkInterceptor(networkInterceptorAllowFails)
+            .build()
 
         val request = Request.Builder()
             .url("https://$invalidSctDomain/")
@@ -94,15 +112,18 @@ internal class CertificateTransparencyInterceptorIntegrationTest {
     @Test
     fun invalidAllowedWhenSctNotChecked() {
         val client =
-            OkHttpClient.Builder().addNetworkInterceptor(
-                certificateTransparencyInterceptor {
-                    -invalidSctDomain
+            OkHttpClient.Builder()
+                .sslSocketFactory(clientCertificates.sslSocketFactory(), clientCertificates.trustManager)
+                .addNetworkInterceptor(
+                    certificateTransparencyInterceptor {
+                        -invalidSctDomain
 
-                    logListDataSource {
-                        LogListDataSourceTestFactory.realLogListDataSource
+                        logListDataSource {
+                            LogListDataSourceTestFactory.realLogListDataSource
+                        }
                     }
-                }
-            ).build()
+                )
+                .build()
 
         val request = Request.Builder()
             .url("https://$invalidSctDomain/")
@@ -114,13 +135,16 @@ internal class CertificateTransparencyInterceptorIntegrationTest {
     @Test(expected = SSLPeerUnverifiedException::class)
     fun invalidNotAllowedWhenAllHostsIncluded() {
         val client =
-            OkHttpClient.Builder().addNetworkInterceptor(
-                certificateTransparencyInterceptor {
-                    logListDataSource {
-                        LogListDataSourceTestFactory.realLogListDataSource
+            OkHttpClient.Builder()
+                .sslSocketFactory(clientCertificates.sslSocketFactory(), clientCertificates.trustManager)
+                .addNetworkInterceptor(
+                    certificateTransparencyInterceptor {
+                        logListDataSource {
+                            LogListDataSourceTestFactory.realLogListDataSource
+                        }
                     }
-                }
-            ).build()
+                )
+                .build()
 
         val request = Request.Builder()
             .url("https://$invalidSctDomain/")
@@ -131,7 +155,10 @@ internal class CertificateTransparencyInterceptorIntegrationTest {
 
     @Test(expected = IllegalStateException::class)
     fun interceptorThrowsException() {
-        val client = OkHttpClient.Builder().addInterceptor(networkInterceptor).build()
+        val client = OkHttpClient.Builder()
+            .sslSocketFactory(clientCertificates.sslSocketFactory(), clientCertificates.trustManager)
+            .addInterceptor(networkInterceptor)
+            .build()
 
         val request = Request.Builder()
             .url("https://www.appmattus.com")

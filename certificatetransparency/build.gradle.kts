@@ -14,26 +14,26 @@ apply(from = "$rootDir/gradle/scripts/jacoco.gradle.kts")
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${libs.versions.coroutines.get()}")
+    implementation(libs.kotlinx.coroutines)
+    implementation(libs.kotlinx.serialization)
+    implementation(libs.okhttp.core)
+    implementation(libs.okio)
 
-    implementation("com.squareup.okhttp3:okhttp:${libs.versions.okhttp.get()}")
-    implementation("com.squareup.okio:okio:${libs.versions.okio.get()}")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${libs.versions.kotlinX.serialization.get()}")
-    testImplementation("com.squareup.retrofit2:retrofit:${libs.versions.retrofit.get()}")
-    testImplementation("com.squareup.retrofit2:retrofit-mock:${libs.versions.retrofit.get()}")
-    testImplementation("com.squareup.okhttp3:mockwebserver:${libs.versions.okhttp.get()}")
-
-    testImplementation("org.bouncycastle:bcpkix-jdk15to18:${libs.versions.bouncyCastle.get()}")
-    testImplementation("org.bouncycastle:bcprov-jdk15to18:${libs.versions.bouncyCastle.get()}")
-    testImplementation("org.bouncycastle:bctls-jdk15to18:${libs.versions.bouncyCastle.get()}")
+    testImplementation(libs.bouncycastle.bcpkix)
+    testImplementation(libs.bouncycastle.bcprov)
+    testImplementation(libs.bouncycastle.bctls)
     // Adding bcutil directly as it's used through bcprov-jdk15to18 but not directly added
-    testImplementation("org.bouncycastle:bcutil-jdk15to18:${libs.versions.bouncyCastle.get()}")
+    testImplementation(libs.bouncycastle.bcutil)
 
-    testImplementation("junit:junit:${libs.versions.junit4.get()}")
-    testImplementation("org.mockito:mockito-core:${libs.versions.mockito.get()}")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:${libs.versions.mockitoKotlin.get()}")
-    testImplementation("nl.jqno.equalsverifier:equalsverifier:${libs.versions.equalsVerifier.get()}")
-    testImplementation("io.github.classgraph:classgraph:${libs.versions.classgraph.get()}")
+    testImplementation(libs.classgraph)
+    testImplementation(libs.equalsverifier)
+    testImplementation(libs.junit4)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.okhttp.mockwebserver)
+    testImplementation(libs.okhttp.tls)
+    testImplementation(libs.retrofit.core)
+    testImplementation(libs.retrofit.mock)
 }
 
 tasks.withType(KotlinCompile::class.java).all {
@@ -47,8 +47,32 @@ dependencyCheck {
 
     suppressionFile = file("cve-suppressions.xml").toString()
 
+    analyzers.dartEnabled = false
+    analyzers.pyDistributionEnabled = false
+    analyzers.pyPackageEnabled = false
+    analyzers.rubygemsEnabled = false
+    analyzers.nuspecEnabled = false
+    analyzers.nugetconfEnabled = false
     analyzers.assemblyEnabled = false
+    analyzers.msbuildEnabled = false
+    analyzers.cmakeEnabled = false
+    analyzers.autoconfEnabled = false
+    analyzers.composerEnabled = false
+    analyzers.cpanEnabled = false
+    analyzers.nodeEnabled = false
+    analyzers.cocoapodsEnabled = false
+    // analyzers.carthageEnabled = false
+    analyzers.swiftEnabled = false
+    analyzers.swiftPackageResolvedEnabled = false
+    analyzers.bundleAuditEnabled = false
+    analyzers.golangDepEnabled = false
+    analyzers.golangModEnabled = false
+
+    analyzers.nodeAudit.enabled = false
+    analyzers.retirejs.enabled = false
     analyzers.ossIndex.enabled = false
+
+    nvd.apiKey = System.getenv("NVD_API_KEY") ?: System.getProperty("NVD_API_KEY") ?: ""
 
     skipConfigurations = listOf(
         "lintClassPath", "jacocoAgent", "jacocoAnt", "kotlinCompilerClasspath", "kotlinCompilerPluginClasspath",

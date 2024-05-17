@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,26 +18,33 @@ package com.appmattus.certificatetransparency.internal
 
 import com.appmattus.certificatetransparency.certificateTransparencyTrustManager
 import com.appmattus.certificatetransparency.utils.LogListDataSourceTestFactory
+import com.appmattus.certificatetransparency.utils.TestData
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.tls.HandshakeCertificates
 import org.junit.Test
-import java.security.KeyStore
 import java.security.SecureRandom
 import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLHandshakeException
 import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManager
-import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
-internal class CertificateTransparencyTrustManagerIntegrationTest {
+internal class CertificateTransparencyTrustManagerBasicIntegrationTest {
 
     companion object {
         private const val invalidSctDomain = "no-sct.badssl.com"
 
-        private val originalTrustManager = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm()).apply {
-            init(null as KeyStore?)
-        }.trustManagers.first { it is X509TrustManager } as X509TrustManager
+        private val clientCertificates: HandshakeCertificates = HandshakeCertificates.Builder()
+            .addPlatformTrustedCertificates()
+            .also { builder ->
+                TestData.loadCertificates(TestData.NOSCT_BADSSL_COM_CERT).forEach {
+                    builder.addTrustedCertificate(it)
+                }
+            }
+            .build()
+
+        private val originalTrustManager = clientCertificates.trustManager
 
         private val trustManager = certificateTransparencyTrustManager(originalTrustManager) {
             logListDataSource {
@@ -53,7 +60,7 @@ internal class CertificateTransparencyTrustManagerIntegrationTest {
             failOnError = false
         }
 
-        private fun X509TrustManager.createSocketFactory(): SSLSocketFactory {
+        public fun X509TrustManager.createSocketFactory(): SSLSocketFactory {
             return SSLContext.getInstance("SSL").apply {
                 init(null, arrayOf<TrustManager>(this@createSocketFactory), SecureRandom())
             }.socketFactory
@@ -96,7 +103,7 @@ internal class CertificateTransparencyTrustManagerIntegrationTest {
     @Test
     fun invalidAllowedWhenFailsAllowed() {
         val client = OkHttpClient.Builder().sslSocketFactory(
-            trustManagerAllowFails.createSocketFactory(),
+            clientCertificates.sslSocketFactory(),
             trustManagerAllowFails
         ).build()
 

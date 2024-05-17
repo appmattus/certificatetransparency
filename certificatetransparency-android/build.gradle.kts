@@ -38,16 +38,15 @@ android {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${libs.versions.coroutines.get()}")
+    implementation(libs.kotlinx.coroutines)
 
     api(project(":certificatetransparency"))
 
-    testImplementation("junit:junit:${libs.versions.junit4.get()}")
-    testImplementation("org.mockito:mockito-core:${libs.versions.mockito.get()}")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:${libs.versions.mockitoKotlin.get()}")
-
-    testImplementation("androidx.test:core:${libs.versions.androidX.testCore.get()}")
-    testImplementation("androidx.test:runner:${libs.versions.androidX.testRunner.get()}")
-    testImplementation("androidx.test.ext:junit:${libs.versions.androidX.testExtJunit.get()}")
-    testImplementation("org.robolectric:robolectric:${libs.versions.robolectric.get()}")
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.androidx.test.runner)
+    testImplementation(libs.androidx.test.junit)
+    testImplementation(libs.junit4)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.robolectric)
 }

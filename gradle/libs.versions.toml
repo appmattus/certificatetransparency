@@ -1,5 +1,5 @@
 #
-# Copyright 2023 Appmattus Limited
+# Copyright 2023-2024 Appmattus Limited
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,53 +17,103 @@
 [versions]
 
 java = "11"
-kotlin = "1.9.10"
+kotlin = "1.9.24"
 
-androidGradlePlugin = "8.1.2"
-detektGradlePlugin = "1.23.1"
-dokkaPlugin = "1.9.0"
-gradleMavenPublishPlugin = "0.25.3"
-gradleVersionsPlugin = "0.36.0"
+# Plugins
+androidGradlePlugin = "8.4.0"
+detektGradlePlugin = "1.23.6"
+dokkaPlugin = "1.9.20"
+gradleMavenPublishPlugin = "0.28.0"
+gradleVersionsPlugin = "0.51.0"
 markdownlintGradlePlugin = "0.6.0"
-owaspDependencyCheckPlugin = "8.4.0"
+owaspDependencyCheckPlugin = "9.2.0"
 
-coroutines = "1.7.3"
-highlightJs = "1.5.0"
-okhttp = "4.11.0"
-okio = "3.6.0"
-retrofit = "2.9.0"
+# Core dependencies
+kotlinx-coroutines = "1.8.1"
+kotlinx-serialization = "1.6.3"
+okhttp = "4.12.0"
+okio = "3.9.0"
+
+# Test dependencies
+androidx-test-core = "1.5.0"
+androidx-test-junit = "1.1.5"
+androidx-test-runner = "1.5.2"
+bouncycastle = "1.78.1"
+classgraph = "4.8.172"
+equalsverifier = "3.16.1"
+jacoco = "0.8.12"
+junit4 = "4.13.2"
+mockito-core = "5.12.0"
+mockito-kotlin = "5.3.1"
+retrofit = "2.11.0"
+robolectric = "4.12.1"
+
+# Sample app only dependencies
+androidx-activity-compose = "1.9.0"
+androidx-appcompat = "1.6.1"
+androidx-compose-bom = "2024.05.00"
+androidx-compose-compiler = "1.5.14"
+androidx-lifecycle-runtime = "2.8.0"
+androidx-lifecycle-viewmodelcompose = "2.8.0"
+androidx-navigation-compose = "2.7.7"
+google-material = "1.12.0"
+google-playservices = "18.4.0"
+highlightjs = "1.5.0"
+jmustache = "1.16"
 volley = "1.2.1"
 orbit = "6.1.0"
 
-jacoco = "0.8.10"
-bouncyCastle = "1.76"
-equalsVerifier = "3.15.2"
-junit4 = "4.13.2"
-mockito = "5.5.0"
-mockitoKotlin = "5.1.0"
-robolectric = "4.10.3"
-classgraph = "4.8.162"
+# Core library desugaring
+desugar = "2.0.4"
 
-desugar = "1.1.5"
 
-androidX-appCompat = "1.6.1"
-androidX-lifecycle = "2.6.2"
-androidX-compose-ui = "1.5.3"
-androidX-compose-foundation = "1.4.3"
-androidX-compose-material = "1.5.3"
-androidX-compose-compiler = "1.5.3"
-androidX-activityCompose = "1.8.0"
-androidX-lifecycleViewmodelCompose = "2.6.1"
-androidX-navigationCompose = "2.7.4"
+[libraries]
 
-androidX-testCore = "1.5.0"
-androidX-testExtJunit = "1.1.5"
-androidX-testRunner = "1.5.2"
+# Core dependencies
+kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+okhttp-core = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okio = { group = "com.squareup.okio", name = "okio", version.ref = "okio" }
 
-google-material = "1.9.0"
-google-playServices = "18.2.0"
+# Test dependencies
+androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidx-test-core" }
+androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-junit" }
+androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidx-test-runner" }
+bouncycastle-bcpkix = { group = "org.bouncycastle", name = "bcpkix-jdk15to18", version.ref = "bouncycastle" }
+bouncycastle-bcprov = { group = "org.bouncycastle", name = "bcprov-jdk15to18", version.ref = "bouncycastle" }
+bouncycastle-bctls = { group = "org.bouncycastle", name = "bctls-jdk15to18", version.ref = "bouncycastle" }
+bouncycastle-bcutil = { group = "org.bouncycastle", name = "bcutil-jdk15to18", version.ref = "bouncycastle" }
+classgraph = { group = "io.github.classgraph", name = "classgraph", version.ref = "classgraph" }
+equalsverifier = { group = "nl.jqno.equalsverifier", name = "equalsverifier", version.ref = "equalsverifier" }
+junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
+mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito-core" }
+mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito-kotlin" }
+okhttp-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "okhttp" }
+okhttp-tls = { group = "com.squareup.okhttp3", name = "okhttp-tls", version.ref = "okhttp" }
+retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-mock = { group = "com.squareup.retrofit2", name = "retrofit-mock", version.ref = "retrofit" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 
-kotlinX-serialization = "1.6.0"
+# Sample app only dependencies
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity-compose" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
+androidx-compose-foundation = { module = "androidx.compose.foundation:foundation" }
+androidx-compose-material = { module = "androidx.compose.material:material" }
+androidx-compose-ui = { module = "androidx.compose.ui:ui" }
+androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle-runtime" }
+androidx-lifecycle-viewmodelcompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle-viewmodelcompose" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation-compose" }
+google-material = { group = "com.google.android.material", name = "material", version.ref = "google-material" }
+google-playservices = { group = "com.google.android.gms", name = "play-services-base", version.ref = "google-playservices" }
+highlightjs = { group = "com.pddstudio", name = "highlightjs-android", version.ref = "highlightjs" }
+jmustache = { module = "com.samskivert:jmustache", version.ref = "jmustache" }
+volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
+orbit-compose = { group = "org.orbit-mvi", name = "orbit-compose", version.ref = "orbit" }
+
+# Core library desugaring
+desugar = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugar" }
 
 
 [plugins]

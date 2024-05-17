@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -107,6 +107,8 @@ internal object TestData {
     const val ELEVEN_CERTS_ROOT_CERT = DATA_ROOT + "chaincleaner/eleven-certs-root-cert.pem"
 
     const val SELF_SIGNED_ROOT_CERT = DATA_ROOT + "chaincleaner/self-signed-root-cert.pem"
+
+    const val NOSCT_BADSSL_COM_CERT = DATA_ROOT + "no-sct.badssl.com.pem"
 
     // Public log key
     const val TEST_PUBLIC_KEY_EC = DATA_ROOT + "ec-public-key.pem"

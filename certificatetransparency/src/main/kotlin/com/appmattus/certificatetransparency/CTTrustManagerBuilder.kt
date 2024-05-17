@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,8 @@ package com.appmattus.certificatetransparency
 import com.appmattus.certificatetransparency.cache.DiskCache
 import com.appmattus.certificatetransparency.chaincleaner.CertificateChainCleanerFactory
 import com.appmattus.certificatetransparency.datasource.DataSource
-import com.appmattus.certificatetransparency.internal.verifier.CertificateTransparencyTrustManager
+import com.appmattus.certificatetransparency.internal.verifier.CertificateTransparencyTrustManagerBasic
+import com.appmattus.certificatetransparency.internal.verifier.CertificateTransparencyTrustManagerExtended
 import com.appmattus.certificatetransparency.internal.verifier.model.Host
 import com.appmattus.certificatetransparency.loglist.LogListResult
 import com.appmattus.certificatetransparency.loglist.LogListService
@@ -227,16 +228,44 @@ public class CTTrustManagerBuilder(
     /**
      * Build the [HostnameVerifier]
      */
-    public fun build(): X509TrustManager = CertificateTransparencyTrustManager(
-        delegate,
-        includeCommonNames.toSet(),
-        excludeCommonNames.toSet(),
-        certificateChainCleanerFactory,
-        logListService,
-        logListDataSource,
-        policy,
-        diskCache,
-        failOnError,
-        logger
-    )
+    @Suppress("NewApi")
+    public fun build(): X509TrustManager =
+        if (hasExtendedTrustManager) {
+            CertificateTransparencyTrustManagerExtended(
+                delegate,
+                includeCommonNames.toSet(),
+                excludeCommonNames.toSet(),
+                certificateChainCleanerFactory,
+                logListService,
+                logListDataSource,
+                policy,
+                diskCache,
+                failOnError,
+                logger
+            )
+        } else {
+            CertificateTransparencyTrustManagerBasic(
+                delegate,
+                includeCommonNames.toSet(),
+                excludeCommonNames.toSet(),
+                certificateChainCleanerFactory,
+                logListService,
+                logListDataSource,
+                policy,
+                diskCache,
+                failOnError,
+                logger
+            )
+        }
+
+    public companion object {
+        private val hasExtendedTrustManager by lazy {
+            try {
+                Class.forName("javax.net.ssl.X509ExtendedTrustManager", false, this::class.java.getClassLoader())
+                true
+            } catch (ignored: Exception) {
+                false
+            }
+        }
+    }
 }
