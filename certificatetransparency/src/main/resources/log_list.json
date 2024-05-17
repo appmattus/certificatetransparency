@@ -1,6 +1,6 @@
 {
-  "version": "33.2",
-  "log_list_timestamp": "2024-03-06T12:55:33Z",
+  "version": "34.20",
+  "log_list_timestamp": "2024-05-16T13:17:14Z",
   "operators": [
     {
       "name": "Google",
@@ -326,8 +326,8 @@
           "url": "https://mammoth2024h1b.ct.sectigo.com/",
           "mmd": 86400,
           "state": {
-            "qualified": {
-              "timestamp": "2024-02-14T02:00:00Z"
+            "usable": {
+              "timestamp": "2024-04-28T16:00:00Z"
             }
           },
           "temporal_interval": {
