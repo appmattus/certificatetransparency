@@ -47,8 +47,32 @@ dependencyCheck {
 
     suppressionFile = file("cve-suppressions.xml").toString()
 
+    analyzers.dartEnabled = false
+    analyzers.pyDistributionEnabled = false
+    analyzers.pyPackageEnabled = false
+    analyzers.rubygemsEnabled = false
+    analyzers.nuspecEnabled = false
+    analyzers.nugetconfEnabled = false
     analyzers.assemblyEnabled = false
+    analyzers.msbuildEnabled = false
+    analyzers.cmakeEnabled = false
+    analyzers.autoconfEnabled = false
+    analyzers.composerEnabled = false
+    analyzers.cpanEnabled = false
+    analyzers.nodeEnabled = false
+    analyzers.cocoapodsEnabled = false
+    // analyzers.carthageEnabled = false
+    analyzers.swiftEnabled = false
+    analyzers.swiftPackageResolvedEnabled = false
+    analyzers.bundleAuditEnabled = false
+    analyzers.golangDepEnabled = false
+    analyzers.golangModEnabled = false
+
+    analyzers.nodeAudit.enabled = false
+    analyzers.retirejs.enabled = false
     analyzers.ossIndex.enabled = false
+
+    nvd.apiKey = System.getenv("NVD_API_KEY") ?: System.getProperty("NVD_API_KEY") ?: ""
 
     skipConfigurations = listOf(
         "lintClassPath", "jacocoAgent", "jacocoAnt", "kotlinCompilerClasspath", "kotlinCompilerPluginClasspath",

@@ -16,6 +16,13 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:${libs.versions.androidGradlePlugin.get()}")
+
+        constraints {
+            // Need to force versions for dependencyCheck to work
+            add("classpath", "com.fasterxml.jackson:jackson-bom:2.17.1")
+            add("classpath", "org.apache.commons:commons-lang3:3.14.0")
+            add("classpath", "org.apache.commons:commons-text:1.12.0")
+        }
     }
 }
 
