@@ -113,7 +113,7 @@ public class LogListDataSourceFactoryTest {
             val dataSource =
                 LogListDataSourceFactory.createDataSource(
                     logListService = logListService,
-                    now = { Instant.ofEpochMilli(1000000) },
+                    now = { Instant.ofEpochMilli(1000000) }
                 )
             val result = dataSource.get()
 
