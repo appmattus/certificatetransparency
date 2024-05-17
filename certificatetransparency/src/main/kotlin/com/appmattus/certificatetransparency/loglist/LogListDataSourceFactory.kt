@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,16 +30,14 @@ import com.appmattus.certificatetransparency.internal.loglist.await
 import com.appmattus.certificatetransparency.internal.loglist.defaultTrustManager
 import com.appmattus.certificatetransparency.internal.utils.MaxSizeInterceptor
 import okhttp3.CacheControl
+import okhttp3.ConnectionSpec
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.security.KeyManagementException
-import java.security.NoSuchAlgorithmException
+import okhttp3.internal.platform.Platform
 import java.security.PublicKey
-import java.security.SecureRandom
 import java.time.Instant
 import java.util.concurrent.TimeUnit
-import javax.net.ssl.SSLContext
 import javax.net.ssl.X509TrustManager
 
 public object LogListDataSourceFactory {
@@ -49,15 +47,17 @@ public object LogListDataSourceFactory {
      * Default: baseUrl = https://www.gstatic.com/ct/log_list/v3/
      */
     public fun createLogListService(
-        baseUrl: String = "...",
+        baseUrl: String = "https://www.gstatic.com/ct/log_list/v3/",
         okHttpClient: OkHttpClient,
         networkTimeoutSeconds: Long = 30,
-        trustManager: X509TrustManager? = null
+        trustManager: X509TrustManager? = null,
+        connectionSpec: ConnectionSpec = ConnectionSpec.MODERN_TLS
     ): LogListService = createLogListService(
         baseUrl = baseUrl,
         okHttpClient = { okHttpClient },
         networkTimeoutSeconds = networkTimeoutSeconds,
-        trustManager = trustManager
+        trustManager = trustManager,
+        connectionSpec = connectionSpec
     )
 
     /**
@@ -68,7 +68,8 @@ public object LogListDataSourceFactory {
         baseUrl: String = "https://www.gstatic.com/ct/log_list/v3/",
         okHttpClient: (() -> OkHttpClient)? = null,
         networkTimeoutSeconds: Long = 30,
-        trustManager: X509TrustManager? = null
+        trustManager: X509TrustManager? = null,
+        connectionSpec: ConnectionSpec = ConnectionSpec.MODERN_TLS
     ): LogListService {
         val client by lazy {
             (okHttpClient?.invoke()?.newBuilder() ?: OkHttpClient.Builder()).apply {
@@ -76,19 +77,9 @@ public object LogListDataSourceFactory {
                 // Otherwise we lookup the system default trust manager that our library does not provide and use that
                 // This ensures our call to get the log list does not loop or block itself
                 val selectedTrustManager = trustManager ?: defaultTrustManager()
+                sslSocketFactory(Platform.get().newSslSocketFactory(selectedTrustManager), selectedTrustManager)
 
-                val sslContext: SSLContext
-                try {
-                    sslContext = SSLContext.getInstance("SSL")
-                    // Our supported minimum SDK is 19, lint complains because this is a Java library so has no minimum SDK defined
-                    // Read https://android-developers.blogspot.com/2013/08/some-securerandom-thoughts.html for more info
-                    sslContext.init(null, arrayOf(selectedTrustManager), SecureRandom())
-                } catch (expected: NoSuchAlgorithmException) {
-                    error("Unable to create an SSLContext")
-                } catch (expected: KeyManagementException) {
-                    error("Unable to create an SSLContext")
-                }
-                sslSocketFactory(sslContext.socketFactory, selectedTrustManager)
+                connectionSpecs(listOf(connectionSpec))
 
                 addInterceptor(MaxSizeInterceptor())
                 connectTimeout(networkTimeoutSeconds, TimeUnit.SECONDS)
