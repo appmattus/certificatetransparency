@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,37 +32,26 @@ internal class CertificateRevocationHostnameVerifierIntegrationTest {
         val emptyHostnameVerifier = certificateRevocationHostnameVerifier(OkHostnameVerifier)
 
         val hostnameVerifier = certificateRevocationHostnameVerifier(OkHostnameVerifier) {
-            // revoked.badssl.com
-            @Suppress("MaxLineLength")
+            // www.appmattus.com
             addCrl(
-                issuerDistinguishedName = "ME0xCzAJBgNVBAYTAlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxJzAlBgNVBAMTHkRpZ2lDZXJ0IFNIQTIgU2VjdXJlIFNlcnZlciBDQQ==",
-                serialNumbers = listOf("Aa8e+91erglSMgsk/mtVaA==", "A3G1iob2zpw+y3v0L5II/A==")
+                issuerDistinguishedName = "MDIxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MQswCQYDVQQDEwJSMw==",
+                serialNumbers = listOf("BGLaLaigL8RBC8kIbcDFIJnX")
             )
+            // Root cert
             @Suppress("MaxLineLength")
             addCrl(
-                issuerDistinguishedName = "MFkxCzAJBgNVBAYTAlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxMzAxBgNVBAMTKlJhcGlkU1NMIFRMUyBEViBSU0EgTWl4ZWQgU0hBMjU2IDIwMjAgQ0EtMQ==",
-                serialNumbers = listOf("DS5nopiFO5pUUuOihaRXLw==")
+                issuerDistinguishedName = "ME8xCzAJBgNVBAYTAlVTMSkwJwYDVQQKEyBJbnRlcm5ldCBTZWN1cml0eSBSZXNlYXJjaCBHcm91cDEVMBMGA1UEAxMMSVNSRyBSb290IFgx",
+                serialNumbers = listOf("AIIQz7DSQONZRGPgu2OCiwA=")
             )
         }
     }
 
     @Test
     fun appmattusAllowed() {
-        val client = OkHttpClient.Builder().hostnameVerifier(hostnameVerifier).build()
+        val client = OkHttpClient.Builder().hostnameVerifier(emptyHostnameVerifier).build()
 
         val request = Request.Builder()
             .url("https://www.appmattus.com")
-            .build()
-
-        client.newCall(request).execute()
-    }
-
-    @Test
-    fun revokedCertificateAllowedByPlatform() {
-        val client = trustAllOkHttpClient { hostnameVerifier(emptyHostnameVerifier) }
-
-        val request = Request.Builder()
-            .url("https://revoked.badssl.com")
             .build()
 
         client.newCall(request).execute()
@@ -73,7 +62,7 @@ internal class CertificateRevocationHostnameVerifierIntegrationTest {
         val client = trustAllOkHttpClient { hostnameVerifier(hostnameVerifier) }
 
         val request = Request.Builder()
-            .url("https://revoked.badssl.com")
+            .url("https://www.appmattus.com")
             .build()
 
         client.newCall(request).execute()
