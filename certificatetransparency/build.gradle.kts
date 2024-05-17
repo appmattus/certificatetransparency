@@ -38,7 +38,10 @@ dependencies {
 
 tasks.withType(KotlinCompile::class.java).all {
     kotlinOptions {
-        freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
+        freeCompilerArgs = listOf(
+            "-opt-in=kotlin.RequiresOptIn",
+            "-Xstring-concat=inline"
+        )
     }
 }
 
