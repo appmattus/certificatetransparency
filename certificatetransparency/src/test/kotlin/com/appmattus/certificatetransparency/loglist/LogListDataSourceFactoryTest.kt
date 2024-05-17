@@ -20,6 +20,7 @@ import com.appmattus.certificatetransparency.internal.loglist.ResourcesCache
 import com.appmattus.certificatetransparency.utils.TestData
 import com.appmattus.certificatetransparency.utils.assertIsA
 import kotlinx.coroutines.runBlocking
+import okhttp3.ConnectionSpec
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -49,8 +50,10 @@ public class LogListDataSourceFactoryTest {
                 val response = when (request.path) {
                     "/log_list.json" -> MockResponse().setResponseCode(200)
                         .setBody(Buffer().write(TestData.file(TestData.TEST_LOG_LIST_JSON).readBytes()))
+
                     "/log_list.sig" -> MockResponse().setResponseCode(200)
                         .setBody(Buffer().write(TestData.file(TestData.TEST_LOG_LIST_SIG).readBytes()))
+
                     "/log_list.zip" -> MockResponse().setResponseCode(200)
                         .setBody(Buffer().write(TestData.file(TestData.TEST_LOG_LIST_ZIP).readBytes()))
 
@@ -79,7 +82,8 @@ public class LogListDataSourceFactoryTest {
                 configuration = { setBodyDelay(5, TimeUnit.SECONDS) }
                 val logListService = LogListDataSourceFactory.createLogListService(
                     baseUrl = baseUrl.toString(),
-                    networkTimeoutSeconds = 1
+                    networkTimeoutSeconds = 1,
+                    connectionSpec = ConnectionSpec.CLEARTEXT
                 )
                 val dataSource = LogListDataSourceFactory.createDataSource(logListService = logListService)
                 // And the resources cache has no data
@@ -100,13 +104,16 @@ public class LogListDataSourceFactoryTest {
     public fun successReturnsValid() {
         runBlocking {
             // Given a default log list service
-            val logListService = LogListDataSourceFactory.createLogListService(baseUrl = baseUrl.toString())
+            val logListService = LogListDataSourceFactory.createLogListService(
+                baseUrl = baseUrl.toString(),
+                connectionSpec = ConnectionSpec.CLEARTEXT
+            )
 
             // When we request the log list
             val dataSource =
                 LogListDataSourceFactory.createDataSource(
                     logListService = logListService,
-                    now = { Instant.ofEpochMilli(1000000) }
+                    now = { Instant.ofEpochMilli(1000000) },
                 )
             val result = dataSource.get()
 
@@ -128,7 +135,8 @@ public class LogListDataSourceFactoryTest {
                 }
                 val logListService = LogListDataSourceFactory.createLogListService(
                     baseUrl = baseUrl.toString(),
-                    networkTimeoutSeconds = 1
+                    networkTimeoutSeconds = 1,
+                    connectionSpec = ConnectionSpec.CLEARTEXT
                 )
                 val dataSource = LogListDataSourceFactory.createDataSource(logListService = logListService)
                 // And the resources cache has no data
