@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,7 @@ package com.appmattus.certificaterevocation.internal.revoker
 import com.appmattus.certificaterevocation.RevocationResult
 import com.appmattus.certificatetransparency.chaincleaner.CertificateChainCleaner
 import com.appmattus.certificatetransparency.chaincleaner.CertificateChainCleanerFactory
+import com.appmattus.certificatetransparency.internal.utils.Base64
 import java.io.IOException
 import java.security.KeyStore
 import java.security.cert.Certificate
@@ -68,6 +69,12 @@ internal open class CertificateRevocationBase(
     private fun hasRevokedCertificate(certificates: List<X509Certificate>): RevocationResult {
         return try {
             certificates.forEach { certificate ->
+                println("subjectX500Principal.name=" + certificate.subjectX500Principal.name)
+                println("serialNumber=" + Base64.toBase64String(certificate.serialNumber.toByteArray()))
+                println("issuerX500Principal.name=" + certificate.issuerX500Principal.name)
+                println("issuerX500Principal=" + Base64.toBase64String(certificate.issuerX500Principal.encoded))
+                println()
+
                 val isRevoked = crlSet.any { pin ->
                     pin.issuerDistinguishedName == certificate.issuerX500Principal && pin.serialNumbers.contains(
                         certificate.serialNumber
