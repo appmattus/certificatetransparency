@@ -14,7 +14,7 @@ apply(from = "$rootDir/gradle/scripts/jacoco.gradle.kts")
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
-    implementation(libs.kotlinx.coroutines)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization)
     implementation(libs.okhttp.core)
     implementation(libs.okio)
@@ -28,6 +28,7 @@ dependencies {
     testImplementation(libs.classgraph)
     testImplementation(libs.equalsverifier)
     testImplementation(libs.junit4)
+    testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.okhttp.mockwebserver)

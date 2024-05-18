@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,8 +24,11 @@ import com.appmattus.certificatetransparency.internal.loglist.InMemoryCache
 import com.appmattus.certificatetransparency.loglist.RawLogListResult
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -43,6 +46,38 @@ internal class DataSourceReuseInflightTest {
     @Before
     fun before() {
         reuseInflightCache = cache.reuseInflight()
+    }
+
+    /**
+     * In the original code of [DataSource.reuseInflight] the job was not being cleared when the job was cancelled
+     * Running this test in the original code would result in the cancelled job continuously being returned with the
+     * second call to `reuseInflightDataSource.get()` throwing the original exception.
+     */
+    @Test
+    fun `reuseInFlight creates a new job if an existing one throws exception`() = runTest {
+        var firstCall = true
+        val cache = object : DataSource<Unit> {
+            override suspend fun get() {
+                if (firstCall) throw Exception()
+            }
+
+            override suspend fun set(value: Unit) = Unit
+        }
+
+        val reuseInflightDataSource = cache.reuseInflight()
+
+        runCatching {
+            coroutineScope {
+                launch {
+                    reuseInflightDataSource.get()
+                }.join()
+            }
+        }
+
+        firstCall = false
+
+        // When the code was broken this call would throw the original exception as the job wasn't removed
+        reuseInflightDataSource.get()
     }
 
     // get
