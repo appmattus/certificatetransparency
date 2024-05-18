@@ -23,7 +23,6 @@ package com.appmattus.certificaterevocation.internal.revoker
 import com.appmattus.certificaterevocation.RevocationResult
 import com.appmattus.certificatetransparency.chaincleaner.CertificateChainCleaner
 import com.appmattus.certificatetransparency.chaincleaner.CertificateChainCleanerFactory
-import com.appmattus.certificatetransparency.internal.utils.Base64
 import java.io.IOException
 import java.security.KeyStore
 import java.security.cert.Certificate
