@@ -54,7 +54,10 @@ setup.
 > :warning: Android's WebViews only allow you to override GET network requests
 > through overriding the *shouldInterceptRequest* method. This means the only
 > reliable way to implement certificate transparency in WebViews is to use the
-> Java Security Provider documented here.
+> Java Security Provider documented here. However, if you are using WebViews on
+> Android 6.0 (API 23) or lower then `installCertificateTransparencyProvider`
+> will cause [issues](https://github.com/appmattus/certificatetransparency/issues/51)
+> and should be avoided.
 
 ```kotlin
 class SampleApplication : Application() {
