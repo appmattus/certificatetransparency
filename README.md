@@ -1,6 +1,6 @@
 # Certificate transparency for Android and JVM
 
-[![CI status](https://github.com/appmattus/certificatetransparency/workflows/CI/badge.svg)](https://github.com/appmattus/certificatetransparency/actions)
+[![CI status]([https://github.com/appmattus/certificatetransparency/workflows/CI/badge.svg](https://github.com/appmattus/certificatetransparency/actions/workflows/main.yml/badge.svg))](https://github.com/appmattus/certificatetransparency/actions)
 [![codecov](https://codecov.io/gh/appmattus/certificatetransparency/branch/main/graph/badge.svg)](https://codecov.io/gh/appmattus/certificatetransparency)
 [![Maven Central](https://img.shields.io/maven-central/v/com.appmattus.certificatetransparency/certificatetransparency)](https://central.sonatype.com/search?q=com.appmattus.certificatetransparency)
 
