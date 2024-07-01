@@ -26,7 +26,7 @@ dokkaPlugin = "1.9.20"
 gradleMavenPublishPlugin = "0.28.0"
 gradleVersionsPlugin = "0.51.0"
 markdownlintGradlePlugin = "0.6.0"
-owaspDependencyCheckPlugin = "9.2.0"
+owaspDependencyCheckPlugin = "10.0.0"
 
 # Core dependencies
 kotlinx-coroutines = "1.8.1"
