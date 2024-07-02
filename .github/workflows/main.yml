@@ -31,6 +31,8 @@ jobs:
         java-version: '17'
 
     - name: Build with Gradle
+      env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
       run: ./gradlew build --stacktrace
 
     - name: Upload reports
