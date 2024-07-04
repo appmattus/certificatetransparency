@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,18 @@
 
 package com.appmattus.certificatetransparency.internal.loglist.deserializer
 
-import com.appmattus.certificatetransparency.internal.utils.toRfc3339Instant
+import com.appmattus.certificatetransparency.internal.utils.toRfc3339Long
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import java.time.Instant
 
-internal class Rfc3339Deserializer : KSerializer<Instant> {
+internal class Rfc3339Deserializer : KSerializer<Long> {
 
     override val descriptor = PrimitiveSerialDescriptor("Rfc3339", PrimitiveKind.STRING)
 
-    override fun deserialize(decoder: Decoder) = decoder.decodeString().toRfc3339Instant()
+    override fun deserialize(decoder: Decoder) = decoder.decodeString().toRfc3339Long()
 
-    override fun serialize(encoder: Encoder, value: Instant) = error("Serialization not supported")
+    override fun serialize(encoder: Encoder, value: Long) = throw IllegalStateException("Serialization not supported")
 }

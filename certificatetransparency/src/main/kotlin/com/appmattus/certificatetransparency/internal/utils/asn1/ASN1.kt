@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Appmattus Limited
+ * Copyright 2023-2024 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,8 @@ internal fun ByteBuffer.toAsn1(logger: ASN1Logger = EmptyLogger): ASN1Object {
         tag.isUniversal(0x0c) -> ASN1PrintableStringUS.create(tag, encoded, logger)
         tag.isUniversal(0x10) || tag.isUniversal(0x11) -> ASN1Sequence.create(tag, encoded, logger)
         tag.isUniversal(0x13) -> ASN1PrintableStringTeletex.create(tag, encoded, logger)
-        tag.isUniversal(0x17) -> ASN1Time.create(tag, encoded, logger)
+        tag.isUniversal(0x17) -> UTCTime.create(tag, encoded, logger)
+        tag.isUniversal(0x18) -> GeneralizedTime.create(tag, encoded, logger)
         tag.isContextSpecific(0x00) -> Version.create(tag, encoded, logger)
         tag.isContextSpecific(0x03) -> Extensions.create(tag, encoded, logger)
         else -> ASN1Unspecified.create(tag, encoded, logger)

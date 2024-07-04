@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Appmattus Limited
+ * Copyright 2024 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package com.appmattus.certificatetransparency.internal.loglist.model.v3
 import com.appmattus.certificatetransparency.internal.loglist.deserializer.Rfc3339Deserializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.time.Instant
 
 /**
  * @property name Name of the log operator
@@ -30,6 +29,6 @@ import java.time.Instant
 internal data class PreviousOperator(
     @Serializable(with = Rfc3339Deserializer::class)
     @SerialName("end_time")
-    val endDate: Instant,
+    val endDate: Long,
     @SerialName("name") val name: String
 )

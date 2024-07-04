@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,6 @@ package com.appmattus.certificatetransparency.internal.loglist.model.v3
 import com.appmattus.certificatetransparency.internal.loglist.deserializer.Rfc3339Deserializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.time.Instant
 
 /**
  * @property logListTimestamp The time at which this version of the log list was published.
@@ -34,7 +33,7 @@ import java.time.Instant
 internal data class LogListV3(
     @Serializable(with = Rfc3339Deserializer::class)
     @SerialName("log_list_timestamp")
-    val logListTimestamp: Instant,
+    val logListTimestamp: Long,
     @SerialName("version") val version: String,
     @SerialName("operators") val operators: List<Operator>
 )

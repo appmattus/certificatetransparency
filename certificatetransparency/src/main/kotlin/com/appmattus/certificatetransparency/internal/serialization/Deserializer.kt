@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,6 @@ import com.appmattus.certificatetransparency.internal.verifier.model.SignedCerti
 import com.appmattus.certificatetransparency.internal.verifier.model.Version
 import java.io.IOException
 import java.io.InputStream
-import java.time.Instant
 import kotlin.math.ceil
 import kotlin.math.log2
 
@@ -50,7 +49,7 @@ internal object Deserializer {
 
         val keyId = inputStream.readFixedLength(CTConstants.KEY_ID_LENGTH)
 
-        val timestamp = Instant.ofEpochMilli(inputStream.readNumber(CTConstants.TIMESTAMP_LENGTH))
+        val timestamp = inputStream.readNumber(CTConstants.TIMESTAMP_LENGTH)
 
         val extensions = inputStream.readVariableLength(CTConstants.MAX_EXTENSIONS_LENGTH)
 

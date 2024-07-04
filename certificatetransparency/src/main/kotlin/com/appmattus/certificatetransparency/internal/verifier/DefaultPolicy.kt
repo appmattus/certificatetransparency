@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,10 +24,11 @@ import com.appmattus.certificatetransparency.CTPolicy
 import com.appmattus.certificatetransparency.SctVerificationResult
 import com.appmattus.certificatetransparency.VerificationResult
 import java.security.cert.X509Certificate
-import java.time.Instant
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
+import java.util.Calendar
+import java.util.Date
+import java.util.GregorianCalendar
+import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 
 /**
  * Default [CTPolicy] which follows most of the rules of https://github.com/GoogleChrome/CertificateTransparency/blob/master/ct_policy.md
@@ -42,14 +43,15 @@ internal class DefaultPolicy : CTPolicy {
         val validScts = sctResults.values.filterIsInstance<SctVerificationResult.Valid>()
 
         // By default we use the 2022 policy when there are no valid SCTs
-        val issuanceDate = validScts.minOfOrNull { it.sct.timestamp } ?: Instant.MAX
-        val use2022policy = issuanceDate >= policyUpdateDate
+        val issuanceDate = validScts.minOfOrNull { it.sct.timestamp } ?: Long.MAX_VALUE
+        val use2022policy = issuanceDate >= POLICY_UPDATE_DATE
 
-        val before = leafCertificate.notBefore.toInstant().atZone(ZoneOffset.UTC)
-        val after = leafCertificate.notAfter.toInstant().atZone(ZoneOffset.UTC)
+        val before = leafCertificate.notBefore
+        val after = leafCertificate.notAfter
+        val daysBetween = TimeUnit.DAYS.convert(after.time - before.time, TimeUnit.MILLISECONDS)
 
         val minimumValidSignedCertificateTimestamps = if (use2022policy) {
-            if (ChronoUnit.DAYS.between(before, after) > 180) 3 else 2
+            if (daysBetween > 180) 3 else 2
         } else {
             val (lifetimeInMonths, hasPartialMonth) = roundedDownMonthDifference(before, after)
 
@@ -70,22 +72,25 @@ internal class DefaultPolicy : CTPolicy {
         }
     }
 
-    private fun roundedDownMonthDifference(start: ZonedDateTime, expiry: ZonedDateTime): MonthDifference {
+    private fun roundedDownMonthDifference(start: Date, expiry: Date): MonthDifference {
         if (expiry < start) {
             return MonthDifference(roundedMonthDifference = 0, hasPartialMonth = false)
         }
 
         @Suppress("MagicNumber")
         return MonthDifference(
-            roundedMonthDifference = ChronoUnit.MONTHS.between(start, expiry).toInt(),
+            roundedMonthDifference = (abs(start.time - expiry.time) / 2629746000).toInt(),
             hasPartialMonth = expiry.dayOfMonth != start.dayOfMonth
         )
     }
+
+    private val Date.dayOfMonth: Int
+        get() = GregorianCalendar().apply { time = this@dayOfMonth }.get(Calendar.DAY_OF_MONTH)
 
     private data class MonthDifference(val roundedMonthDifference: Int, val hasPartialMonth: Boolean)
 
     companion object {
         // 15 April 2022
-        private val policyUpdateDate = Instant.ofEpochMilli(1649980800000)
+        private const val POLICY_UPDATE_DATE = 1649980800000
     }
 }

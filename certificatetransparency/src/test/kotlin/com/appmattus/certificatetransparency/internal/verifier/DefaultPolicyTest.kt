@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,9 +35,6 @@ import org.junit.runners.Parameterized
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import java.security.cert.X509Certificate
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.util.Calendar
 import java.util.Date
 import java.util.UUID
@@ -295,7 +292,8 @@ fun date(year: Int, month: Int, dayOfMonth: Int, hour: Int, minute: Int, second:
 private val oldPolicySct
     get() = SignedCertificateTimestamp(
         id = LogId(Random.nextBytes(10)),
-        timestamp = LocalDateTime.of(2022, 1, 1, 0, 0, 0).atZone(ZoneId.systemDefault()).toInstant(),
+        // 1 January 2022
+        timestamp = 1640995200000,
         extensions = byteArrayOf(),
         signature = DigitallySigned(signature = byteArrayOf())
     )
@@ -304,7 +302,7 @@ private val newPolicySct
     get() = SignedCertificateTimestamp(
         id = LogId(Random.nextBytes(10)),
         // 15 April 2022
-        timestamp = Instant.ofEpochMilli(1649980800000),
+        timestamp = 1649980800000,
         extensions = byteArrayOf(),
         signature = DigitallySigned(signature = byteArrayOf())
     )
