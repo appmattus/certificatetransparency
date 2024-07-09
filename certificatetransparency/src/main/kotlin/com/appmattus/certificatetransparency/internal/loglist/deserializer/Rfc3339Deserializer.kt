@@ -29,5 +29,5 @@ internal class Rfc3339Deserializer : KSerializer<Long> {
 
     override fun deserialize(decoder: Decoder) = decoder.decodeString().toRfc3339Long()
 
-    override fun serialize(encoder: Encoder, value: Long) = throw IllegalStateException("Serialization not supported")
+    override fun serialize(encoder: Encoder, value: Long) = error("Serialization not supported")
 }

@@ -41,7 +41,7 @@ internal fun ByteBuffer.header(logger: ASN1Logger): ASN1Header {
     return ASN1Header(tag, headerLength.offset, headerLength.length)
 }
 
-@Suppress("MagicNumber")
+@Suppress("MagicNumber", "CyclomaticComplexMethod")
 internal fun ByteBuffer.toAsn1(logger: ASN1Logger = EmptyLogger): ASN1Object {
     val header = header(logger)
 
