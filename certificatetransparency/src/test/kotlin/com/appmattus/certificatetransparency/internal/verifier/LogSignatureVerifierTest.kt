@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -61,8 +61,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
-import java.time.Duration
-import java.time.Instant
 
 /**
  * This test verifies that the data is correctly serialized for signature comparison, so signature
@@ -276,7 +274,7 @@ internal class LogSignatureVerifierTest {
         // given we have an SCT with a future timestamp
         val certs = loadCertificates(TEST_CERT)
         val sct = Deserializer.parseSctFromBinary(TestData.file(TEST_CERT_SCT).inputStream())
-        val futureSct = sct.copy(timestamp = Instant.now() + Duration.ofMillis(10000))
+        val futureSct = sct.copy(timestamp = System.currentTimeMillis() + 10000)
 
         // when the signature is verified
         assertIsA<SctVerificationResult.Invalid.FutureTimestamp>(verifier.verifySignature(futureSct, certs))
@@ -290,7 +288,7 @@ internal class LogSignatureVerifierTest {
 
         // when we have a log server which is no longer valid
         val logInfo = LogServer.fromKeyFile(TestData.fileName(TEST_LOG_KEY))
-        val verifier = LogSignatureVerifier(logInfo.copy(validUntil = sct.timestamp - Duration.ofMillis(10000)))
+        val verifier = LogSignatureVerifier(logInfo.copy(validUntil = sct.timestamp - 10000))
 
         // then the signature is rejected
         assertIsA<SctVerificationResult.Invalid.LogServerUntrusted>(verifier.verifySignature(sct, certs))

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Test
-import java.time.Instant
 
 internal class LogListJsonParserV3Test {
 
@@ -84,7 +83,7 @@ internal class LogListJsonParserV3Test {
 
         val logServer = result.servers.first { it.id.contentEquals(symantecId) }
         assertNotNull(logServer.validUntil)
-        assertEquals(Instant.ofEpochMilli(1588550440000), logServer.validUntil)
+        assertEquals(1588550440000, logServer.validUntil)
     }
 
     companion object {
