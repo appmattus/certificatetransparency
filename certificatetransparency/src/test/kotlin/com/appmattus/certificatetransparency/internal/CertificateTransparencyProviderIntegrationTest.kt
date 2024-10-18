@@ -37,6 +37,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.security.Security
+import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLHandshakeException
 
 internal class CertificateTransparencyProviderIntegrationTest {
@@ -223,6 +224,8 @@ internal class CertificateTransparencyProviderIntegrationTest {
             .build()
 
         val client = OkHttpClient.Builder()
+            .connectTimeout(20, TimeUnit.SECONDS)
+            .readTimeout(20, TimeUnit.SECONDS)
             .sslSocketFactory(clientCertificates.sslSocketFactory(), clientCertificates.trustManager)
             .build()
 
