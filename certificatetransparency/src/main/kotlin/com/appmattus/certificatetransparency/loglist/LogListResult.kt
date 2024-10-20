@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,23 +22,22 @@ package com.appmattus.certificatetransparency.loglist
 
 import com.appmattus.certificatetransparency.internal.utils.stringStackTrace
 import kotlinx.serialization.SerializationException
-import java.time.Instant
 
 public sealed interface LogListResult {
     /**
      * Interface representing log list loading successful
      */
     public sealed interface Valid : LogListResult {
-        public val timestamp: Instant
+        public val timestamp: Long
         public val servers: List<LogServer>
 
-        public data class Success(override val timestamp: Instant, override val servers: List<LogServer>) : Valid
+        public data class Success(override val timestamp: Long, override val servers: List<LogServer>) : Valid
 
         /**
          * Network is returning stale data so this denotes we are returning locally cached data to reduce the chance of replay attacks
          */
         public data class StaleNetworkUsingCachedData(
-            override val timestamp: Instant,
+            override val timestamp: Long,
             override val servers: List<LogServer>,
             val networkResult: Valid
         ) : Valid
@@ -47,7 +46,7 @@ public sealed interface LogListResult {
          * Network is returning stale data so this denotes there is potentially a network issue
          */
         public data class StaleNetworkUsingNetworkData(
-            override val timestamp: Instant,
+            override val timestamp: Long,
             override val servers: List<LogServer>
         ) : Valid
     }
@@ -55,7 +54,7 @@ public sealed interface LogListResult {
     /**
      * Class representing log list stale data
      */
-    public data class DisableChecks(val timestamp: Instant, val networkResult: LogListResult) : LogListResult
+    public data class DisableChecks(val timestamp: Long, val networkResult: LogListResult) : LogListResult
 
     /**
      * Interface representing log list loading failed
