@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,6 @@ import com.appmattus.certificatetransparency.loglist.LogListDataSourceFactory
 import com.appmattus.certificatetransparency.loglist.LogListResult
 import com.appmattus.certificatetransparency.loglist.LogServer
 import kotlinx.serialization.json.Json
-import java.time.Instant
 
 internal object LogListDataSourceTestFactory {
 
@@ -48,7 +47,7 @@ internal object LogListDataSourceTestFactory {
                     previousOperators = emptyList()
                 )
             }
-        }.flatten().let { LogListResult.Valid.Success(Instant.now(), it) }
+        }.flatten().let { LogListResult.Valid.Success(System.currentTimeMillis(), it) }
 
         object : DataSource<LogListResult> {
             override suspend fun get() = list
@@ -59,7 +58,7 @@ internal object LogListDataSourceTestFactory {
 
     val emptySource: DataSource<LogListResult> by lazy {
         object : DataSource<LogListResult> {
-            override suspend fun get() = LogListResult.Valid.Success(Instant.now(), emptyList())
+            override suspend fun get() = LogListResult.Valid.Success(System.currentTimeMillis(), emptyList())
 
             override suspend fun set(value: LogListResult) = Unit
         }
