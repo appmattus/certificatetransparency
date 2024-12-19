@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,6 @@
 package com.appmattus.certificatetransparency
 
 import com.appmattus.certificatetransparency.internal.verifier.model.SignedCertificateTimestamp
-import java.time.Instant
 
 /**
  * Abstract class providing the results of verifying a Signed Certificate Timestamp
@@ -66,7 +65,7 @@ public sealed interface SctVerificationResult {
          * @property timestamp The timestamp of the SCT
          * @property now The time now
          */
-        public data class FutureTimestamp(val timestamp: Instant, val now: Instant) : Invalid {
+        public data class FutureTimestamp(val timestamp: Long, val now: Long) : Invalid {
             /**
              * Returns a string representation of the object.
              */
@@ -78,7 +77,7 @@ public sealed interface SctVerificationResult {
          * @property timestamp The timestamp of the SCT
          * @property logServerValidUntil The time the log server was valid till
          */
-        public data class LogServerUntrusted(val timestamp: Instant, val logServerValidUntil: Instant) : Invalid {
+        public data class LogServerUntrusted(val timestamp: Long, val logServerValidUntil: Long) : Invalid {
             /**
              * Returns a string representation of the object.
              */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,7 +37,6 @@ import java.security.KeyPair
 import java.security.KeyPairGenerator
 import java.security.PrivateKey
 import java.security.Signature
-import java.time.Instant
 import javax.net.ssl.SSLException
 
 internal class RawLogListToLogListResultTransformerTest {
@@ -190,7 +189,7 @@ internal class RawLogListToLogListResultTransformerTest {
         assertIsA<LogListResult.Valid>(result)
         val logServer = result.servers[3]
         assertNotNull(logServer.validUntil)
-        assertEquals(Instant.ofEpochMilli(1550275200000), logServer.validUntil)
+        assertEquals(1550275200000, logServer.validUntil)
     }
 
     private fun calculateSignature(privateKey: PrivateKey, data: ByteArray): ByteArray {

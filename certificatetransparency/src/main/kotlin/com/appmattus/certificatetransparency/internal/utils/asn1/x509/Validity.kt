@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Appmattus Limited
+ * Copyright 2024 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,6 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Sequence
 import com.appmattus.certificatetransparency.internal.utils.asn1.ASN1Time
 import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
 import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 internal class Validity private constructor(private val sequence: ASN1Sequence) : ASN1Object() {
 
@@ -43,13 +40,9 @@ internal class Validity private constructor(private val sequence: ASN1Sequence) 
 
     override fun toString(): String =
         "Not Valid Before ${
-            notValidBefore.value.atZone(ZoneId.systemDefault()).format(
-                DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL)
-            )
+            notValidBefore.value
         }\nNot Valid After ${
-            notValidAfter.value.atZone(ZoneId.systemDefault()).format(
-                DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL)
-            )
+            notValidAfter.value
         }"
 
     companion object {
