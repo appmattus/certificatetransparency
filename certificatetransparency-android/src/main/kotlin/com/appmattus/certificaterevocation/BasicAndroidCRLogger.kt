@@ -24,6 +24,7 @@ import android.util.Log
 
 /**
  * Basic logger which outputs the host name and certificate revocation results.
+ *
  * **NOTE:** This data could be considered sensitive data. Please ensure you review your usage.
  */
 public class BasicAndroidCRLogger(private val isDebugMode: Boolean) : CRLogger {
