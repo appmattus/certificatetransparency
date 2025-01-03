@@ -66,6 +66,9 @@ class SampleApplication : Application() {
 
         installCertificateTransparencyProvider {
             // Setup a logger
+            // NOTE: The logger outputs the host name and certificate
+            // transparency results which could be considered sensitive data.
+            // Please ensure you review your usage.
             logger = BasicAndroidCTLogger(BuildConfig.DEBUG)
 
             // Setup disk cache
