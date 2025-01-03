@@ -3,7 +3,7 @@
   # Ignore files in the sample app
   - sampleapp
 
-- ignore-rules:
+  ignore-rules:
   # Sample app only so rule not relevant
   - android_tapjacking
 
