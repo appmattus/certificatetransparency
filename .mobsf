@@ -1,6 +1,10 @@
 ---
-- ignore-rules:
-  - android_prevent_screenshot
-  - android_root_detection
-  - android_tapjacking
-  - android_task_hijacking2
+- ignore-paths:
+  # Ignore all files in the sample app as this is just for demonstration purposes and not deployed
+  - sampleapp
+
+#- ignore-rules:
+#  - android_prevent_screenshot
+#  - android_root_detection
+#  - android_tapjacking
+#  - android_task_hijacking2
