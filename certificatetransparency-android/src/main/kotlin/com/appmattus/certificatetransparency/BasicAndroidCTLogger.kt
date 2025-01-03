@@ -30,7 +30,6 @@ import android.util.Log
 public class BasicAndroidCTLogger(private val isDebugMode: Boolean) : CTLogger {
     override fun log(host: String, result: VerificationResult) {
         if (isDebugMode) {
-            // Suppressing MobSF warning as note added to documentation
             Log.i("CertificateTransparency", "$host $result") // mobsf-ignore: android_kotlin_logging
         }
     }
