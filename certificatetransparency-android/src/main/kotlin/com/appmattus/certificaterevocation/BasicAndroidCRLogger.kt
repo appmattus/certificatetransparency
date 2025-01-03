@@ -22,10 +22,15 @@ package com.appmattus.certificaterevocation
 
 import android.util.Log
 
+/**
+ * Basic logger which outputs the host name and certificate revocation results.
+ * **NOTE:** This data could be considered sensitive data. Please ensure you review your usage.
+ */
 public class BasicAndroidCRLogger(private val isDebugMode: Boolean) : CRLogger {
     override fun log(host: String, result: RevocationResult) {
         if (isDebugMode) {
-            Log.i("CertificateRevocation", "$host $result")
+            // Suppressing MobSF warning as note added to documentation
+            Log.i("CertificateRevocation", "$host $result") // mobsf-ignore: android_kotlin_logging
         }
     }
 }
