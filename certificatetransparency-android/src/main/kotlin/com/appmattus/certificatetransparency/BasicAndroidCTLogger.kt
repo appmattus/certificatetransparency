@@ -22,10 +22,16 @@ package com.appmattus.certificatetransparency
 
 import android.util.Log
 
+/**
+ * Basic logger which outputs the host name and certificate transparency results.
+ *
+ * **NOTE:** This data could be considered sensitive data. Please ensure you review your usage.
+ */
 public class BasicAndroidCTLogger(private val isDebugMode: Boolean) : CTLogger {
     override fun log(host: String, result: VerificationResult) {
         if (isDebugMode) {
-            Log.i("CertificateTransparency", "$host $result")
+            // Suppressing MobSF warning as note added to documentation
+            Log.i("CertificateTransparency", "$host $result") // mobsf-ignore: android_kotlin_logging
         }
     }
 }
