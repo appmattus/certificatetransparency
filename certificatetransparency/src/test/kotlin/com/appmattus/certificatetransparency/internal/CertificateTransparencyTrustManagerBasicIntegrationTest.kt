@@ -61,7 +61,7 @@ internal class CertificateTransparencyTrustManagerBasicIntegrationTest {
         }
 
         public fun X509TrustManager.createSocketFactory(): SSLSocketFactory {
-            return SSLContext.getInstance("SSL").apply {
+            return SSLContext.getInstance("TLS").apply {
                 init(null, arrayOf<TrustManager>(this@createSocketFactory), SecureRandom())
             }.socketFactory
         }
