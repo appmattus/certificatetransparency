@@ -1,5 +1,5 @@
 #
-# Copyright 2023-2024 Appmattus Limited
+# Copyright 2023-2025 Appmattus Limited
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,54 +17,53 @@
 [versions]
 
 java = "11"
-kotlin = "1.9.24"
+kotlin = "2.1.10"
 
 # Plugins
-androidGradlePlugin = "8.4.0"
-detektGradlePlugin = "1.23.6"
-dokkaPlugin = "1.9.20"
-gradleMavenPublishPlugin = "0.28.0"
-gradleVersionsPlugin = "0.51.0"
+androidGradlePlugin = "8.8.0"
+detektGradlePlugin = "1.23.7"
+dokkaPlugin = "2.0.0"
+gradleMavenPublishPlugin = "0.30.0"
+gradleVersionsPlugin = "0.52.0"
 markdownlintGradlePlugin = "0.6.0"
-owaspDependencyCheckPlugin = "10.0.2"
+owaspDependencyCheckPlugin = "12.0.1"
 
 # Core dependencies
-kotlinx-coroutines = "1.8.1"
-kotlinx-serialization = "1.6.3"
+kotlinx-coroutines = "1.10.1"
+kotlinx-serialization = "1.8.0"
 okhttp = "4.12.0"
-okio = "3.9.0"
+okio = "3.10.2"
 
 # Test dependencies
-androidx-test-core = "1.5.0"
-androidx-test-junit = "1.1.5"
-androidx-test-runner = "1.5.2"
-bouncycastle = "1.78.1"
-classgraph = "4.8.172"
-equalsverifier = "3.16.1"
+androidx-test-core = "1.6.1"
+androidx-test-junit = "1.2.1"
+androidx-test-runner = "1.6.2"
+bouncycastle = "1.80"
+classgraph = "4.8.179"
+equalsverifier = "3.18.1"
 jacoco = "0.8.12"
 junit4 = "4.13.2"
-mockito-core = "5.12.0"
-mockito-kotlin = "5.3.1"
+mockito-core = "5.15.2"
+mockito-kotlin = "5.4.0"
 retrofit = "2.11.0"
-robolectric = "4.12.1"
+robolectric = "4.14.1"
 
 # Sample app only dependencies
-androidx-activity-compose = "1.9.0"
-androidx-appcompat = "1.6.1"
-androidx-compose-bom = "2024.05.00"
-androidx-compose-compiler = "1.5.14"
-androidx-lifecycle-runtime = "2.8.0"
-androidx-lifecycle-viewmodelcompose = "2.8.0"
-androidx-navigation-compose = "2.7.7"
+androidx-activity-compose = "1.10.0"
+androidx-appcompat = "1.7.0"
+androidx-compose-bom = "2025.01.00"
+androidx-lifecycle-runtime = "2.8.7"
+androidx-lifecycle-viewmodelcompose = "2.8.7"
+androidx-navigation-compose = "2.8.5"
 google-material = "1.12.0"
-google-playservices = "18.4.0"
+google-playservices = "18.5.0"
 highlightjs = "1.5.0"
 jmustache = "1.16"
 volley = "1.2.1"
-orbit = "6.1.0"
+orbit = "9.0.0"
 
 # Core library desugaring
-desugar = "2.0.4"
+desugar = "2.1.4"
 
 
 [libraries]
@@ -125,6 +124,8 @@ gradleMavenPublishPlugin = { id = "com.vanniktech.maven.publish", version.ref = 
 gradleVersionsPlugin = { id = "com.github.ben-manes.versions", version.ref = "gradleVersionsPlugin" }
 markdownlintGradlePlugin = { id = "com.appmattus.markdown", version.ref = "markdownlintGradlePlugin" }
 owaspDependencyCheckPlugin = { id = "org.owasp.dependencycheck", version.ref = "owaspDependencyCheckPlugin" }
+
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

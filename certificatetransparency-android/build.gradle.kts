@@ -39,8 +39,6 @@ android {
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-
     implementation(libs.kotlinx.coroutines.core)
 
     api(project(":certificatetransparency"))

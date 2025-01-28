@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -69,7 +69,7 @@ internal data class Host(
     }
 
     override fun hashCode(): Int {
-        return arrayOf(canonicalHostname, startsWithWildcard).contentHashCode()
+        return arrayOf<Any>(canonicalHostname, startsWithWildcard).contentHashCode()
     }
 
     companion object {

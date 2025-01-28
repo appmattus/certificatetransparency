@@ -12,8 +12,6 @@ plugins {
 apply(from = "$rootDir/gradle/scripts/jacoco.gradle.kts")
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization)
     implementation(libs.okhttp.core)
@@ -38,7 +36,7 @@ dependencies {
 }
 
 tasks.withType(KotlinCompile::class.java).all {
-    kotlinOptions {
+    compilerOptions {
         freeCompilerArgs = listOf(
             "-opt-in=kotlin.RequiresOptIn",
             "-Xstring-concat=inline"
