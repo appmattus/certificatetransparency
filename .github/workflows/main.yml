@@ -37,7 +37,7 @@ jobs:
                 env:
                     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
                 run: |
-                    snyk test --sarif-file-output=snyk.sarif --prune-repeated-subdependencies --package-manager=gradle --file=certificatetransparency-android/build.gradle || (exit "$(($? == 1 ? 0 : $?))")
+                    snyk test --sarif-file-output=snyk.sarif --prune-repeated-subdependencies --package-manager=gradle --file=certificatetransparency-android/build.gradle.kts || (exit "$(($? == 1 ? 0 : $?))")
             -   name: Upload snyk report
                 uses: github/codeql-action/upload-sarif@v3
                 with:
