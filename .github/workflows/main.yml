@@ -63,7 +63,7 @@ jobs:
             -   name: Build with Gradle
                 env:
                     NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
-                run: ./gradlew build --stacktrace -x dependencyCheckAnalyze
+                run: ./gradlew build --stacktrace
 
             -   name: Upload reports
                 if: failure()
