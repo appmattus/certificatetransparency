@@ -109,7 +109,7 @@ dependencies {
 }
 
 detekt {
-    input = files(subprojects.map { it.layout.projectDirectory.file("src") })
+    source.setFrom(files(subprojects.map { it.layout.projectDirectory.file("src") }))
 
     buildUponDefaultConfig = true
 
