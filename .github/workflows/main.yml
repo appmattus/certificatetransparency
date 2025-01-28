@@ -34,6 +34,11 @@ jobs:
                 run: |
                     mv snyk-linux /usr/local/bin/snyk && \
                     chmod +x /usr/local/bin/snyk
+            -   name: Execute snyk monitor
+                env:
+                    SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+                run: |
+                    snyk monitor --prune-repeated-subdependencies --package-manager=gradle --file=certificatetransparency-android/build.gradle.kts || (exit "$(($? == 1 ? 0 : $?))")
             -   name: Execute snyk test
                 env:
                     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
