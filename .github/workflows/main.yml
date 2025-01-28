@@ -24,6 +24,7 @@ jobs:
         name: "Snyk"
         runs-on: ubuntu-latest
         steps:
+            -   uses: actions/checkout@v3
             -   name: Download snyk
                 run: |
                     curl -o ./snyk-linux https://downloads.snyk.io/cli/stable/snyk-linux && \
