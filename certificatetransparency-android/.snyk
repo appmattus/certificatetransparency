@@ -5,49 +5,40 @@ ignore:
   SNYK-JAVA-COMFASTERXMLJACKSONCORE-7569538:
     - '*':
         reason: 'Android testing tool, not used in production code'
-        expires: 2025-02-27T16:43:07.594Z
         created: 2025-01-28T16:43:07.597Z
   SNYK-JAVA-COMMONSIO-8161190:
     - '*':
         reason: 'Android testing tool, not used in production code'
-        expires: 2025-02-27T16:43:07.594Z
         created: 2025-01-28T16:43:07.597Z
   SNYK-JAVA-IONETTY-5725787:
     - '*':
         reason: 'Android testing tool, not used in production code'
-        expires: 2025-02-27T16:43:07.594Z
         created: 2025-01-28T16:43:07.597Z
   SNYK-JAVA-COMGOOGLEPROTOBUF-8055227:
     - '*':
         reason: 'Android testing tool, not used in production code'
-        expires: 2025-02-27T16:43:07.594Z
         created: 2025-01-28T16:43:07.597Z
   SNYK-JAVA-IONETTY-5953332:
     - '*':
         reason: 'Android testing tool, not used in production code'
-        expires: 2025-02-27T16:43:07.594Z
         created: 2025-01-28T16:43:07.597Z
   SNYK-JAVA-IONETTY-6483812:
     - '*':
         reason: 'Android testing tool, not used in production code'
-        expires: 2025-02-27T16:43:07.594Z
         created: 2025-01-28T16:43:07.597Z
   SNYK-JAVA-IONETTY-8367012:
     - '*':
         reason: 'Android testing tool, not used in production code'
-        expires: 2025-02-27T16:43:07.594Z
         created: 2025-01-28T16:43:07.597Z
 
 
   SNYK-JAVA-COMFASTERXMLWOODSTOX-3091135:
     - '*':
         reason: 'Documentation tool, not used in production code'
-        expires: 2025-02-27T16:43:07.594Z
         created: 2025-01-28T16:43:07.597Z
   SNYK-JAVA-ORGJETBRAINSKOTLIN-2393744:
     - '*':
         reason: 'Documentation tool, not used in production code'
-        expires: 2025-02-27T16:43:07.594Z
         created: 2025-01-28T16:43:07.597Z
 
 patch: {}
