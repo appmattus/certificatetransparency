@@ -25,7 +25,7 @@ fun trustAllOkHttpClient(builder: OkHttpClient.Builder.() -> Unit): OkHttpClient
 
     val trustAllHostnameVerifier = HostnameVerifier { _, _ -> true }
 
-    val sslContext = SSLContext.getInstance("SSL")
+    val sslContext = SSLContext.getInstance("TLS")
     sslContext.init(null, arrayOf(trustAllCerts as TrustManager), SecureRandom())
 
     return OkHttpClient.Builder()

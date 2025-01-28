@@ -70,7 +70,7 @@ class TrustManagerKotlinExampleViewModel(application: Application) : BaseExample
             diskCache = AndroidDiskCache(getApplication())
         }
 
-        val sslContext: SSLContext = SSLContext.getInstance("SSL")
+        val sslContext: SSLContext = SSLContext.getInstance("TLS")
         sslContext.init(null, arrayOf<TrustManager>(wrappedTrustManager), SecureRandom())
 
         // Set the interceptor when creating the OkHttp client

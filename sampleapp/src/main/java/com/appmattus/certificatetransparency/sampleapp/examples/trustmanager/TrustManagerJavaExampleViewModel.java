@@ -86,7 +86,7 @@ public class TrustManagerJavaExampleViewModel extends BaseExampleViewModel {
 
         SSLContext sslContext;
         try {
-            sslContext = SSLContext.getInstance("SSL");
+            sslContext = SSLContext.getInstance("TLS");
             sslContext.init(null, new TrustManager[]{wrappedTrustManager}, new SecureRandom());
         } catch (NoSuchAlgorithmException | KeyManagementException expected) {
             throw new IllegalStateException("Unable to create an SSLContext");

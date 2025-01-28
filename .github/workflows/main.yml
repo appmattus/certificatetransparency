@@ -1,59 +1,94 @@
 name: CI
 
 on:
-  push:
-    branches:
-    - main
-    tags:
-    - '*'
-  pull_request:
-    branches:
-    - main
+    push:
+        branches:
+            - main
+        tags:
+            - '*'
+    pull_request:
+        branches:
+            - main
 
 jobs:
 
-  validation:
-    name: "Validation"
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - uses: gradle/wrapper-validation-action@v1
+    validation:
+        name: "Validation"
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v3
+            -   uses: gradle/wrapper-validation-action@v1
 
-  build:
-    needs: [validation]
-    runs-on: ubuntu-latest
+    snyk:
+        needs: [ validation ]
+        name: "Snyk"
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v3
+            -   name: Download snyk
+                run: |
+                    curl -o ./snyk-linux https://downloads.snyk.io/cli/stable/snyk-linux && \
+                    curl -o ./snyk-linux.sha256 https://downloads.snyk.io/cli/stable/snyk-linux.sha256 && \
+                    sha256sum -c snyk-linux.sha256
+            -   name: Install snyk
+                run: |
+                    mv snyk-linux /usr/local/bin/snyk && \
+                    chmod +x /usr/local/bin/snyk
+            -   name: Execute snyk monitor
+                env:
+                    SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+                run: |
+                    snyk monitor --prune-repeated-subdependencies --package-manager=gradle --file=certificatetransparency-android/build.gradle.kts || (exit "$(($? == 1 ? 0 : $?))")
+            -   name: Execute snyk test
+                env:
+                    SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+                run: |
+                    snyk test --sarif-file-output=snyk.sarif --prune-repeated-subdependencies --package-manager=gradle --file=certificatetransparency-android/build.gradle.kts || (exit "$(($? == 1 ? 0 : $?))")
+            -   name: Upload snyk report
+                uses: github/codeql-action/upload-sarif@v3
+                with:
+                    sarif_file: snyk.sarif
+            -   uses: actions/upload-artifact@v3
+                with:
+                    name: snyk.sarif
+                    path: snyk.sarif
+                    retention-days: 1
 
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-java@v3
-      with:
-        distribution: 'zulu'
-        java-version: '17'
+    build:
+        needs: [ snyk ]
+        runs-on: ubuntu-latest
 
-    - name: Build with Gradle
-      env:
-          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
-      run: ./gradlew build --stacktrace
+        steps:
+            -   uses: actions/checkout@v3
+            -   uses: actions/setup-java@v3
+                with:
+                    distribution: 'zulu'
+                    java-version: '17'
 
-    - name: Upload reports
-      if: failure()
-      uses: actions/upload-artifact@master
-      with:
-          name: test-results
-          path: '**/build/reports/**'
+            -   name: Build with Gradle
+                env:
+                    NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+                run: ./gradlew build --stacktrace
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-          token: ${{secrets.CODECOV_TOKEN}}
+            -   name: Upload reports
+                if: failure()
+                uses: actions/upload-artifact@master
+                with:
+                    name: test-results
+                    path: '**/build/reports/**'
 
-    - name: Prepare tag properties
-      run: |
-          echo "${{secrets.GPG_SIGNING_SECRET_KEY_RING_FILE_BASE64}}" > ~/.gradle/sonatype-appmattus-keys.gpg.b64
-          base64 -d ~/.gradle/sonatype-appmattus-keys.gpg.b64 > ~/.gradle/sonatype-appmattus-keys.gpg
-          echo "${{secrets.GPG_GRADLE_PROPERTIES}}" > ~/.gradle/gradle.properties
-      if: startsWith(github.ref, 'refs/tags/')
+            -   name: Upload coverage to Codecov
+                uses: codecov/codecov-action@v3
+                with:
+                    token: ${{secrets.CODECOV_TOKEN}}
 
-    - name: Upload tag
-      run: ./gradlew publishAllPublicationsToMavenCentral -Psigning.secretKeyRingFile=$(echo ~/.gradle/sonatype-appmattus-keys.gpg)
-      if: startsWith(github.ref, 'refs/tags/')
+            -   name: Prepare tag properties
+                run: |
+                    echo "${{secrets.GPG_SIGNING_SECRET_KEY_RING_FILE_BASE64}}" > ~/.gradle/sonatype-appmattus-keys.gpg.b64
+                    base64 -d ~/.gradle/sonatype-appmattus-keys.gpg.b64 > ~/.gradle/sonatype-appmattus-keys.gpg
+                    echo "${{secrets.GPG_GRADLE_PROPERTIES}}" > ~/.gradle/gradle.properties
+                if: startsWith(github.ref, 'refs/tags/')
+
+            -   name: Upload tag
+                run: ./gradlew publishAllPublicationsToMavenCentral -Psigning.secretKeyRingFile=$(echo ~/.gradle/sonatype-appmattus-keys.gpg)
+                if: startsWith(github.ref, 'refs/tags/')
