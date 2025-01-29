@@ -1,4 +1,5 @@
 /*
+ * Copyright 2023-2025 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,11 +43,11 @@ val jacocoTask = tasks.register<JacocoReport>("jacocoTestReport") {
         "**/*Test*.*",
         "android/**/*.*"
     )
-    val debugTree = fileTree("${project.buildDir}/intermediates/javac/debug") {
+    val debugTree = fileTree("${project.layout.buildDirectory}/intermediates/javac/debug") {
         exclude(fileFilter)
     }
 
-    val mainSrc = "${project.projectDir}/src/main/kotlin"
+    val mainSrc = "${project.layout.projectDirectory}/src/main/kotlin"
 
     sourceDirectories.setFrom(files(listOf(mainSrc)))
     classDirectories.setFrom(files(listOf(debugTree)))

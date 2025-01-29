@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,9 +31,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.container
-import org.orbitmvi.orbit.syntax.simple.SimpleSyntax
-import org.orbitmvi.orbit.syntax.simple.intent
-import org.orbitmvi.orbit.syntax.simple.reduce
+import org.orbitmvi.orbit.syntax.Syntax
 import javax.net.ssl.SSLPeerUnverifiedException
 
 @Suppress("TooManyFunctions")
@@ -100,7 +98,7 @@ abstract class BaseExampleViewModel(application: Application) : AndroidViewModel
         return Mustache.compiler().compile(template).execute(scopes)
     }
 
-    private suspend fun SimpleSyntax<State, Unit>.updateSourceCode() {
+    private suspend fun Syntax<State, Unit>.updateSourceCode() {
         val source = generateSourceCode(state.includeHosts, state.excludeHosts, state.failOnError)
         reduce {
             state.copy(sampleCode = source)

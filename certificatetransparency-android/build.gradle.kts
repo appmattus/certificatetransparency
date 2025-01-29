@@ -14,7 +14,7 @@ apply(from = "$rootDir/gradle/scripts/jacoco-android.gradle.kts")
 android {
     namespace = "com.appmattus.certificatetransparency"
 
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 19
@@ -39,8 +39,6 @@ android {
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-
     implementation(libs.kotlinx.coroutines.core)
 
     api(project(":certificatetransparency"))
