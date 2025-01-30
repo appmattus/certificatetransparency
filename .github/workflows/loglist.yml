@@ -1,6 +1,6 @@
 name: Update Log List
 permissions:
-    contents: read
+    contents: write
 
 on:
     workflow_dispatch:
@@ -27,8 +27,6 @@ jobs:
 
             -   name: Push log list
                 uses: stefanzweifel/git-auto-commit-action@v4
-                permissions:
-                    contents: write
                 with:
                     commit_message: Auto update log_list.json and log_list.sig
                     file_pattern: 'certificatetransparency/src/main/resources/*'
