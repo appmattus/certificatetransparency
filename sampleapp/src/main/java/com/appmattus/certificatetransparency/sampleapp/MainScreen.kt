@@ -17,8 +17,11 @@
 package com.appmattus.certificatetransparency.sampleapp
 
 import android.net.Uri
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContent
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
@@ -42,6 +45,7 @@ fun MainScreen(navController: NavController) {
         LazyColumn(
             modifier = Modifier
                 .padding(padding)
+                .windowInsetsPadding(WindowInsets.safeContent)
                 .padding(vertical = 8.dp)
                 .fillMaxHeight()
         ) {
@@ -89,6 +93,16 @@ fun MainScreen(navController: NavController) {
                     moreInfoUri = Uri.parse("https://developer.android.com/reference/javax/net/ssl/X509TrustManager"),
                     onKotlinClick = { navController.navigate("trustmanager/kotlin") },
                     onJavaClick = { navController.navigate("trustmanager/java") },
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+            }
+            item {
+                ExampleCardItem(
+                    scaffoldState = scaffoldState,
+                    title = stringResource(R.string.webview),
+                    moreInfoUri = null,
+                    onKotlinClick = { navController.navigate("webview/kotlin") },
+                    onJavaClick = null,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                 )
             }

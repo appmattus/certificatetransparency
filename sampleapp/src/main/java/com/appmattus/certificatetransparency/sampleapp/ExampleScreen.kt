@@ -216,7 +216,7 @@ private fun LazyListScope.sampleCodeSection(state: State?) {
 }
 
 @Composable
-fun IncludeHostDialog(showIncludeHostDialog: MutableState<Boolean>, onInclude: (String) -> Unit) {
+private fun IncludeHostDialog(showIncludeHostDialog: MutableState<Boolean>, onInclude: (String) -> Unit) {
     if (showIncludeHostDialog.value) {
         val text = remember { mutableStateOf("") }
 
@@ -251,7 +251,7 @@ fun IncludeHostDialog(showIncludeHostDialog: MutableState<Boolean>, onInclude: (
 }
 
 @Composable
-fun ExcludeHostDialog(showExcludeHostDialog: MutableState<Boolean>, onExclude: (String) -> Unit) {
+private fun ExcludeHostDialog(showExcludeHostDialog: MutableState<Boolean>, onExclude: (String) -> Unit) {
     if (showExcludeHostDialog.value) {
         val text = remember { mutableStateOf("") }
 
@@ -286,7 +286,7 @@ fun ExcludeHostDialog(showExcludeHostDialog: MutableState<Boolean>, onExclude: (
 }
 
 @Composable
-fun TestConnectionDialog(showConnectionDialog: MutableState<Boolean>, onConnect: (String) -> Unit) {
+private fun TestConnectionDialog(showConnectionDialog: MutableState<Boolean>, onConnect: (String) -> Unit) {
     if (showConnectionDialog.value) {
         val text = remember { mutableStateOf("") }
 
