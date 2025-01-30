@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,14 +50,14 @@ import androidx.core.content.ContextCompat
 import com.appmattus.certificatetransparency.sampleapp.R
 import kotlinx.coroutines.launch
 
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "LongMethod")
 @Composable
 fun ExampleCardItem(
     scaffoldState: ScaffoldState,
     title: String,
-    moreInfoUri: Uri,
+    moreInfoUri: Uri?,
     onKotlinClick: () -> Unit,
-    onJavaClick: () -> Unit,
+    onJavaClick: (() -> Unit)?,
     modifier: Modifier = Modifier
 ) {
     val scope = rememberCoroutineScope()
@@ -75,23 +75,25 @@ fun ExampleCardItem(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(title, style = MaterialTheme.typography.h5, modifier = Modifier.padding(8.dp))
-                TextButton(
-                    onClick = {
-                        scope.launch {
-                            launchUri(
-                                context = context,
-                                scaffoldState = scaffoldState,
-                                uri = moreInfoUri
-                            )
+                if (moreInfoUri != null) {
+                    TextButton(
+                        onClick = {
+                            scope.launch {
+                                launchUri(
+                                    context = context,
+                                    scaffoldState = scaffoldState,
+                                    uri = moreInfoUri
+                                )
+                            }
                         }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.open_in_new),
+                            contentDescription = null,
+                            Modifier.padding(end = 8.dp)
+                        )
+                        Text(stringResource(R.string.more_info))
                     }
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.open_in_new),
-                        contentDescription = null,
-                        Modifier.padding(end = 8.dp)
-                    )
-                    Text(stringResource(R.string.more_info))
                 }
             }
             Row {
@@ -103,14 +105,16 @@ fun ExampleCardItem(
                     )
                     Text(stringResource(R.string.kotlin))
                 }
-                Spacer(modifier = Modifier.width(8.dp))
-                OutlinedButton(onClick = onJavaClick) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.java),
-                        contentDescription = null,
-                        Modifier.padding(end = 8.dp)
-                    )
-                    Text(stringResource(R.string.java))
+                if (onJavaClick != null) {
+                    Spacer(modifier = Modifier.width(8.dp))
+                    OutlinedButton(onClick = onJavaClick) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.java),
+                            contentDescription = null,
+                            Modifier.padding(end = 8.dp)
+                        )
+                        Text(stringResource(R.string.java))
+                    }
                 }
             }
         }

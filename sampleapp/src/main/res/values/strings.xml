@@ -36,4 +36,6 @@
     <string name="trust_manager">TrustManager</string>
     <string name="trust_manager_kotlin_example">TrustManager Kotlin Example</string>
     <string name="trust_manager_java_example">TrustManager Java Example</string>
+    <string name="webview">WebView</string>
+    <string name="webview_example">WebView Example</string>
 </resources>
