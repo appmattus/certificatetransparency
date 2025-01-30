@@ -1,5 +1,9 @@
 name: Auto release
+permissions:
+    contents: read
+
 on:
+    workflow_dispatch:
     schedule:
         # every Wednesday at 3:00 pm
         -   cron: '0 15 * * 3'
