@@ -63,7 +63,7 @@ abstract class UpdateLogListTask : DefaultTask() {
                 }
 
                 if (!entry.isDirectory) {
-                    outputFile.outputStream().use { output ->
+                    canonicalOutputFile.outputStream().use { output ->
                         zipInputStream.copyTo(output)
                     }
                 }
