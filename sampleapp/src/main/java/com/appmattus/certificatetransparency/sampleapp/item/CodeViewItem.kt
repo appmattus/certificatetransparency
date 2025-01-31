@@ -44,5 +44,5 @@ fun CodeViewItem(language: Language, sourceCode: String?, modifier: Modifier = M
 @Preview
 @Composable
 fun PreviewCodeViewItem() {
-    CodeViewItem(language = Language.JAVA, sourceCode = "fun main() {\n    System.out.println(\"Hello world!\");\n}")
+    CodeViewItem(language = Language.JAVA, sourceCode = "fun main() {\n    helloWorld();\n}")
 }
