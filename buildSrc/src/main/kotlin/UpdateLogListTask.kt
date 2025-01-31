@@ -54,6 +54,7 @@ abstract class UpdateLogListTask : DefaultTask() {
         ZipInputStream(connection.getInputStream()).use { zipInputStream ->
             var entry = zipInputStream.nextEntry
             while (entry != null) {
+                @SuppressWarnings("java/zipslip")
                 val outputFile = File(outputFolder, entry.name)
 
                 if (!entry.isDirectory) {
