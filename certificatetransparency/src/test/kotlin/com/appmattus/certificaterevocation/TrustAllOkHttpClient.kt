@@ -13,6 +13,7 @@ import javax.net.ssl.X509TrustManager
  * DO NOT USE IN REAL CODE
  * This is an OkHttpClient that trusts all certificates as the certs for revoked.badssl.com have expired
  */
+@SuppressWarnings("codeql[java/insecure-trustmanager]")
 fun trustAllOkHttpClient(builder: OkHttpClient.Builder.() -> Unit): OkHttpClient {
     val trustAllCerts = object : X509TrustManager {
         override fun checkClientTrusted(p0: Array<out X509Certificate>?, p1: String?) = Unit

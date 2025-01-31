@@ -54,8 +54,13 @@ abstract class UpdateLogListTask : DefaultTask() {
         ZipInputStream(connection.getInputStream()).use { zipInputStream ->
             var entry = zipInputStream.nextEntry
             while (entry != null) {
-                @SuppressWarnings("codeql[java/zipslip]")
+                val canonicalOutputFolder = outputFolder.canonicalFile
                 val outputFile = File(outputFolder, entry.name)
+                val canonicalOutputFile = outputFile.canonicalFile
+
+                if (canonicalOutputFile.parentFile != canonicalOutputFolder) {
+                    throw IllegalStateException("Entry is outside of the target dir: ${entry.name}")
+                }
 
                 if (!entry.isDirectory) {
                     outputFile.outputStream().use { output ->
