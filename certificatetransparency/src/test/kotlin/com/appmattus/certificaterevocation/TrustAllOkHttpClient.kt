@@ -15,6 +15,7 @@ import javax.net.ssl.X509TrustManager
  */
 @SuppressWarnings("codeql[java/insecure-trustmanager]")
 fun trustAllOkHttpClient(builder: OkHttpClient.Builder.() -> Unit): OkHttpClient {
+    @SuppressWarnings("codeql[java/insecure-trustmanager]")
     val trustAllCerts = object : X509TrustManager {
         override fun checkClientTrusted(p0: Array<out X509Certificate>?, p1: String?) = Unit
 
@@ -26,6 +27,7 @@ fun trustAllOkHttpClient(builder: OkHttpClient.Builder.() -> Unit): OkHttpClient
 
     val trustAllHostnameVerifier = HostnameVerifier { _, _ -> true }
 
+    @SuppressWarnings("codeql[java/insecure-trustmanager]")
     val sslContext = SSLContext.getInstance("TLS")
     sslContext.init(null, arrayOf(trustAllCerts as TrustManager), SecureRandom())
 

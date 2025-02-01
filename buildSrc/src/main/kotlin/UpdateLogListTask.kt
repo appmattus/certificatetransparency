@@ -49,10 +49,6 @@ abstract class UpdateLogListTask : DefaultTask() {
             createDirectories()
         }
 
-        //val outputFolder = File(project.projectDir, "src/main/resources").apply {
-        //    mkdirs()
-        //}
-
         val connection = URI(url).toURL().openConnection().apply {
             connect()
         }
