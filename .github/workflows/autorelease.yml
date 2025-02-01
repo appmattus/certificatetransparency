@@ -19,16 +19,16 @@ jobs:
 
             -   name: 'Get last tag'
                 id: lasttag
-                uses: "WyriHaximus/github-action-get-previous-tag@v1"
+                uses: WyriHaximus/github-action-get-previous-tag@04e8485ecb6487243907e330d522ff60f02283ce # v1.4.0
 
             -   name: 'Get next version'
                 id: semvers
-                uses: "WyriHaximus/github-action-next-semvers@v1"
+                uses: WyriHaximus/github-action-next-semvers@18aa9ed4152808ab99b88d71f5481e41f8d89930 # v1.2.1
                 with:
                     version: ${{ steps.lasttag.outputs.tag }}
 
             -   name: 'Create tag and release'
-                uses: ncipollo/release-action@v1
+                uses: ncipollo/release-action@cdcc88a9acf3ca41c16c37bb7d21b9ad48560d87 # v1.15.0
                 with:
                     tag: ${{ steps.semvers.outputs.patch }}
                     commit: "main"

@@ -26,7 +26,7 @@ We are open about the security of our library and provide a threat model in the
 we have missed please reach out so we can keep this up to date.
 
 The source code and dependencies are continuously scanned with
-[Snyk](https://snyk.io).
+[Snyk](https://snyk.io), [CodeQL](https://codeql.github.com) and [mobsfscan](https://github.com/MobSF/mobsfscan).
 
 ## Getting started
 
@@ -70,6 +70,9 @@ class SampleApplication : Application() {
 
         installCertificateTransparencyProvider {
             // Setup a logger
+            // NOTE: The logger outputs the host name and certificate
+            // transparency results which could be considered sensitive data.
+            // Please ensure you review your usage.
             logger = BasicAndroidCTLogger(BuildConfig.DEBUG)
 
             // Setup disk cache

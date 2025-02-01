@@ -52,6 +52,7 @@ internal class LogListV3Test {
 
         val nimbusLog = cloudflare.logs.first { it.description == "Cloudflare 'Nimbus2022' Log" }
         assertEquals(86400, nimbusLog.maximumMergeDelay)
-        assertEquals(Instant.ofEpochMilli(1572549720000), nimbusLog.state?.timestamp)
+        // Suppressing MobSF warning as false positive, no logging occurs here
+        assertEquals(Instant.ofEpochMilli(1572549720000), nimbusLog.state?.timestamp) // mobsf-ignore: android_kotlin_logging
     }
 }
