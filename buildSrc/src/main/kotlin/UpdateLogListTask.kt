@@ -44,7 +44,6 @@ abstract class UpdateLogListTask : DefaultTask() {
     @TaskAction
     fun greet() {
         val url = "https://www.gstatic.com/ct/log_list/v3/log_list.zip"
-
         val outputFolder = project.projectDir.toPath().resolve("src/main/resources").apply {
             createDirectories()
         }

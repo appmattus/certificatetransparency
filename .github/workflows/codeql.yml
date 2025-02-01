@@ -46,8 +46,8 @@ jobs:
         include:
         - language: java-kotlin
           build-mode: manual
-        - language: actions
-          build-mode: none
+#        - language: actions
+#          build-mode: none
 
         # CodeQL supports the following values keywords for 'language': 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'swift'
         # Use `c-cpp` to analyze code written in C, C++ or both
@@ -67,6 +67,10 @@ jobs:
       with:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
+#        config: |
+#            packs:
+#            - codeql/java-queries:AlertSuppression.ql
+#            - codeql/java-queries:AlertSuppressionAnnotations.ql
         packs: "codeql/java-queries:AlertSuppression.ql,codeql/java-queries:AlertSuppressionAnnotations.ql"
 
         # If you wish to specify custom queries, you can do so here or in a config file.
@@ -91,3 +95,19 @@ jobs:
       uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{matrix.language}}"
+
+    -   uses: actions/upload-artifact@v4
+        with:
+            name: java.sarif
+            path: results/java.sarif
+            retention-days: 1
+
+
+#    - name: Dismiss alerts
+#      if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+#      uses: advanced-security/dismiss-alerts@v1
+#      with:
+#          sarif-id: $[[ steps.analyze.outputs.sarif-id ]]
+#          sarif-file: sarif-results/java.sarif
+#      env:
+#          GITHUB_TOKEN: $[[ secrets.GITHUB_TOKEN ]]
