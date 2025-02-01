@@ -20,7 +20,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v4
-            -   uses: gradle/actions/wrapper-validation@94baf225fe0a508e581a564467443d0e2379123b # v4
+            -   uses: gradle/actions/wrapper-validation@94baf225fe0a508e581a564467443d0e2379123b # v4.3.0
 
     mobsfscan:
         needs: [validation]
@@ -171,7 +171,7 @@ jobs:
                     path: '**/build/reports/**'
 
             -   name: Upload coverage to Codecov
-                uses: codecov/codecov-action@13ce06bfc6bbe3ecf90edbbf1bc32fe5978ca1d3 # v5
+                uses: codecov/codecov-action@13ce06bfc6bbe3ecf90edbbf1bc32fe5978ca1d3 # v5.3.1
                 with:
                     token: ${{secrets.CODECOV_TOKEN}}
 
