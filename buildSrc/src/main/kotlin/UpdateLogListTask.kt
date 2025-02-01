@@ -16,7 +16,6 @@
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
-import java.io.File
 import java.net.URI
 import java.security.KeyFactory
 import java.security.PublicKey
@@ -24,6 +23,8 @@ import java.security.Signature
 import java.security.spec.X509EncodedKeySpec
 import java.util.Base64
 import java.util.zip.ZipInputStream
+import kotlin.io.path.createDirectories
+import kotlin.io.path.readBytes
 
 abstract class UpdateLogListTask : DefaultTask() {
 
@@ -43,9 +44,14 @@ abstract class UpdateLogListTask : DefaultTask() {
     @TaskAction
     fun greet() {
         val url = "https://www.gstatic.com/ct/log_list/v3/log_list.zip"
-        val outputFolder = File(project.projectDir, "src/main/resources").apply {
-            mkdirs()
+
+        val outputFolder = project.projectDir.toPath().resolve("src/main/resources").apply {
+            createDirectories()
         }
+
+        //val outputFolder = File(project.projectDir, "src/main/resources").apply {
+        //    mkdirs()
+        //}
 
         val connection = URI(url).toURL().openConnection().apply {
             connect()
@@ -54,16 +60,16 @@ abstract class UpdateLogListTask : DefaultTask() {
         ZipInputStream(connection.getInputStream()).use { zipInputStream ->
             var entry = zipInputStream.nextEntry
             while (entry != null) {
-                val canonicalOutputFolder = outputFolder.canonicalFile
-                val outputFile = File(outputFolder, entry.name)
-                val canonicalOutputFile = outputFile.canonicalFile
+                val canonicalOutputFolder = outputFolder.normalize()
+                val outputFile = outputFolder.resolve(entry.name)
+                val canonicalOutputFile = outputFile.normalize()
 
-                if (canonicalOutputFile.parentFile != canonicalOutputFolder) {
+                if (!canonicalOutputFile.startsWith(canonicalOutputFolder)) {
                     throw IllegalStateException("Entry is outside of the target dir: ${entry.name}")
                 }
 
                 if (!entry.isDirectory) {
-                    canonicalOutputFile.outputStream().use { output ->
+                    canonicalOutputFile.toFile().outputStream().use { output ->
                         zipInputStream.copyTo(output)
                     }
                 }
@@ -75,8 +81,8 @@ abstract class UpdateLogListTask : DefaultTask() {
 
         if (!Signature.getInstance("SHA256withRSA").apply {
                 initVerify(googleLogListPublicKey)
-                update(File(outputFolder, "log_list.json").readBytes())
-            }.verify(File(outputFolder, "log_list.sig").readBytes())) {
+                update(outputFolder.resolve("log_list.json").readBytes())
+            }.verify(outputFolder.resolve("log_list.sig").readBytes())) {
             throw IllegalStateException("Signature validation failed")
         }
     }
