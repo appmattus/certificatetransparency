@@ -99,7 +99,7 @@ jobs:
     -   uses: actions/upload-artifact@v4
         with:
             name: java.sarif
-            path: results/java.sarif
+            path: ../results/java.sarif
             retention-days: 1
 
 
