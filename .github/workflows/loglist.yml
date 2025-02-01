@@ -1,5 +1,9 @@
 name: Update Log List
+permissions:
+    contents: write
+
 on:
+    workflow_dispatch:
     schedule:
         # every day at 2:00 pm
         -   cron: '0 14 * * *'
@@ -10,10 +14,10 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v4
                 with:
                     token: ${{ secrets.AUTO_UPDATE_GITHUB_TOKEN }}
-            -   uses: actions/setup-java@v3
+            -   uses: actions/setup-java@v4
                 with:
                     distribution: 'zulu'
                     java-version: '17'
