@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,7 +33,7 @@ internal class CertificateRevocationInterceptor(
     crlSet: Set<CrlItem>,
     certificateChainCleanerFactory: CertificateChainCleanerFactory? = null,
     trustManager: X509TrustManager?,
-    private val failOnError: Boolean = true,
+    private val failOnError: () -> Boolean = { true },
     private val logger: CRLogger? = null
 ) : CertificateRevocationBase(crlSet, certificateChainCleanerFactory, trustManager), Interceptor {
 
@@ -49,7 +49,7 @@ internal class CertificateRevocationInterceptor(
 
         logger?.log(host, result)
 
-        if (result is RevocationResult.Failure && failOnError) {
+        if (result is RevocationResult.Failure && failOnError()) {
             throw SSLPeerUnverifiedException("Certificate revocation failed")
         }
 

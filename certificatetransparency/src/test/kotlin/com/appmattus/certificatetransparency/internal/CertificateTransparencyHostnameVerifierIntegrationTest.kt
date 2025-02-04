@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +26,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.internal.tls.OkHostnameVerifier
 import okhttp3.tls.HandshakeCertificates
+import org.junit.Assert.assertThrows
 import org.junit.Test
 import javax.net.ssl.SSLPeerUnverifiedException
 
@@ -38,6 +39,7 @@ internal class CertificateTransparencyHostnameVerifierIntegrationTest {
             logListDataSource {
                 LogListDataSourceTestFactory.realLogListDataSource
             }
+            failOnError = true
         }
 
         private val clientCertificates: HandshakeCertificates = HandshakeCertificates.Builder()
@@ -93,6 +95,38 @@ internal class CertificateTransparencyHostnameVerifierIntegrationTest {
             .url("https://$invalidSctDomain/")
             .build()
 
+        client.newCall(request).execute()
+    }
+
+    @Test
+    fun failOnErrorDynamicallyChanged() {
+        // Given a hostname verifier with dynamic failOnError value
+        var dynamicFailOnError = true
+        val hostnameVerifier = certificateTransparencyHostnameVerifier(OkHostnameVerifier) {
+            logListDataSource {
+                LogListDataSourceTestFactory.realLogListDataSource
+            }
+            setFailOnError { dynamicFailOnError }
+        }
+        // Given a request with CT enabled
+        val client = OkHttpClient.Builder()
+            .sslSocketFactory(clientCertificates.sslSocketFactory(), clientCertificates.trustManager)
+            .hostnameVerifier(hostnameVerifier)
+            .build()
+        val request = Request.Builder()
+            .url("https://$invalidSctDomain/")
+            .build()
+
+        // When failOnError is set to true
+        dynamicFailOnError = true
+        // Then the request fails
+        assertThrows(SSLPeerUnverifiedException::class.java) {
+            client.newCall(request).execute()
+        }
+
+        // When failOnError is set to false
+        dynamicFailOnError = false
+        // The the request succeeds with no error
         client.newCall(request).execute()
     }
 }

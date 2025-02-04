@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,7 +44,7 @@ internal class CertificateTransparencyHostnameVerifier(
     logListDataSource: DataSource<LogListResult>?,
     policy: CTPolicy?,
     diskCache: DiskCache?,
-    private val failOnError: Boolean = true,
+    private val failOnError: () -> Boolean = { true },
     private val logger: CTLogger? = null
 ) : HostnameVerifier, CertificateTransparencyBase(
     includeHosts,
@@ -66,6 +66,6 @@ internal class CertificateTransparencyHostnameVerifier(
 
         logger?.log(host, result)
 
-        return !(result is VerificationResult.Failure && failOnError)
+        return !(result is VerificationResult.Failure && failOnError())
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,16 +47,20 @@ public class CTHostnameVerifierBuilder(
     private var logListDataSource: DataSource<LogListResult>? = null
     private val includeHosts = mutableSetOf<Host>()
     private val excludeHosts = mutableSetOf<Host>()
+    private var _failOnError: () -> Boolean = { true }
 
     /**
      * Determine if a failure to pass certificate transparency results in the connection being closed. A value of true ensures the connection is
      * closed on errors
      * Default: true
      */
-    public var failOnError: Boolean = true
-        @JvmSynthetic get
-
-        @JvmSynthetic set
+    @get:JvmSynthetic
+    @set:JvmSynthetic
+    public var failOnError: Boolean
+        get() = _failOnError()
+        set(value) {
+            _failOnError = { value }
+        }
 
     /**
      * [CTLogger] which will be called with all results
@@ -170,6 +174,14 @@ public class CTHostnameVerifierBuilder(
     public fun setFailOnError(failOnError: Boolean): CTHostnameVerifierBuilder = apply { this.failOnError = failOnError }
 
     /**
+     * Determine if a failure to pass certificate transparency results in the connection being closed. [failOnError] set to true closes the
+     * connection on errors
+     * Default: true
+     */
+    @Suppress("unused")
+    public fun setFailOnError(failOnError: () -> Boolean): CTHostnameVerifierBuilder = apply { this._failOnError = failOnError }
+
+    /**
      * [CTLogger] which will be called with all results
      * Default: none
      */
@@ -262,7 +274,7 @@ public class CTHostnameVerifierBuilder(
         logListDataSource,
         policy,
         diskCache,
-        failOnError,
+        _failOnError,
         logger
     )
 }

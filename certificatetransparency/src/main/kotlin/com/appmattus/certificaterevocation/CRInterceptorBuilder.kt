@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,16 +37,20 @@ public class CRInterceptorBuilder {
     private var certificateChainCleanerFactory: CertificateChainCleanerFactory? = null
     private var trustManager: X509TrustManager? = null
     private val crlSet = mutableSetOf<CrlItem>()
+    private var _failOnError: () -> Boolean = { true }
 
     /**
      * Determine if a failure to pass certificate revocation results in the connection being closed. A value of true ensures the connection is
      * closed on errors
      * Default: true
      */
-    public var failOnError: Boolean = true
-        @JvmSynthetic get
-
-        @JvmSynthetic set
+    @get:JvmSynthetic
+    @set:JvmSynthetic
+    public var failOnError: Boolean
+        get() = _failOnError()
+        set(value) {
+            _failOnError = { value }
+        }
 
     /**
      * [CRLogger] which will be called with all results
@@ -102,6 +106,14 @@ public class CRInterceptorBuilder {
     public fun setFailOnError(failOnError: Boolean): CRInterceptorBuilder = apply { this.failOnError = failOnError }
 
     /**
+     * Determine if a failure to pass certificate revocation results in the connection being closed. [failOnError] set to true closes the
+     * connection on errors
+     * Default: true
+     */
+    @Suppress("unused")
+    public fun setFailOnError(failOnError: () -> Boolean): CRInterceptorBuilder = apply { this._failOnError = failOnError }
+
+    /**
      * [CRLogger] which will be called with all results
      * Default: none
      */
@@ -127,7 +139,7 @@ public class CRInterceptorBuilder {
         crlSet = crlSet.toSet(),
         certificateChainCleanerFactory = certificateChainCleanerFactory,
         trustManager = trustManager,
-        failOnError = failOnError,
+        failOnError = _failOnError,
         logger = logger
     )
 }

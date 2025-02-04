@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ internal class CertificateTransparencyTrustManagerBasic(
     logListDataSource: DataSource<LogListResult>?,
     policy: CTPolicy?,
     diskCache: DiskCache?,
-    private val failOnError: Boolean = true,
+    private val failOnError: () -> Boolean = { true },
     private val logger: CTLogger? = null
 ) : X509TrustManager, CertificateTransparencyTrustManager {
 
@@ -96,7 +96,7 @@ internal class CertificateTransparencyTrustManagerBasic(
 
         logger?.log(commonName, result)
 
-        if (result is VerificationResult.Failure && failOnError) {
+        if (result is VerificationResult.Failure && failOnError()) {
             throw CertificateException("Certificate transparency failed")
         }
     }
@@ -111,7 +111,7 @@ internal class CertificateTransparencyTrustManagerBasic(
 
         logger?.log(host, result)
 
-        if (result is VerificationResult.Failure && failOnError) {
+        if (result is VerificationResult.Failure && failOnError()) {
             throw CertificateException("Certificate transparency failed")
         }
 
