@@ -2058,9 +2058,11 @@
         ],
         "version": "2.3.0",
         "title": "Overview",
-        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "thumbnail": "./public/content/images/thumbnail.stride.jpg",
         "id": 0,
-        "description": ""
+        "description": "",
+        "diagramType": "STRIDE",
+        "placeholder": "New STRIDE diagram description"
       }
     ],
     "diagramTop": 10,
