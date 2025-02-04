@@ -2062,7 +2062,8 @@
         "version": "2.3.0",
         "title": "Overview",
         "thumbnail": "./public/content/images/thumbnail.jpg",
-        "id": 0
+        "id": 0,
+        "description": "https://github.com/appmattus/certificatetransparency"
       }
     ],
     "diagramTop": 10,
