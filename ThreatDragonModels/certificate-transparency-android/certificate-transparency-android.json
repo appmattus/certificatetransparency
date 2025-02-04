@@ -5,11 +5,7 @@
     "description": "https://github.com/appmattus/certificatetransparency"
   },
   "detail": {
-    "contributors": [
-      {
-        "name": "Sakis Kaliakoudas"
-      }
-    ],
+    "contributors": [],
     "diagrams": [
       {
         "cells": [
