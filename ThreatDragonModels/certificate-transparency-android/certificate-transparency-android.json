@@ -1,7 +1,8 @@
 {
   "summary": {
     "title": "certificate-transparency-android",
-    "owner": "Matthew Dolan"
+    "owner": "Matthew Dolan",
+    "description": "https://github.com/appmattus/certificatetransparency"
   },
   "detail": {
     "contributors": [
