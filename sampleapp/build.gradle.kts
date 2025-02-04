@@ -5,16 +5,17 @@ import com.android.build.api.dsl.ApplicationBuildType
 plugins {
     id("com.android.application")
     id(libs.plugins.kotlin.android.get().pluginId)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace = "com.appmattus.certificatetransparency.sampleapp"
 
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         applicationId = "com.appmattus.certificatetransparency.sampleapp"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
         proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
@@ -27,9 +28,6 @@ android {
     }
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
     }
     packaging {
         resources.excludes.add("META-INF/DEPENDENCIES")
@@ -44,8 +42,6 @@ dependencies {
     implementation(project(":certificatetransparency-android"))
 
     implementation(platform(libs.androidx.compose.bom))
-
-    implementation(kotlin("stdlib-jdk8"))
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)

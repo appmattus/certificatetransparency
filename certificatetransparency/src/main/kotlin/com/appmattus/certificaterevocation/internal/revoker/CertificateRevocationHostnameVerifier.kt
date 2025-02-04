@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,7 @@ internal class CertificateRevocationHostnameVerifier(
     crlSet: Set<CrlItem>,
     certificateChainCleanerFactory: CertificateChainCleanerFactory? = null,
     trustManager: X509TrustManager?,
-    private val failOnError: Boolean = true,
+    private val failOnError: () -> Boolean = { true },
     private val logger: CRLogger? = null
 ) : CertificateRevocationBase(crlSet, certificateChainCleanerFactory, trustManager), HostnameVerifier {
 
@@ -45,6 +45,6 @@ internal class CertificateRevocationHostnameVerifier(
 
         logger?.log(host, result)
 
-        return !(result is RevocationResult.Failure && failOnError)
+        return !(result is RevocationResult.Failure && failOnError())
     }
 }

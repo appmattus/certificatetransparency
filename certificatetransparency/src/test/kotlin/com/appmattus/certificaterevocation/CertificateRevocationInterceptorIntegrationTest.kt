@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,7 @@ package com.appmattus.certificaterevocation
 
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.junit.Assert.assertThrows
 import org.junit.Test
 import javax.net.ssl.SSLPeerUnverifiedException
 
@@ -31,12 +32,7 @@ internal class CertificateRevocationInterceptorIntegrationTest {
         val emptyRevocationInterceptor = certificateRevocationInterceptor()
 
         val revocationInterceptor = certificateRevocationInterceptor {
-            // www.appmattus.com
-            addCrl(
-                issuerDistinguishedName = "MDIxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MQswCQYDVQQDEwJSMw==",
-                serialNumbers = listOf("BGLaLaigL8RBC8kIbcDFIJnX")
-            )
-            // Root cert
+            // Root cert for www.appmattus.com
             @Suppress("MaxLineLength")
             addCrl(
                 issuerDistinguishedName = "ME8xCzAJBgNVBAYTAlVTMSkwJwYDVQQKEyBJbnRlcm5ldCBTZWN1cml0eSBSZXNlYXJjaCBHcm91cDEVMBMGA1UEAxMMSVNSRyBSb290IFgx",
@@ -58,12 +54,44 @@ internal class CertificateRevocationInterceptorIntegrationTest {
 
     @Test(expected = SSLPeerUnverifiedException::class)
     fun certificateRejectedWhenRulePresentForCert() {
-        val client = trustAllOkHttpClient { addNetworkInterceptor(revocationInterceptor) }
+        val client = OkHttpClient.Builder().addNetworkInterceptor(revocationInterceptor).build()
 
         val request = Request.Builder()
             .url("https://www.appmattus.com")
             .build()
 
+        client.newCall(request).execute()
+    }
+
+    @Test
+    fun failOnErrorDynamicallyChanged() {
+        // Given a hostname verifier with dynamic failOnError value
+        var dynamicFailOnError = true
+        val revocationInterceptor = certificateRevocationInterceptor {
+            // Root cert for www.appmattus.com
+            @Suppress("MaxLineLength")
+            addCrl(
+                issuerDistinguishedName = "ME8xCzAJBgNVBAYTAlVTMSkwJwYDVQQKEyBJbnRlcm5ldCBTZWN1cml0eSBSZXNlYXJjaCBHcm91cDEVMBMGA1UEAxMMSVNSRyBSb290IFgx",
+                serialNumbers = listOf("AIIQz7DSQONZRGPgu2OCiwA=")
+            )
+            setFailOnError { dynamicFailOnError }
+        }
+        // Given a request with CR enabled
+        val client = OkHttpClient.Builder().addNetworkInterceptor(revocationInterceptor).build()
+        val request = Request.Builder()
+            .url("https://www.appmattus.com")
+            .build()
+
+        // When failOnError is set to true
+        dynamicFailOnError = true
+        // Then the request fails
+        assertThrows(SSLPeerUnverifiedException::class.java) {
+            client.newCall(request).execute()
+        }
+
+        // When failOnError is set to false
+        dynamicFailOnError = false
+        // The the request succeeds with no error
         client.newCall(request).execute()
     }
 }

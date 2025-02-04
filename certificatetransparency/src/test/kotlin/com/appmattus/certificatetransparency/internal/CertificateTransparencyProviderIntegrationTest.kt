@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,6 +34,7 @@ import okhttp3.Request
 import okhttp3.tls.HandshakeCertificates
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.security.Security
@@ -209,6 +210,25 @@ internal class CertificateTransparencyProviderIntegrationTest {
             }
         }
 
+        makeConnection("https://$invalidSctDomain/")
+    }
+
+    @Test
+    fun failOnErrorDynamicallyChanged() {
+        // Given a provider with dynamic failOnError value
+        var dynamicFailOnError = true
+        installProvider { setFailOnError { dynamicFailOnError } }
+
+        // When failOnError is set to true
+        dynamicFailOnError = true
+        // Then the request fails
+        assertThrows(SSLHandshakeException::class.java) {
+            makeConnection("https://$invalidSctDomain/")
+        }
+
+        // When failOnError is set to false
+        dynamicFailOnError = false
+        // The the request succeeds with no error
         makeConnection("https://$invalidSctDomain/")
     }
 

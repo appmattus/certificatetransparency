@@ -3,6 +3,7 @@
 [![CI status](https://github.com/appmattus/certificatetransparency/actions/workflows/main.yml/badge.svg)](https://github.com/appmattus/certificatetransparency/actions)
 [![codecov](https://codecov.io/gh/appmattus/certificatetransparency/branch/main/graph/badge.svg)](https://codecov.io/gh/appmattus/certificatetransparency)
 [![Maven Central](https://img.shields.io/maven-central/v/com.appmattus.certificatetransparency/certificatetransparency)](https://central.sonatype.com/search?q=com.appmattus.certificatetransparency)
+[![Snyk](https://snyk.io/test/github/appmattus/certificatetransparency/badge.svg)](https://security.snyk.io/package/maven/com.appmattus.certificatetransparency%3Acertificatetransparency)
 
 To protect our apps from man-in-the-middle attacks one of the first things that
 usually springs to mind is certificate pinning. However, the issues of
@@ -23,6 +24,9 @@ We are open about the security of our library and provide a threat model in the
 [source code](ThreatDragonModels/), created using
 [OWASP Threat Dragon](https://threatdragon.org). If you feel there is something
 we have missed please reach out so we can keep this up to date.
+
+The source code and dependencies are continuously scanned with
+[Snyk](https://snyk.io), [CodeQL](https://codeql.github.com) and [mobsfscan](https://github.com/MobSF/mobsfscan).
 
 ## Getting started
 
@@ -66,6 +70,9 @@ class SampleApplication : Application() {
 
         installCertificateTransparencyProvider {
             // Setup a logger
+            // NOTE: The logger outputs the host name and certificate
+            // transparency results which could be considered sensitive data.
+            // Please ensure you review your usage.
             logger = BasicAndroidCTLogger(BuildConfig.DEBUG)
 
             // Setup disk cache

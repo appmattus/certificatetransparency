@@ -79,7 +79,7 @@ subprojects {
     }
 
     tasks.withType<KotlinCompile>().all {
-        kotlinOptions {
+        compilerOptions {
             allWarningsAsErrors = true
         }
     }
@@ -92,7 +92,7 @@ subprojects {
 }
 
 tasks.register<Delete>("clean") {
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory)
 }
 
 apply(from = "$rootDir/gradle/scripts/dependencyUpdates.gradle.kts")
@@ -109,13 +109,13 @@ dependencies {
 }
 
 detekt {
-    input = files(subprojects.map { File(it.projectDir, "src") })
+    source.setFrom(files(subprojects.map { it.layout.projectDirectory.file("src") }))
 
     buildUponDefaultConfig = true
 
     autoCorrect = true
 
-    config = files("gradle/scripts/detekt-config.yml")
+    config.setFrom("${layout.projectDirectory}/gradle/scripts/detekt-config.yml")
 }
 
 tasks.maybeCreate("check").dependsOn(tasks.named("detekt"))

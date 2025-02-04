@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,6 +51,7 @@ internal class LogListV3Test {
 
         val nimbusLog = cloudflare.logs.first { it.description == "Cloudflare 'Nimbus2022' Log" }
         assertEquals(86400, nimbusLog.maximumMergeDelay)
-        assertEquals(1572549720000, nimbusLog.state?.timestamp)
+        // Suppressing MobSF warning as false positive, no logging occurs here
+        assertEquals(1572549720000, nimbusLog.state?.timestamp) // mobsf-ignore: android_kotlin_logging
     }
 }

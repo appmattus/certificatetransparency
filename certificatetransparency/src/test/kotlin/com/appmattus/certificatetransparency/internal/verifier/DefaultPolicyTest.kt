@@ -215,56 +215,56 @@ internal class DefaultPolicyTest {
             @JvmStatic
             @Parameterized.Parameters(name = "{0} ({1} -> {2})")
             fun data() = arrayOf(
-                arrayOf(
+                arrayOf<Any>(
                     "Cert valid for -14 months (nonsensical), needs 2 SCTs",
                     date(2016, 6, 6, 11, 25, 0),
                     date(2015, 3, 25, 11, 25, 0),
                     2,
                     2
                 ),
-                arrayOf(
+                arrayOf<Any>(
                     "Cert valid for 14 months, needs 2 SCTs",
                     date(2015, 3, 25, 11, 25, 0),
                     date(2016, 6, 6, 11, 25, 0),
                     2,
                     3
                 ),
-                arrayOf(
+                arrayOf<Any>(
                     "Cert valid for exactly 15 months, needs 3 SCTs",
                     date(2015, 3, 25, 11, 25, 0),
                     date(2016, 6, 25, 11, 25, 0),
                     3,
                     3
                 ),
-                arrayOf(
+                arrayOf<Any>(
                     "Cert valid for over 15 months, needs 3 SCTs",
                     date(2015, 3, 25, 11, 25, 0),
                     date(2016, 6, 27, 11, 25, 0),
                     3,
                     3
                 ),
-                arrayOf(
+                arrayOf<Any>(
                     "Cert valid for exactly 27 months, needs 3 SCTs",
                     date(2015, 3, 25, 11, 25, 0),
                     date(2017, 6, 25, 11, 25, 0),
                     3,
                     3
                 ),
-                arrayOf(
+                arrayOf<Any>(
                     "Cert valid for over 27 months, needs 4 SCTs",
                     date(2015, 3, 25, 11, 25, 0),
                     date(2017, 6, 28, 11, 25, 0),
                     4,
                     3
                 ),
-                arrayOf(
+                arrayOf<Any>(
                     "Cert valid for exactly 39 months, needs 4 SCTs (old policy) or 3 SCTs (new policy)",
                     date(2015, 3, 25, 11, 25, 0),
                     date(2018, 6, 25, 11, 25, 0),
                     4,
                     3
                 ),
-                arrayOf(
+                arrayOf<Any>(
                     "Cert valid for over 39 months, needs 5 SCTs (old policy) or 3 SCTs (new policy)",
                     date(2015, 3, 25, 11, 25, 0),
                     date(2018, 6, 27, 11, 25, 0),

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import com.appmattus.certificatetransparency.utils.TestData
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.tls.HandshakeCertificates
+import org.junit.Assert.assertThrows
 import org.junit.Test
 import java.security.SecureRandom
 import javax.net.ssl.SSLContext
@@ -60,8 +61,8 @@ internal class CertificateTransparencyTrustManagerBasicIntegrationTest {
             failOnError = false
         }
 
-        public fun X509TrustManager.createSocketFactory(): SSLSocketFactory {
-            return SSLContext.getInstance("SSL").apply {
+        private fun X509TrustManager.createSocketFactory(): SSLSocketFactory {
+            return SSLContext.getInstance("TLS").apply {
                 init(null, arrayOf<TrustManager>(this@createSocketFactory), SecureRandom())
             }.socketFactory
         }
@@ -147,6 +148,35 @@ internal class CertificateTransparencyTrustManagerBasicIntegrationTest {
             .url("https://$invalidSctDomain/")
             .build()
 
+        client.newCall(request).execute()
+    }
+
+    @Test
+    fun failOnErrorDynamicallyChanged() {
+        // Given a hostname verifier with dynamic failOnError value
+        var dynamicFailOnError = true
+        val trustManager = certificateTransparencyTrustManager(originalTrustManager) {
+            logListDataSource {
+                LogListDataSourceTestFactory.realLogListDataSource
+            }
+            setFailOnError { dynamicFailOnError }
+        }
+        // Given a request with CT enabled
+        val client = OkHttpClient.Builder().sslSocketFactory(trustManager.createSocketFactory(), trustManager).build()
+        val request = Request.Builder()
+            .url("https://$invalidSctDomain/")
+            .build()
+
+        // When failOnError is set to true
+        dynamicFailOnError = true
+        // Then the request fails
+        assertThrows(SSLHandshakeException::class.java) {
+            client.newCall(request).execute()
+        }
+
+        // When failOnError is set to false
+        dynamicFailOnError = false
+        // The the request succeeds with no error
         client.newCall(request).execute()
     }
 }

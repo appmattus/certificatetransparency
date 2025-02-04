@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import com.appmattus.certificatetransparency.sampleapp.examples.okhttp.OkHttpJav
 import com.appmattus.certificatetransparency.sampleapp.examples.okhttp.OkHttpKotlinExampleViewModel
 import com.appmattus.certificatetransparency.sampleapp.examples.trustmanager.TrustManagerJavaExampleViewModel
 import com.appmattus.certificatetransparency.sampleapp.examples.trustmanager.TrustManagerKotlinExampleViewModel
+import com.appmattus.certificatetransparency.sampleapp.examples.trustmanager.WebViewExampleViewModel
 import com.appmattus.certificatetransparency.sampleapp.examples.volley.VolleyJavaExampleViewModel
 import com.appmattus.certificatetransparency.sampleapp.examples.volley.VolleyKotlinExampleViewModel
 
@@ -65,6 +66,9 @@ class MainActivity : AppCompatActivity() {
                 }
                 composable("trustmanager/java") {
                     ExampleScreen(viewModel = viewModel<TrustManagerJavaExampleViewModel>())
+                }
+                composable("webview/kotlin") {
+                    WebViewScreen(viewModel = viewModel<WebViewExampleViewModel>())
                 }
             }
         }
