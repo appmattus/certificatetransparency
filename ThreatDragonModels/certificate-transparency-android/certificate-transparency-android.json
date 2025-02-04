@@ -1238,33 +1238,6 @@
             "vertices": []
           },
           {
-            "shape": "trust-boundary-curve",
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Boundary",
-              "name": "",
-              "description": "",
-              "isTrustBoundary": true,
-              "hasOpenThreats": false
-            },
-            "labels": [
-              ""
-            ],
-            "id": "88f4ed85-4acd-44ec-8da5-69a09161b104",
-            "source": {
-              "x": 355,
-              "y": 58
-            },
-            "target": {
-              "x": 476,
-              "y": 521
-            },
-            "vertices": []
-          },
-          {
             "shape": "flow",
             "attrs": {
               "line": {
@@ -1916,6 +1889,33 @@
                 "y": 202
               }
             ]
+          },
+          {
+            "shape": "trust-boundary-curve",
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Boundary",
+              "name": "",
+              "description": "",
+              "isTrustBoundary": true,
+              "hasOpenThreats": false
+            },
+            "labels": [
+              ""
+            ],
+            "id": "88f4ed85-4acd-44ec-8da5-69a09161b104",
+            "source": {
+              "x": 450,
+              "y": 50
+            },
+            "target": {
+              "x": 410,
+              "y": 510
+            },
+            "vertices": []
           },
           {
             "position": {
