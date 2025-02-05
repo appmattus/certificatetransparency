@@ -903,7 +903,10 @@
                   "description": "An attacker blocking the connection to a logging service can hide a targeted attack on certificate transparency.",
                   "mitigation": "- Mitigations depend on the logging service used.",
                   "modelType": "STRIDE",
-                  "id": "ac067dc2-64df-47c9-86b3-b65b9e22ffcc"
+                  "id": "ac067dc2-64df-47c9-86b3-b65b9e22ffcc",
+                  "new": false,
+                  "number": 104,
+                  "score": ""
                 },
                 {
                   "status": "Open",
@@ -913,7 +916,10 @@
                   "description": "Fake failures sent to logging service can make it look like there are failures that didn't really happen.",
                   "mitigation": "- Mitigations depend on the logging service used.",
                   "modelType": "STRIDE",
-                  "id": "f2011b1b-d4fa-4e95-ba41-14aa1e857015"
+                  "id": "f2011b1b-d4fa-4e95-ba41-14aa1e857015",
+                  "new": false,
+                  "number": 105,
+                  "score": ""
                 }
               ],
               "isTrustBoundary": false
@@ -1036,7 +1042,10 @@
                   "description": "For a malicious certificate to be trusted, it still has to be signed using a CA in the trust root as well as having at least two valid SCTs, i.e. the loglist will have to be compromised or two log servers private keys known.",
                   "type": "Tampering",
                   "modelType": "STRIDE",
-                  "id": "7f99d1c6-4dbe-4c3d-8d80-8cfe281b503e"
+                  "id": "7f99d1c6-4dbe-4c3d-8d80-8cfe281b503e",
+                  "new": false,
+                  "number": 106,
+                  "score": ""
                 }
               ],
               "isTrustBoundary": false
@@ -1161,7 +1170,10 @@
                   "description": "A compromised device could override the 'failOnError' flag in memory causing CT failures to be allowed through.",
                   "mitigation": "- Create separate debug & release versions with 'failOnError' only available in the debug variant.",
                   "modelType": "STRIDE",
-                  "id": "67f0cd88-739c-42de-933d-2b797a9cfb33"
+                  "id": "67f0cd88-739c-42de-933d-2b797a9cfb33",
+                  "new": false,
+                  "number": 107,
+                  "score": ""
                 },
                 {
                   "status": "Open",
@@ -1171,7 +1183,10 @@
                   "description": "Changing the domain config in memory can allow an attacker to remove a domain from CT checks resulting in an attacker being able to present certificates that don't pass CT validation.",
                   "mitigation": "- Have release only build that enforces CT checks for all domains, i.e. so there is no configuration",
                   "modelType": "STRIDE",
-                  "id": "0cff31b9-d7cd-4318-bb7b-afc396859b99"
+                  "id": "0cff31b9-d7cd-4318-bb7b-afc396859b99",
+                  "new": false,
+                  "number": 108,
+                  "score": ""
                 },
                 {
                   "status": "Open",
@@ -1181,7 +1196,10 @@
                   "type": "Denial of service",
                   "mitigation": "- Ensure all domains the app uses through the CT library have SCTs in their certificates.",
                   "modelType": "STRIDE",
-                  "id": "ebcff01a-f366-4ff2-a5e2-4c1152aee93e"
+                  "id": "ebcff01a-f366-4ff2-a5e2-4c1152aee93e",
+                  "new": false,
+                  "number": 109,
+                  "score": ""
                 },
                 {
                   "status": "Open",
@@ -1191,7 +1209,10 @@
                   "description": "An attacker could change the log list in memory to add or alter log server entries setting their own public key allowing them to create a certificate with SCTs that would pass validation.",
                   "mitigation": "- Encrypt log list when in memory at rest",
                   "modelType": "STRIDE",
-                  "id": "4129a81d-e907-43d8-8017-8c7e1018487b"
+                  "id": "4129a81d-e907-43d8-8017-8c7e1018487b",
+                  "new": false,
+                  "number": 110,
+                  "score": ""
                 },
                 {
                   "status": "Open",
@@ -1201,7 +1222,10 @@
                   "title": "Log list entries removed to block otherwise valid connections",
                   "mitigation": "- Encrypt log list when in memory at rest",
                   "modelType": "STRIDE",
-                  "id": "516b9010-620d-4741-b985-7d64c799b27b"
+                  "id": "516b9010-620d-4741-b985-7d64c799b27b",
+                  "new": false,
+                  "number": 111,
+                  "score": ""
                 }
               ],
               "isTrustBoundary": false
@@ -1269,7 +1293,10 @@
                   "mitigation": "- Detect age of loglist.json and reject if older than a certain age.\n- Can be mitigated by ensuring certificates are logged in more than the minimum required number of log servers.",
                   "title": "Malicious certificate presented",
                   "modelType": "STRIDE",
-                  "id": "7f99d1c6-4dbe-4c3d-8d80-8cfe281b503e"
+                  "id": "7f99d1c6-4dbe-4c3d-8d80-8cfe281b503e",
+                  "new": false,
+                  "number": 112,
+                  "score": ""
                 },
                 {
                   "status": "Mitigated",
@@ -1280,7 +1307,9 @@
                   "mitigation": "- Mitigated by CT checks requiring more than one SCT to validate.",
                   "modelType": "STRIDE",
                   "id": "906bebaa-0629-4b61-b1a1-29b5f0a21dd5",
-                  "new": false
+                  "new": false,
+                  "number": 113,
+                  "score": ""
                 },
                 {
                   "status": "Mitigated",
@@ -1291,7 +1320,9 @@
                   "modelType": "STRIDE",
                   "id": "97d4822e-f6f8-452f-a1ea-c35ca78314ee",
                   "mitigation": "- Store embedded and cached copies of the loglist so clients can continue to work without relying on loading from the network.",
-                  "new": false
+                  "new": false,
+                  "number": 114,
+                  "score": ""
                 },
                 {
                   "status": "Mitigated",
@@ -1302,7 +1333,9 @@
                   "mitigation": "- Limit size of loglist.json and loglist.sig loaded into memory.",
                   "modelType": "STRIDE",
                   "id": "09fad154-3851-4944-a2f2-93f006e106fd",
-                  "new": false
+                  "new": false,
+                  "number": 115,
+                  "score": ""
                 },
                 {
                   "id": "d4fc0abd-4986-43c4-abf7-d4c19756ac98",
@@ -1386,7 +1419,10 @@
                   "description": "An attacker could present an old snapshot of loglist.json along with its loglist.sig which will pass validation resulting in the CT library not being aware of a new log server causing a DoS",
                   "mitigation": "- Detect age of loglist.json and reject if older than a certain age.\n- Can be mitigated by ensuring certificates are logged in more than the minimum required number of log servers.",
                   "modelType": "STRIDE",
-                  "id": "230496dc-203c-4c7a-930a-1bd343d35423"
+                  "id": "230496dc-203c-4c7a-930a-1bd343d35423",
+                  "new": false,
+                  "number": 116,
+                  "score": ""
                 },
                 {
                   "status": "Mitigated",
@@ -1396,7 +1432,10 @@
                   "mitigation": "- Mitigated by CT checks requiring more than one SCT to validate.",
                   "type": "Tampering",
                   "modelType": "STRIDE",
-                  "id": "906bebaa-0629-4b61-b1a1-29b5f0a21dd5"
+                  "id": "906bebaa-0629-4b61-b1a1-29b5f0a21dd5",
+                  "new": false,
+                  "number": 117,
+                  "score": ""
                 },
                 {
                   "status": "Mitigated",
@@ -1407,7 +1446,9 @@
                   "description": "Blocking the loading of either loglist.json or loglist.sig will mean validation of SCTs cannot be completed resulting in a DoS.",
                   "modelType": "STRIDE",
                   "id": "97d4822e-f6f8-452f-a1ea-c35ca78314ee",
-                  "new": false
+                  "new": false,
+                  "number": 118,
+                  "score": ""
                 },
                 {
                   "status": "Mitigated",
@@ -1417,7 +1458,10 @@
                   "description": "Json and signature loaded out of sync results in signature failure - can be caused by server or client caching issues.",
                   "mitigation": "Ensure json and signature are loaded in one network call by migrating to log-list.zip",
                   "modelType": "STRIDE",
-                  "id": "537cd4d2-f2ae-4c89-b7bd-6032d286ec11"
+                  "id": "537cd4d2-f2ae-4c89-b7bd-6032d286ec11",
+                  "new": false,
+                  "number": 119,
+                  "score": ""
                 },
                 {
                   "status": "Mitigated",
@@ -1427,7 +1471,10 @@
                   "mitigation": "- Limit size of loglist.json and loglist.sig loaded into memory.",
                   "type": "Denial of service",
                   "modelType": "STRIDE",
-                  "id": "09fad154-3851-4944-a2f2-93f006e106fd"
+                  "id": "09fad154-3851-4944-a2f2-93f006e106fd",
+                  "new": false,
+                  "number": 120,
+                  "score": ""
                 },
                 {
                   "id": "56ee85b0-9f9d-4c63-b8a4-3281420ddb31",
@@ -1902,7 +1949,7 @@
       }
     ],
     "diagramTop": 10,
-    "threatTop": 103
+    "threatTop": 120
   },
   "version": "2.3.0"
 }
