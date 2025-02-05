@@ -5,6 +5,7 @@
     "description": "https://github.com/appmattus/certificatetransparency"
   },
   "detail": {
+    "reviewer": "",
     "contributors": [],
     "diagrams": [
       {
@@ -1923,19 +1924,18 @@
             },
             "id": "95e82117-dcc5-4c3f-b0c3-944eaac29882",
             "data": {
+              "type": "tm.Store",
               "name": "loglist.zip",
               "description": "",
-              "type": "tm.Store",
-              "isTrustBoundary": false,
               "outOfScope": true,
               "reasonOutOfScope": "Owned by Google",
-              "threats": [],
               "hasOpenThreats": false,
               "isALog": false,
-              "storesCredentials": false,
               "isEncrypted": false,
               "isSigned": false,
-              "storesInventory": null
+              "storesCredentials": false,
+              "storesInventory": false,
+              "threats": []
             }
           }
         ],
