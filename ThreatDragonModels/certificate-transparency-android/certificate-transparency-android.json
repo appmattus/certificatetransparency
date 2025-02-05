@@ -243,8 +243,8 @@
           },
           {
             "position": {
-              "x": 614,
-              "y": 231
+              "x": 612,
+              "y": 233
             },
             "size": {
               "width": 100,
@@ -257,7 +257,7 @@
               "body": {
                 "stroke": "#333333",
                 "strokeWidth": 1.5,
-                "strokeDasharray": "4 3"
+                "strokeDasharray": null
               }
             },
             "visible": true,
@@ -351,10 +351,32 @@
               "description": "",
               "type": "tm.Process",
               "isTrustBoundary": false,
-              "outOfScope": true,
+              "outOfScope": false,
               "reasonOutOfScope": "Controlled by Google",
-              "threats": [],
-              "hasOpenThreats": false
+              "threats": [
+                {
+                  "id": "1c66e17b-0696-426a-83f7-f76dfaabcfd4",
+                  "title": "New STRIDE threat",
+                  "status": "Mitigated",
+                  "severity": "TBA",
+                  "type": "Spoofing",
+                  "description": "Provide a description for this threat",
+                  "mitigation": "Provide remediation for this threat or a reason if status is N/A",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 103,
+                  "score": ""
+                }
+              ],
+              "hasOpenThreats": false,
+              "threatFrequency": {
+                "spoofing": 1,
+                "tampering": 0,
+                "repudiation": 0,
+                "informationDisclosure": 0,
+                "denialOfService": 0,
+                "elevationOfPrivilege": 0
+              }
             }
           },
           {
@@ -981,170 +1003,6 @@
             "shape": "flow",
             "attrs": {
               "line": {
-                "stroke": "red",
-                "strokeWidth": 2.5,
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": null
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "config & log list",
-              "description": "",
-              "outOfScope": false,
-              "reasonOutOfScope": "",
-              "hasOpenThreats": true,
-              "isBidirectional": false,
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "protocol": "",
-              "threats": [
-                {
-                  "status": "Open",
-                  "severity": "Low",
-                  "type": "Tampering",
-                  "title": "Set failOnError to false",
-                  "description": "A compromised device could override the 'failOnError' flag in memory causing CT failures to be allowed through.",
-                  "mitigation": "- Create separate debug & release versions with 'failOnError' only available in the debug variant.",
-                  "modelType": "STRIDE",
-                  "id": "67f0cd88-739c-42de-933d-2b797a9cfb33"
-                },
-                {
-                  "status": "Open",
-                  "severity": "Low",
-                  "title": "Domain config changed to remove domain from CT checks",
-                  "type": "Tampering",
-                  "description": "Changing the domain config in memory can allow an attacker to remove a domain from CT checks resulting in an attacker being able to present certificates that don't pass CT validation.",
-                  "mitigation": "- Have release only build that enforces CT checks for all domains, i.e. so there is no configuration",
-                  "modelType": "STRIDE",
-                  "id": "0cff31b9-d7cd-4318-bb7b-afc396859b99"
-                },
-                {
-                  "status": "Open",
-                  "severity": "Low",
-                  "description": "Changing the domain config in memory can allow an attacker to add a domain that has no SCTs to CT checks resulting in calls to that domain failing.",
-                  "title": "Domain config changed to add domain to CT checks",
-                  "type": "Denial of service",
-                  "mitigation": "- Ensure all domains the app uses through the CT library have SCTs in their certificates.",
-                  "modelType": "STRIDE",
-                  "id": "ebcff01a-f366-4ff2-a5e2-4c1152aee93e"
-                },
-                {
-                  "status": "Open",
-                  "severity": "Low",
-                  "title": "Log list changed to allow an otherwise denied connection",
-                  "type": "Tampering",
-                  "description": "An attacker could change the log list in memory to add or alter log server entries setting their own public key allowing them to create a certificate with SCTs that would pass validation.",
-                  "mitigation": "- Encrypt log list when in memory at rest",
-                  "modelType": "STRIDE",
-                  "id": "4129a81d-e907-43d8-8017-8c7e1018487b"
-                },
-                {
-                  "status": "Open",
-                  "severity": "Low",
-                  "description": "An attacker could change the log list in memory to remove log server entries causing SCT verification to fail resulting in a DoS.",
-                  "type": "Denial of service",
-                  "title": "Log list entries removed to block otherwise valid connections",
-                  "mitigation": "- Encrypt log list when in memory at rest",
-                  "modelType": "STRIDE",
-                  "id": "516b9010-620d-4741-b985-7d64c799b27b"
-                }
-              ],
-              "isTrustBoundary": false
-            },
-            "labels": [
-              {
-                "attrs": {
-                  "label": {
-                    "text": "config & log list"
-                  }
-                },
-                "position": 0.5
-              }
-            ],
-            "id": "cd896e97-fff3-440d-ae0f-038e8558e2ae",
-            "source": {
-              "cell": "e2512b82-39a7-4427-b411-b2c55a21a6aa"
-            },
-            "target": {
-              "cell": "19b083c3-ac40-4b2c-96ff-f1e6e9856117"
-            },
-            "vertices": [
-              {
-                "x": 270,
-                "y": 356
-              }
-            ]
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": null
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "",
-              "description": "",
-              "outOfScope": false,
-              "reasonOutOfScope": "",
-              "hasOpenThreats": false,
-              "isBidirectional": false,
-              "isEncrypted": true,
-              "isPublicNetwork": true,
-              "protocol": "https",
-              "threats": [],
-              "isTrustBoundary": false
-            },
-            "labels": [
-              {
-                "attrs": {
-                  "label": {
-                    "text": " (https)"
-                  }
-                },
-                "position": 0.5
-              }
-            ],
-            "id": "1e5d7eea-f0b5-4952-ae2f-2f11e15e3ed1",
-            "source": {
-              "cell": "19b083c3-ac40-4b2c-96ff-f1e6e9856117"
-            },
-            "target": {
-              "cell": "f7fbe375-91b3-4302-858b-71e145872456"
-            },
-            "vertices": [
-              {
-                "x": 506,
-                "y": 368
-              }
-            ]
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
                 "stroke": "#333333",
                 "targetMarker": {
                   "name": "block"
@@ -1236,308 +1094,6 @@
               "y": 354
             },
             "vertices": []
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": null
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "(https)",
-              "description": "",
-              "outOfScope": false,
-              "reasonOutOfScope": "",
-              "hasOpenThreats": false,
-              "isBidirectional": false,
-              "isEncrypted": true,
-              "isPublicNetwork": true,
-              "protocol": "https",
-              "threats": [],
-              "isTrustBoundary": false
-            },
-            "labels": [
-              "(https)"
-            ],
-            "id": "37eebb5c-d229-48b6-aee8-1f51aaf7dc3c",
-            "source": {
-              "cell": "19b083c3-ac40-4b2c-96ff-f1e6e9856117"
-            },
-            "target": {
-              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
-            },
-            "vertices": [
-              {
-                "x": 489,
-                "y": 244
-              }
-            ]
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "red",
-                "strokeWidth": 2.5,
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": null
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "loglist.zip",
-              "description": "",
-              "outOfScope": false,
-              "reasonOutOfScope": "",
-              "hasOpenThreats": true,
-              "isBidirectional": false,
-              "isEncrypted": true,
-              "isPublicNetwork": true,
-              "protocol": "https",
-              "threats": [
-                {
-                  "status": "Mitigated",
-                  "severity": "Low",
-                  "type": "Tampering",
-                  "description": "For a malicious certificate to be trusted, it still has to be signed using a CA in the trust root as well as having at least two valid SCTs, i.e. the loglist will have to be compromised or two log servers private keys known.",
-                  "mitigation": "- Detect age of loglist.json and reject if older than a certain age.\n- Can be mitigated by ensuring certificates are logged in more than the minimum required number of log servers.",
-                  "title": "Malicious certificate presented",
-                  "modelType": "STRIDE",
-                  "id": "7f99d1c6-4dbe-4c3d-8d80-8cfe281b503e"
-                },
-                {
-                  "status": "Mitigated",
-                  "severity": "Low",
-                  "title": "Stale snapshot of loglist.json/loglist.sig can accept rejected log servers",
-                  "type": "Tampering",
-                  "description": "An attacker could present an old snapshot of loglist.json along with its loglist.sig which will pass validation resulting in the CT library accepting a log server that has since been rejected.\n\nThis is only an issue if the certificate presented was generated after the date/time the server was rejected.",
-                  "mitigation": "- Mitigated by CT checks requiring more than one SCT to validate.",
-                  "modelType": "STRIDE",
-                  "id": "906bebaa-0629-4b61-b1a1-29b5f0a21dd5"
-                },
-                {
-                  "status": "Open",
-                  "severity": "Medium",
-                  "title": "Block loglist.json/loglist.sig from loading",
-                  "type": "Denial of service",
-                  "description": "Blocking the loading of either loglist.json or loglist.sig will mean validation of SCTs cannot be completed resulting in a DoS.",
-                  "modelType": "STRIDE",
-                  "id": "97d4822e-f6f8-452f-a1ea-c35ca78314ee",
-                  "mitigation": "- Store local copy of the loglist so clients can continue to work without relying on loading from the network."
-                },
-                {
-                  "status": "Mitigated",
-                  "severity": "Medium",
-                  "type": "Denial of service",
-                  "title": "log-list.json and log-list.sig out of sync",
-                  "description": "Json and signature loaded out of sync results in signature failure - can be caused by server or client caching issues.",
-                  "mitigation": "Ensure json and signature are loaded in one network call by migrating to log-list.zip",
-                  "modelType": "STRIDE",
-                  "id": "537cd4d2-f2ae-4c89-b7bd-6032d286ec11"
-                },
-                {
-                  "status": "Mitigated",
-                  "severity": "Medium",
-                  "type": "Denial of service",
-                  "title": "Out of memory caused by large loglist.json/loglist.sig",
-                  "description": "As the loglist.json and loglist.sig are loaded into memory for processing, if they are large they can cause an out of memory error.",
-                  "mitigation": "- Limit size of loglist.json and loglist.sig loaded into memory.",
-                  "modelType": "STRIDE",
-                  "id": "09fad154-3851-4944-a2f2-93f006e106fd"
-                },
-                {
-                  "id": "d4fc0abd-4986-43c4-abf7-d4c19756ac98",
-                  "title": "Change in Googles private key breaks signature verification",
-                  "status": "Open",
-                  "severity": "Medium",
-                  "type": "Denial of service",
-                  "description": "If Google's private key used to sign the loglist.json file is changed then verification will fail causing the CT checks to fail resulting in outgoing connections being rejected and so a DoS.",
-                  "mitigation": "- Use our own private key so we have more visibility and management of the private key used.\n- Store local copy of the loglist so clients can continue to work without relying on loading from the network.\n- Monitor Google's public key to detect key changes so updates to the library.\n- Monitor the certificate transparency forums to be aware of future key changes.",
-                  "modelType": "STRIDE",
-                  "new": false,
-                  "number": 101,
-                  "score": ""
-                }
-              ],
-              "isTrustBoundary": false,
-              "isALog": false,
-              "storesCredentials": false,
-              "isSigned": false,
-              "threatFrequency": {
-                "tampering": 0,
-                "informationDisclosure": 0,
-                "denialOfService": 1
-              }
-            },
-            "labels": [
-              {
-                "attrs": {
-                  "label": {
-                    "text": "loglist.zip"
-                  }
-                },
-                "position": 0.5
-              }
-            ],
-            "id": "c19daaa7-39c5-48a7-8935-3b9797f277bb",
-            "source": {
-              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
-            },
-            "target": {
-              "cell": "19b083c3-ac40-4b2c-96ff-f1e6e9856117"
-            },
-            "vertices": []
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "red",
-                "strokeWidth": 2.5,
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": null
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "loglist.json &\nloglist.sig",
-              "description": "",
-              "outOfScope": false,
-              "reasonOutOfScope": "",
-              "hasOpenThreats": true,
-              "isBidirectional": false,
-              "isEncrypted": true,
-              "isPublicNetwork": true,
-              "protocol": "https",
-              "threats": [
-                {
-                  "status": "Open",
-                  "severity": "Medium",
-                  "title": "Stale snapshot of loglist.json/loglist.sig can hide availability of new log servers",
-                  "type": "Denial of service",
-                  "description": "An attacker could present an old snapshot of loglist.json along with its loglist.sig which will pass validation resulting in the CT library not being aware of a new log server causing a DoS",
-                  "mitigation": "- Detect age of loglist.json and reject if older than a certain age.\n- Can be mitigated by ensuring certificates are logged in more than the minimum required number of log servers.",
-                  "modelType": "STRIDE",
-                  "id": "230496dc-203c-4c7a-930a-1bd343d35423"
-                },
-                {
-                  "status": "Mitigated",
-                  "severity": "Low",
-                  "description": "An attacker could present an old snapshot of loglist.json along with its loglist.sig which will pass validation resulting in the CT library accepting a log server that has since been rejected.\n\nThis is only an issue if the certificate presented was generated after the date/time the server was rejected.",
-                  "title": "Stale snapshot of loglist.json/loglist.sig can accept rejected log servers",
-                  "mitigation": "- Mitigated by CT checks requiring more than one SCT to validate.",
-                  "type": "Tampering",
-                  "modelType": "STRIDE",
-                  "id": "906bebaa-0629-4b61-b1a1-29b5f0a21dd5"
-                },
-                {
-                  "status": "Open",
-                  "severity": "Medium",
-                  "type": "Denial of service",
-                  "title": "Block loglist.json/loglist.sig from loading",
-                  "mitigation": "- Store local copy of the loglist so clients can continue to work without relying on loading from the network.",
-                  "description": "Blocking the loading of either loglist.json or loglist.sig will mean validation of SCTs cannot be completed resulting in a DoS.",
-                  "modelType": "STRIDE",
-                  "id": "97d4822e-f6f8-452f-a1ea-c35ca78314ee"
-                },
-                {
-                  "status": "Mitigated",
-                  "severity": "Medium",
-                  "type": "Denial of service",
-                  "title": "log-list.json and log-list.sig out of sync",
-                  "description": "Json and signature loaded out of sync results in signature failure - can be caused by server or client caching issues.",
-                  "mitigation": "Ensure json and signature are loaded in one network call by migrating to log-list.zip",
-                  "modelType": "STRIDE",
-                  "id": "537cd4d2-f2ae-4c89-b7bd-6032d286ec11"
-                },
-                {
-                  "status": "Mitigated",
-                  "severity": "Medium",
-                  "title": "Out of memory caused by large loglist.json/loglist.sig",
-                  "description": "As the loglist.json and loglist.sig are loaded into memory for processing, if they are large they can cause an out of memory error.",
-                  "mitigation": "- Limit size of loglist.json and loglist.sig loaded into memory.",
-                  "type": "Denial of service",
-                  "modelType": "STRIDE",
-                  "id": "09fad154-3851-4944-a2f2-93f006e106fd"
-                },
-                {
-                  "id": "56ee85b0-9f9d-4c63-b8a4-3281420ddb31",
-                  "title": "Change in Googles private key breaks signature verification",
-                  "status": "Open",
-                  "severity": "Medium",
-                  "type": "Denial of service",
-                  "description": "If Google's private key used to sign the loglist.json file is changed then verification will fail causing the CT checks to fail resulting in outgoing connections being rejected and so a DoS.",
-                  "mitigation": "- Use our own private key so we have more visibility and management of the private key used.\n- Store local copy of the loglist so clients can continue to work without relying on loading from the network.\n- Monitor Google's public key to detect key changes so updates to the library.\n- Monitor the certificate transparency forums to be aware of future key changes.",
-                  "modelType": "STRIDE",
-                  "new": false,
-                  "number": 102,
-                  "score": ""
-                }
-              ],
-              "isTrustBoundary": false,
-              "threatFrequency": {
-                "tampering": 0,
-                "informationDisclosure": 0,
-                "denialOfService": 1
-              }
-            },
-            "labels": [
-              {
-                "attrs": {
-                  "label": {
-                    "text": "loglist.json &\nloglist.sig (https)"
-                  }
-                },
-                "position": {
-                  "distance": 0.44229097874442713,
-                  "offset": 4.483389719389379
-                }
-              }
-            ],
-            "id": "29dee867-7a89-4487-aa6e-4f05774b03e2",
-            "source": {
-              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
-            },
-            "target": {
-              "cell": "19b083c3-ac40-4b2c-96ff-f1e6e9856117"
-            },
-            "vertices": [
-              {
-                "x": 506,
-                "y": 313
-              }
-            ]
           },
           {
             "shape": "flow",
@@ -1918,6 +1474,367 @@
             "vertices": []
           },
           {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "red",
+                "strokeWidth": 2.5,
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "loglist.zip",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": true,
+              "isBidirectional": false,
+              "isEncrypted": true,
+              "isPublicNetwork": true,
+              "protocol": "https",
+              "threats": [
+                {
+                  "status": "Mitigated",
+                  "severity": "Low",
+                  "type": "Tampering",
+                  "description": "For a malicious certificate to be trusted, it still has to be signed using a CA in the trust root as well as having at least two valid SCTs, i.e. the loglist will have to be compromised or two log servers private keys known.",
+                  "mitigation": "- Detect age of loglist.json and reject if older than a certain age.\n- Can be mitigated by ensuring certificates are logged in more than the minimum required number of log servers.",
+                  "title": "Malicious certificate presented",
+                  "modelType": "STRIDE",
+                  "id": "7f99d1c6-4dbe-4c3d-8d80-8cfe281b503e"
+                },
+                {
+                  "status": "Mitigated",
+                  "severity": "Low",
+                  "title": "Stale snapshot of loglist.json/loglist.sig can accept rejected log servers",
+                  "type": "Tampering",
+                  "description": "An attacker could present an old snapshot of loglist.json along with its loglist.sig which will pass validation resulting in the CT library accepting a log server that has since been rejected.\n\nThis is only an issue if the certificate presented was generated after the date/time the server was rejected.",
+                  "mitigation": "- Mitigated by CT checks requiring more than one SCT to validate.",
+                  "modelType": "STRIDE",
+                  "id": "906bebaa-0629-4b61-b1a1-29b5f0a21dd5"
+                },
+                {
+                  "status": "Open",
+                  "severity": "Medium",
+                  "title": "Block loglist.json/loglist.sig from loading",
+                  "type": "Denial of service",
+                  "description": "Blocking the loading of either loglist.json or loglist.sig will mean validation of SCTs cannot be completed resulting in a DoS.",
+                  "modelType": "STRIDE",
+                  "id": "97d4822e-f6f8-452f-a1ea-c35ca78314ee",
+                  "mitigation": "- Store local copy of the loglist so clients can continue to work without relying on loading from the network."
+                },
+                {
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "title": "log-list.json and log-list.sig out of sync",
+                  "description": "Json and signature loaded out of sync results in signature failure - can be caused by server or client caching issues.",
+                  "mitigation": "Ensure json and signature are loaded in one network call by migrating to log-list.zip",
+                  "modelType": "STRIDE",
+                  "id": "537cd4d2-f2ae-4c89-b7bd-6032d286ec11"
+                },
+                {
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "title": "Out of memory caused by large loglist.json/loglist.sig",
+                  "description": "As the loglist.json and loglist.sig are loaded into memory for processing, if they are large they can cause an out of memory error.",
+                  "mitigation": "- Limit size of loglist.json and loglist.sig loaded into memory.",
+                  "modelType": "STRIDE",
+                  "id": "09fad154-3851-4944-a2f2-93f006e106fd"
+                },
+                {
+                  "id": "d4fc0abd-4986-43c4-abf7-d4c19756ac98",
+                  "title": "Change in Googles private key breaks signature verification",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "If Google's private key used to sign the loglist.json file is changed then verification will fail causing the CT checks to fail resulting in outgoing connections being rejected and so a DoS.",
+                  "mitigation": "- Use our own private key so we have more visibility and management of the private key used.\n- Store local copy of the loglist so clients can continue to work without relying on loading from the network.\n- Monitor Google's public key to detect key changes so updates to the library.\n- Monitor the certificate transparency forums to be aware of future key changes.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 101,
+                  "score": ""
+                }
+              ],
+              "isTrustBoundary": false,
+              "isALog": false,
+              "storesCredentials": false,
+              "isSigned": false,
+              "threatFrequency": {
+                "tampering": 0,
+                "informationDisclosure": 0,
+                "denialOfService": 1
+              }
+            },
+            "labels": [
+              {
+                "attrs": {
+                  "label": {
+                    "text": "loglist.zip"
+                  }
+                },
+                "position": 0.5
+              }
+            ],
+            "id": "c19daaa7-39c5-48a7-8935-3b9797f277bb",
+            "source": {
+              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
+            },
+            "target": {
+              "cell": "19b083c3-ac40-4b2c-96ff-f1e6e9856117"
+            },
+            "vertices": []
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "red",
+                "strokeWidth": 2.5,
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": "4 3"
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "loglist.json &\nloglist.sig",
+              "description": "",
+              "outOfScope": true,
+              "reasonOutOfScope": "By default using loglist.zip",
+              "hasOpenThreats": true,
+              "isBidirectional": false,
+              "isEncrypted": true,
+              "isPublicNetwork": true,
+              "protocol": "https",
+              "threats": [
+                {
+                  "status": "Open",
+                  "severity": "Medium",
+                  "title": "Stale snapshot of loglist.json/loglist.sig can hide availability of new log servers",
+                  "type": "Denial of service",
+                  "description": "An attacker could present an old snapshot of loglist.json along with its loglist.sig which will pass validation resulting in the CT library not being aware of a new log server causing a DoS",
+                  "mitigation": "- Detect age of loglist.json and reject if older than a certain age.\n- Can be mitigated by ensuring certificates are logged in more than the minimum required number of log servers.",
+                  "modelType": "STRIDE",
+                  "id": "230496dc-203c-4c7a-930a-1bd343d35423"
+                },
+                {
+                  "status": "Mitigated",
+                  "severity": "Low",
+                  "description": "An attacker could present an old snapshot of loglist.json along with its loglist.sig which will pass validation resulting in the CT library accepting a log server that has since been rejected.\n\nThis is only an issue if the certificate presented was generated after the date/time the server was rejected.",
+                  "title": "Stale snapshot of loglist.json/loglist.sig can accept rejected log servers",
+                  "mitigation": "- Mitigated by CT checks requiring more than one SCT to validate.",
+                  "type": "Tampering",
+                  "modelType": "STRIDE",
+                  "id": "906bebaa-0629-4b61-b1a1-29b5f0a21dd5"
+                },
+                {
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "title": "Block loglist.json/loglist.sig from loading",
+                  "mitigation": "- Store local copy of the loglist so clients can continue to work without relying on loading from the network.",
+                  "description": "Blocking the loading of either loglist.json or loglist.sig will mean validation of SCTs cannot be completed resulting in a DoS.",
+                  "modelType": "STRIDE",
+                  "id": "97d4822e-f6f8-452f-a1ea-c35ca78314ee"
+                },
+                {
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "title": "log-list.json and log-list.sig out of sync",
+                  "description": "Json and signature loaded out of sync results in signature failure - can be caused by server or client caching issues.",
+                  "mitigation": "Ensure json and signature are loaded in one network call by migrating to log-list.zip",
+                  "modelType": "STRIDE",
+                  "id": "537cd4d2-f2ae-4c89-b7bd-6032d286ec11"
+                },
+                {
+                  "status": "Mitigated",
+                  "severity": "Medium",
+                  "title": "Out of memory caused by large loglist.json/loglist.sig",
+                  "description": "As the loglist.json and loglist.sig are loaded into memory for processing, if they are large they can cause an out of memory error.",
+                  "mitigation": "- Limit size of loglist.json and loglist.sig loaded into memory.",
+                  "type": "Denial of service",
+                  "modelType": "STRIDE",
+                  "id": "09fad154-3851-4944-a2f2-93f006e106fd"
+                },
+                {
+                  "id": "56ee85b0-9f9d-4c63-b8a4-3281420ddb31",
+                  "title": "Change in Googles private key breaks signature verification",
+                  "status": "Open",
+                  "severity": "Medium",
+                  "type": "Denial of service",
+                  "description": "If Google's private key used to sign the loglist.json file is changed then verification will fail causing the CT checks to fail resulting in outgoing connections being rejected and so a DoS.",
+                  "mitigation": "- Use our own private key so we have more visibility and management of the private key used.\n- Store local copy of the loglist so clients can continue to work without relying on loading from the network.\n- Monitor Google's public key to detect key changes so updates to the library.\n- Monitor the certificate transparency forums to be aware of future key changes.",
+                  "modelType": "STRIDE",
+                  "new": false,
+                  "number": 102,
+                  "score": ""
+                }
+              ],
+              "isTrustBoundary": false,
+              "threatFrequency": {
+                "tampering": 0,
+                "informationDisclosure": 0,
+                "denialOfService": 1
+              }
+            },
+            "labels": [
+              {
+                "attrs": {
+                  "label": {
+                    "text": "loglist.json &\nloglist.sig (https)"
+                  }
+                },
+                "position": {
+                  "distance": 0.44229097874442713,
+                  "offset": 4.483389719389379
+                }
+              }
+            ],
+            "id": "29dee867-7a89-4487-aa6e-4f05774b03e2",
+            "source": {
+              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
+            },
+            "target": {
+              "cell": "19b083c3-ac40-4b2c-96ff-f1e6e9856117"
+            },
+            "vertices": [
+              {
+                "x": 506,
+                "y": 313
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "red",
+                "strokeWidth": 2.5,
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "config & log list",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": true,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [
+                {
+                  "status": "Open",
+                  "severity": "Low",
+                  "type": "Tampering",
+                  "title": "Set failOnError to false",
+                  "description": "A compromised device could override the 'failOnError' flag in memory causing CT failures to be allowed through.",
+                  "mitigation": "- Create separate debug & release versions with 'failOnError' only available in the debug variant.",
+                  "modelType": "STRIDE",
+                  "id": "67f0cd88-739c-42de-933d-2b797a9cfb33"
+                },
+                {
+                  "status": "Open",
+                  "severity": "Low",
+                  "title": "Domain config changed to remove domain from CT checks",
+                  "type": "Tampering",
+                  "description": "Changing the domain config in memory can allow an attacker to remove a domain from CT checks resulting in an attacker being able to present certificates that don't pass CT validation.",
+                  "mitigation": "- Have release only build that enforces CT checks for all domains, i.e. so there is no configuration",
+                  "modelType": "STRIDE",
+                  "id": "0cff31b9-d7cd-4318-bb7b-afc396859b99"
+                },
+                {
+                  "status": "Open",
+                  "severity": "Low",
+                  "description": "Changing the domain config in memory can allow an attacker to add a domain that has no SCTs to CT checks resulting in calls to that domain failing.",
+                  "title": "Domain config changed to add domain to CT checks",
+                  "type": "Denial of service",
+                  "mitigation": "- Ensure all domains the app uses through the CT library have SCTs in their certificates.",
+                  "modelType": "STRIDE",
+                  "id": "ebcff01a-f366-4ff2-a5e2-4c1152aee93e"
+                },
+                {
+                  "status": "Open",
+                  "severity": "Low",
+                  "title": "Log list changed to allow an otherwise denied connection",
+                  "type": "Tampering",
+                  "description": "An attacker could change the log list in memory to add or alter log server entries setting their own public key allowing them to create a certificate with SCTs that would pass validation.",
+                  "mitigation": "- Encrypt log list when in memory at rest",
+                  "modelType": "STRIDE",
+                  "id": "4129a81d-e907-43d8-8017-8c7e1018487b"
+                },
+                {
+                  "status": "Open",
+                  "severity": "Low",
+                  "description": "An attacker could change the log list in memory to remove log server entries causing SCT verification to fail resulting in a DoS.",
+                  "type": "Denial of service",
+                  "title": "Log list entries removed to block otherwise valid connections",
+                  "mitigation": "- Encrypt log list when in memory at rest",
+                  "modelType": "STRIDE",
+                  "id": "516b9010-620d-4741-b985-7d64c799b27b"
+                }
+              ],
+              "isTrustBoundary": false
+            },
+            "labels": [
+              {
+                "attrs": {
+                  "label": {
+                    "text": "config & log list"
+                  }
+                },
+                "position": 0.5
+              }
+            ],
+            "id": "cd896e97-fff3-440d-ae0f-038e8558e2ae",
+            "source": {
+              "cell": "e2512b82-39a7-4427-b411-b2c55a21a6aa"
+            },
+            "target": {
+              "cell": "19b083c3-ac40-4b2c-96ff-f1e6e9856117"
+            },
+            "vertices": [
+              {
+                "x": 270,
+                "y": 356
+              }
+            ]
+          },
+          {
             "position": {
               "x": 857,
               "y": 243
@@ -2051,7 +1968,7 @@
       }
     ],
     "diagramTop": 10,
-    "threatTop": 102
+    "threatTop": 103
   },
   "version": "2.3.0"
 }
