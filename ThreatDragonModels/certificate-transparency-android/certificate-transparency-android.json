@@ -732,7 +732,7 @@
               "type": "tm.Store",
               "isTrustBoundary": false,
               "outOfScope": true,
-              "reasonOutOfScope": "",
+              "reasonOutOfScope": "Owned by Google",
               "threats": [],
               "hasOpenThreats": false,
               "isALog": false,
@@ -855,7 +855,7 @@
               "type": "tm.Store",
               "isTrustBoundary": false,
               "outOfScope": true,
-              "reasonOutOfScope": "",
+              "reasonOutOfScope": "Owned by Google",
               "threats": [],
               "hasOpenThreats": false,
               "isALog": false,
@@ -1094,357 +1094,6 @@
               "y": 354
             },
             "vertices": []
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": "4 3"
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "",
-              "description": "",
-              "outOfScope": true,
-              "reasonOutOfScope": "Controlled by Google",
-              "hasOpenThreats": false,
-              "isBidirectional": false,
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "protocol": "",
-              "threats": [],
-              "isTrustBoundary": false
-            },
-            "labels": [
-              {
-                "attrs": {
-                  "label": {
-                    "text": ""
-                  }
-                },
-                "position": 0.5
-              }
-            ],
-            "id": "273849a6-8e45-482c-8573-d0132982f1ed",
-            "source": {
-              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
-            },
-            "target": {
-              "cell": "2544b035-3ef5-4aa6-8d83-adab274b7cfa"
-            },
-            "vertices": [
-              {
-                "x": 770,
-                "y": 171
-              }
-            ]
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": "4 3"
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "private key",
-              "description": "",
-              "outOfScope": true,
-              "reasonOutOfScope": "Controlled by Google",
-              "hasOpenThreats": false,
-              "isBidirectional": false,
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "protocol": "",
-              "threats": [],
-              "isTrustBoundary": false
-            },
-            "labels": [
-              {
-                "attrs": {
-                  "label": {
-                    "text": "private key"
-                  }
-                },
-                "position": {
-                  "distance": 0.5382207240504857,
-                  "offset": -2.424485393416351
-                }
-              }
-            ],
-            "id": "b24ad7c6-1833-4f15-8a54-a21220907f15",
-            "source": {
-              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
-            },
-            "target": {
-              "cell": "95e82117-dcc5-4c3f-b0c3-944eaac29882"
-            },
-            "vertices": [
-              {
-                "x": 783,
-                "y": 265
-              }
-            ]
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": "4 3"
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "loglist.zip",
-              "description": "",
-              "outOfScope": true,
-              "reasonOutOfScope": "Controlled by Google",
-              "hasOpenThreats": false,
-              "isBidirectional": false,
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "protocol": "",
-              "threats": [],
-              "isTrustBoundary": false
-            },
-            "labels": [
-              {
-                "attrs": {
-                  "label": {
-                    "text": "loglist.zip"
-                  }
-                },
-                "position": {
-                  "distance": 0.547378419645268,
-                  "offset": 1.0922526295179646
-                }
-              }
-            ],
-            "id": "87406ce0-5572-4f4d-bf6a-e5a45ef2781b",
-            "source": {
-              "cell": "95e82117-dcc5-4c3f-b0c3-944eaac29882"
-            },
-            "target": {
-              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
-            },
-            "vertices": [
-              {
-                "x": 805,
-                "y": 300
-              },
-              {
-                "x": 785,
-                "y": 303
-              }
-            ]
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": "4 3"
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "private key",
-              "description": "",
-              "outOfScope": true,
-              "reasonOutOfScope": "Controlled by Google",
-              "hasOpenThreats": false,
-              "isBidirectional": false,
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "protocol": "",
-              "threats": [],
-              "isTrustBoundary": false
-            },
-            "labels": [
-              {
-                "attrs": {
-                  "label": {
-                    "text": "private key"
-                  }
-                },
-                "position": 0.5
-              }
-            ],
-            "id": "c7896122-e78f-44b4-a997-5f8e5c6d7ba7",
-            "source": {
-              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
-            },
-            "target": {
-              "cell": "19c1b93e-94f0-47d1-b74d-f471ec339b3e"
-            },
-            "vertices": [
-              {
-                "x": 789,
-                "y": 381
-              }
-            ]
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": "4 3"
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "loglist.json &\nloglist.sig",
-              "description": "",
-              "outOfScope": true,
-              "reasonOutOfScope": "Controlled by Google",
-              "hasOpenThreats": false,
-              "isBidirectional": false,
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "protocol": "",
-              "threats": [],
-              "isTrustBoundary": false
-            },
-            "labels": [
-              {
-                "attrs": {
-                  "label": {
-                    "text": "loglist.json &\nloglist.sig"
-                  }
-                },
-                "position": 0.5
-              }
-            ],
-            "id": "41c5d13e-1531-466c-8dec-1ced79fe7e12",
-            "source": {
-              "cell": "19c1b93e-94f0-47d1-b74d-f471ec339b3e"
-            },
-            "target": {
-              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
-            },
-            "vertices": [
-              {
-                "x": 783,
-                "y": 423
-              }
-            ]
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": "4 3"
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "",
-              "description": "",
-              "outOfScope": true,
-              "reasonOutOfScope": "Controlled by Google",
-              "hasOpenThreats": false,
-              "isBidirectional": false,
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "protocol": "",
-              "threats": [],
-              "isTrustBoundary": false,
-              "threatFrequency": {
-                "tampering": 0,
-                "informationDisclosure": 0,
-                "denialOfService": 0
-              }
-            },
-            "labels": [
-              {
-                "attrs": {
-                  "label": {
-                    "text": ""
-                  }
-                },
-                "position": 0.5
-              }
-            ],
-            "id": "1dd95e66-31a4-4a54-806c-40421e2a0a7a",
-            "source": {
-              "cell": "2544b035-3ef5-4aa6-8d83-adab274b7cfa"
-            },
-            "target": {
-              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
-            },
-            "vertices": [
-              {
-                "x": 779,
-                "y": 202
-              }
-            ]
           },
           {
             "shape": "trust-boundary-curve",
@@ -1829,6 +1478,296 @@
             ]
           },
           {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": "4 3"
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "loglist.json &\nloglist.sig",
+              "description": "",
+              "outOfScope": true,
+              "reasonOutOfScope": "Owned by Google",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [],
+              "isTrustBoundary": false
+            },
+            "labels": [
+              {
+                "attrs": {
+                  "label": {
+                    "text": "loglist.json &\nloglist.sig"
+                  }
+                },
+                "position": 0.5
+              }
+            ],
+            "id": "41c5d13e-1531-466c-8dec-1ced79fe7e12",
+            "source": {
+              "cell": "19c1b93e-94f0-47d1-b74d-f471ec339b3e"
+            },
+            "target": {
+              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
+            },
+            "vertices": [
+              {
+                "x": 783,
+                "y": 423
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": "4 3"
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "private key",
+              "description": "",
+              "outOfScope": true,
+              "reasonOutOfScope": "Owned by Google",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [],
+              "isTrustBoundary": false
+            },
+            "labels": [
+              {
+                "attrs": {
+                  "label": {
+                    "text": "private key"
+                  }
+                },
+                "position": 0.5
+              }
+            ],
+            "id": "c7896122-e78f-44b4-a997-5f8e5c6d7ba7",
+            "source": {
+              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
+            },
+            "target": {
+              "cell": "19c1b93e-94f0-47d1-b74d-f471ec339b3e"
+            },
+            "vertices": [
+              {
+                "x": 789,
+                "y": 381
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": "4 3"
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "loglist.zip",
+              "description": "",
+              "outOfScope": true,
+              "reasonOutOfScope": "Owned by Google",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [],
+              "isTrustBoundary": false
+            },
+            "labels": [
+              {
+                "attrs": {
+                  "label": {
+                    "text": "loglist.zip"
+                  }
+                },
+                "position": {
+                  "distance": 0.547378419645268,
+                  "offset": 1.0922526295179646
+                }
+              }
+            ],
+            "id": "87406ce0-5572-4f4d-bf6a-e5a45ef2781b",
+            "source": {
+              "cell": "95e82117-dcc5-4c3f-b0c3-944eaac29882"
+            },
+            "target": {
+              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
+            },
+            "vertices": [
+              {
+                "x": 805,
+                "y": 300
+              },
+              {
+                "x": 785,
+                "y": 303
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": "4 3"
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "private key",
+              "description": "",
+              "outOfScope": true,
+              "reasonOutOfScope": "Owned by Google",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [],
+              "isTrustBoundary": false
+            },
+            "labels": [
+              {
+                "attrs": {
+                  "label": {
+                    "text": "private key"
+                  }
+                },
+                "position": {
+                  "distance": 0.5382207240504857,
+                  "offset": -2.424485393416351
+                }
+              }
+            ],
+            "id": "b24ad7c6-1833-4f15-8a54-a21220907f15",
+            "source": {
+              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
+            },
+            "target": {
+              "cell": "95e82117-dcc5-4c3f-b0c3-944eaac29882"
+            },
+            "vertices": [
+              {
+                "x": 783,
+                "y": 265
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": "block"
+                },
+                "strokeDasharray": "4 3"
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "",
+              "description": "",
+              "outOfScope": true,
+              "reasonOutOfScope": "Owned by Google",
+              "hasOpenThreats": false,
+              "isBidirectional": true,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [],
+              "isTrustBoundary": false
+            },
+            "labels": [
+              {
+                "attrs": {
+                  "label": {
+                    "text": ""
+                  }
+                },
+                "position": 0.5
+              }
+            ],
+            "id": "273849a6-8e45-482c-8573-d0132982f1ed",
+            "source": {
+              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
+            },
+            "target": {
+              "cell": "2544b035-3ef5-4aa6-8d83-adab274b7cfa"
+            },
+            "vertices": [
+              {
+                "x": 770,
+                "y": 171
+              }
+            ]
+          },
+          {
             "position": {
               "x": 857,
               "y": 243
@@ -1942,13 +1881,14 @@
               "type": "tm.Store",
               "isTrustBoundary": false,
               "outOfScope": true,
-              "reasonOutOfScope": "",
+              "reasonOutOfScope": "Owned by Google",
               "threats": [],
               "hasOpenThreats": false,
               "isALog": false,
               "storesCredentials": false,
               "isEncrypted": false,
-              "isSigned": false
+              "isSigned": false,
+              "storesInventory": null
             }
           }
         ],
