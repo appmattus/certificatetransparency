@@ -378,9 +378,9 @@
                 "denialOfService": 0,
                 "elevationOfPrivilege": 0
               },
-              "handlesCardPayment": null,
-              "handlesGoodsOrServices": null,
-              "isWebApplication": null
+              "handlesCardPayment": false,
+              "handlesGoodsOrServices": false,
+              "isWebApplication": false
             }
           },
           {
@@ -743,7 +743,7 @@
               "storesCredentials": true,
               "isEncrypted": false,
               "isSigned": false,
-              "storesInventory": null
+              "storesInventory": false
             }
           },
           {
