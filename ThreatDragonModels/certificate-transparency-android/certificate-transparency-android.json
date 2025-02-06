@@ -349,7 +349,7 @@
             "id": "9686da38-8db5-40e7-8869-3a0838494063",
             "data": {
               "name": "Google",
-              "description": "",
+              "description": "Provides https://www.gstatic.com/ct/log_list/v3/log_list.zip",
               "type": "tm.Process",
               "isTrustBoundary": false,
               "outOfScope": false,
@@ -377,7 +377,10 @@
                 "informationDisclosure": 0,
                 "denialOfService": 0,
                 "elevationOfPrivilege": 0
-              }
+              },
+              "handlesCardPayment": null,
+              "handlesGoodsOrServices": null,
+              "isWebApplication": null
             }
           },
           {
@@ -622,129 +625,6 @@
           {
             "position": {
               "x": 859,
-              "y": 404
-            },
-            "size": {
-              "width": 160,
-              "height": 80
-            },
-            "attrs": {
-              "text": {
-                "text": "loglist.json & loglist.sig"
-              },
-              "topLine": {
-                "strokeWidth": 1.5,
-                "strokeDasharray": "4 3"
-              },
-              "bottomLine": {
-                "strokeWidth": 1.5,
-                "strokeDasharray": "4 3"
-              }
-            },
-            "visible": true,
-            "shape": "store",
-            "zIndex": 6,
-            "ports": {
-              "groups": {
-                "top": {
-                  "position": "top",
-                  "attrs": {
-                    "circle": {
-                      "r": 4,
-                      "magnet": true,
-                      "stroke": "#5F95FF",
-                      "strokeWidth": 1,
-                      "fill": "#fff",
-                      "style": {
-                        "visibility": "hidden"
-                      }
-                    }
-                  }
-                },
-                "right": {
-                  "position": "right",
-                  "attrs": {
-                    "circle": {
-                      "r": 4,
-                      "magnet": true,
-                      "stroke": "#5F95FF",
-                      "strokeWidth": 1,
-                      "fill": "#fff",
-                      "style": {
-                        "visibility": "hidden"
-                      }
-                    }
-                  }
-                },
-                "bottom": {
-                  "position": "bottom",
-                  "attrs": {
-                    "circle": {
-                      "r": 4,
-                      "magnet": true,
-                      "stroke": "#5F95FF",
-                      "strokeWidth": 1,
-                      "fill": "#fff",
-                      "style": {
-                        "visibility": "hidden"
-                      }
-                    }
-                  }
-                },
-                "left": {
-                  "position": "left",
-                  "attrs": {
-                    "circle": {
-                      "r": 4,
-                      "magnet": true,
-                      "stroke": "#5F95FF",
-                      "strokeWidth": 1,
-                      "fill": "#fff",
-                      "style": {
-                        "visibility": "hidden"
-                      }
-                    }
-                  }
-                }
-              },
-              "items": [
-                {
-                  "group": "top",
-                  "id": "d1b5c87e-e1d1-44b7-8a6f-f37cbb43ef95"
-                },
-                {
-                  "group": "right",
-                  "id": "dcd98811-9091-4ee4-ab4f-eeffb3b3ab38"
-                },
-                {
-                  "group": "bottom",
-                  "id": "d2653862-27c4-475f-afd4-555a5fe4d1be"
-                },
-                {
-                  "group": "left",
-                  "id": "d386da5f-16be-4c73-8dd3-9b4219af6a88"
-                }
-              ]
-            },
-            "id": "19c1b93e-94f0-47d1-b74d-f471ec339b3e",
-            "data": {
-              "name": "loglist.json & loglist.sig",
-              "description": "",
-              "type": "tm.Store",
-              "isTrustBoundary": false,
-              "outOfScope": true,
-              "reasonOutOfScope": "Owned by Google",
-              "threats": [],
-              "hasOpenThreats": false,
-              "isALog": false,
-              "storesCredentials": false,
-              "isEncrypted": false,
-              "isSigned": true
-            }
-          },
-          {
-            "position": {
-              "x": 859,
               "y": 74
             },
             "size": {
@@ -852,7 +732,7 @@
             "id": "2544b035-3ef5-4aa6-8d83-adab274b7cfa",
             "data": {
               "name": "private key",
-              "description": "",
+              "description": "private key used to sign the loglist.json file",
               "type": "tm.Store",
               "isTrustBoundary": false,
               "outOfScope": true,
@@ -862,90 +742,9 @@
               "isALog": false,
               "storesCredentials": true,
               "isEncrypted": false,
-              "isSigned": false
+              "isSigned": false,
+              "storesInventory": null
             }
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "red",
-                "strokeWidth": 2.5,
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": null
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "logs (domain & failure\nreason)",
-              "description": "",
-              "outOfScope": false,
-              "reasonOutOfScope": "",
-              "hasOpenThreats": true,
-              "isBidirectional": false,
-              "isEncrypted": true,
-              "isPublicNetwork": true,
-              "protocol": "https",
-              "threats": [
-                {
-                  "status": "Open",
-                  "severity": "Low",
-                  "type": "Repudiation",
-                  "title": "Failures blocked from logging",
-                  "description": "An attacker blocking the connection to a logging service can hide a targeted attack on certificate transparency.",
-                  "mitigation": "- Mitigations depend on the logging service used.",
-                  "modelType": "STRIDE",
-                  "id": "ac067dc2-64df-47c9-86b3-b65b9e22ffcc",
-                  "new": false,
-                  "number": 104,
-                  "score": ""
-                },
-                {
-                  "status": "Open",
-                  "severity": "Low",
-                  "title": "Fake failures sent to logging service",
-                  "type": "Repudiation",
-                  "description": "Fake failures sent to logging service can make it look like there are failures that didn't really happen.",
-                  "mitigation": "- Mitigations depend on the logging service used.",
-                  "modelType": "STRIDE",
-                  "id": "f2011b1b-d4fa-4e95-ba41-14aa1e857015",
-                  "new": false,
-                  "number": 105,
-                  "score": ""
-                }
-              ],
-              "isTrustBoundary": false
-            },
-            "labels": [
-              {
-                "attrs": {
-                  "label": {
-                    "text": "logs (domain & failure\nreason) (https)"
-                  }
-                },
-                "position": {
-                  "distance": 0.7667161557484664,
-                  "offset": 14.384646272286773
-                }
-              }
-            ],
-            "id": "a5473cbb-4ebd-440e-abd2-eecb687ff05e",
-            "source": {
-              "cell": "19b083c3-ac40-4b2c-96ff-f1e6e9856117"
-            },
-            "target": {
-              "cell": "9df4bc7e-0c76-4fce-bfc7-585f8614106d"
-            },
-            "vertices": []
           },
           {
             "shape": "flow",
@@ -1136,6 +935,128 @@
             "shape": "flow",
             "attrs": {
               "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": "4 3"
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "loglist.zip",
+              "description": "",
+              "outOfScope": true,
+              "reasonOutOfScope": "Owned by Google",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [],
+              "isTrustBoundary": false
+            },
+            "labels": [
+              {
+                "attrs": {
+                  "label": {
+                    "text": "loglist.zip"
+                  }
+                },
+                "position": {
+                  "distance": 0.547378419645268,
+                  "offset": 1.0922526295179646
+                }
+              }
+            ],
+            "id": "87406ce0-5572-4f4d-bf6a-e5a45ef2781b",
+            "source": {
+              "cell": "95e82117-dcc5-4c3f-b0c3-944eaac29882"
+            },
+            "target": {
+              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
+            },
+            "vertices": [
+              {
+                "x": 805,
+                "y": 300
+              },
+              {
+                "x": 785,
+                "y": 303
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": "4 3"
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "private key",
+              "description": "",
+              "outOfScope": true,
+              "reasonOutOfScope": "Owned by Google",
+              "hasOpenThreats": false,
+              "isBidirectional": false,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [],
+              "isTrustBoundary": false
+            },
+            "labels": [
+              {
+                "attrs": {
+                  "label": {
+                    "text": "private key"
+                  }
+                },
+                "position": {
+                  "distance": 0.5382207240504857,
+                  "offset": -2.424485393416351
+                }
+              }
+            ],
+            "id": "b24ad7c6-1833-4f15-8a54-a21220907f15",
+            "source": {
+              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
+            },
+            "target": {
+              "cell": "95e82117-dcc5-4c3f-b0c3-944eaac29882"
+            },
+            "vertices": [
+              {
+                "x": 783,
+                "y": 265
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
                 "stroke": "red",
                 "strokeWidth": 2.5,
                 "targetMarker": {
@@ -1259,6 +1180,146 @@
             "shape": "flow",
             "attrs": {
               "line": {
+                "stroke": "#333333",
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": "block"
+                },
+                "strokeDasharray": "4 3"
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "",
+              "description": "",
+              "outOfScope": true,
+              "reasonOutOfScope": "Owned by Google",
+              "hasOpenThreats": false,
+              "isBidirectional": true,
+              "isEncrypted": false,
+              "isPublicNetwork": false,
+              "protocol": "",
+              "threats": [],
+              "isTrustBoundary": false
+            },
+            "labels": [
+              {
+                "attrs": {
+                  "label": {
+                    "text": ""
+                  }
+                },
+                "position": 0.5
+              }
+            ],
+            "id": "273849a6-8e45-482c-8573-d0132982f1ed",
+            "source": {
+              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
+            },
+            "target": {
+              "cell": "2544b035-3ef5-4aa6-8d83-adab274b7cfa",
+              "port": "8be720f0-ad9d-478c-b321-4e8277e9f635"
+            },
+            "vertices": [
+              {
+                "x": 770,
+                "y": 171
+              }
+            ]
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
+                "stroke": "red",
+                "strokeWidth": 2.5,
+                "targetMarker": {
+                  "name": "block"
+                },
+                "sourceMarker": {
+                  "name": ""
+                },
+                "strokeDasharray": null
+              }
+            },
+            "width": 200,
+            "height": 100,
+            "zIndex": 10,
+            "connector": "smooth",
+            "data": {
+              "type": "tm.Flow",
+              "name": "logs (domain & failure\nreason)",
+              "description": "",
+              "outOfScope": false,
+              "reasonOutOfScope": "",
+              "hasOpenThreats": true,
+              "isBidirectional": false,
+              "isEncrypted": true,
+              "isPublicNetwork": true,
+              "protocol": "https",
+              "threats": [
+                {
+                  "status": "Open",
+                  "severity": "Low",
+                  "type": "Repudiation",
+                  "title": "Failures blocked from logging",
+                  "description": "An attacker blocking the connection to a logging service can hide a targeted attack on certificate transparency.",
+                  "mitigation": "- Mitigations depend on the logging service used.",
+                  "modelType": "STRIDE",
+                  "id": "ac067dc2-64df-47c9-86b3-b65b9e22ffcc",
+                  "new": false,
+                  "number": 104,
+                  "score": ""
+                },
+                {
+                  "status": "Open",
+                  "severity": "Low",
+                  "title": "Fake failures sent to logging service",
+                  "type": "Repudiation",
+                  "description": "Fake failures sent to logging service can make it look like there are failures that didn't really happen.",
+                  "mitigation": "- Mitigations depend on the logging service used.",
+                  "modelType": "STRIDE",
+                  "id": "f2011b1b-d4fa-4e95-ba41-14aa1e857015",
+                  "new": false,
+                  "number": 105,
+                  "score": ""
+                }
+              ],
+              "isTrustBoundary": false
+            },
+            "labels": [
+              {
+                "attrs": {
+                  "label": {
+                    "text": "logs (domain & failure\nreason) (https)"
+                  }
+                },
+                "position": {
+                  "distance": 0.7667161557484664,
+                  "offset": 14.384646272286773
+                }
+              }
+            ],
+            "id": "a5473cbb-4ebd-440e-abd2-eecb687ff05e",
+            "source": {
+              "cell": "19b083c3-ac40-4b2c-96ff-f1e6e9856117"
+            },
+            "target": {
+              "cell": "9df4bc7e-0c76-4fce-bfc7-585f8614106d",
+              "port": "a1c1eee5-2ff2-430f-8d9b-f423a90f3d47"
+            },
+            "vertices": []
+          },
+          {
+            "shape": "flow",
+            "attrs": {
+              "line": {
                 "stroke": "red",
                 "strokeWidth": 2.5,
                 "targetMarker": {
@@ -1305,7 +1366,7 @@
                   "title": "Stale snapshot of loglist.zip can accept rejected log servers",
                   "type": "Tampering",
                   "description": "An attacker could present an old snapshot of loglist.zip which will pass validation resulting in the CT library accepting a log server that has since been rejected.\n\nThis is only an issue if the certificate presented was generated after the date/time the server was rejected.",
-                  "mitigation": "- Mitigated by CT checks requiring more than one SCT to validate.",
+                  "mitigation": "- Mitigated by CT checks requiring more than one SCT to validate.\n- loglist.json is timestamped which reduces the chance of replay attacks.",
                   "modelType": "STRIDE",
                   "id": "906bebaa-0629-4b61-b1a1-29b5f0a21dd5",
                   "new": false,
@@ -1357,9 +1418,9 @@
               "storesCredentials": false,
               "isSigned": false,
               "threatFrequency": {
-                "tampering": 1,
+                "tampering": 2,
                 "informationDisclosure": 0,
-                "denialOfService": 4
+                "denialOfService": 5
               }
             },
             "labels": [
@@ -1374,446 +1435,13 @@
             ],
             "id": "c19daaa7-39c5-48a7-8935-3b9797f277bb",
             "source": {
-              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
+              "x": 610,
+              "y": 280
             },
             "target": {
               "cell": "19b083c3-ac40-4b2c-96ff-f1e6e9856117"
             },
             "vertices": []
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "red",
-                "strokeWidth": 2.5,
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": "4 3"
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "loglist.json &\nloglist.sig",
-              "description": "",
-              "outOfScope": true,
-              "reasonOutOfScope": "By default using loglist.zip",
-              "hasOpenThreats": true,
-              "isBidirectional": false,
-              "isEncrypted": true,
-              "isPublicNetwork": true,
-              "protocol": "https",
-              "threats": [
-                {
-                  "status": "Open",
-                  "severity": "Medium",
-                  "title": "Stale snapshot of loglist.json/loglist.sig can hide availability of new log servers",
-                  "type": "Denial of service",
-                  "description": "An attacker could present an old snapshot of loglist.json along with its loglist.sig which will pass validation resulting in the CT library not being aware of a new log server causing a DoS",
-                  "mitigation": "- Detect age of loglist.json and reject if older than a certain age.\n- Can be mitigated by ensuring certificates are logged in more than the minimum required number of log servers.",
-                  "modelType": "STRIDE",
-                  "id": "230496dc-203c-4c7a-930a-1bd343d35423",
-                  "new": false,
-                  "number": 116,
-                  "score": ""
-                },
-                {
-                  "status": "Mitigated",
-                  "severity": "Low",
-                  "description": "An attacker could present an old snapshot of loglist.json along with its loglist.sig which will pass validation resulting in the CT library accepting a log server that has since been rejected.\n\nThis is only an issue if the certificate presented was generated after the date/time the server was rejected.",
-                  "title": "Stale snapshot of loglist.json/loglist.sig can accept rejected log servers",
-                  "mitigation": "- Mitigated by CT checks requiring more than one SCT to validate.",
-                  "type": "Tampering",
-                  "modelType": "STRIDE",
-                  "id": "906bebaa-0629-4b61-b1a1-29b5f0a21dd5",
-                  "new": false,
-                  "number": 117,
-                  "score": ""
-                },
-                {
-                  "status": "Mitigated",
-                  "severity": "Medium",
-                  "type": "Denial of service",
-                  "title": "Block loglist.json/loglist.sig from loading",
-                  "mitigation": "- Store embedded and cached copies of the loglist so clients can continue to work without relying on loading from the network.",
-                  "description": "Blocking the loading of either loglist.json or loglist.sig will mean validation of SCTs cannot be completed resulting in a DoS.",
-                  "modelType": "STRIDE",
-                  "id": "97d4822e-f6f8-452f-a1ea-c35ca78314ee",
-                  "new": false,
-                  "number": 118,
-                  "score": ""
-                },
-                {
-                  "status": "Mitigated",
-                  "severity": "Medium",
-                  "type": "Denial of service",
-                  "title": "log-list.json and log-list.sig out of sync",
-                  "description": "Json and signature loaded out of sync results in signature failure - can be caused by server or client caching issues.",
-                  "mitigation": "Ensure json and signature are loaded in one network call by migrating to log-list.zip",
-                  "modelType": "STRIDE",
-                  "id": "537cd4d2-f2ae-4c89-b7bd-6032d286ec11",
-                  "new": false,
-                  "number": 119,
-                  "score": ""
-                },
-                {
-                  "status": "Mitigated",
-                  "severity": "Medium",
-                  "title": "Out of memory caused by large loglist.json/loglist.sig",
-                  "description": "As the loglist.json and loglist.sig are loaded into memory for processing, if they are large they can cause an out of memory error.",
-                  "mitigation": "- Limit size of loglist.json and loglist.sig loaded into memory.",
-                  "type": "Denial of service",
-                  "modelType": "STRIDE",
-                  "id": "09fad154-3851-4944-a2f2-93f006e106fd",
-                  "new": false,
-                  "number": 120,
-                  "score": ""
-                },
-                {
-                  "id": "56ee85b0-9f9d-4c63-b8a4-3281420ddb31",
-                  "title": "Change in Google's private key breaks signature verification",
-                  "status": "Open",
-                  "severity": "Medium",
-                  "type": "Denial of service",
-                  "description": "If Google's private key used to sign the loglist.json file is changed then verification will fail causing the CT checks to fail resulting in outgoing connections being rejected and so a DoS.",
-                  "mitigation": "- Use our own private key so we have more visibility and management of the private key used.\n- Monitor the certificate transparency forums to be aware of future key changes.\n\nPartially mitigated by:\n- Embedded and cached loglist.json ensure clients can continue to work without relying on loading from the network. However, when the loglist.json is older than 70 days then CT checks are disabled.\n- UpdateLogListTask validates the embedded loglist.json when updating the data which will pick up public key changes that have already happened.",
-                  "modelType": "STRIDE",
-                  "new": false,
-                  "number": 102,
-                  "score": ""
-                }
-              ],
-              "isTrustBoundary": false,
-              "threatFrequency": {
-                "tampering": 0,
-                "informationDisclosure": 0,
-                "denialOfService": 4
-              }
-            },
-            "labels": [
-              {
-                "attrs": {
-                  "label": {
-                    "text": "loglist.json &\nloglist.sig (https)"
-                  }
-                },
-                "position": {
-                  "distance": 0.44229097874442713,
-                  "offset": 4.483389719389379
-                }
-              }
-            ],
-            "id": "29dee867-7a89-4487-aa6e-4f05774b03e2",
-            "source": {
-              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
-            },
-            "target": {
-              "cell": "19b083c3-ac40-4b2c-96ff-f1e6e9856117"
-            },
-            "vertices": [
-              {
-                "x": 506,
-                "y": 313
-              }
-            ]
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": "4 3"
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "loglist.json &\nloglist.sig",
-              "description": "",
-              "outOfScope": true,
-              "reasonOutOfScope": "Owned by Google",
-              "hasOpenThreats": false,
-              "isBidirectional": false,
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "protocol": "",
-              "threats": [],
-              "isTrustBoundary": false
-            },
-            "labels": [
-              {
-                "attrs": {
-                  "label": {
-                    "text": "loglist.json &\nloglist.sig"
-                  }
-                },
-                "position": 0.5
-              }
-            ],
-            "id": "41c5d13e-1531-466c-8dec-1ced79fe7e12",
-            "source": {
-              "cell": "19c1b93e-94f0-47d1-b74d-f471ec339b3e"
-            },
-            "target": {
-              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
-            },
-            "vertices": [
-              {
-                "x": 783,
-                "y": 423
-              }
-            ]
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": "4 3"
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "private key",
-              "description": "",
-              "outOfScope": true,
-              "reasonOutOfScope": "Owned by Google",
-              "hasOpenThreats": false,
-              "isBidirectional": false,
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "protocol": "",
-              "threats": [],
-              "isTrustBoundary": false
-            },
-            "labels": [
-              {
-                "attrs": {
-                  "label": {
-                    "text": "private key"
-                  }
-                },
-                "position": 0.5
-              }
-            ],
-            "id": "c7896122-e78f-44b4-a997-5f8e5c6d7ba7",
-            "source": {
-              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
-            },
-            "target": {
-              "cell": "19c1b93e-94f0-47d1-b74d-f471ec339b3e"
-            },
-            "vertices": [
-              {
-                "x": 789,
-                "y": 381
-              }
-            ]
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": "4 3"
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "loglist.zip",
-              "description": "",
-              "outOfScope": true,
-              "reasonOutOfScope": "Owned by Google",
-              "hasOpenThreats": false,
-              "isBidirectional": false,
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "protocol": "",
-              "threats": [],
-              "isTrustBoundary": false
-            },
-            "labels": [
-              {
-                "attrs": {
-                  "label": {
-                    "text": "loglist.zip"
-                  }
-                },
-                "position": {
-                  "distance": 0.547378419645268,
-                  "offset": 1.0922526295179646
-                }
-              }
-            ],
-            "id": "87406ce0-5572-4f4d-bf6a-e5a45ef2781b",
-            "source": {
-              "cell": "95e82117-dcc5-4c3f-b0c3-944eaac29882"
-            },
-            "target": {
-              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
-            },
-            "vertices": [
-              {
-                "x": 805,
-                "y": 300
-              },
-              {
-                "x": 785,
-                "y": 303
-              }
-            ]
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": ""
-                },
-                "strokeDasharray": "4 3"
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "private key",
-              "description": "",
-              "outOfScope": true,
-              "reasonOutOfScope": "Owned by Google",
-              "hasOpenThreats": false,
-              "isBidirectional": false,
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "protocol": "",
-              "threats": [],
-              "isTrustBoundary": false
-            },
-            "labels": [
-              {
-                "attrs": {
-                  "label": {
-                    "text": "private key"
-                  }
-                },
-                "position": {
-                  "distance": 0.5382207240504857,
-                  "offset": -2.424485393416351
-                }
-              }
-            ],
-            "id": "b24ad7c6-1833-4f15-8a54-a21220907f15",
-            "source": {
-              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
-            },
-            "target": {
-              "cell": "95e82117-dcc5-4c3f-b0c3-944eaac29882"
-            },
-            "vertices": [
-              {
-                "x": 783,
-                "y": 265
-              }
-            ]
-          },
-          {
-            "shape": "flow",
-            "attrs": {
-              "line": {
-                "stroke": "#333333",
-                "targetMarker": {
-                  "name": "block"
-                },
-                "sourceMarker": {
-                  "name": "block"
-                },
-                "strokeDasharray": "4 3"
-              }
-            },
-            "width": 200,
-            "height": 100,
-            "zIndex": 10,
-            "connector": "smooth",
-            "data": {
-              "type": "tm.Flow",
-              "name": "",
-              "description": "",
-              "outOfScope": true,
-              "reasonOutOfScope": "Owned by Google",
-              "hasOpenThreats": false,
-              "isBidirectional": true,
-              "isEncrypted": false,
-              "isPublicNetwork": false,
-              "protocol": "",
-              "threats": [],
-              "isTrustBoundary": false
-            },
-            "labels": [
-              {
-                "attrs": {
-                  "label": {
-                    "text": ""
-                  }
-                },
-                "position": 0.5
-              }
-            ],
-            "id": "273849a6-8e45-482c-8573-d0132982f1ed",
-            "source": {
-              "cell": "9686da38-8db5-40e7-8869-3a0838494063"
-            },
-            "target": {
-              "cell": "2544b035-3ef5-4aa6-8d83-adab274b7cfa"
-            },
-            "vertices": [
-              {
-                "x": 770,
-                "y": 171
-              }
-            ]
           },
           {
             "position": {
@@ -1926,7 +1554,7 @@
             "data": {
               "type": "tm.Store",
               "name": "loglist.zip",
-              "description": "",
+              "description": "Zip file containing loglist.json & loglist.sig",
               "outOfScope": true,
               "reasonOutOfScope": "Owned by Google",
               "hasOpenThreats": false,
