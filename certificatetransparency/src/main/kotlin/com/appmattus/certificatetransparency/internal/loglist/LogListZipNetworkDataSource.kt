@@ -88,8 +88,6 @@ internal class LogListZipNetworkDataSource(
     }
 
     companion object {
-        // Constants also in LogListService
-
         // 1 MB
         private const val LOG_LIST_JSON_MAX_SIZE = 1048576L
 

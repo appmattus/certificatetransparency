@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Appmattus Limited
+ * Copyright 2023-2025 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,13 +99,49 @@ class AndroidDiskCacheTest {
             jsonFile.apply { createNewFile() }.writeBytes(jsonData)
             sigFile.apply { createNewFile() }.writeBytes(sigData)
 
-            // when we read data
+            // When we read data
             val result = diskCache.get()
 
-            // then the written result matches the original
+            // Then the written result matches the original
             assertIsA<RawLogListResult.Success>(result)
             assertTrue(jsonData.contentEquals(result.logList))
             assertTrue(sigData.contentEquals(result.signature))
+        }
+    }
+
+    @Test
+    fun doesNotReadTooLargeJson() {
+        runBlocking {
+            // Given pre-cached data with too large loglist.json data
+            ctCacheDir.mkdirs()
+            val jsonData = Random.nextBytes(1048577)
+            val sigData = Random.nextBytes(512)
+            jsonFile.apply { createNewFile() }.writeBytes(jsonData)
+            sigFile.apply { createNewFile() }.writeBytes(sigData)
+
+            // When we read data
+            val result = diskCache.get()
+
+            // Then a failure is returned
+            assertIsA<RawLogListCacheFailedJsonTooBig>(result)
+        }
+    }
+
+    @Test
+    fun doesNotReadTooLargeSig() {
+        runBlocking {
+            // Given pre-cached data with too large loglist.sig data
+            ctCacheDir.mkdirs()
+            val jsonData = Random.nextBytes(1048576)
+            val sigData = Random.nextBytes(513)
+            jsonFile.apply { createNewFile() }.writeBytes(jsonData)
+            sigFile.apply { createNewFile() }.writeBytes(sigData)
+
+            // When we read data
+            val result = diskCache.get()
+
+            // Then a failure is returned
+            assertIsA<RawLogListCacheFailedSigTooBig>(result)
         }
     }
 
@@ -114,10 +150,10 @@ class AndroidDiskCacheTest {
         runBlocking {
             // Given no pre-cached data
 
-            // when we read data
+            // When we read data
             val result = diskCache.get()
 
-            // then the written result matches the original
+            // Then null returned
             assertNull(result)
         }
     }
