@@ -21,16 +21,18 @@ import java.security.KeyFactory
 import java.security.PublicKey
 import java.security.Signature
 import java.security.spec.X509EncodedKeySpec
-import java.util.Base64
 import java.util.zip.ZipInputStream
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.io.path.createDirectories
 import kotlin.io.path.readBytes
 
 abstract class UpdateLogListTask : DefaultTask() {
 
+    @OptIn(ExperimentalEncodingApi::class)
     private fun String.decodeKey(): PublicKey {
         val keyFactory = KeyFactory.getInstance("RSA")
-        return keyFactory.generatePublic(X509EncodedKeySpec(Base64.getDecoder().decode(this)))
+        return keyFactory.generatePublic(X509EncodedKeySpec(Base64.Mime.decode(this)))
     }
 
     private val googleLogListPublicKey =
@@ -42,13 +44,13 @@ abstract class UpdateLogListTask : DefaultTask() {
             "VDhhYuSZ8ax3T0C3FZpb7HMjZtpEorSV5ElKJEJwrhrBCMOD8L01EoSPrGlS1w22i9uGHMn/uGQKo28u7AsCAwEAAQ==").decodeKey()
 
     @TaskAction
-    fun greet() {
-        val url = "https://www.gstatic.com/ct/log_list/v3/log_list.zip"
+    fun task() {
+        val logListZipUrl = "https://www.gstatic.com/ct/log_list/v3/log_list.zip"
         val outputFolder = project.projectDir.toPath().resolve("src/main/resources").apply {
             createDirectories()
         }
 
-        val connection = URI(url).toURL().openConnection().apply {
+        val connection = URI(logListZipUrl).toURL().openConnection().apply {
             connect()
         }
 
@@ -78,7 +80,33 @@ abstract class UpdateLogListTask : DefaultTask() {
                 initVerify(googleLogListPublicKey)
                 update(outputFolder.resolve("log_list.json").readBytes())
             }.verify(outputFolder.resolve("log_list.sig").readBytes())) {
+            // Given the signature is invalid, verify if this is because the Google Public Key has changed
+            verifyGooglePublicKey()
             throw IllegalStateException("Signature validation failed")
         }
+    }
+
+    /**
+     * Ensures the public key hasn't changed by re-downloading it from Google.
+     */
+    private fun verifyGooglePublicKey() {
+        // Fetch the raw public key PEM content from Google
+        val googlePublicKeyPemUrl = "https://www.gstatic.com/ct/log_list/v3/log_list_pubkey.pem"
+        val publicKeyConnection = URI(googlePublicKeyPemUrl).toURL().openConnection().apply {
+            connect()
+        }
+        val rawPemContent = publicKeyConnection.getInputStream().use { it.readAllBytes() }.decodeToString()
+
+        // Extract the public key string from the PEM content
+        val extractedPublicKey = PUBLIC_KEY_REGEX.replace(rawPemContent, "$1")
+
+        // Verify that the extracted public key matches the stored public key
+        if (extractedPublicKey.decodeKey() != googleLogListPublicKey) {
+            throw IllegalStateException("Public key changed")
+        }
+    }
+
+    companion object {
+        val PUBLIC_KEY_REGEX = "-----BEGIN PUBLIC KEY-----(.*)-----END PUBLIC KEY-----".toRegex(RegexOption.DOT_MATCHES_ALL)
     }
 }
