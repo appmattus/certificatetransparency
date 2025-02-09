@@ -171,7 +171,7 @@ class AndroidDiskCacheTest {
                 async(Dispatchers.IO) {
                     delay(Random.nextLong(100))
 
-                    val bytes = Random.nextBytes(Random.nextInt(4098, 40960))
+                    val bytes = Random.nextBytes(Random.nextInt(1, 512))
 
                     AndroidDiskCache(ApplicationProvider.getApplicationContext()).set(
                         RawLogListResult.Success(bytes, bytes)

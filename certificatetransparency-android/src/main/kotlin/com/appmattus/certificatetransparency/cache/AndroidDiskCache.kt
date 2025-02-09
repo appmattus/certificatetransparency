@@ -36,19 +36,13 @@ public class AndroidDiskCache(context: Context) : DiskCache {
         mutex.withLock {
             return try {
                 val jsonFile = File(cacheDirPath, LOG_LIST_FILE)
-                if (jsonFile.length() > LOG_LIST_JSON_MAX_SIZE) {
-                    return RawLogListCacheFailedJsonTooBig
-                }
-
                 val sigFile = File(cacheDirPath, SIG_FILE)
-                if (sigFile.length() > LOG_LIST_SIG_MAX_SIZE) {
-                    return RawLogListCacheFailedSigTooBig
+
+                when {
+                    jsonFile.length() > LOG_LIST_JSON_MAX_SIZE -> RawLogListCacheFailedJsonTooBig
+                    sigFile.length() > LOG_LIST_SIG_MAX_SIZE -> RawLogListCacheFailedSigTooBig
+                    else -> RawLogListResult.Success(jsonFile.readBytes(), sigFile.readBytes())
                 }
-
-                val logList = jsonFile.readBytes()
-                val signature = sigFile.readBytes()
-
-                RawLogListResult.Success(logList, signature)
             } catch (ignored: IOException) {
                 null
             }
