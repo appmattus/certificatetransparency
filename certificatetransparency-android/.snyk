@@ -30,7 +30,14 @@ ignore:
     - '*':
         reason: 'Android testing tool, not used in production code'
         created: 2025-01-28T16:43:07.597Z
-
+  SNYK-JAVA-IONETTY-8707740:
+    - '*':
+        reason: 'Android testing tool, not used in production code'
+        created: 2025-02-13T09:16:09.274Z
+  SNYK-JAVA-IONETTY-8707739:
+    - '*':
+        reason: 'Android testing tool, not used in production code'
+        created: 2025-02-13T09:16:09.274Z
 
   SNYK-JAVA-COMFASTERXMLWOODSTOX-3091135:
     - '*':
