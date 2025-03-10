@@ -36,7 +36,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.internal.platform.Platform
 import java.security.PublicKey
-import java.time.Instant
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.X509TrustManager
 
@@ -111,10 +110,7 @@ public object LogListDataSourceFactory {
         logListService: LogListService = createLogListService(),
         diskCache: DiskCache? = null,
         publicKey: PublicKey = GoogleLogListPublicKey,
-        now: () -> Instant = {
-            @Suppress("NewApi")
-            Instant.now()
-        }
+        now: () -> Long = { System.currentTimeMillis() }
     ): DataSource<LogListResult> = LogListCacheManagementDataSource(
         inMemoryCache = InMemoryCache(),
         diskCache = diskCache,
