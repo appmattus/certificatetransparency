@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Appmattus Limited
+ * Copyright 2024 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 package com.appmattus.certificatetransparency.loglist
 
-import java.time.Instant
-
-public data class PreviousOperator(val name: String, val endDate: Instant) {
+public data class PreviousOperator(val name: String, val endDate: Long) {
     public companion object
 }
