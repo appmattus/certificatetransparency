@@ -37,7 +37,7 @@ import javax.net.ssl.SSLEngine
 import javax.net.ssl.X509ExtendedTrustManager
 import javax.net.ssl.X509TrustManager
 
-@Suppress("LongParameterList", "CustomX509TrustManager", "NewApi")
+@Suppress("LongParameterList", "CustomX509TrustManager", "NewApi", "TooManyFunctions")
 internal class CertificateTransparencyTrustManagerExtended(
     private val delegate: X509TrustManager,
     includeHosts: Set<Host>,
@@ -65,6 +65,19 @@ internal class CertificateTransparencyTrustManagerExtended(
         delegate::class.java.getDeclaredMethod(
             "checkServerTrusted",
             Array<X509Certificate>::class.java,
+            String::class.java,
+            String::class.java
+        )
+    } catch (ignored: NoSuchMethodException) {
+        null
+    }
+
+    private val checkServerTrustedMethodApi36: Method? = try {
+        delegate::class.java.getDeclaredMethod(
+            "checkServerTrusted",
+            Array<X509Certificate>::class.java,
+            ByteArray::class.java,
+            ByteArray::class.java,
             String::class.java,
             String::class.java
         )
@@ -142,6 +155,29 @@ internal class CertificateTransparencyTrustManagerExtended(
     fun checkServerTrusted(chain: Array<out X509Certificate>, authType: String, host: String): List<X509Certificate> {
         @Suppress("UNCHECKED_CAST")
         val certs = checkServerTrustedMethod!!.invoke(delegate, chain, authType, host) as List<X509Certificate>
+
+        val result = verifyCertificateTransparency(host, certs.toList())
+
+        logger?.log(host, result)
+
+        if (result is VerificationResult.Failure && failOnError()) {
+            throw CertificateException("Certificate transparency failed")
+        }
+
+        return certs
+    }
+
+    // Called through reflection by X509TrustManagerExtensions on Android
+    @Suppress("unused")
+    fun checkServerTrusted(
+        chain: Array<out X509Certificate>,
+        ocspData: ByteArray?,
+        tlsSctData: ByteArray?,
+        authType: String,
+        host: String
+    ): List<X509Certificate> {
+        @Suppress("UNCHECKED_CAST")
+        val certs = checkServerTrustedMethodApi36!!.invoke(delegate, chain, ocspData, tlsSctData, authType, host) as List<X509Certificate>
 
         val result = verifyCertificateTransparency(host, certs.toList())
 
