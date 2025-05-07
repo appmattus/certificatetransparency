@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,6 @@ package com.appmattus.certificatetransparency.loglist
 
 import com.appmattus.certificatetransparency.internal.utils.sha256Hash
 import java.security.PublicKey
-import java.time.Instant
 
 /**
  * Representation of a log server, usually loaded from log-list.json
@@ -31,7 +30,7 @@ import java.time.Instant
  */
 public data class LogServer(
     val key: PublicKey,
-    val validUntil: Instant? = null,
+    val validUntil: Long? = null,
     val operator: String,
     val previousOperators: List<PreviousOperator>
 ) {
@@ -40,7 +39,7 @@ public data class LogServer(
      */
     val id: ByteArray = key.sha256Hash()
 
-    public fun operatorAt(timestamp: Instant): String {
+    public fun operatorAt(timestamp: Long): String {
         previousOperators.sortedBy { it.endDate }.forEach {
             if (timestamp < it.endDate) return it.name
         }
