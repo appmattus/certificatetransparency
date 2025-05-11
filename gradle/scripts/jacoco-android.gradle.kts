@@ -52,7 +52,7 @@ val jacocoTask = tasks.register<JacocoReport>("jacocoTestReport") {
     sourceDirectories.setFrom(files(listOf(mainSrc)))
     classDirectories.setFrom(files(listOf(debugTree)))
     executionData.setFrom(
-        fileTree(project.buildDir) {
+        fileTree(rootProject.layout.buildDirectory) {
             include(listOf("jacoco/testDebugUnitTest.exec"))
         }
     )
