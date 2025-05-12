@@ -23,7 +23,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContent
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
@@ -78,7 +78,7 @@ fun WebViewScreen(viewModel: WebViewExampleViewModel) {
         LazyColumn(
             modifier = Modifier
                 .padding(padding)
-                .windowInsetsPadding(WindowInsets.safeContent)
+                .windowInsetsPadding(WindowInsets.safeDrawing)
                 .fillMaxHeight()
         ) {
             item { Spacer(modifier = Modifier.height(8.dp)) }

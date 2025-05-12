@@ -38,6 +38,10 @@ ignore:
     - '*':
         reason: 'Android testing tool, not used in production code'
         created: 2025-02-13T09:16:09.274Z
+  SNYK-JAVA-COMGOOGLEPROTOBUF-8055228:
+    - '*':
+        reason: 'Android testing tool, not used in production code'
+        created: 2025-05-12T22:42:04.168Z
 
   SNYK-JAVA-COMFASTERXMLWOODSTOX-3091135:
     - '*':

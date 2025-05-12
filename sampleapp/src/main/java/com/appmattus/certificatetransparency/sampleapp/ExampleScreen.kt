@@ -18,10 +18,13 @@ package com.appmattus.certificatetransparency.sampleapp
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
@@ -96,7 +99,12 @@ fun ExampleScreen(viewModel: BaseExampleViewModel) {
             }
         }
     ) { padding ->
-        LazyColumn(modifier = Modifier.padding(padding).fillMaxHeight()) {
+        LazyColumn(
+            modifier = Modifier
+                .padding(padding)
+                .windowInsetsPadding(WindowInsets.safeDrawing)
+                .fillMaxHeight()
+        ) {
             item { Spacer(modifier = Modifier.height(8.dp)) }
 
             item {
