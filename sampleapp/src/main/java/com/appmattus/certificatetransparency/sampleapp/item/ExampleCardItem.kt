@@ -47,6 +47,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import com.appmattus.certificatetransparency.sampleapp.R
 import kotlinx.coroutines.launch
 
@@ -136,7 +137,7 @@ fun PreviewExampleCardItem() {
     ExampleCardItem(
         scaffoldState = rememberScaffoldState(),
         title = "OkHttp",
-        moreInfoUri = Uri.parse("https://example.com/"),
+        moreInfoUri = "https://example.com/".toUri(),
         onKotlinClick = {},
         onJavaClick = {}
     )

@@ -11,11 +11,11 @@ plugins {
 android {
     namespace = "com.appmattus.certificatetransparency.sampleapp"
 
-    compileSdk = 35
+    compileSdk = 36
     defaultConfig {
         applicationId = "com.appmattus.certificatetransparency.sampleapp"
         minSdk = 21
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
         proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")

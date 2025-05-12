@@ -16,11 +16,10 @@
 
 package com.appmattus.certificatetransparency.sampleapp
 
-import android.net.Uri
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContent
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
@@ -29,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.navigation.NavController
 import com.appmattus.certificatetransparency.sampleapp.item.AppmattusLogo
 import com.appmattus.certificatetransparency.sampleapp.item.ExampleCardItem
@@ -45,7 +45,7 @@ fun MainScreen(navController: NavController) {
         LazyColumn(
             modifier = Modifier
                 .padding(padding)
-                .windowInsetsPadding(WindowInsets.safeContent)
+                .windowInsetsPadding(WindowInsets.safeDrawing)
                 .padding(vertical = 8.dp)
                 .fillMaxHeight()
         ) {
@@ -60,7 +60,7 @@ fun MainScreen(navController: NavController) {
                 ExampleCardItem(
                     scaffoldState = scaffoldState,
                     title = stringResource(R.string.okhttp),
-                    moreInfoUri = Uri.parse("https://square.github.io/okhttp/"),
+                    moreInfoUri = "https://square.github.io/okhttp/".toUri(),
                     onKotlinClick = { navController.navigate("okhttp/kotlin") },
                     onJavaClick = { navController.navigate("okhttp/java") },
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -70,7 +70,7 @@ fun MainScreen(navController: NavController) {
                 ExampleCardItem(
                     scaffoldState = scaffoldState,
                     title = stringResource(R.string.httpurlconnection),
-                    moreInfoUri = Uri.parse("https://developer.android.com/reference/java/net/HttpURLConnection"),
+                    moreInfoUri = "https://developer.android.com/reference/java/net/HttpURLConnection".toUri(),
                     onKotlinClick = { navController.navigate("httpurlconnection/kotlin") },
                     onJavaClick = { navController.navigate("httpurlconnection/java") },
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -80,7 +80,7 @@ fun MainScreen(navController: NavController) {
                 ExampleCardItem(
                     scaffoldState = scaffoldState,
                     title = stringResource(R.string.volley),
-                    moreInfoUri = Uri.parse("https://developer.android.com/training/volley/index.html"),
+                    moreInfoUri = "https://developer.android.com/training/volley/index.html".toUri(),
                     onKotlinClick = { navController.navigate("volley/kotlin") },
                     onJavaClick = { navController.navigate("volley/java") },
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -90,7 +90,7 @@ fun MainScreen(navController: NavController) {
                 ExampleCardItem(
                     scaffoldState = scaffoldState,
                     title = stringResource(R.string.trust_manager),
-                    moreInfoUri = Uri.parse("https://developer.android.com/reference/javax/net/ssl/X509TrustManager"),
+                    moreInfoUri = "https://developer.android.com/reference/javax/net/ssl/X509TrustManager".toUri(),
                     onKotlinClick = { navController.navigate("trustmanager/kotlin") },
                     onJavaClick = { navController.navigate("trustmanager/java") },
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -108,7 +108,7 @@ fun MainScreen(navController: NavController) {
             }
 
             item {
-                AppmattusLogo(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+                AppmattusLogo(modifier = Modifier.padding(horizontal = 64.dp, vertical = 32.dp))
             }
         }
     }
