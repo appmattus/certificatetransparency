@@ -47,9 +47,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import com.appmattus.certificatetransparency.sampleapp.R
 import kotlinx.coroutines.launch
-import androidx.core.net.toUri
 
 @Suppress("LongParameterList", "LongMethod")
 @Composable
