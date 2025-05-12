@@ -20,7 +20,7 @@ import android.net.Uri
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContent
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
@@ -45,7 +45,7 @@ fun MainScreen(navController: NavController) {
         LazyColumn(
             modifier = Modifier
                 .padding(padding)
-                .windowInsetsPadding(WindowInsets.safeContent)
+                .windowInsetsPadding(WindowInsets.safeDrawing)
                 .padding(vertical = 8.dp)
                 .fillMaxHeight()
         ) {
