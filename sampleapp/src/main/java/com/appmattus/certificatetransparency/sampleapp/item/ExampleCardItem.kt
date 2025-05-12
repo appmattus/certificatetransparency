@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.appmattus.certificatetransparency.sampleapp.R
 import kotlinx.coroutines.launch
+import androidx.core.net.toUri
 
 @Suppress("LongParameterList", "LongMethod")
 @Composable
@@ -136,7 +137,7 @@ fun PreviewExampleCardItem() {
     ExampleCardItem(
         scaffoldState = rememberScaffoldState(),
         title = "OkHttp",
-        moreInfoUri = Uri.parse("https://example.com/"),
+        moreInfoUri = "https://example.com/".toUri(),
         onKotlinClick = {},
         onJavaClick = {}
     )
