@@ -27,7 +27,6 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.toAsn1
 import com.appmattus.certificatetransparency.internal.verifier.model.Host
 import com.appmattus.certificatetransparency.loglist.LogListResult
 import com.appmattus.certificatetransparency.loglist.LogListService
-import java.lang.reflect.Method
 import java.security.cert.Certificate
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
@@ -58,36 +57,6 @@ internal class CertificateTransparencyTrustManagerBasic(
         diskCache = diskCache
     )
 
-    private val checkServerTrustedMethod: Method? = try {
-        delegate::class.java.getDeclaredMethod(
-            "checkServerTrusted",
-            Array<X509Certificate>::class.java,
-            String::class.java,
-            String::class.java
-        )
-    } catch (ignored: NoSuchMethodException) {
-        null
-    }
-
-    private val checkServerTrustedMethodApi36: Method? = try {
-        delegate::class.java.getDeclaredMethod(
-            "checkServerTrusted",
-            Array<X509Certificate>::class.java,
-            ByteArray::class.java,
-            ByteArray::class.java,
-            String::class.java,
-            String::class.java
-        )
-    } catch (ignored: NoSuchMethodException) {
-        null
-    }
-
-    private val isSameTrustConfigurationMethod: Method? = try {
-        delegate::class.java.getDeclaredMethod("isSameTrustConfiguration", String::class.java, String::class.java)
-    } catch (ignored: NoSuchMethodException) {
-        null
-    }
-
     override fun verifyCertificateTransparency(host: String, certificates: List<Certificate>): VerificationResult =
         ctBase.verifyCertificateTransparency(host, certificates)
 
@@ -112,52 +81,6 @@ internal class CertificateTransparencyTrustManagerBasic(
         if (result is VerificationResult.Failure && failOnError()) {
             throw CertificateException("Certificate transparency failed")
         }
-    }
-
-    // Called through reflection by X509TrustManagerExtensions on Android
-    @Suppress("unused")
-    fun checkServerTrusted(chain: Array<out X509Certificate>, authType: String, host: String): List<X509Certificate> {
-        @Suppress("UNCHECKED_CAST")
-        val certs = checkServerTrustedMethod!!.invoke(delegate, chain, authType, host) as List<X509Certificate>
-
-        val result = verifyCertificateTransparency(host, certs.toList())
-
-        logger?.log(host, result)
-
-        if (result is VerificationResult.Failure && failOnError()) {
-            throw CertificateException("Certificate transparency failed")
-        }
-
-        return certs
-    }
-
-    // Called through reflection by X509TrustManagerExtensions on Android
-    @Suppress("unused")
-    fun checkServerTrusted(
-        chain: Array<out X509Certificate>,
-        ocspData: ByteArray?,
-        tlsSctData: ByteArray?,
-        authType: String,
-        host: String
-    ): List<X509Certificate> {
-        @Suppress("UNCHECKED_CAST")
-        val certs = checkServerTrustedMethodApi36!!.invoke(delegate, chain, ocspData, tlsSctData, authType, host) as List<X509Certificate>
-
-        val result = verifyCertificateTransparency(host, certs.toList())
-
-        logger?.log(host, result)
-
-        if (result is VerificationResult.Failure && failOnError()) {
-            throw CertificateException("Certificate transparency failed")
-        }
-
-        return certs
-    }
-
-    // Called through reflection by X509TrustManagerExtensions on Android
-    @Suppress("unused")
-    fun isSameTrustConfiguration(hostname1: String?, hostname2: String?): Boolean {
-        return isSameTrustConfigurationMethod!!.invoke(delegate, hostname1, hostname2) as Boolean
     }
 
     override fun getAcceptedIssuers(): Array<X509Certificate> = delegate.acceptedIssuers

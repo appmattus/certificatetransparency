@@ -1,3 +1,19 @@
+/*
+ * Copyright 2025 Appmattus Limited
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.appmattus.certificatetransparency.internal.verifier
 
 import com.appmattus.certificatetransparency.chaincleaner.CertificateChainCleaner
@@ -11,9 +27,11 @@ import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import java.net.InetSocketAddress
 import java.net.Socket
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
@@ -21,9 +39,19 @@ import javax.net.ssl.SSLEngine
 import javax.net.ssl.X509ExtendedTrustManager
 import javax.net.ssl.X509TrustManager
 
-class CertificateTransparencyTrustManagerExtendedTest {
+class CertificateTransparencyTrustManagerExtendedDelegationTest {
 
-    private val certificateChain = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN)
+    private val mockSocketAddress = mock<InetSocketAddress> { on { hostName } doReturn "host" }
+    private val mockSocket = mock<Socket> {
+        on { remoteSocketAddress } doReturn mockSocketAddress
+    }
+
+    private val mockSslEngine = mock<SSLEngine> {
+        on { peerHost } doReturn "host"
+    }
+
+    private val certificateChain = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN).toTypedArray()
+    private val brokenCertificateChain = certificateChain.drop(1).toTypedArray()
 
     // Called through reflection by X509TrustManagerExtensions on Android
     interface AndroidTrustManager {
@@ -129,27 +157,96 @@ class CertificateTransparencyTrustManagerExtendedTest {
     }
 
     @Test
-    fun checkServerTrustedFailureApi17() {
-        // When we call checkClientTrusted
+    fun checkServerTrustedFailure() {
+        // When we call checkServerTrusted with a broken certificate chain
         val exception = assertThrows(CertificateException::class.java) {
-            subject.checkServerTrusted(emptyArray(), "AUTH", "host")
+            subject.checkServerTrusted(brokenCertificateChain, "AUTH")
         }
 
         // Then the call is delegated
-        verify(x509ExtendedTrustManager as AndroidTrustManager).checkServerTrusted(emptyArray(), "AUTH", "host")
+        verify(x509ExtendedTrustManager).checkServerTrusted(brokenCertificateChain, "AUTH")
+        // And a certificate transparency failure is thrown
+        assertEquals("Certificate transparency failed", exception.message)
+    }
+
+    @Test
+    fun checkServerTrustedSuccess() {
+        // When we call checkServerTrusted with a valid certificate chain
+        subject.checkServerTrusted(certificateChain, "AUTH")
+
+        // Then the call is delegated
+        verify(x509ExtendedTrustManager).checkServerTrusted(certificateChain, "AUTH")
+        // And no exception is thrown i.e. certificate transparency successful
+    }
+
+    @Test
+    fun checkServerTrustedSocketFailure() {
+        // When we call checkServerTrusted with a broken certificate chain
+        val exception = assertThrows(CertificateException::class.java) {
+            subject.checkServerTrusted(brokenCertificateChain, "AUTH", mockSocket)
+        }
+
+        // Then the call is delegated
+        verify(x509ExtendedTrustManager).checkServerTrusted(brokenCertificateChain, "AUTH", mockSocket)
+        // And a certificate transparency failure is thrown
+        assertEquals("Certificate transparency failed", exception.message)
+    }
+
+    @Test
+    fun checkServerTrustedSocketSuccess() {
+        // When we call checkServerTrusted with a valid certificate chain
+        subject.checkServerTrusted(certificateChain, "AUTH", mockSocket)
+
+        // Then the call is delegated
+        verify(x509ExtendedTrustManager).checkServerTrusted(certificateChain, "AUTH", mockSocket)
+        // And no exception is thrown i.e. certificate transparency successful
+    }
+
+    @Test
+    fun checkServerTrustedSslEngineFailure() {
+        // When we call checkServerTrusted with a broken certificate chain
+        val exception = assertThrows(CertificateException::class.java) {
+            subject.checkServerTrusted(brokenCertificateChain, "AUTH", mockSslEngine)
+        }
+
+        // Then the call is delegated
+        verify(x509ExtendedTrustManager).checkServerTrusted(brokenCertificateChain, "AUTH", mockSslEngine)
+        // And a certificate transparency failure is thrown
+        assertEquals("Certificate transparency failed", exception.message)
+    }
+
+    @Test
+    fun checkServerTrustedSslEngineSuccess() {
+        // When we call checkServerTrusted with a valid certificate chain
+        subject.checkServerTrusted(certificateChain, "AUTH", mockSslEngine)
+
+        // Then the call is delegated
+        verify(x509ExtendedTrustManager).checkServerTrusted(certificateChain, "AUTH", mockSslEngine)
+        // And no exception is thrown i.e. certificate transparency successful
+    }
+
+    @Test
+    fun checkServerTrustedFailureApi17() {
+        // When we call checkServerTrusted with a broken certificate chain
+        val exception = assertThrows(CertificateException::class.java) {
+            subject.checkServerTrusted(brokenCertificateChain, "AUTH", "host")
+        }
+
+        // Then the call is delegated
+        verify(x509ExtendedTrustManager as AndroidTrustManager).checkServerTrusted(brokenCertificateChain, "AUTH", "host")
         // And a certificate transparency failure is thrown
         assertEquals("Certificate transparency failed", exception.message)
     }
 
     @Test
     fun checkServerTrustedFailureApi36() {
-        // When we call checkClientTrusted
+        // When we call checkServerTrusted with a broken certificate chain
         val exception = assertThrows(CertificateException::class.java) {
-            subject.checkServerTrusted(emptyArray(), null, null, "AUTH", "host")
+            subject.checkServerTrusted(brokenCertificateChain, null, null, "AUTH", "host")
         }
 
         // Then the call is delegated
-        verify(x509ExtendedTrustManager as AndroidTrustManager).checkServerTrusted(emptyArray(), null, null, "AUTH", "host")
+        verify(x509ExtendedTrustManager as AndroidTrustManager).checkServerTrusted(brokenCertificateChain, null, null, "AUTH", "host")
         // And a certificate transparency failure is thrown
         assertEquals("Certificate transparency failed", exception.message)
     }
@@ -158,14 +255,14 @@ class CertificateTransparencyTrustManagerExtendedTest {
     fun checkServerTrustedSuccessApi17() {
         // When we call checkServerTrusted with a valid certificate chain
         subject.checkServerTrusted(
-            chain = certificateChain.toTypedArray(),
+            chain = certificateChain,
             authType = "AUTH",
             host = "host"
         )
 
         // Then the call is delegated
         verify(x509ExtendedTrustManager as AndroidTrustManager).checkServerTrusted(
-            chain = certificateChain.toTypedArray(),
+            chain = certificateChain,
             authType = "AUTH",
             host = "host"
         )
@@ -176,7 +273,7 @@ class CertificateTransparencyTrustManagerExtendedTest {
     fun checkServerTrustedSuccessApi36() {
         // When we call checkServerTrusted with a valid certificate chain
         subject.checkServerTrusted(
-            chain = certificateChain.toTypedArray(),
+            chain = certificateChain,
             ocspData = null,
             tlsSctData = null,
             authType = "AUTH",
@@ -185,7 +282,7 @@ class CertificateTransparencyTrustManagerExtendedTest {
 
         // Then the call is delegated
         verify(x509ExtendedTrustManager as AndroidTrustManager).checkServerTrusted(
-            chain = certificateChain.toTypedArray(),
+            chain = certificateChain,
             ocspData = null,
             tlsSctData = null,
             authType = "AUTH",
