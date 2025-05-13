@@ -91,6 +91,12 @@ internal class CertificateTransparencyTrustManagerExtended(
         null
     }
 
+    private val isUserAddedCertificateMethod: Method? = try {
+        delegate::class.java.getDeclaredMethod("isUserAddedCertificate", X509Certificate::class.java)
+    } catch (ignored: NoSuchMethodException) {
+        null
+    }
+
     override fun verifyCertificateTransparency(host: String, certificates: List<Certificate>): VerificationResult =
         ctBase.verifyCertificateTransparency(host, certificates)
 
@@ -151,6 +157,7 @@ internal class CertificateTransparencyTrustManagerExtended(
     }
 
     // Called through reflection by X509TrustManagerExtensions on Android
+    // Added in API level 17
     @Suppress("unused")
     fun checkServerTrusted(chain: Array<out X509Certificate>, authType: String, host: String): List<X509Certificate> {
         @Suppress("UNCHECKED_CAST")
@@ -168,6 +175,7 @@ internal class CertificateTransparencyTrustManagerExtended(
     }
 
     // Called through reflection by X509TrustManagerExtensions on Android
+    // Added in API level 36
     @Suppress("unused")
     fun checkServerTrusted(
         chain: Array<out X509Certificate>,
@@ -191,9 +199,17 @@ internal class CertificateTransparencyTrustManagerExtended(
     }
 
     // Called through reflection by X509TrustManagerExtensions on Android
+    // Added in API level 28
     @Suppress("unused")
     fun isSameTrustConfiguration(hostname1: String?, hostname2: String?): Boolean {
         return isSameTrustConfigurationMethod!!.invoke(delegate, hostname1, hostname2) as Boolean
+    }
+
+    // Called through reflection by X509TrustManagerExtensions on Android
+    // Added in API level 21
+    @Suppress("unused")
+    fun isUserAddedCertificate(cert: X509Certificate): Boolean {
+        return isUserAddedCertificateMethod!!.invoke(delegate, cert) as Boolean
     }
 
     override fun getAcceptedIssuers(): Array<X509Certificate> = delegate.acceptedIssuers
