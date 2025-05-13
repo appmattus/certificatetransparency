@@ -62,7 +62,6 @@ public class CTTrustManagerBuilder(
      */
     public var logger: CTLogger? = null
         @JvmSynthetic get
-
         @JvmSynthetic set
 
     /**
@@ -71,7 +70,6 @@ public class CTTrustManagerBuilder(
      */
     public var policy: CTPolicy? = null
         @JvmSynthetic get
-
         @JvmSynthetic set
 
     /**
@@ -80,7 +78,6 @@ public class CTTrustManagerBuilder(
      */
     public var diskCache: DiskCache? = null
         @JvmSynthetic get
-
         @JvmSynthetic set
 
     /**
@@ -243,7 +240,7 @@ public class CTTrustManagerBuilder(
     @Suppress("NewApi")
     public fun build(): X509TrustManager =
         if (hasExtendedTrustManager) {
-            // API level 24 and up
+            // Java 1.7 or Android API level 24 and up
             CertificateTransparencyTrustManagerExtended(
                 delegate,
                 includeCommonNames.toSet(),
