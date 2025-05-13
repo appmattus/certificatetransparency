@@ -21,6 +21,7 @@ import com.appmattus.certificatetransparency.chaincleaner.CertificateChainCleane
 import com.appmattus.certificatetransparency.utils.LogListDataSourceTestFactory
 import com.appmattus.certificatetransparency.utils.TestData
 import com.appmattus.certificatetransparency.utils.TestData.TEST_MITMPROXY_ORIGINAL_CHAIN
+import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Test
@@ -31,6 +32,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import java.net.InetSocketAddress
 import java.net.Socket
 import java.security.cert.CertificateException
@@ -52,27 +54,6 @@ class CertificateTransparencyTrustManagerExtendedDelegationTest {
 
     private val certificateChain = TestData.loadCertificates(TEST_MITMPROXY_ORIGINAL_CHAIN).toTypedArray()
     private val brokenCertificateChain = certificateChain.drop(1).toTypedArray()
-
-    // Called through reflection by X509TrustManagerExtensions on Android
-    interface AndroidTrustManager {
-        // Added in API level 17
-        fun checkServerTrusted(chain: Array<out X509Certificate>, authType: String, host: String): List<X509Certificate>
-
-        // Added in API level 36
-        fun checkServerTrusted(
-            chain: Array<out X509Certificate>,
-            ocspData: ByteArray?,
-            tlsSctData: ByteArray?,
-            authType: String,
-            host: String
-        ): List<X509Certificate>
-
-        // Added in API level 28
-        fun isSameTrustConfiguration(hostname1: String?, hostname2: String?): Boolean
-
-        // Added in API level 21
-        fun isUserAddedCertificate(cert: X509Certificate): Boolean
-    }
 
     private val x509ExtendedTrustManager = mock<X509ExtendedTrustManager>(extraInterfaces = arrayOf(AndroidTrustManager::class)) {
         on {
@@ -145,15 +126,6 @@ class CertificateTransparencyTrustManagerExtendedDelegationTest {
 
         // Then the call is delegated
         verify(x509ExtendedTrustManager as AndroidTrustManager).isSameTrustConfiguration("host1", "host2")
-    }
-
-    @Test
-    fun isUserAddedCertificate() {
-        // When we call isUserAddedCertificate
-        subject.isUserAddedCertificate(mock())
-
-        // Then the call is delegated
-        verify(x509ExtendedTrustManager as AndroidTrustManager).isUserAddedCertificate(any())
     }
 
     @Test
@@ -289,5 +261,20 @@ class CertificateTransparencyTrustManagerExtendedDelegationTest {
             host = "host"
         )
         // And no exception is thrown i.e. certificate transparency successful
+    }
+
+    @Test
+    fun acceptedIssuers() {
+        // Given delegate returns accepted issuers
+        val issuers = arrayOf(mock<X509Certificate>())
+        whenever(x509ExtendedTrustManager.acceptedIssuers).thenReturn(issuers)
+
+        // When we call acceptedIssuers
+        val result = subject.acceptedIssuers
+
+        // Then the call is delegated
+        verify(x509ExtendedTrustManager).acceptedIssuers
+        // And the result is the same as the delegate
+        assertArrayEquals(issuers, result)
     }
 }

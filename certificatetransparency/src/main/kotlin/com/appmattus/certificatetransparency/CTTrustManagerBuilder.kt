@@ -243,6 +243,7 @@ public class CTTrustManagerBuilder(
     @Suppress("NewApi")
     public fun build(): X509TrustManager =
         if (hasExtendedTrustManager) {
+            // API level 24 and up
             CertificateTransparencyTrustManagerExtended(
                 delegate,
                 includeCommonNames.toSet(),
