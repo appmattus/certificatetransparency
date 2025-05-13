@@ -33,6 +33,9 @@ import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
 import javax.net.ssl.X509TrustManager
 
+/**
+ * Used on Android API level 23 and below to delegate to the platform X509TrustManager
+ */
 @Suppress("LongParameterList", "CustomX509TrustManager")
 internal class CertificateTransparencyTrustManagerBasic(
     private val delegate: X509TrustManager,
