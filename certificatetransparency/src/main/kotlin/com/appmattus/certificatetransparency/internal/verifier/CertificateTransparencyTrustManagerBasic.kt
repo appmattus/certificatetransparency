@@ -33,6 +33,9 @@ import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
 import javax.net.ssl.X509TrustManager
 
+/**
+ * Used on Android API level 23 and below to delegate to the platform X509TrustManager
+ */
 @Suppress("LongParameterList", "CustomX509TrustManager")
 internal class CertificateTransparencyTrustManagerBasic(
     private val delegate: X509TrustManager,
@@ -58,19 +61,13 @@ internal class CertificateTransparencyTrustManagerBasic(
         diskCache = diskCache
     )
 
-    private val checkServerTrustedMethod: Method? = try {
+    private val checkServerTrustedMethodApi17: Method? = try {
         delegate::class.java.getDeclaredMethod(
             "checkServerTrusted",
             Array<X509Certificate>::class.java,
             String::class.java,
             String::class.java
         )
-    } catch (ignored: NoSuchMethodException) {
-        null
-    }
-
-    private val isSameTrustConfigurationMethod: Method? = try {
-        delegate::class.java.getDeclaredMethod("isSameTrustConfiguration", String::class.java, String::class.java)
     } catch (ignored: NoSuchMethodException) {
         null
     }
@@ -102,10 +99,11 @@ internal class CertificateTransparencyTrustManagerBasic(
     }
 
     // Called through reflection by X509TrustManagerExtensions on Android
+    // Added in API level 17
     @Suppress("unused")
     fun checkServerTrusted(chain: Array<out X509Certificate>, authType: String, host: String): List<X509Certificate> {
         @Suppress("UNCHECKED_CAST")
-        val certs = checkServerTrustedMethod!!.invoke(delegate, chain, authType, host) as List<X509Certificate>
+        val certs = checkServerTrustedMethodApi17!!.invoke(delegate, chain, authType, host) as List<X509Certificate>
 
         val result = verifyCertificateTransparency(host, certs.toList())
 
@@ -116,12 +114,6 @@ internal class CertificateTransparencyTrustManagerBasic(
         }
 
         return certs
-    }
-
-    // Called through reflection by X509TrustManagerExtensions on Android
-    @Suppress("unused")
-    fun isSameTrustConfiguration(hostname1: String?, hostname2: String?): Boolean {
-        return isSameTrustConfigurationMethod!!.invoke(delegate, hostname1, hostname2) as Boolean
     }
 
     override fun getAcceptedIssuers(): Array<X509Certificate> = delegate.acceptedIssuers
