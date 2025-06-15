@@ -32,7 +32,6 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.whenever
 import java.io.IOException
 import java.net.SocketTimeoutException
-import java.time.Instant
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -113,7 +112,7 @@ public class LogListDataSourceFactoryTest {
             val dataSource =
                 LogListDataSourceFactory.createDataSource(
                     logListService = logListService,
-                    now = { Instant.ofEpochMilli(1000000) }
+                    now = { 1000000 }
                 )
             val result = dataSource.get()
 
