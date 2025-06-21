@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,7 +56,6 @@ import java.security.cert.CertificateEncodingException
 import java.security.cert.CertificateException
 import java.security.cert.CertificateParsingException
 import java.security.cert.X509Certificate
-import java.time.Instant
 
 /**
  * Verifies signatures from a given CT Log.
@@ -69,7 +68,7 @@ internal class LogSignatureVerifier(private val logServer: LogServer) : Signatur
     @Suppress("ReturnCount", "ComplexMethod")
     override fun verifySignature(sct: SignedCertificateTimestamp, chain: List<X509Certificate>): SctVerificationResult {
         // If the timestamp is in the future then we have to reject it
-        val now = Instant.now()
+        val now = System.currentTimeMillis()
         if (sct.timestamp > now) {
             return SctVerificationResult.Invalid.FutureTimestamp(sct.timestamp, now)
         }
@@ -283,7 +282,7 @@ internal class LogSignatureVerifier(private val logServer: LogServer) : Signatur
         require(sct.sctVersion == Version.V1) { "Can only serialize SCT v1 for now." }
         writeUint(sct.sctVersion.number.toLong(), VERSION_LENGTH) // ct::V1
         writeUint(0, 1) // ct::CERTIFICATE_TIMESTAMP
-        writeUint(sct.timestamp.toEpochMilli(), TIMESTAMP_LENGTH) // Timestamp
+        writeUint(sct.timestamp, TIMESTAMP_LENGTH) // Timestamp
     }
 
     companion object {

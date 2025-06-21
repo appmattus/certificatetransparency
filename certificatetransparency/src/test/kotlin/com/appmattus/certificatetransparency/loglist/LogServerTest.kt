@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,6 @@ import com.appmattus.certificatetransparency.internal.utils.PublicKeyFactory
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.time.Instant
 
 /** Mostly for verifying the log info calculates the log ID correctly.  */
 internal class LogServerTest {
@@ -57,10 +56,10 @@ internal class LogServerTest {
         val logServer = LogServer(
             key = PublicKeyFactory.fromByteArray(PUBLIC_KEY_RSA),
             operator = "Appmattus",
-            previousOperators = listOf(PreviousOperator("Google", 1000.fromEpochMillis()))
+            previousOperators = listOf(PreviousOperator("Google", 1000))
         )
 
-        assertEquals("Appmattus", logServer.operatorAt(1200.fromEpochMillis()))
+        assertEquals("Appmattus", logServer.operatorAt(1200))
     }
 
     @Test
@@ -71,7 +70,7 @@ internal class LogServerTest {
             previousOperators = emptyList()
         )
 
-        assertEquals("Appmattus", logServer.operatorAt(1200.fromEpochMillis()))
+        assertEquals("Appmattus", logServer.operatorAt(1200))
     }
 
     @Test
@@ -80,12 +79,12 @@ internal class LogServerTest {
             key = PublicKeyFactory.fromByteArray(PUBLIC_KEY_RSA),
             operator = "Appmattus",
             previousOperators = listOf(
-                PreviousOperator("Google", 1000.fromEpochMillis()),
-                PreviousOperator("Cloudflare", 800.fromEpochMillis())
+                PreviousOperator("Google", 1000),
+                PreviousOperator("Cloudflare", 800)
             )
         )
 
-        assertEquals("Google", logServer.operatorAt(900.fromEpochMillis()))
+        assertEquals("Google", logServer.operatorAt(900))
     }
 
     @Test
@@ -94,12 +93,12 @@ internal class LogServerTest {
             key = PublicKeyFactory.fromByteArray(PUBLIC_KEY_RSA),
             operator = "Appmattus",
             previousOperators = listOf(
-                PreviousOperator("Google", 1000.fromEpochMillis()),
-                PreviousOperator("Cloudflare", 800.fromEpochMillis())
+                PreviousOperator("Google", 1000),
+                PreviousOperator("Cloudflare", 800)
             )
         )
 
-        assertEquals("Cloudflare", logServer.operatorAt(700.fromEpochMillis()))
+        assertEquals("Cloudflare", logServer.operatorAt(700))
     }
 
     companion object {
@@ -122,7 +121,5 @@ internal class LogServerTest {
         )
 
         private val LOG_ID_RSA: ByteArray = Base64.decode("oCQsumIkVhezsKvGJ+spTJIM9H+jy/OdvSGDIX0VsgY=")
-
-        private fun Int.fromEpochMillis() = Instant.ofEpochMilli(toLong())
     }
 }

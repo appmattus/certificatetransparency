@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2024 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,7 +43,6 @@ import org.junit.Test
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.whenever
 import java.security.cert.X509Certificate
-import java.time.Instant
 import javax.net.ssl.SSLPeerUnverifiedException
 import javax.net.ssl.X509TrustManager
 
@@ -102,7 +101,7 @@ internal class CertificateTransparencyBaseTest {
         val ctb = CertificateTransparencyBase(
             logListDataSource = object : DataSource<LogListResult> {
                 override suspend fun get() = LogListResult.DisableChecks(
-                    Instant.now(),
+                    System.currentTimeMillis(),
                     LogListResult.Invalid.LogListJsonFailedLoading
                 )
 
@@ -128,7 +127,7 @@ internal class CertificateTransparencyBaseTest {
                 override suspend fun get() = LogListResult.Valid.StaleNetworkUsingCachedData(
                     timestamp = (LogListDataSourceTestFactory.logListDataSource.get() as LogListResult.Valid.Success).timestamp,
                     servers = (LogListDataSourceTestFactory.logListDataSource.get() as LogListResult.Valid.Success).servers,
-                    networkResult = LogListResult.Valid.Success(Instant.now(), emptyList())
+                    networkResult = LogListResult.Valid.Success(System.currentTimeMillis(), emptyList())
                 )
 
                 override suspend fun set(value: LogListResult) = Unit
@@ -177,9 +176,9 @@ internal class CertificateTransparencyBaseTest {
         val ctb = CertificateTransparencyBase(
             logListDataSource = object : DataSource<LogListResult> {
                 override suspend fun get() = LogListResult.Valid.StaleNetworkUsingCachedData(
-                    timestamp = Instant.now(),
+                    timestamp = System.currentTimeMillis(),
                     servers = emptyList(),
-                    networkResult = LogListResult.Valid.Success(Instant.now(), emptyList())
+                    networkResult = LogListResult.Valid.Success(System.currentTimeMillis(), emptyList())
                 )
 
                 override suspend fun set(value: LogListResult) = Unit
@@ -202,7 +201,7 @@ internal class CertificateTransparencyBaseTest {
         val ctb = CertificateTransparencyBase(
             logListDataSource = object : DataSource<LogListResult> {
                 override suspend fun get() = LogListResult.Valid.StaleNetworkUsingNetworkData(
-                    timestamp = Instant.now(),
+                    timestamp = System.currentTimeMillis(),
                     servers = emptyList(),
                 )
 

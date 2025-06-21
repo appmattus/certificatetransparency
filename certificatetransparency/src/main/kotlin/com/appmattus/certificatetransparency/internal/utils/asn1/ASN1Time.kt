@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Appmattus Limited
+ * Copyright 2024 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,32 +16,8 @@
 
 package com.appmattus.certificatetransparency.internal.utils.asn1
 
-import com.appmattus.certificatetransparency.internal.utils.asn1.bytes.ByteBuffer
-import com.appmattus.certificatetransparency.internal.utils.asn1.header.ASN1HeaderTag
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
+import java.util.Date
 
-internal class ASN1Time private constructor(
-    override val tag: ASN1HeaderTag,
-    override val encoded: ByteBuffer,
-    override val logger: ASN1Logger
-) : ASN1Object() {
-
-    val value: Instant by lazy {
-        @Suppress("MagicNumber")
-        val pattern = if (encoded.size == 13) "yyMMddHHmmss'Z'" else "yyyyMMddHHmmss'Z'"
-        val formatter = DateTimeFormatter.ofPattern(pattern)
-
-        val time = encoded.toList().toByteArray().decodeToString()
-
-        LocalDateTime.parse(time, formatter).toInstant(ZoneOffset.UTC)
-    }
-
-    override fun toString(): String = "TIME $value"
-
-    companion object {
-        fun create(tag: ASN1HeaderTag, encoded: ByteBuffer, logger: ASN1Logger) = ASN1Time(tag, encoded, logger)
-    }
+internal interface ASN1Time {
+    val value: Date
 }

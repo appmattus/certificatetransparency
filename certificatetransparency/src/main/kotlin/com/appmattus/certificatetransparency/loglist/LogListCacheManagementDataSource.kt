@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Appmattus Limited
+ * Copyright 2023-2024 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import com.appmattus.certificatetransparency.internal.loglist.LogListZipNetworkD
 import com.appmattus.certificatetransparency.internal.loglist.ResourcesCache
 import com.appmattus.certificatetransparency.internal.loglist.parser.RawLogListToLogListResultTransformer
 import java.security.PublicKey
-import java.time.Duration
-import java.time.Instant
 
 @Suppress("LongParameterList")
 internal class LogListCacheManagementDataSource constructor(
@@ -34,7 +32,7 @@ internal class LogListCacheManagementDataSource constructor(
     private val networkCache: LogListZipNetworkDataSource,
     private val publicKey: PublicKey,
     private val transformer: RawLogListToLogListResultTransformer = RawLogListToLogListResultTransformer(publicKey),
-    private val now: () -> Instant
+    private val now: () -> Long
 ) : DataSource<LogListResult> {
 
     @Suppress("ReturnCount")
@@ -134,8 +132,8 @@ internal class LogListCacheManagementDataSource constructor(
     }
 
     companion object {
-        private val ONE_DAY = Duration.ofMillis(86400000)
-        private val FOURTEEN_DAYS = Duration.ofMillis(1209600000)
-        private val SEVENTY_DAYS = Duration.ofMillis(6048000000)
+        private const val ONE_DAY = 86400000
+        private const val FOURTEEN_DAYS = 1209600000
+        private const val SEVENTY_DAYS = 6048000000
     }
 }
