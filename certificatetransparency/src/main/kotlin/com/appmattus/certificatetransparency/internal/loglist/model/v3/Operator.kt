@@ -37,6 +37,5 @@ internal data class Operator(
     init {
         require(name.isNotEmpty())
         require(email.isNotEmpty())
-        require(logs.isNotEmpty())
     }
 }
