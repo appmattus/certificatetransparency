@@ -26,14 +26,20 @@ import kotlinx.serialization.Serializable
 /**
  * @property name Name of this log operator
  * @property email CT log operator email addresses. The log operator can be contacted using any of these email addresses. (format: email)
+ * @property logs Details of Certificate Transparency logs run by this operator.
+ * @property tiledLogs Details of tiled Certificate Transparency logs run by this operator.
  */
 @Serializable
 internal data class Operator(
     @SerialName("name") val name: String,
     @SerialName("email") val email: List<String>,
+    @SerialName("logs") val logs: List<Log> = emptyList(),
+    @SerialName("tiled_logs") val tiledLogs: List<Log> = emptyList()
 ) {
     init {
         require(name.isNotEmpty())
         require(email.isNotEmpty())
+        // Note: Removed requirement for logs.isNotEmpty() || tiledLogs.isNotEmpty()
+        // to handle cases where operators have empty logs arrays in the JSON
     }
 }
