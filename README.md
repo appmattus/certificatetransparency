@@ -21,7 +21,8 @@ At the time of writing, the most significant issues are:
 1. **Android 16 (API 36) Support** Support for Android 16 is still in progress.
    I do not have access to a
    physical device running API 36, and the emulator has proven unreliable. As
-   such, I’m relying on the community to help find a working solution.
+   such, I’m relying on the community to help find a working solution (see
+   [#142](https://github.com/appmattus/certificatetransparency/issues/142)).
 
    Given that API 36 finally introduces native support for Certificate
    Transparency (after a seven-year wait), the most practical approach might be
