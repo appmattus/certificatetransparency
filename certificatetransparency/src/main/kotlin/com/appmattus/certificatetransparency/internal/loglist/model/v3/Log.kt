@@ -59,7 +59,7 @@ internal data class Log(
     @SerialName("state")
     @Serializable(with = StateDeserializer::class)
     override val state: State? = null
-) : BaseLog{
+) : BaseLog {
     init {
         require(description == null || description.isNotEmpty())
         @Suppress("MagicNumber")

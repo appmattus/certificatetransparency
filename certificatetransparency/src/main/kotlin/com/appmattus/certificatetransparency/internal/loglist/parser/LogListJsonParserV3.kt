@@ -47,8 +47,9 @@ internal class LogListJsonParserV3 : LogListJsonParser {
     @Suppress("ReturnCount")
     private fun buildLogServerList(logList: LogListV3): LogListResult {
         return logList.operators.map { operator ->
+            val allLogs = operator.logs + operator.tiledLogs.orEmpty()
             // null, PENDING, REJECTED -> An SCT associated with this log server would be treated as untrusted
-            (operator.logs + operator.tiledLogs.orEmpty()).filterNot { it.state == null || it.state is State.Pending || it.state is State.Rejected }
+            allLogs.filterNot { it.state == null || it.state is State.Pending || it.state is State.Rejected }
                 .map { log ->
                     val keyBytes = Base64.decode(log.key)
 
