@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,7 +40,7 @@ internal class LogListJsonParserV3Test {
         // when we parse the data
         val result = LogListJsonParserV3().parseJson(json)
 
-        // then 41 items are returned
+        // then 29 servers are returned
         assertIsA<LogListResult.Valid>(result)
         assertEquals(29, result.servers.size)
         assertEquals("KXm+8J45OSHwVnOfY6V35b5XfZxgCvj5TV0mXCVdx4Q=", Base64.toBase64String(result.servers[0].id))
@@ -55,6 +55,20 @@ internal class LogListJsonParserV3Test {
 
         // then invalid is returned
         assertIsA<LogListResult.Invalid.LogListJsonBadFormat>(result)
+    }
+
+    @Test
+    fun `parses the json with tiled logs`() = runBlocking {
+        // given we have an incomplete json file
+
+        // when we parse the data
+        val result = LogListJsonParserV3().parseJson(jsonTiledLogs)
+
+        // then 44 servers are returned
+        assertIsA<LogListResult.Valid>(result)
+        assertEquals(44, result.servers.size)
+        // and tiled log servers are included
+        assertEquals("750EQi4gtDIQJ1TfUtJRRgJ/hEwH/YZeySLub86fe7w=", Base64.toBase64String(result.servers.first { it.operator == "Geomys" }.id))
     }
 
     @Test
@@ -90,5 +104,6 @@ internal class LogListJsonParserV3Test {
     companion object {
         private val json = TestData.file(TestData.TEST_LOG_LIST_JSON).readText()
         private val jsonIncomplete = TestData.file(TestData.TEST_LOG_LIST_JSON_INCOMPLETE).readText()
+        private val jsonTiledLogs = TestData.file(TestData.TEST_LOG_LIST_JSON_TILED_LOGS).readText()
     }
 }

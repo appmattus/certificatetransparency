@@ -58,8 +58,9 @@ kid in town is **[certificate transparency](docs/what-is-certificate-transparenc
 
 We are open about the security of our library and provide a threat model in the
 [source code](ThreatDragonModels/), created using
-[OWASP Threat Dragon](https://owasp.org/www-project-threat-dragon/). If you feel there is something
-we have missed please reach out so we can keep this up to date.
+[OWASP Threat Dragon](https://owasp.org/www-project-threat-dragon/). If you feel
+there is something we have missed please reach out so we can keep this up to
+date.
 
 The source code and dependencies are continuously scanned with
 [Snyk](https://snyk.io), [CodeQL](https://codeql.github.com) and [mobsfscan](https://github.com/MobSF/mobsfscan).

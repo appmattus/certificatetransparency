@@ -1,6 +1,5 @@
 /*
- * Copyright 2021-2025 Appmattus Limited
- * Copyright 2019 Babylon Partners Limited
+ * Copyright 2025 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- * File modified by Appmattus Limited
- * See: https://github.com/appmattus/certificatetransparency/compare/e3d469df9be35bcbf0f564d32ca74af4e5ca4ae5...main
  */
 
 package com.appmattus.certificatetransparency.internal.loglist.model.v3
@@ -36,7 +32,8 @@ import okhttp3.HttpUrl
  * (https://tools.ietf.org/html/rfc6962#section-3).
  * @property listOfPreviousOperators Previous operators that ran this log in the past, if any. If the log has changed operators,
  * this will contain a list of the previous operators, along with the timestamp when they stopped operating the log.
- * @property url The base URL of the CT log's HTTP API. The API endpoints are defined in https://tools.ietf.org/html/rfc6962#section-4.
+ * @property submissionUrl The submission prefix of the log. The API endpoints are defined in https://c2sp.org/static-ct-api.
+ * @property monitoringUrl The monitoring prefix of the log. The API endpoints are defined in https://c2sp.org/static-ct-api.
  * @property dns The domain name of the CT log's DNS API. The API endpoints are defined in
  * https://github.com/google/certificate-transparency-rfcs/blob/master/dns/draft-ct-over-dns.md.
  * @property temporalInterval The log will only accept certificates that expire (have a NotAfter date) between these dates.
@@ -44,15 +41,18 @@ import okhttp3.HttpUrl
  * @property state The state of the log from the log list distributor's perspective.
  */
 @Serializable
-internal data class Log(
+internal data class TiledLog(
     @SerialName("description") override val description: String? = null,
     @SerialName("key") override val key: String,
     @SerialName("log_id") override val logId: String,
     @SerialName("mmd") override val maximumMergeDelay: Int,
     @SerialName("previous_operators") override val listOfPreviousOperators: List<PreviousOperator>? = null,
-    @SerialName("url")
+    @SerialName("submission_url")
     @Serializable(with = HttpUrlDeserializer::class)
-    val url: HttpUrl,
+    val submissionUrl: HttpUrl,
+    @SerialName("monitoring_url")
+    @Serializable(with = HttpUrlDeserializer::class)
+    val monitoringUrl: HttpUrl,
     @SerialName("dns") override val dns: Hostname? = null,
     @SerialName("temporal_interval") override val temporalInterval: TemporalInterval? = null,
     @SerialName("log_type") override val logType: LogType? = null,
