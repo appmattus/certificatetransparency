@@ -1,5 +1,41 @@
 # Certificate transparency for Android and JVM
 
+:warning: While I strive to continue supporting this open-source project, I
+don’t always have the time or resources to do so consistently. As a result,
+issue resolution may take time.
+
+At the time of writing, the most significant issues are:
+
+1. **Dependency on Chrome’s Log List Files** As previously highlighted by
+   engineers at Google, this library currently
+   relies directly on Chrome’s log list files. While this primarily works, it
+   carries inherent risks due to potential schema changes. Please refer to
+   [#70](https://github.com/appmattus/certificatetransparency/issues/70)
+   and [#143](https://github.com/appmattus/certificatetransparency/issues/143)
+   for additional background information.
+
+   I lack the time and resources to host and manage this file independently;
+   therefore, it’s up to the users of the library to determine the best way to
+   host and manage the file themselves.
+
+1. **Android 16 (API 36) Support** Support for Android 16 is still in progress.
+   I do not have access to a
+   physical device running API 36, and the emulator has proven unreliable. As
+   such, I’m relying on the community to help find a working solution (see
+   [#142](https://github.com/appmattus/certificatetransparency/issues/142)).
+
+   Given that API 36 finally introduces native support for Certificate
+   Transparency (after a seven-year wait), the most practical approach might be
+   to turn off this library on API 36 and utilise the built-in support instead.
+
+1. **Caching Mechanism Issues** There are known problems with the library’s
+   caching mechanism (see
+   [#98](https://github.com/appmattus/certificatetransparency/issues/98)). I
+   want to develop a more robust solution but haven’t yet had the focused time
+   required to do so.
+
+---
+
 [![CI status](https://github.com/appmattus/certificatetransparency/actions/workflows/main.yml/badge.svg)](https://github.com/appmattus/certificatetransparency/actions)
 [![codecov](https://codecov.io/gh/appmattus/certificatetransparency/branch/main/graph/badge.svg)](https://codecov.io/gh/appmattus/certificatetransparency)
 [![Maven Central](https://img.shields.io/maven-central/v/com.appmattus.certificatetransparency/certificatetransparency)](https://central.sonatype.com/search?q=com.appmattus.certificatetransparency)
