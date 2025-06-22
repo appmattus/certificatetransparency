@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  * Copyright 2020 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -83,6 +83,7 @@ internal object TestData {
     const val TEST_LOG_LIST_JSON_TOO_BIG = DATA_ROOT + "loglist/log_list_too_big.json"
     const val TEST_LOG_LIST_JSON_VALID_UNTIL = DATA_ROOT + "loglist/log_list_valid_until.json"
     const val TEST_LOG_LIST_JSON_INCOMPLETE = DATA_ROOT + "loglist/log_list_incomplete.json"
+    const val TEST_LOG_LIST_JSON_TILED_LOGS = DATA_ROOT + "loglist/log_list_tiled_logs.json"
     const val TEST_LOG_LIST_SIG = DATA_ROOT + "loglist/log_list.sig"
     const val TEST_LOG_LIST_SIG_TOO_BIG = DATA_ROOT + "loglist/log_list_too_big.sig"
 

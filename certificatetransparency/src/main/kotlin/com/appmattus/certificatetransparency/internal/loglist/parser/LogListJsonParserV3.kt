@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,29 +48,30 @@ internal class LogListJsonParserV3 : LogListJsonParser {
     private fun buildLogServerList(logList: LogListV3): LogListResult {
         return logList.operators.map { operator ->
             // null, PENDING, REJECTED -> An SCT associated with this log server would be treated as untrusted
-            operator.logs.filterNot { it.state == null || it.state is State.Pending || it.state is State.Rejected }
-                .map {
-                    val keyBytes = Base64.decode(it.key)
+            (operator.logs + operator.tiledLogs.orEmpty()).filterNot { it.state == null || it.state is State.Pending || it.state is State.Rejected }
+                .map { log ->
+                    val keyBytes = Base64.decode(log.key)
 
                     // FROZEN, RETIRED -> Validate SCT against this if it was issued before the state timestamp, otherwise SCT is untrusted
                     // QUALIFIED, USABLE -> Validate SCT against this (any timestamp okay)
-                    val validUntil = if (it.state is State.Retired || it.state is State.ReadOnly) it.state.timestamp else null
+                    val state = log.state
+                    val validUntil = if (state is State.Retired || state is State.ReadOnly) state.timestamp else null
 
                     val key = try {
                         PublicKeyFactory.fromByteArray(keyBytes)
                     } catch (e: InvalidKeySpecException) {
-                        return LogListResult.Invalid.LogServerInvalidKey(e, it.key)
+                        return LogListResult.Invalid.LogServerInvalidKey(e, log.key)
                     } catch (e: NoSuchAlgorithmException) {
-                        return LogListResult.Invalid.LogServerInvalidKey(e, it.key)
+                        return LogListResult.Invalid.LogServerInvalidKey(e, log.key)
                     } catch (e: IllegalArgumentException) {
-                        return LogListResult.Invalid.LogServerInvalidKey(e, it.key)
+                        return LogListResult.Invalid.LogServerInvalidKey(e, log.key)
                     }
 
                     LogServer(
                         key = key,
                         validUntil = validUntil,
                         operator = operator.name,
-                        previousOperators = it.listOfPreviousOperators?.map { PreviousOperator(it.name, it.endDate) } ?: emptyList()
+                        previousOperators = log.listOfPreviousOperators?.map { PreviousOperator(it.name, it.endDate) } ?: emptyList()
                     )
                 }
         }.flatten().let { LogListResult.Valid.Success(logList.logListTimestamp, it) }
