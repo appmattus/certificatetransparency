@@ -32,7 +32,6 @@ plugins {
     alias(libs.plugins.dokkaPlugin)
     alias(libs.plugins.detektGradlePlugin)
 }
-
 allprojects {
     repositories {
         google()
@@ -41,7 +40,12 @@ allprojects {
 }
 
 subprojects {
-    version = System.getenv("GITHUB_REF")?.substring(10) ?: System.getProperty("GITHUB_REF")?.substring(10) ?: "unknown"
+    val githubRef = System.getenv("GITHUB_REF") ?: System.getProperty("GITHUB_REF")
+    version = if (githubRef?.startsWith("refs/tags/") == true) {
+        githubRef.substring("refs/tags/".length).removePrefix("v")
+    } else {
+        "0.0.1-SNAPSHOT-LOCAL"
+    }
 
     plugins.withType<DokkaPlugin> {
         dokka {
