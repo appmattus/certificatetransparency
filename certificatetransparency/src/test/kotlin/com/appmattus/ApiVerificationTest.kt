@@ -42,6 +42,7 @@ class ApiVerificationTest {
                     .filterNot { it.packageName.startsWith("kotlin") }
                     .filterNot { it.packageName.startsWith("okhttp3") }
                     .filterNot { it.packageName.startsWith("okio") }
+                    .filterNot { it.packageName.startsWith("javax.naming") }
                     .filter { it.name != "org.jetbrains.annotations.NotNull" }
                     .filter { it.name != "org.jetbrains.annotations.Nullable" }
                     .map { it.name }
