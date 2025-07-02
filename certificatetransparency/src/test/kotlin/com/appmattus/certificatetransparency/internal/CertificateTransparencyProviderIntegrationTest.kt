@@ -146,16 +146,17 @@ internal class CertificateTransparencyProviderIntegrationTest {
             // Exclude all but a specific domain
             -"*.*"
             +"*.appmattus.com"
+            +"appmattus.com"
         }
 
         makeConnection("https://$invalidSctDomain/")
         makeConnection("https://www.appmattus.com/")
 
         assertEquals(4, results.size)
-        assertTrue(results.contains("SDK no-sct.badssl.com DisabledForHost"))
         assertTrue(results.contains("Client no-sct.badssl.com DisabledForHost"))
-        assertTrue(results.contains("SDK www.appmattus.com Trusted"))
-        assertTrue(results.contains("Client www.appmattus.com Trusted"))
+        assertTrue(results.contains("SDK no-sct.badssl.com DisabledForHost"))
+        assertTrue(results.contains("Client appmattus.com Trusted"))
+        assertTrue(results.contains("SDK appmattus.com Trusted"))
     }
 
     @Test(expected = IllegalArgumentException::class)
