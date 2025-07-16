@@ -23,7 +23,7 @@ kotlin = "2.1.20"
 androidGradlePlugin = "8.10.0"
 detektGradlePlugin = "1.23.8"
 dokkaPlugin = "2.0.0"
-gradleMavenPublishPlugin = "0.31.0"
+gradleMavenPublishPlugin = "0.34.0"
 gradleVersionsPlugin = "0.52.0"
 markdownlintGradlePlugin = "0.6.0"
 
