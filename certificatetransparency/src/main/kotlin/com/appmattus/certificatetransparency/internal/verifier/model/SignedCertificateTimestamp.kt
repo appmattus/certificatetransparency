@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +49,8 @@ public data class SignedCertificateTimestamp(
 
         if (sctVersion != other.sctVersion) return false
         if (id != other.id) return false
+        // Suppressed until Kotlin 2.2.10 - see https://youtrack.jetbrains.com/issue/KT-78352/False-positive-IDENTITYSENSITIVEOPERATIONSWITHVALUETYPE-when-comparing-with-equality-operator
+        @Suppress("IDENTITY_SENSITIVE_OPERATIONS_WITH_VALUE_TYPE")
         if (timestamp != other.timestamp) return false
         if (signature != other.signature) return false
         if (!extensions.contentEquals(other.extensions)) return false

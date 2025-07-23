@@ -27,8 +27,8 @@ import com.appmattus.certificatetransparency.internal.utils.asn1.toAsn1
 import com.appmattus.certificatetransparency.internal.verifier.model.Host
 import com.appmattus.certificatetransparency.loglist.LogListResult
 import com.appmattus.certificatetransparency.loglist.LogListService
-import okhttp3.internal.peerName
 import java.lang.reflect.Method
+import java.net.InetSocketAddress
 import java.net.Socket
 import java.security.cert.Certificate
 import java.security.cert.CertificateException
@@ -110,7 +110,7 @@ internal class CertificateTransparencyTrustManagerExtended(
     override fun checkServerTrusted(chain: Array<out X509Certificate>, authType: String, socket: Socket) {
         if (delegate is X509ExtendedTrustManager) delegate.checkServerTrusted(chain, authType, socket)
 
-        val commonName = socket.peerName()
+        val commonName = socket.peerName
 
         val result = verifyCertificateTransparency(commonName, chain.toList())
 
@@ -120,6 +120,12 @@ internal class CertificateTransparencyTrustManagerExtended(
             throw CertificateException("Certificate transparency failed")
         }
     }
+
+    private val Socket.peerName: String
+        get() = when (val address = remoteSocketAddress) {
+            is InetSocketAddress -> address.hostName
+            else -> address.toString()
+        }
 
     override fun checkServerTrusted(chain: Array<out X509Certificate>, authType: String, engine: SSLEngine) {
         if (delegate is X509ExtendedTrustManager) delegate.checkServerTrusted(chain, authType, engine)
