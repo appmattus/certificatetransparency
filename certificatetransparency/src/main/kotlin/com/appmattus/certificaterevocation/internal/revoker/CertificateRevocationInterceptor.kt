@@ -33,7 +33,7 @@ internal class CertificateRevocationInterceptor(
     crlSet: Set<CrlItem>,
     certificateChainCleanerFactory: CertificateChainCleanerFactory? = null,
     trustManager: X509TrustManager?,
-    private val failOnError: () -> Boolean = { true },
+    private val failOnError: (RevocationResult.Failure) -> Boolean = { true },
     private val logger: CRLogger? = null
 ) : CertificateRevocationBase(crlSet, certificateChainCleanerFactory, trustManager), Interceptor {
 
@@ -49,7 +49,7 @@ internal class CertificateRevocationInterceptor(
 
         logger?.log(host, result)
 
-        if (result is RevocationResult.Failure && failOnError()) {
+        if (result is RevocationResult.Failure && failOnError(result)) {
             throw SSLPeerUnverifiedException("Certificate revocation failed")
         }
 

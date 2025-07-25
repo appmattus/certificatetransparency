@@ -44,7 +44,7 @@ internal class CertificateTransparencyHostnameVerifier(
     logListDataSource: DataSource<LogListResult>?,
     policy: CTPolicy?,
     diskCache: DiskCache?,
-    private val failOnError: () -> Boolean = { true },
+    private val failOnError: (VerificationResult.Failure) -> Boolean = { true },
     private val logger: CTLogger? = null
 ) : HostnameVerifier, CertificateTransparencyBase(
     includeHosts,
@@ -66,6 +66,6 @@ internal class CertificateTransparencyHostnameVerifier(
 
         logger?.log(host, result)
 
-        return !(result is VerificationResult.Failure && failOnError())
+        return !(result is VerificationResult.Failure && failOnError(result))
     }
 }

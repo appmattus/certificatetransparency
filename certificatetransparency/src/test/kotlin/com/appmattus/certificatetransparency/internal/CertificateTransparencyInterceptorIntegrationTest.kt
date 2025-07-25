@@ -45,7 +45,7 @@ internal class CertificateTransparencyInterceptorIntegrationTest {
                 LogListDataSourceTestFactory.realLogListDataSource
             }
 
-            failOnError = false
+            failOnError = { false }
         }
 
         private val clientCertificates: HandshakeCertificates = HandshakeCertificates.Builder()

@@ -45,7 +45,7 @@ internal class CertificateTransparencyInterceptor(
     logListDataSource: DataSource<LogListResult>?,
     policy: CTPolicy?,
     diskCache: DiskCache? = null,
-    private val failOnError: () -> Boolean = { true },
+    private val failOnError: (VerificationResult.Failure) -> Boolean = { true },
     private val logger: CTLogger? = null
 ) : Interceptor, CertificateTransparencyBase(
     includeHosts,
@@ -74,7 +74,7 @@ internal class CertificateTransparencyInterceptor(
 
         logger?.log(host, result)
 
-        if (result is VerificationResult.Failure && failOnError()) {
+        if (result is VerificationResult.Failure && failOnError(result)) {
             throw SSLPeerUnverifiedException("Certificate transparency failed")
         }
 

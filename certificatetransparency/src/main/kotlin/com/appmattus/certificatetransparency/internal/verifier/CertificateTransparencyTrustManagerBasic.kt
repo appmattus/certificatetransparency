@@ -46,7 +46,7 @@ internal class CertificateTransparencyTrustManagerBasic(
     logListDataSource: DataSource<LogListResult>?,
     policy: CTPolicy?,
     diskCache: DiskCache?,
-    private val failOnError: () -> Boolean = { true },
+    private val failOnError: (VerificationResult.Failure) -> Boolean = { true },
     private val logger: CTLogger? = null
 ) : X509TrustManager, CertificateTransparencyTrustManager {
 
@@ -93,7 +93,7 @@ internal class CertificateTransparencyTrustManagerBasic(
 
         logger?.log(commonName, result)
 
-        if (result is VerificationResult.Failure && failOnError()) {
+        if (result is VerificationResult.Failure && failOnError(result)) {
             throw CertificateException("Certificate transparency failed")
         }
     }
@@ -109,7 +109,7 @@ internal class CertificateTransparencyTrustManagerBasic(
 
         logger?.log(host, result)
 
-        if (result is VerificationResult.Failure && failOnError()) {
+        if (result is VerificationResult.Failure && failOnError(result)) {
             throw CertificateException("Certificate transparency failed")
         }
 

@@ -50,7 +50,7 @@ internal class CertificateTransparencyTrustManagerExtended(
     logListDataSource: DataSource<LogListResult>?,
     policy: CTPolicy?,
     diskCache: DiskCache?,
-    private val failOnError: () -> Boolean = { true },
+    private val failOnError: (VerificationResult.Failure) -> Boolean = { true },
     private val logger: CTLogger? = null
 ) : X509ExtendedTrustManager(), CertificateTransparencyTrustManager {
     private val ctBase = CertificateTransparencyBase(
@@ -116,7 +116,7 @@ internal class CertificateTransparencyTrustManagerExtended(
 
         logger?.log(commonName, result)
 
-        if (result is VerificationResult.Failure && failOnError()) {
+        if (result is VerificationResult.Failure && failOnError(result)) {
             throw CertificateException("Certificate transparency failed")
         }
     }
@@ -136,7 +136,7 @@ internal class CertificateTransparencyTrustManagerExtended(
 
         logger?.log(commonName, result)
 
-        if (result is VerificationResult.Failure && failOnError()) {
+        if (result is VerificationResult.Failure && failOnError(result)) {
             throw CertificateException("Certificate transparency failed")
         }
     }
@@ -154,7 +154,7 @@ internal class CertificateTransparencyTrustManagerExtended(
 
         logger?.log(commonName, result)
 
-        if (result is VerificationResult.Failure && failOnError()) {
+        if (result is VerificationResult.Failure && failOnError(result)) {
             throw CertificateException("Certificate transparency failed")
         }
     }
@@ -170,7 +170,7 @@ internal class CertificateTransparencyTrustManagerExtended(
 
         logger?.log(host, result)
 
-        if (result is VerificationResult.Failure && failOnError()) {
+        if (result is VerificationResult.Failure && failOnError(result)) {
             throw CertificateException("Certificate transparency failed")
         }
 
@@ -194,7 +194,7 @@ internal class CertificateTransparencyTrustManagerExtended(
 
         logger?.log(host, result)
 
-        if (result is VerificationResult.Failure && failOnError()) {
+        if (result is VerificationResult.Failure && failOnError(result)) {
             throw CertificateException("Certificate transparency failed")
         }
 

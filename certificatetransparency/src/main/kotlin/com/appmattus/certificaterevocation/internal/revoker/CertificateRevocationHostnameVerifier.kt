@@ -32,7 +32,7 @@ internal class CertificateRevocationHostnameVerifier(
     crlSet: Set<CrlItem>,
     certificateChainCleanerFactory: CertificateChainCleanerFactory? = null,
     trustManager: X509TrustManager?,
-    private val failOnError: () -> Boolean = { true },
+    private val failOnError: (RevocationResult.Failure) -> Boolean = { true },
     private val logger: CRLogger? = null
 ) : CertificateRevocationBase(crlSet, certificateChainCleanerFactory, trustManager), HostnameVerifier {
 
@@ -45,6 +45,6 @@ internal class CertificateRevocationHostnameVerifier(
 
         logger?.log(host, result)
 
-        return !(result is RevocationResult.Failure && failOnError())
+        return !(result is RevocationResult.Failure && failOnError(result))
     }
 }

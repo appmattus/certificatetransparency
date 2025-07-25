@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,7 +57,7 @@ class HttpURLConnectionKotlinExampleViewModel(application: Application) : BaseEx
                 includeHosts.forEach {
                     +it
                 }
-                failOnError = isFailOnError
+                failOnError = { isFailOnError }
                 logger = defaultLogger
                 diskCache = AndroidDiskCache(getApplication())
             }
