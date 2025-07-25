@@ -1,6 +1,7 @@
 @file:Suppress("MagicNumber")
 
 import com.android.build.api.dsl.AndroidSourceSet
+import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
 
 plugins {
     id("com.android.library")
@@ -10,6 +11,11 @@ plugins {
 }
 
 apply(from = "$rootDir/gradle/scripts/jacoco-android.gradle.kts")
+
+mavenPublishing {
+    // Remove javadoc from publishing
+    configure(AndroidSingleVariantLibrary("release", true, false))
+}
 
 android {
     namespace = "com.appmattus.certificatetransparency"
