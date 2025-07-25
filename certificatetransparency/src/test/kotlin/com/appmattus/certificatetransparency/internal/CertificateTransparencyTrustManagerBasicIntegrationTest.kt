@@ -58,7 +58,7 @@ internal class CertificateTransparencyTrustManagerBasicIntegrationTest {
                 LogListDataSourceTestFactory.realLogListDataSource
             }
 
-            failOnError = false
+            failOnError = { false }
         }
 
         private fun X509TrustManager.createSocketFactory(): SSLSocketFactory {

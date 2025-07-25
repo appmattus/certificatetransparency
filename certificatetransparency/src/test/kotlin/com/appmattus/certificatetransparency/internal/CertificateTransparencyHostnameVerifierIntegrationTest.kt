@@ -39,7 +39,7 @@ internal class CertificateTransparencyHostnameVerifierIntegrationTest {
             logListDataSource {
                 LogListDataSourceTestFactory.realLogListDataSource
             }
-            failOnError = true
+            failOnError = { true }
         }
 
         private val clientCertificates: HandshakeCertificates = HandshakeCertificates.Builder()

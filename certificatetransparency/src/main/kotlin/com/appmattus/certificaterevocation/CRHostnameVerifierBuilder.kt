@@ -40,20 +40,16 @@ public class CRHostnameVerifierBuilder(
     private var certificateChainCleanerFactory: CertificateChainCleanerFactory? = null
     private var trustManager: X509TrustManager? = null
     private val crlSet = mutableSetOf<CrlItem>()
-    private var _failOnError: () -> Boolean = { true }
 
     /**
      * Determine if a failure to pass certificate revocation results in the connection being closed. A value of true ensures the connection is
      * closed on errors
      * Default: true
      */
-    @get:JvmSynthetic
-    @set:JvmSynthetic
-    public var failOnError: Boolean
-        get() = _failOnError()
-        set(value) {
-            _failOnError = { value }
-        }
+    public var failOnError: (RevocationResult.Failure) -> Boolean = { true }
+        @JvmSynthetic get
+
+        @JvmSynthetic set
 
     /**
      * [CRLogger] which will be called with all results
@@ -106,7 +102,7 @@ public class CRHostnameVerifierBuilder(
      * Default: true
      */
     @Suppress("unused")
-    public fun setFailOnError(failOnError: Boolean): CRHostnameVerifierBuilder = apply { this.failOnError = failOnError }
+    public fun setFailOnError(failOnError: Boolean): CRHostnameVerifierBuilder = apply { this.failOnError = { failOnError } }
 
     /**
      * Determine if a failure to pass certificate revocation results in the connection being closed. [failOnError] set to true closes the
@@ -114,7 +110,9 @@ public class CRHostnameVerifierBuilder(
      * Default: true
      */
     @Suppress("unused")
-    public fun setFailOnError(failOnError: () -> Boolean): CRHostnameVerifierBuilder = apply { this._failOnError = failOnError }
+    public fun setFailOnError(
+        failOnError: (RevocationResult.Failure) -> Boolean
+    ): CRHostnameVerifierBuilder = apply { this.failOnError = failOnError }
 
     /**
      * [CRLogger] which will be called with all results
@@ -143,7 +141,7 @@ public class CRHostnameVerifierBuilder(
         crlSet = crlSet.toSet(),
         certificateChainCleanerFactory = certificateChainCleanerFactory,
         trustManager = trustManager,
-        failOnError = _failOnError,
+        failOnError = failOnError,
         logger = logger
     )
 }

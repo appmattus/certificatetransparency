@@ -39,7 +39,7 @@ class WebViewExampleViewModel(application: Application) : AndroidViewModel(appli
     override val container: Container<State, Unit> = viewModelScope.container(State()) {
         intent {
             installCertificateTransparencyProvider {
-                failOnError = true
+                failOnError = { true }
                 logger = defaultLogger
                 diskCache = AndroidDiskCache(getApplication())
             }

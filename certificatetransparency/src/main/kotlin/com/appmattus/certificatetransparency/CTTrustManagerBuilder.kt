@@ -41,20 +41,16 @@ public class CTTrustManagerBuilder(
     private var logListDataSource: DataSource<LogListResult>? = null
     private val includeCommonNames = mutableSetOf<Host>()
     private val excludeCommonNames = mutableSetOf<Host>()
-    private var _failOnError: () -> Boolean = { true }
 
     /**
      * Determine if a failure to pass certificate transparency results in the connection being closed. A value of true ensures the connection is
      * closed on errors
      * Default: true
      */
-    @get:JvmSynthetic
-    @set:JvmSynthetic
-    public var failOnError: Boolean
-        get() = _failOnError()
-        set(value) {
-            _failOnError = { value }
-        }
+    public var failOnError: (VerificationResult.Failure) -> Boolean = { true }
+        @JvmSynthetic get
+
+        @JvmSynthetic set
 
     /**
      * [CTLogger] which will be called with all results
@@ -147,7 +143,7 @@ public class CTTrustManagerBuilder(
      * Default: true
      */
     @Suppress("unused")
-    public fun setFailOnError(failOnError: Boolean): CTTrustManagerBuilder = apply { this._failOnError = { failOnError } }
+    public fun setFailOnError(failOnError: Boolean): CTTrustManagerBuilder = apply { this.failOnError = { failOnError } }
 
     /**
      * Determine if a failure to pass certificate transparency results in the connection being closed. [failOnError] set to true closes the
@@ -155,7 +151,8 @@ public class CTTrustManagerBuilder(
      * Default: true
      */
     @Suppress("unused")
-    public fun setFailOnError(failOnError: () -> Boolean): CTTrustManagerBuilder = apply { this._failOnError = failOnError }
+    public fun setFailOnError(failOnError: (VerificationResult.Failure) -> Boolean): CTTrustManagerBuilder =
+        apply { this.failOnError = failOnError }
 
     /**
      * [CTLogger] which will be called with all results
@@ -253,7 +250,7 @@ public class CTTrustManagerBuilder(
                 logListDataSource,
                 policy,
                 diskCache,
-                _failOnError,
+                failOnError,
                 logger
             )
         } else {
@@ -266,7 +263,7 @@ public class CTTrustManagerBuilder(
                 logListDataSource,
                 policy,
                 diskCache,
-                _failOnError,
+                failOnError,
                 logger
             )
         }

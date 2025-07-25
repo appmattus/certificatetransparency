@@ -292,7 +292,7 @@ internal class CertificateTransparencyProviderIntegrationTest {
                     }
                 }
 
-                failOnError = false
+                failOnError = { false }
 
                 init()
             }
