@@ -80,6 +80,7 @@ internal object TestData {
     const val TEST_NO_SUBJECT = DATA_ROOT + "no-subject.pem"
 
     const val TEST_LOG_LIST_JSON = DATA_ROOT + "loglist/log_list.json"
+    const val TEST_LOG_LIST_JSON_NO_OPERATOR_NAME = DATA_ROOT + "loglist/log_list_no_operator_name.json"
     const val TEST_LOG_LIST_JSON_TOO_BIG = DATA_ROOT + "loglist/log_list_too_big.json"
     const val TEST_LOG_LIST_JSON_VALID_UNTIL = DATA_ROOT + "loglist/log_list_valid_until.json"
     const val TEST_LOG_LIST_JSON_INCOMPLETE = DATA_ROOT + "loglist/log_list_incomplete.json"

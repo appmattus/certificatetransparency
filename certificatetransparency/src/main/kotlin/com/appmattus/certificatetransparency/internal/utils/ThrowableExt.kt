@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@ package com.appmattus.certificatetransparency.internal.utils
 import java.io.PrintWriter
 import java.io.StringWriter
 
-internal fun Exception.stringStackTrace() = StringWriter().use { stringWriter ->
+internal fun Throwable.stringStackTrace() = StringWriter().use { stringWriter ->
     PrintWriter(stringWriter).use {
         printStackTrace(it)
     }

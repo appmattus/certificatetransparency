@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,6 @@
 package com.appmattus.certificatetransparency.loglist
 
 import com.appmattus.certificatetransparency.internal.utils.stringStackTrace
-import kotlinx.serialization.SerializationException
 import java.time.Instant
 
 public sealed interface LogListResult {
@@ -75,7 +74,7 @@ public sealed interface LogListResult {
             override fun toString(): String = "log-list.zip failed to load with ${exception.stringStackTrace()}"
         }
 
-        public data class LogListJsonBadFormat(val exception: SerializationException) : Invalid {
+        public data class LogListJsonBadFormat(val exception: Throwable) : Invalid {
             override fun toString(): String = "log-list.json badly formatted with ${exception.stringStackTrace()}"
         }
 

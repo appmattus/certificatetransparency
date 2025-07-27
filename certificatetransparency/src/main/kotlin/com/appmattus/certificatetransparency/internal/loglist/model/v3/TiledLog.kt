@@ -61,9 +61,9 @@ internal data class TiledLog(
     override val state: State? = null
 ) : BaseLog {
     init {
-        require(description == null || description.isNotEmpty())
+        require(description == null || description.isNotEmpty(), { "description cannot be empty" })
         @Suppress("MagicNumber")
-        require(logId.length == 44)
-        require(maximumMergeDelay >= 1)
+        require(logId.length == 44, { "logId invalid" })
+        require(maximumMergeDelay >= 1, { "maximumMergeDelay must be greater than equal to 1" })
     }
 }
