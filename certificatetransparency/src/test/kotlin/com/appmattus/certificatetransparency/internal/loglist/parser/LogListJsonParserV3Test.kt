@@ -58,6 +58,17 @@ internal class LogListJsonParserV3Test {
     }
 
     @Test
+    fun `returns Invalid with empty operator name`() = runBlocking {
+        // given we have an incomplete json file
+
+        // when we parse the data
+        val result = LogListJsonParserV3().parseJson(jsonNoOperatorName)
+
+        // then invalid is returned
+        assertIsA<LogListResult.Invalid.LogListJsonBadFormat>(result)
+    }
+
+    @Test
     fun `parses the json with tiled logs`() = runBlocking {
         // given we have an incomplete json file
 
@@ -105,5 +116,6 @@ internal class LogListJsonParserV3Test {
         private val json = TestData.file(TestData.TEST_LOG_LIST_JSON).readText()
         private val jsonIncomplete = TestData.file(TestData.TEST_LOG_LIST_JSON_INCOMPLETE).readText()
         private val jsonTiledLogs = TestData.file(TestData.TEST_LOG_LIST_JSON_TILED_LOGS).readText()
+        private val jsonNoOperatorName = TestData.file(TestData.TEST_LOG_LIST_JSON_NO_OPERATOR_NAME).readText()
     }
 }

@@ -27,7 +27,6 @@ import com.appmattus.certificatetransparency.internal.utils.PublicKeyFactory
 import com.appmattus.certificatetransparency.loglist.LogListResult
 import com.appmattus.certificatetransparency.loglist.LogServer
 import com.appmattus.certificatetransparency.loglist.PreviousOperator
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import java.security.NoSuchAlgorithmException
 import java.security.spec.InvalidKeySpecException
@@ -35,13 +34,12 @@ import java.security.spec.InvalidKeySpecException
 internal class LogListJsonParserV3 : LogListJsonParser {
 
     override fun parseJson(logListJson: String): LogListResult {
-        val logList = try {
-            json.decodeFromString(LogListV3.serializer(), logListJson)
-        } catch (e: SerializationException) {
-            return LogListResult.Invalid.LogListJsonBadFormat(e)
+        return runCatching {
+            val logList = json.decodeFromString(LogListV3.serializer(), logListJson)
+            buildLogServerList(logList)
+        }.getOrElse { e ->
+            LogListResult.Invalid.LogListJsonBadFormat(e)
         }
-
-        return buildLogServerList(logList)
     }
 
     @Suppress("ReturnCount")

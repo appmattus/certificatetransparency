@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -173,7 +173,7 @@ internal class LogSignatureVerifier(private val logServer: LogServer) : Signatur
      */
     private fun createTbsForVerification(preCertificate: X509Certificate, issuerInformation: IssuerInformation): TbsCertificate {
         @Suppress("MagicNumber")
-        require(preCertificate.version >= 3)
+        require(preCertificate.version >= 3, { "preCertificate.version must be 3 or greater" })
         // We have to use our own parsing code because Java's X509 certificate
         // parsing discards the order of the extensions. The signature from SCT we're verifying
         // is over the TBSCertificate in its original form, including the order of the extensions.
@@ -183,7 +183,7 @@ internal class LogSignatureVerifier(private val logServer: LogServer) : Signatur
         // The PreCertificate has this extension, AND:
         // The PreCertificate was signed by a PreCertificate signing cert.
         if (parsedPreCertificate.hasX509AuthorityKeyIdentifier() && issuerInformation.issuedByPreCertificateSigningCert) {
-            require(issuerInformation.x509authorityKeyIdentifier != null)
+            require(issuerInformation.x509authorityKeyIdentifier != null, { "issuerInformation must have x509authorityKeyIdentifier" })
         }
 
         val orderedExtensions = getExtensionsWithoutPoisonAndSct(

@@ -38,7 +38,7 @@ internal data class Operator(
     @SerialName("tiled_logs") val tiledLogs: List<TiledLog>? = null,
 ) {
     init {
-        require(name.isNotEmpty())
-        require(email.isNotEmpty())
+        require(name.isNotEmpty(), { "name cannot be empty" })
+        require(email.isNotEmpty(), { "email cannot be empty" })
     }
 }

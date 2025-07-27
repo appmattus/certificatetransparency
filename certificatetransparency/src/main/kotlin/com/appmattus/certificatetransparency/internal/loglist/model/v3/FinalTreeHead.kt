@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Appmattus Limited
+ * Copyright 2021-2025 Appmattus Limited
  * Copyright 2019 Babylon Partners Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,8 +29,8 @@ internal data class FinalTreeHead(
     @SerialName("sha256_root_hash") val sha256RootHash: String
 ) {
     init {
-        require(treeSize >= 0)
+        require(treeSize >= 0, { "treeSize must not be negative" })
         @Suppress("MagicNumber")
-        require(sha256RootHash.length == 44)
+        require(sha256RootHash.length == 44, { "sha256RootHash invalid" })
     }
 }
