@@ -76,11 +76,28 @@ internal class CertificateTransparencyTrustManagerExtended(
     }
 
     private val checkServerTrustedMethodApi36: Method? = try {
+        println("checkServerTrustedMethodApi36: availableMethods: ${delegate::class.java.declaredMethods.joinToString("\n") { method ->
+            "${method.name}(${method.genericParameterTypes.joinToString { it.typeName }}): ${method.genericReturnType.typeName}"
+        }}")
         delegate::class.java.getDeclaredMethod(
             "checkServerTrusted",
             Array<X509Certificate>::class.java,
             ByteArray::class.java,
             ByteArray::class.java,
+            String::class.java,
+            String::class.java
+        )
+    } catch (ignored: NoSuchMethodException) {
+        null
+    }
+
+    private val checkServerTrustedMethodApi36Fallback: Method? = try {
+        println("checkServerTrustedMethodApi36: availableMethods: ${delegate::class.java.declaredMethods.joinToString("\n") { method ->
+            "${method.name}(${method.genericParameterTypes.joinToString { it.typeName }}): ${method.genericReturnType.typeName}"
+        }}")
+        delegate::class.java.getDeclaredMethod(
+            "checkServerTrusted",
+            Array<X509Certificate>::class.java,
             String::class.java,
             String::class.java
         )
@@ -188,7 +205,12 @@ internal class CertificateTransparencyTrustManagerExtended(
         host: String
     ): List<X509Certificate> {
         @Suppress("UNCHECKED_CAST")
-        val certs = checkServerTrustedMethodApi36!!.invoke(delegate, chain, ocspData, tlsSctData, authType, host) as List<X509Certificate>
+        val certs = try {
+            checkServerTrustedMethodApi36!!.invoke(delegate, chain, ocspData, tlsSctData, authType, host) as List<X509Certificate>
+        } catch (e: Exception) {
+            e.printStackTrace()
+            checkServerTrustedMethodApi36Fallback!!.invoke(delegate, chain, authType, host) as List<X509Certificate>
+        }
 
         val result = verifyCertificateTransparency(host, certs.toList())
 
