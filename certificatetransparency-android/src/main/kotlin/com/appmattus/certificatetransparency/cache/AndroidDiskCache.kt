@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Appmattus Limited
+ * Copyright 2023-2025 Appmattus Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,10 +37,12 @@ public class AndroidDiskCache(context: Context) : DiskCache {
             return try {
                 val jsonFile = File(cacheDirPath, LOG_LIST_FILE)
                 val sigFile = File(cacheDirPath, SIG_FILE)
-                val logList = jsonFile.readBytes()
-                val signature = sigFile.readBytes()
 
-                RawLogListResult.Success(logList, signature)
+                when {
+                    jsonFile.length() > LOG_LIST_JSON_MAX_SIZE -> RawLogListCacheFailedJsonTooBig
+                    sigFile.length() > LOG_LIST_SIG_MAX_SIZE -> RawLogListCacheFailedSigTooBig
+                    else -> RawLogListResult.Success(jsonFile.readBytes(), sigFile.readBytes())
+                }
             } catch (ignored: IOException) {
                 null
             }
@@ -70,5 +72,13 @@ public class AndroidDiskCache(context: Context) : DiskCache {
          * Ensure only one instance of AndroidDiskCache can read/write at a time
          */
         private val mutex = Mutex()
+
+        // Constants also in LogListZipNetworkDataSource
+
+        // 1 MB
+        private const val LOG_LIST_JSON_MAX_SIZE = 1048576L
+
+        // 512 bytes
+        private const val LOG_LIST_SIG_MAX_SIZE = 512L
     }
 }
